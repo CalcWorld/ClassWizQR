@@ -1,0 +1,1 @@
+const modeInfo = require('./mode.json');

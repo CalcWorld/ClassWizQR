@@ -1,0 +1,200 @@
+{
+  "X1": {
+    "name": {
+      "en": "Calculate Manual",
+      "zh": "计算模式说明"
+    }
+  },
+  "X2": {
+    "name": {
+      "en": "Base-N Manual",
+      "zh": "基数模式说明"
+    }
+  },
+  "X3": {
+    "name": {
+      "en": "Statistics Manual",
+      "zh": "统计模式说明"
+    }
+  },
+  "X4": {
+    "name": {
+      "en": "Complex Manual",
+      "zh": "复数模式说明"
+    }
+  },
+  "X5": {
+    "name": {
+      "en": "Equation Manual",
+      "zh": "方程模式说明"
+    }
+  },
+  "X6": {
+    "name": {
+      "en": "Matrix Manual",
+      "zh": "矩阵模式说明"
+    }
+  },
+  "X7": {
+    "name": {
+      "en": "Vector Manual",
+      "zh": "向量模式说明"
+    }
+  },
+  "X8": {
+    "name": {
+      "en": "Table Manual",
+      "zh": "函数表格模式说明"
+    }
+  },
+  "X9": {
+    "name": {
+      "en": "Verify Manual",
+      "zh": "验证模式说明"
+    }
+  },
+  "XA": {
+    "name": {
+      "en": "Ratio Manual",
+      "zh": "比例模式说明"
+    }
+  },
+  "XB": {
+    "name": {
+      "en": "Inequality Manual",
+      "zh": "不等式模式说明"
+    }
+  },
+  "XC": {
+    "name": {
+      "en": "Distribution Manual",
+      "zh": "分布模式说明"
+    }
+  },
+  "XD": {
+    "name": {
+      "en": "Spreadsheet Manual",
+      "zh": "电子表格模式说明"
+    }
+  },
+  "XE": {
+    "name": {
+      "en": "Algorithm Manual",
+      "zh": "算法模式说明"
+    }
+  },
+  "XF": {
+    "name": {
+      "en": "Math Box Manual",
+      "zh": "数学盒说明"
+    }
+  },
+  "Y1": {
+    "name": {
+      "en": "AC Break",
+      "zh": "AC键中断"
+    }
+  },
+  "Y2": {
+    "name": {
+      "en": "Syntax ERROR",
+      "zh": "语法错误"
+    }
+  },
+  "Y3": {
+    "name": {
+      "en": "Math ERROR",
+      "zh": "数学错误"
+    }
+  },
+  "Y4": {
+    "name": {
+      "en": "Range ERROR",
+      "zh": "范围错误"
+    }
+  },
+  "Y5": {
+    "name": {
+      "en": "Cannot Simplify",
+      "zh": "无法化简"
+    }
+  },
+  "Y6": {
+    "name": {
+      "en": "Circular ERROR",
+      "zh": "循环引用错误"
+    }
+  },
+  "Y7": {
+    "name": {
+      "en": "Stack ERROR",
+      "zh": "堆栈错误"
+    }
+  },
+  "Y8": {
+    "name": {
+      "en": "Argument ERROR",
+      "zh": "自变量错"
+    }
+  },
+  "Y9": {
+    "name": {
+      "en": "Dimension ERROR",
+      "zh": "维数错误"
+    }
+  },
+  "YA": {
+    "name": {
+      "en": "Cannot Solve",
+      "zh": "无解"
+    }
+  },
+  "YB": {
+    "name": {
+      "en": "Time Out",
+      "zh": "超时"
+    }
+  },
+  "YC": {
+    "name": {
+      "en": "Variable ERROR",
+      "zh": "变量错误"
+    }
+  },
+  "YE": {
+    "name": {
+      "en": "Memory ERROR",
+      "zh": "内存错误"
+    }
+  },
+  "YG": {
+    "name": {
+      "en": "No Operator",
+      "zh": "无运算符"
+    }
+  },
+  "YH": {
+    "name": {
+      "en": "Not Defined",
+      "zh": "未定义"
+    }
+  },
+  "YZ": {
+    "name": {
+      "en": "Nesting ERROR",
+      "zh": "嵌套错误"
+    }
+  },
+  "Z0": {
+    "name": {
+      "en": "Setup Menu Manual",
+      "zh": "设置菜单说明"
+    }
+  },
+  "Z1": {
+    "name": {
+      "en": "Setup Sub Menu Manual",
+      "zh": "设置(二级)菜单说明"
+    }
+  }
+}

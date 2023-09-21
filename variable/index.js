@@ -1,4 +1,4 @@
-const Decimal = require("decimal.js");
+import Decimal from "decimal.js";
 
 export class ParseVariable {
   constructor(variable) {
@@ -136,6 +136,7 @@ const numberToLatex = (num) => {
   return latex;
 }
 
+// TODO: move to `result`
 export const ParseAns = (ans) => {
   const ans1 = ans.slice(0, ans.length / 2);
   const ans2 = ans.slice(ans.length / 2);

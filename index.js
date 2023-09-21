@@ -1,5 +1,5 @@
-import { ParseExpression } from "./expression";
-import { getModelInfo } from "./model";
+import { ParseExpression } from "./expression/index.js";
+import { getModelInfo } from "./model/index.js";
 import {
   ParseAns,
   ParseMatrixList,
@@ -7,22 +7,25 @@ import {
   ParseStatistic,
   ParseTableRange,
   ParseVariableList
-} from "./variable";
+} from "./variable/index.js";
+import { getModeInfo } from "./mode/index.js";
 
-class ClassWizQR {
+export class ClassWizQR {
   constructor() {
     this.url = undefined;
     this.kv = {
       I: undefined,
       U: undefined,
+      M: undefined,
+      S: undefined,
+      R: undefined,
       E: undefined,
+      T: undefined,
+      C: undefined,
       G: undefined,
       P: undefined,
-      R: undefined,
-      Q: undefined,
       V: undefined,
-      C: undefined,
-      T: undefined,
+      Q: undefined,
     }
 
     this.modelType = undefined;
@@ -45,8 +48,8 @@ class ClassWizQR {
       acc[k] = v;
       return acc;
     }, {});
-    this.modelType = modelType;
-    this.kv = kv;
+    this.setModelType(modelType)
+    this.setKV(kv)
     return this;
   }
 
@@ -70,6 +73,11 @@ class ClassWizQR {
     }
 
     const serialNumber = kv.U;
+
+    let mode;
+    if (kv.M) {
+      mode = getModeInfo(kv.M);
+    }
 
     let expression;
     if (kv.E) {
@@ -132,6 +140,7 @@ class ClassWizQR {
         qr,
         serialNumber,
       },
+      mode,
       expression,
       tableRange,
       result,
@@ -144,4 +153,7 @@ class ClassWizQR {
 
 }
 
-module.exports = ClassWizQR;
+export const parseUrl = (url) => {
+  const cwqr = new ClassWizQR();
+  return cwqr.setUrl(url).getResult();
+}

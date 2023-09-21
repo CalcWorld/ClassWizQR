@@ -1,4 +1,4 @@
-import { AsciiTable, mathTemplate, recDecOverlineModel, recDecBracketModel } from "../ascii";
+import { AsciiTable, mathTemplate, recDecOverlineModel, recDecBracketModel } from "../ascii/index.js";
 
 export class ParseExpression {
   constructor(expression, modelType, modelId) {

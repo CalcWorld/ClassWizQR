@@ -1,11 +1,11 @@
-const ascii00 = require('./00.json');
-const ascii00_EY = require('./00_EY.json');
-const asciiFA = require('./FA.json');
-const asciiFB = require('./FB.json');
-const asciiFB_EY = require('./FB_EY.json');
-const asciiFD = require('./FD.json');
-const asciiFE = require('./FE.json');
-const asciiFE_JP = require('./FE_JP.json');
+import ascii00 from './00.json' assert { type: 'json' };
+import ascii00_EY from './00_EY.json' assert { type: 'json' };
+import asciiFA from './FA.json' assert { type: 'json' };
+import asciiFB from './FB.json' assert { type: 'json' };
+import asciiFB_EY from './FB_EY.json' assert { type: 'json' };
+import asciiFD from './FD.json' assert { type: 'json' };
+import asciiFE from './FE.json' assert { type: 'json' };
+import asciiFE_JP from './FE_JP.json' assert { type: 'json' };
 
 const JPModel = ['CY240', 'CY241', 'CY242', 'CY243'];
 

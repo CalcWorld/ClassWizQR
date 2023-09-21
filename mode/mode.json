@@ -5,70 +5,70 @@
       "zh": "函数表格"
     },
     "expression": "f(x)= ${0} \\\\ \ng(x)= ${1} ",
-    "subCode": {}
+    "subMode": {}
   },
   "89": {
     "name": {
       "en": "Verify",
       "zh": "验证"
     },
-    "subCode": {}
+    "subMode": {}
   },
   "06": {
     "name": {
       "en": "Matrix",
       "zh": "矩阵"
     },
-    "subCode": {}
+    "subMode": {}
   },
   "07": {
     "name": {
       "en": "Vector",
       "zh": "向量"
     },
-    "subCode": {}
+    "subMode": {}
   },
   "0D": {
     "name": {
       "en": "Spreadsheet",
       "zh": "数据表格"
     },
-    "subCode": {}
+    "subMode": {}
   },
   "0E": {
     "name": {
       "en": "Algorithm",
       "zh": "算法"
     },
-    "subCode": {}
+    "subMode": {}
   },
   "4F": {
     "name": {
       "en": "Math Box",
       "zh": "数学盒"
     },
-    "subCode": {}
+    "subMode": {}
   },
   "C1": {
     "name": {
       "en": "Calculate",
       "zh": "计算"
     },
-    "subCode": {}
+    "subMode": {}
   },
   "C4": {
     "name": {
       "en": "Complex",
       "zh": "复数"
     },
-    "subCode": {}
+    "subMode": {}
   },
   "02": {
     "name": {
       "en": "Base-N",
       "zh": "基数"
     },
-    "subCode": {
+    "subMode": {
       "01": {
         "name": {
           "en": "Binary",
@@ -100,7 +100,7 @@
       "en": "Statistics",
       "zh": "统计"
     },
-    "subCode": {
+    "subMode": {
       "01": {
         "name": {
           "en": "Single-Variable Statistic",
@@ -156,7 +156,7 @@
       "en": "Distribution",
       "zh": "分布"
     },
-    "subCode": {
+    "subMode": {
       "01": {
         "name": {
           "en": "Normal Probability Density",
@@ -206,7 +206,7 @@
       "en": "Equation",
       "zh": "方程"
     },
-    "subCode": {
+    "subMode": {
       "01": {
         "name": {
           "en": "Simultaneous Equation with 2 Unknowns",
@@ -262,7 +262,7 @@
       "en": "Ratio",
       "zh": "比例"
     },
-    "subCode": {
+    "subMode": {
       "01": {
         "name": {
           "en": "A:B=X:D"
@@ -282,7 +282,7 @@
       "en": "Inequality",
       "zh": "不等式"
     },
-    "subCode": {
+    "subMode": {
       "0400": {
         "name": {
           "en": "ax²+bx+c>0"

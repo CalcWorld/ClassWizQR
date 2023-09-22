@@ -7,7 +7,7 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 
 const config = {
-    entry: './index.js',
+    entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
         filename: 'cwqr.js',
@@ -21,7 +21,7 @@ const config = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: 'index.html',
+            template: './src/index.html',
         }),
 
         // Add your plugins here

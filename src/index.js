@@ -10,6 +10,7 @@ import { ParseAns } from "./variable/R.js";
 export class ClassWizQR {
   constructor() {
     this.url = undefined;
+    this.modelType = undefined;
     this.kv = {
       I: undefined,
       U: undefined,
@@ -24,16 +25,6 @@ export class ClassWizQR {
       V: undefined,
       Q: undefined,
     }
-
-    this.modelType = undefined;
-    this.modelId = undefined;
-    this.modelName = undefined;
-    this.modelVersion = undefined;
-    this.qr = undefined;
-
-    this.serialNumber = undefined;
-
-    this.expression = undefined;
   }
 
   setUrl(url) {

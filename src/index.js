@@ -1,14 +1,11 @@
 import { ParseExpression } from "./expression/index.js";
 import { getModelInfo } from "./model/index.js";
-import {
-  ParseAns,
-  ParseMatrixList,
-  ParseSpreadsheet,
-  ParseStatistic,
-  ParseTableRange,
-  ParseVariableList
-} from "./variable/index.js";
 import { getModeInfo } from "./mode/index.js";
+import { ParseEquation, ParseMatrixList } from "./variable/C.js";
+import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
+import { ParseTableRange } from "./variable/P.js";
+import { ParseVariableList } from "./variable/V.js";
+import { ParseAns } from "./variable/R.js";
 
 export class ClassWizQR {
   constructor() {
@@ -40,7 +37,7 @@ export class ClassWizQR {
   }
 
   setUrl(url) {
-    this.url = new URL(url);
+    this.url = new URL(url.trim());
     const { search, pathname } = this.url;
     const modelType = pathname.slice(0, 5) === '/ncal' ? 'EY' : 'CY';
     const kv = search.slice(3).split('+').reduce((acc, cur) => {
@@ -117,9 +114,15 @@ export class ClassWizQR {
       variable = ParseVariableList(kv.V, modelType);
     }
 
-    let matrix;
+    let vector, matrix, equation;
     if (kv.C) {
-      matrix = ParseMatrixList(kv.C);
+      if (kv.C.startsWith('M')) {
+        matrix = ParseMatrixList(kv.C);
+      } else if (kv.C.startsWith('V')) {
+        vector = ParseMatrixList(kv.C);
+      } else if (kv.M) {
+        equation = ParseEquation(kv.M, kv.C);
+      }
     }
 
     let spreadsheet, statistic
@@ -142,9 +145,11 @@ export class ClassWizQR {
       },
       mode,
       expression,
+      equation,
       tableRange,
       result,
       variable,
+      vector,
       matrix,
       spreadsheet,
       statistic,

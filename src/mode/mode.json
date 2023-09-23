@@ -4,7 +4,6 @@
       "en": "Table",
       "zh": "函数表格"
     },
-    "expression": "f(x)= ${0} \\\\ \ng(x)= ${1} ",
     "subMode": {}
   },
   "89": {
@@ -211,43 +210,35 @@
         "name": {
           "en": "Simultaneous Equation with 2 Unknowns",
           "zh": "二元一次方程组"
-        },
-        "expression": "\\left\\{\\begin{array}\\\\${0}x${1}y=${2}\\\\${3}x${4}y=${5}\\end{array}\\right."
+        }
       },
       "02": {
         "name": {
           "en": "Simultaneous Equation with 3 Unknowns",
           "zh": "三元一次方程组"
-        },
-        "expression": "\\left\\{\\begin{array}\\\\${0}x${1}y${2}z=${3}\\\\${4}x${5}y${6}z=${7}\\\\${8}x${9}y${10}z=${11}\\end{array}\\right."
+        }
       },
       "03": {
         "name": {
           "en": "Simultaneous Equation with 4 Unknowns",
           "zh": "四元一次方程组"
-        },
-        "expression": "\\left\\{\\begin{array}\\\\${0}x${1}y${2}z${3}t=${4}\\\\${5}x${6}y${7}z${8}t=${9}\\\\${10}x${11}y${12}z${13}t=${14}\\\\${15}x${16}y${17}z${18}t=${19}\\end{array}\\right."
-      },
+        }},
       "04": {
         "name": {
           "en": "Quadratic Equation [ax²+bx+c=0]",
           "zh": "二次方程 [ax²+bx+c=0]"
-        },
-        "expression": "${0}x^2${1}x${2}=0"
-      },
+        }},
       "05": {
         "name": {
           "en": "Cubic Equation [ax³+bx²+cx+d=0]",
           "zh": "三次方程 [ax³+bx²+cx+d=0]"
-        },
-        "expression": "${0}x^3${1}x^2${2}x${3}=0"
+        }
       },
       "06": {
         "name": {
           "en": "Quartic Equation [ax⁴+bx³+cx²+dx+e=0]",
           "zh": "四次方程 [ax⁴+bx³+cx²+dx+e=0]"
-        },
-        "expression": "${0}x^4${1}x^3${2}x^2${3}x${4}=0"
+        }
       },
       "08": {
         "name": {
@@ -266,14 +257,12 @@
       "01": {
         "name": {
           "en": "A:B=X:D"
-        },
-        "expression": "${0}:${1}=X:${2}"
+        }
       },
       "02": {
         "name": {
           "en": "A:B=C:X"
-        },
-        "expression": "${0}:${1}=${2}:X"
+        }
       }
     }
   },
@@ -286,74 +275,62 @@
       "0400": {
         "name": {
           "en": "ax²+bx+c>0"
-        },
-        "expression": "${0}x^2${1}x${2}>0"
+        }
       },
       "0401": {
         "name": {
           "en": "ax²+bx+c<0"
-        },
-        "expression": "${0}x^2${1}x${2}<0"
+        }
       },
       "0402": {
         "name": {
           "en": "ax²+bx+c≥0"
-        },
-        "expression": "${0}x^2${1}x${2}≥0"
+        }
       },
       "0403": {
         "name": {
           "en": "ax²+bx+c≤0"
-        },
-        "expression": "${0}x^2${1}x${2}≤0"
+        }
       },
       "0500": {
         "name": {
           "en": "ax³+bx²+cx+d>0"
-        },
-        "expression": "${0}x^3${1}x^2${2}x${3}>0"
+        }
       },
       "0501": {
         "name": {
           "en": "ax³+bx²+cx+d<0"
-        },
-        "expression": "${0}x^3${1}x^2${2}x${3}<0"
+        }
       },
       "0502": {
         "name": {
           "en": "ax³+bx²+cx+d≥0"
-        },
-        "expression": "${0}x^3${1}x^2${2}x${3}≥0"
+        }
       },
       "0503": {
         "name": {
           "en": "ax³+bx²+cx+d≤0"
-        },
-        "expression": "${0}x^3${1}x^2${2}x${3}≤0"
+        }
       },
       "0600": {
         "name": {
           "en": "ax⁴+bx³+cx²+dx+e>0"
-        },
-        "expression": "${0}x^4${1}x^3${2}x^2${3}x${4}>0"
+        }
       },
       "0601": {
         "name": {
           "en": "ax⁴+bx³+cx²+dx+e<0"
-        },
-        "expression": "${0}x^4${1}x^3${2}x^2${3}x${4}<0"
+        }
       },
       "0602": {
         "name": {
           "en": "ax⁴+bx³+cx²+dx+e≥0"
-        },
-        "expression": "${0}x^4${1}x^3${2}x^2${3}x${4}≥0"
+        }
       },
       "0603": {
         "name": {
           "en": "ax⁴+bx³+cx²+dx+e≤0"
-        },
-        "expression": "${0}x^4${1}x^3${2}x^2${3}x${4}≤0"
+        }
       }
     }
   }

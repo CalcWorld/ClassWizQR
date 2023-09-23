@@ -103,6 +103,8 @@ export const ParseEquation = (M, C) => {
     latexExpression = latexExpression.replace(`\$\{${i}\}`, latex);
     decimalResult.push(decimal);
   }
-  console.assert(latexExpression.indexOf('$') === -1);
+  if (latexExpression.includes('$')) {
+    throw new Error('Equation template not match');
+  }
   return { latex: latexExpression, decimal: decimalResult };
 }

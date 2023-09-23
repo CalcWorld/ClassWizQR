@@ -59,9 +59,13 @@ export const ParseEquation = (M, C) => {
       break;
   }
   let latexExpression = equationInfo[equType][subMode].template;
+  const omitPlus = equationInfo[equType][subMode].omitPlus;
   const decimalResult = [];
   for (let i = 0; i < split.length; i++) {
-    const [latex, decimal] = new ParseVariable(split[i]).get();
+    let [latex, decimal] = new ParseVariable(split[i]).get();
+    if (!omitPlus.includes(i) && decimal.gte(0)) {
+      latex  = '+' + latex;
+    }
     latexExpression = latexExpression.replace(`\$\{${i}\}`, latex);
     decimalResult.push(decimal);
   }

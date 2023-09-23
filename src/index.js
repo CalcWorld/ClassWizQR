@@ -1,7 +1,7 @@
 import { ParseExpression } from "./expression/index.js";
 import { getModelInfo } from "./model/index.js";
 import { getModeInfo } from "./mode/index.js";
-import { ParseEquation, ParseMatrixList } from "./variable/C.js";
+import { ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js";
 import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
@@ -110,7 +110,7 @@ export class ClassWizQR {
       if (kv.C.startsWith('M')) {
         matrix = ParseMatrixList(kv.C);
       } else if (kv.C.startsWith('V')) {
-        vector = ParseMatrixList(kv.C);
+        vector = ParseVectorList(kv.C);
       } else if (kv.M) {
         equation = ParseEquation(kv.M, kv.C);
       }

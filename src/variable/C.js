@@ -1,7 +1,7 @@
 import { ParseVariable } from "./index.js";
 import equationInfo from './equation.json' assert { type: "json" };
 
-export const ParseMatrix = (matrix, m, n) => {
+const ParseMatrix = (matrix, m, n) => {
   const split = matrix.match(/.{20}/g);
   if (m * n !== split.length) {
     throw new Error('Matrix size not match');
@@ -18,22 +18,56 @@ export const ParseMatrix = (matrix, m, n) => {
     }
     decimalResult.push(row);
     latexResult = latexResult.slice(0, -2);
-    latexResult += '\\\\';
+    if (i !== m - 1) {
+      latexResult += '\\\\';
+    }
   }
-  latexResult = latexResult.slice(0, -2);
   latexResult += '\\end{bmatrix}';
   return [latexResult, decimalResult];
 }
 
 export const ParseMatrixList = (matrix) => {
-  // TODO: 解耦vector，降为一维数组
-  const regx = /([MV])([A-DT])(\d)(\d)(\d+)/g;
+  const regx = /M([A-DT])(\d)(\d)(\d+)/g;
   let match;
   const result = [];
   while ((match = regx.exec(matrix)) !== null) {
-    const type = match[1] === 'M' ? 'Mat' : 'Vct';
-    const name = match[2] === 'T' ? `${type}Ans` : `${type}${match[2]}`;
-    const [latex, decimal] = ParseMatrix(match[5], match[3], match[4]);
+    const name = match[1] === 'T' ? `MatAns` : `Mat${match[1]}`;
+    let m = parseInt(match[2]);
+    let n = parseInt(match[3]);
+    const [latex, decimal] = ParseMatrix(match[4], m, n);
+    result.push({ name, latex, decimal });
+  }
+  return result;
+}
+
+const ParseVector = (vector, n) => {
+  const split = vector.match(/.{20}/g);
+  if (n !== split.length) {
+    throw new Error('Vector size not match');
+  }
+
+  const decimalResult = [];
+  let latexResult = '\\begin{bmatrix}';
+  for (let i = 0; i < n; i++) {
+    const [latex, decimal] = new ParseVariable(split[i]).get();
+    decimalResult.push(decimal);
+    latexResult += `${latex}`;
+    if (i !== n - 1) {
+      latexResult += ' \\\\ ';
+    }
+  }
+  latexResult += '\\end{bmatrix}';
+  return [latexResult, decimalResult];
+}
+
+export const ParseVectorList = (vector) => {
+  const regx = /V([A-CT])(\d)(\d)(\d+)/g;
+  let match;
+  const result = [];
+  while ((match = regx.exec(vector)) !== null) {
+    const name = match[1] === 'T' ? `VctAns` : `Vct${match[1]}`;
+    const n = parseInt(match[3]);
+    const [latex, decimal] = ParseVector(match[4], n);
     result.push({ name, latex, decimal });
   }
   return result;
@@ -64,7 +98,7 @@ export const ParseEquation = (M, C) => {
   for (let i = 0; i < split.length; i++) {
     let [latex, decimal] = new ParseVariable(split[i]).get();
     if (!omitPlus.includes(i) && decimal.gte(0)) {
-      latex  = '+' + latex;
+      latex = '+' + latex;
     }
     latexExpression = latexExpression.replace(`\$\{${i}\}`, latex);
     decimalResult.push(decimal);

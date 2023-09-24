@@ -72,7 +72,7 @@ export const ParseEquationResult = (R, M, S) => {
   if (['01', '02', '03'].includes(subMode)) {
     template = resultInfo['EQUATION'][resultCode][subMode].template;
   } else {
-    if (resultInfo['EQUATION'][resultCode][subMode][split.length].complexSetting) {
+    if (resultInfo['EQUATION'][resultCode][subMode][split.length]['complexSetting']) {
       const complexSetting = S.slice(16, 17)
       template = resultInfo['EQUATION'][resultCode][subMode][split.length].template[complexSetting];
     } else {

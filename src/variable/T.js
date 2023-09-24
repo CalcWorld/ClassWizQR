@@ -32,7 +32,7 @@ export const ParseStatistic = (stat) => {
     const data = t.match(/.{2}/g).map(tt => {
       return parseInt(tt, 32).toString(10).padStart(3, '0')
     }).join('')
-    const [latex, decimal] = new ParseVariable(`0${data}`).get();
+    const [, decimal] = new ParseVariable(`0${data}`).get();
     return decimal;
   });
 }

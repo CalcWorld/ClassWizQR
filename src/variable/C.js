@@ -94,7 +94,7 @@ export const ParseEquation = (M, C) => {
       break;
   }
   let latexExpression = equationInfo[equType][subMode].template;
-  const omitPlus = equationInfo[equType][subMode].omitPlus;
+  const omitPlus = equationInfo[equType][subMode]['omitPlus'];
   const decimalResult = [];
   for (let i = 0; i < split.length; i++) {
     let [latex, decimal] = new ParseVariable(split[i]).get();

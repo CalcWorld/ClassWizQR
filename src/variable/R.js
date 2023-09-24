@@ -61,10 +61,14 @@ export const ParseInequalityResult = (R) => {
 }
 
 export const ParseEquationResult = (R, M, S) => {
-  const resultCode = R.slice(2, 3);
-  if (resultCode !== '0') {
+  let resultCode = R.slice(2, 3);
+  if (['1', '2', '4'].includes(resultCode)) {
     return resultInfo['EQUATION'][resultCode];
   }
+  const noLocal = resultCode === '5';
+  // when resultCode is '5', it still contains roots data, but indicates no Local Minimum/Maximum
+  // just set to 0 to get the template
+  resultCode = '0';
 
   const split = R.slice(3).match(/.{20}/g);
   let template;
@@ -120,6 +124,9 @@ export const ParseEquationResult = (R, M, S) => {
   }
   if (template.includes('$')) {
     throw new Error('Equation template not match');
+  }
+  if (noLocal) {
+    result.unshift(resultInfo['EQUATION']['5']);
   }
   result.unshift({ name: 'templated', latex: template });
   return result;

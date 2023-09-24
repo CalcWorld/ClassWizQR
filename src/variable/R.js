@@ -12,15 +12,15 @@ export const ParseNumber = (R, M, modelType, modelId) => {
   let result = [];
   if (!template) {
     if (ans2Decimal.eq(0)) {
-      result.push({ name: 'templated', latex: ans1Latex });
+      template = ans1Latex;
     } else if (ans2Decimal.eq(1)) {
-      result.push({ name: 'templated', latex: `${ans1Latex} + i` });
+      template = `${ans1Latex} + i`;
     } else if (ans2Decimal.gt(0)) {
-      result.push({ name: 'templated', latex: `${ans1Latex} + ${ans2Latex}i` });
+      template = `${ans1Latex} + ${ans2Latex}i`;
     } else if (ans2Decimal.eq(-1)) {
-      result.push({ name: 'templated', latex: `${ans1Latex} - i` });
+      template = `${ans1Latex} - i`;
     } else {
-      result.push({ name: 'templated', latex: `${ans1Latex} ${ans2Latex}i` });
+      template = `${ans1Latex} ${ans2Latex}i`;
     }
   } else {
     template = template.template;
@@ -32,8 +32,8 @@ export const ParseNumber = (R, M, modelType, modelId) => {
       const varAscii = asciiTable[varCode];
       template = template.replace('${2}', varAscii);
     }
-    result.push({ name: 'templated', latex: template });
   }
+  result.push({ name: 'templated', latex: template });
   result.push({ name: 'Part1', latex: ans1Latex, decimal: ans1Decimal })
   result.push({ name: 'Part2', latex: ans2Latex, decimal: ans2Decimal })
   return result;

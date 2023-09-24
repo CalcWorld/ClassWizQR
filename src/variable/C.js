@@ -90,6 +90,7 @@ export const ParseEquation = (M, C) => {
       break;
     case '4B':
       equType = 'INEQUALITY';
+      subMode += M.slice(6, 8);
       break;
   }
   let latexExpression = equationInfo[equType][subMode].template;

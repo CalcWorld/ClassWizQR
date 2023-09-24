@@ -5,7 +5,7 @@ import { ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js
 import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
-import { ParseNumber } from "./variable/R.js";
+import { ParseInequalityResult, ParseNumberResult } from "./variable/R.js";
 
 export class ClassWizQR {
   constructor() {
@@ -97,14 +97,33 @@ export class ClassWizQR {
     let result;
     const R = kv.R || kv.Q;
     if (R) {
-      result = ParseNumber(R, kv.M, modelType, modelId);
+      const typeCode = R.slice(0, 2);
+      switch (typeCode) {
+        case 'MT':
+          result = ParseMatrixList(R);
+          break;
+        case 'VT':
+          result = ParseVectorList(R);
+          break;
+        case 'EQ':
+          //
+          break;
+        case 'IN':
+          result = ParseInequalityResult(R);
+          break;
+        default:
+          result = ParseNumberResult(R, kv.M, modelType, modelId);
+      }
     }
 
+    // variable in Table mode, create table based on variable if the formula contains variable
     let variable;
     if (kv.V) {
       variable = ParseVariableList(kv.V, modelType);
     }
 
+    // any calculate in Vector or Matrix contains its defined vector or matrix in C
+    // in Equation, Inequality or Ratio mode, it's the entered coefficients
     let vector, matrix, equation;
     if (kv.C) {
       if (kv.C.startsWith('M')) {

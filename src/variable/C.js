@@ -26,11 +26,11 @@ const ParseMatrix = (matrix, m, n) => {
   return [latexResult, decimalResult];
 }
 
-export const ParseMatrixList = (matrix) => {
+export const ParseMatrixList = (C) => {
   const regx = /M([A-DT])(\d)(\d)(\d+)/g;
   let match;
   const result = [];
-  while ((match = regx.exec(matrix)) !== null) {
+  while ((match = regx.exec(C)) !== null) {
     const name = match[1] === 'T' ? `MatAns` : `Mat${match[1]}`;
     let m = parseInt(match[2]);
     let n = parseInt(match[3]);
@@ -60,11 +60,11 @@ const ParseVector = (vector, n) => {
   return [latexResult, decimalResult];
 }
 
-export const ParseVectorList = (vector) => {
+export const ParseVectorList = (C) => {
   const regx = /V([A-CT])(\d)(\d)(\d+)/g;
   let match;
   const result = [];
-  while ((match = regx.exec(vector)) !== null) {
+  while ((match = regx.exec(C)) !== null) {
     const name = match[1] === 'T' ? `VctAns` : `Vct${match[1]}`;
     const n = parseInt(match[3]);
     const [latex, decimal] = ParseVector(match[4], n);

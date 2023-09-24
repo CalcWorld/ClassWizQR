@@ -5,7 +5,7 @@ import { ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js
 import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
-import { ParseAns } from "./variable/R.js";
+import { ParseNumber } from "./variable/R.js";
 
 export class ClassWizQR {
   constructor() {
@@ -95,9 +95,9 @@ export class ClassWizQR {
     }
 
     let result;
-    if (kv.R || kv.Q) {
-      const ans = kv.R || kv.Q;
-      result = ParseAns(ans);
+    const R = kv.R || kv.Q;
+    if (R) {
+      result = ParseNumber(R, kv.M, modelType, modelId);
     }
 
     let variable;

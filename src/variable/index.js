@@ -26,18 +26,19 @@ export class ParseVariable {
   }
 
   _toFrac() {
-    // TODO: negative number
+    const numSign = this.valSign < 5 ? '' : '-';
+    const signFix = this.valSign < 5 ? 1 : -1;
     const fracArr = this.valNum.slice(0, this.valExp % 100).split('A');
     const a = fracArr[0];
     const b = fracArr[1];
     const c = fracArr[2] || '';
     let fracLatex, fracDec;
     if (fracArr.length === 2) {
-      fracDec = new Decimal(a).div(b);
-      fracLatex = `\\dfrac {${a}} {${b}}`;
+      fracDec = new Decimal(a).div(b).mul(signFix);
+      fracLatex = `${numSign} \\dfrac {${a}} {${b}}`;
     } else if (fracArr.length === 3) {
-      fracDec = new Decimal(a).add(new Decimal(b).div(c));
-      fracLatex = `{${a}} \\dfrac {${b}} {${c}}`;
+      fracDec = new Decimal(a).add(new Decimal(b).div(c)).mul(signFix);
+      fracLatex = `${numSign} {${a}} \\dfrac {${b}} {${c}}`;
     }
     return [fracLatex, fracDec];
   }
@@ -92,18 +93,23 @@ export class ParseVariable {
     const [aLatex, aDecimal] = toOneSqrt(a);
     const [bLatex, bDecimal] = toOneSqrt(b);
     let latex, decimal;
-    if (aSign && bSign) {
-      latex = `${aLatex} + ${bLatex}`;
-      decimal = aDecimal.add(bDecimal);
-    } else if (aSign && !bSign) {
-      latex = `${aLatex} - ${bLatex}`;
-      decimal = aDecimal.sub(bDecimal);
-    } else if (!aSign && bSign) {
-      latex = `-${aLatex} + ${bLatex}`;
-      decimal = bDecimal.sub(aDecimal);
+    if (!aDecimal.eq(0) && !bDecimal.eq(0)) {
+      if (aSign && bSign) {
+        latex = `${aLatex} + ${bLatex}`;
+        decimal = aDecimal.add(bDecimal);
+      } else if (aSign && !bSign) {
+        latex = `${aLatex} - ${bLatex}`;
+        decimal = aDecimal.sub(bDecimal);
+      } else if (!aSign && bSign) {
+        latex = `-${aLatex} + ${bLatex}`;
+        decimal = bDecimal.sub(aDecimal);
+      } else {
+        latex = `-${aLatex} - ${bLatex}`;
+        decimal = aDecimal.add(bDecimal).neg();
+      }
     } else {
-      latex = `-${aLatex} - ${bLatex}`;
-      decimal = aDecimal.add(bDecimal).neg();
+      decimal = !aDecimal.eq(0) ? aDecimal : bDecimal;
+      latex = !aDecimal.eq(0) ? aLatex : bLatex;
     }
     return [latex, decimal];
   }

@@ -7,7 +7,7 @@ import asciiFD from './FD.json' assert { type: 'json' };
 import asciiFE from './FE.json' assert { type: 'json' };
 import asciiFE_JP from './FE_JP.json' assert { type: 'json' };
 
-const JPModel = ['CY240', 'CY241', 'CY242', 'CY243'];
+const JPModel = ['CY240', 'CY241', 'CY242', 'CY243', 'EY029', 'EY030', 'EY031', 'EY032'];
 
 export class AsciiTable {
   constructor(modelType, modelId) {

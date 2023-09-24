@@ -110,6 +110,9 @@ export class ParseVariable {
     } else {
       decimal = !aDecimal.eq(0) ? aDecimal : bDecimal;
       latex = !aDecimal.eq(0) ? aLatex : bLatex;
+      const sign = !aDecimal.eq(0) ? aSign : bSign;
+      latex = sign ? latex : `-${latex}`;
+      decimal = sign ? decimal : decimal.neg();
     }
     return [latex, decimal];
   }

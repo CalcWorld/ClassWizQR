@@ -53,6 +53,74 @@ export const ParseInequalityResult = (R) => {
     template = template.replace(`\$\{${i}\}`, latex);
     returnResult.push({ name: `Part${i + 1}`, latex, decimal });
   }
+  if (result.template.includes('$')) {
+    throw new Error('Inequality template not match');
+  }
   returnResult.unshift({ name: 'templated', latex: template });
   return returnResult;
+}
+
+export const ParseEquationResult = (R, M, S) => {
+  const resultCode = R.slice(2, 3);
+  if (resultCode !== '0') {
+    return resultInfo['EQUATION'][resultCode];
+  }
+
+  const split = R.slice(3).match(/.{20}/g);
+  let template;
+  const subMode = M.slice(2, 4);
+  if (['01', '02', '03'].includes(subMode)) {
+    template = resultInfo['EQUATION'][resultCode][subMode].template;
+  } else {
+    if (resultInfo['EQUATION'][resultCode][subMode][split.length].complexSetting) {
+      const complexSetting = S.slice(16, 17)
+      template = resultInfo['EQUATION'][resultCode][subMode][split.length].template[complexSetting];
+    } else {
+      template = resultInfo['EQUATION'][resultCode][subMode][split.length].template;
+    }
+  }
+
+  let result = [];
+  if (['01', '02', '03'].includes(subMode)) {
+    for (let i = 0; i < split.length; i++) {
+      const [latex, decimal] = new ParseVariable(split[i]).get();
+      template = template.replace(`\$\{${i}\}`, latex);
+      result.push({ name: `Part${i + 1}`, latex, decimal });
+    }
+  } else {
+    let rootCount;
+    if (['04', '06'].includes(subMode) || ('05' === subMode && !template.includes('max'))) {
+      rootCount = split.length / 2;
+    } else {
+      rootCount = (split.length - 4) / 2;
+    }
+    for (let i = 0; i < rootCount; i++) {
+      const numberResult = ParseNumberResult(split[2 * i] + split[2 * i + 1], M);
+      const latex = numberResult[0].latex;
+      template = template.replace(`\$\{${i}\}`, latex);
+      result.push({ name: `Part${2 * i + 1}`, latex: numberResult[1].latex, decimal: numberResult[1].decimal });
+      result.push({ name: `Part${2 * i + 2}`, latex: numberResult[2].latex, decimal: numberResult[2].decimal });
+    }
+    if ('05' === subMode && template.includes('max')) {
+      for (let i = 0; i < 4; i++) {
+        const [latex, decimal] = new ParseVariable(split[rootCount * 2 + i]).get();
+        template = template.replace(`\$\{${rootCount + i}\}`, latex);
+        result.push({ name: `Part${rootCount * 2 + i + 1}`, latex, decimal });
+      }
+    }
+  }
+
+  if (template.includes('${EXT}')) {
+    const [, firstDecimal] = new ParseVariable(split[0]).get();
+    if (firstDecimal.gt(0)) {
+      template = template.replaceAll('${EXT}', 'min');
+    } else {
+      template = template.replaceAll('${EXT}', 'max');
+    }
+  }
+  if (template.includes('$')) {
+    throw new Error('Equation template not match');
+  }
+  result.unshift({ name: 'templated', latex: template });
+  return result;
 }

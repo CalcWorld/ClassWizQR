@@ -5,7 +5,7 @@ import { ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js
 import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
-import { ParseInequalityResult, ParseNumberResult } from "./variable/R.js";
+import { ParseEquationResult, ParseInequalityResult, ParseNumberResult } from "./variable/R.js";
 
 export class ClassWizQR {
   constructor() {
@@ -106,7 +106,7 @@ export class ClassWizQR {
           result = ParseVectorList(R);
           break;
         case 'EQ':
-          //
+          result = ParseEquationResult(R, kv.M, kv.S);
           break;
         case 'IN':
           result = ParseInequalityResult(R);

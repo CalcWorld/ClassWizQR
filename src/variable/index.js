@@ -61,31 +61,23 @@ export class ParseVariable {
       const b = new Decimal(sqrt.slice(5, 7));
       let latex, decimal;
       if (a.isZero() || r.isZero() || b.isZero()) {
-        latex = '';
+        latex = '0';
         decimal = new Decimal(0);
       } else if (r.eq(1)) {
         if (b.eq(1)) {
           latex = `${a} `;
-          decimal = a;
         } else {
           latex = `\\frac {${a}} {${b}}`;
-          decimal = a.div(b);
         }
+        decimal = a.div(b);
       } else {
+        const aLatex = a.eq(1) ? '' : a;
         if (b.eq(1)) {
-          if (a.eq(1)) {
-            latex = `\\sqrt{${r}} `;
-          } else {
-            latex = `${a} \\sqrt{${r}} `;
-          }
-          decimal = a.mul(r.sqrt());
-        } else if (a.eq(1)) {
-          latex = `\\frac {\\sqrt{${r}} } {${b}}`;
-          decimal = a.mul(r.sqrt()).div(b);
+          latex = `${aLatex} \\sqrt{${r}} `;
         } else {
-          latex = `\\frac {${a} \\sqrt{${r}} } {${b}}`;
-          decimal = a.mul(r.sqrt()).div(b);
+          latex = `\\frac {${aLatex} \\sqrt{${r}} } {${b}}`;
         }
+        decimal = a.mul(r.sqrt()).div(b);
       }
       return [latex, decimal];
     }
@@ -99,16 +91,16 @@ export class ParseVariable {
     let latex, decimal;
     if (!aDecimal.eq(0) && !bDecimal.eq(0)) {
       if (aSign && bSign) {
-        latex = `${aLatex} + ${bLatex}`;
+        latex = `${aLatex}+${bLatex}`;
         decimal = aDecimal.add(bDecimal);
       } else if (aSign && !bSign) {
-        latex = `${aLatex} - ${bLatex}`;
+        latex = `${aLatex}-${bLatex}`;
         decimal = aDecimal.sub(bDecimal);
       } else if (!aSign && bSign) {
-        latex = `-${aLatex} + ${bLatex}`;
+        latex = `-${aLatex}+${bLatex}`;
         decimal = bDecimal.sub(aDecimal);
       } else {
-        latex = `-${aLatex} - ${bLatex}`;
+        latex = `-${aLatex}-${bLatex}`;
         decimal = aDecimal.add(bDecimal).neg();
       }
     } else {

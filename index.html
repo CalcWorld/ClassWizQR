@@ -1,0 +1,6 @@
+<!doctype html><html lang="en"><head><script defer="defer" src="cwqr.js"></script></head><meta charset="UTF-8"><title>ClassWiz QR</title><style>#qrUrl {
+        width: 99%;
+    }</style><div id="app"><label for="qrUrl"></label><input id="qrUrl"/><pre id="qrResult"></pre></div><script>qrUrl.onchange = () => {
+    const result = cwqr.parseUrl(qrUrl.value);
+    qrResult.innerText = JSON.stringify(result, null, 2);
+  }</script></html>

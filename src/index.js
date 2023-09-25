@@ -124,6 +124,8 @@ export class ClassWizQR {
 
     // any calculate in Vector or Matrix contains its defined vector or matrix in C
     // in Equation, Inequality or Ratio mode, it's the entered coefficients
+    // in Distribution mode, it's the entered data
+    // in MathBox mode, it's the dice/coin number and attempts
     let vector, matrix, equation;
     if (kv.C) {
       if (kv.C.startsWith('M')) {
@@ -131,7 +133,14 @@ export class ClassWizQR {
       } else if (kv.C.startsWith('V')) {
         vector = ParseVectorList(kv.C);
       } else if (kv.M) {
-        equation = ParseEquation(kv.M, kv.C);
+        const mainMode = kv.M.slice(0, 2);
+        if (['45', '4A', '4B'].includes(mainMode)) {
+          equation = ParseEquation(kv.M, kv.C);
+        } else if (mainMode === '0C') {
+          // TODO: Distribution Mode input
+        } else if (mainMode === '4F') {
+          // TODO: MathBox Mode input
+        }
       }
     }
 
@@ -140,7 +149,7 @@ export class ClassWizQR {
       if (kv.T.startsWith('SP')) {
         spreadsheet = ParseSpreadsheet(kv.T);
       } else {
-        statistic = ParseStatistic(kv.T);
+        statistic = ParseStatistic(kv.T, kv.M, kv.S);
       }
     }
 

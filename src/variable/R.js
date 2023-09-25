@@ -53,7 +53,7 @@ export const ParseInequalityResult = (R) => {
     template = template.replace(`\$\{${i}\}`, latex);
     returnResult.push({ name: `Part${i + 1}`, latex, decimal });
   }
-  if (result.template.includes('$')) {
+  if (template.includes('$')) {
     throw new Error('Inequality template not match');
   }
   returnResult.unshift({ name: 'templated', latex: template });

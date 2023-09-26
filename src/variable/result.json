@@ -19,14 +19,14 @@
   "INEQUALITY": {
     "01": {
       "name": {
-        "en": "All Real Numbers",
-        "zh": "所有实数"
+        "Global": "All Real Numbers",
+        "CN": "所有实数"
       }
     },
     "02": {
       "name": {
-        "en": "No Solution",
-        "zh": "无解"
+        "Global": "No Solution",
+        "CN": "无解"
       }
     },
     "03": {
@@ -187,26 +187,26 @@
     },
     "1": {
       "name": {
-        "en": "Infinite Solution",
-        "zh": "无数解"
+        "Global": "Infinite Solution",
+        "CN": "无数解"
       }
     },
     "2": {
       "name": {
-        "en": "No Solution",
-        "zh": "无解"
+        "Global": "No Solution",
+        "CN": "无解"
       }
     },
     "4": {
       "name": {
-        "en": "No Real Root",
-        "zh": "无实根"
+        "Global": "No Real Root",
+        "CN": "无实根"
       }
     },
     "5": {
       "name": {
-        "en": "No Local Max/Min",
-        "zh": "无极值"
+        "Global": "No Local Max/Min",
+        "CN": "无极值"
       }
     }
   }

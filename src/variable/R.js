@@ -1,5 +1,6 @@
 import { ParseVariable } from "./index.js";
 import { AsciiTable } from "../ascii/index.js";
+import { langDictToList } from "../mode/index.js";
 import resultInfo from './result.json' assert { type: "json" };
 
 export const ParseNumberResult = (R, M, modelType, modelId) => {
@@ -43,7 +44,7 @@ export const ParseInequalityResult = (R) => {
   const resultCode = R.slice(2, 4);
   const result = resultInfo['INEQUALITY'][resultCode];
   if (!result.template) {
-    return result;
+    return { name: langDictToList(result.name) };
   }
   const split = R.slice(4).match(/.{20}/g);
   let template = result.template;
@@ -63,7 +64,7 @@ export const ParseInequalityResult = (R) => {
 export const ParseEquationResult = (R, M, S) => {
   let resultCode = R.slice(2, 3);
   if (['1', '2', '4'].includes(resultCode)) {
-    return resultInfo['EQUATION'][resultCode];
+    return { name: langDictToList(resultInfo['EQUATION'][resultCode].name) };
   }
   const noLocal = resultCode === '5';
   // when resultCode is '5', it still contains roots data, but indicates no Local Minimum/Maximum

@@ -1,7 +1,7 @@
 import { ParseExpression } from "./expression/index.js";
 import { getModelInfo } from "./model/index.js";
 import { getModeInfo } from "./mode/index.js";
-import { ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js";
+import { ParseDistribution, ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js";
 import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
@@ -112,6 +112,7 @@ export class ClassWizQR {
           result = ParseInequalityResult(R);
           break;
         default:
+          // TODO: statistic calc list
           result = ParseNumberResult(R, kv.M, modelType, modelId);
       }
     }
@@ -126,7 +127,7 @@ export class ClassWizQR {
     // in Equation, Inequality or Ratio mode, it's the entered coefficients
     // in Distribution mode, it's the entered data
     // in MathBox mode, it's the dice/coin number and attempts
-    let vector, matrix, equation;
+    let vector, matrix, equation, distribution, mathBox;
     if (kv.C) {
       if (kv.C.startsWith('M')) {
         matrix = ParseMatrixList(kv.C);
@@ -137,7 +138,7 @@ export class ClassWizQR {
         if (['45', '4A', '4B'].includes(mainMode)) {
           equation = ParseEquation(kv.M, kv.C);
         } else if (mainMode === '0C') {
-          // TODO: Distribution Mode input
+          distribution = ParseDistribution(kv.M, kv.C);
         } else if (mainMode === '4F') {
           // TODO: MathBox Mode input
         }
@@ -172,6 +173,8 @@ export class ClassWizQR {
       matrix,
       spreadsheet,
       statistic,
+      distribution,
+      mathBox,
     };
   }
 

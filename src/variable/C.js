@@ -1,5 +1,5 @@
 import { ParseVariable } from "./index.js";
-import equationInfo from './equation.json' assert { type: "json" };
+import inputInfo from './input.json' assert { type: "json" };
 
 const ParseMatrix = (matrix, m, n) => {
   const split = matrix.match(/.{20}/g);
@@ -93,19 +93,38 @@ export const ParseEquation = (M, C) => {
       subMode += M.slice(6, 8);
       break;
   }
-  let latexExpression = equationInfo[equType][subMode].template;
-  const omitPlus = equationInfo[equType][subMode]['omitPlus'];
+  let template = inputInfo[equType][subMode].template;
+  const omitPlus = inputInfo[equType][subMode]['omitPlus'];
   const decimalResult = [];
   for (let i = 0; i < split.length; i++) {
     let [latex, decimal] = new ParseVariable(split[i]).get();
     if (!omitPlus.includes(i) && decimal.gte(0)) {
       latex = '+' + latex;
     }
-    latexExpression = latexExpression.replace(`\$\{${i}\}`, latex);
+    template = template.replace(`\$\{${i}\}`, latex);
     decimalResult.push(decimal);
   }
-  if (latexExpression.includes('$')) {
+  if (template.includes('$')) {
     throw new Error('Equation template not match');
   }
-  return { latex: latexExpression, decimal: decimalResult };
+  return { latex: template, decimal: decimalResult };
+}
+
+export const ParseDistribution = (M, C) => {
+  const subMode = M.slice(2, 4);
+  const split = C.match(/.{20}/g);
+  const distInfo = inputInfo['DISTRIBUTION'][subMode][split.length];
+  let template = distInfo.template;
+  if (!distInfo['i18n']) {
+    template = [{ region: "Global", template: template }]
+  }
+  const decimalResult = [];
+  for (let i = 0; i < split.length; i++) {
+    const [latex, decimal] = new ParseVariable(split[i]).get();
+    for (let j = 0; j < template.length; j++) {
+      template[j].template = template[j].template.replace(`\$\{${i}\}`, latex);
+    }
+    decimalResult.push(decimal);
+  }
+  return { latex: template, decimal: decimalResult };
 }

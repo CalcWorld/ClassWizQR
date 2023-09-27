@@ -19,6 +19,7 @@ export const getModeInfo = (mode) => {
     subMode += mode.slice(6, 8);
   }
   const mainName = langDictToList(modeInfo[mainMode]['name']);
-  const subName = langDictToList(modeInfo[mainMode]['subMode'][subMode]['name']);
+  let subName = modeInfo[mainMode]['subMode'][subMode];
+  subName = subName ? langDictToList(subName) : [];
   return { mainName, subName };
 }

@@ -1,4 +1,5 @@
 import Decimal from "decimal.js";
+import menuInfo from '../mode/menu.json' assert { type: 'json' };
 
 export class ParseVariable {
   constructor(variable) {
@@ -113,6 +114,13 @@ export class ParseVariable {
     return [latex, decimal];
   }
 
+  _toError() {
+    const errCode = `Y${this.val.slice(1, 2)}`;
+    console.log(errCode);
+    const errInfo = menuInfo[errCode].name.Global;
+    return [errInfo, errInfo];
+  }
+
   get() {
     switch (this.valType) {
       case '0':
@@ -123,6 +131,8 @@ export class ParseVariable {
         return this._toDMS();
       case '8':
         return this._toSqrt();
+      case 'F':
+        return this._toError();
     }
   }
 }

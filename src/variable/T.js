@@ -16,8 +16,7 @@ export const ParseSpreadsheet = (T) => {
           const [, decimal] = new ParseVariable(`0${cell}`).get();
           array[j][i] = decimal;
         } else {
-          // TODO: parse ERROR
-          array[j][i] = 'ERROR';
+          array[j][i] = new ParseVariable(cell).get()[0];
         }
         k++;
       }

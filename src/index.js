@@ -6,6 +6,7 @@ import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
 import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseStatisticResult } from "./variable/R.js";
+import { ParseSetup } from "../setup/index.js";
 
 export class ClassWizQR {
   constructor() {
@@ -67,6 +68,12 @@ export class ClassWizQR {
       _parseM = new ParseMode(kv.M);
       mode = _parseM.getModeInfo();
       _mainMode = _parseM.getMainMode();
+    }
+
+    let setup;
+    if (kv.S) {
+      const parseS = new ParseSetup(kv.S);
+      setup = parseS.parseAll();
     }
 
     let expression;
@@ -167,6 +174,7 @@ export class ClassWizQR {
         serialNumber,
       },
       mode,
+      setup,
       expression,
       equation,
       tableRange,

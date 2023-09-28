@@ -1,0 +1,349 @@
+{
+  "NUMBER_FORMAT": {
+    "name": {
+      "Global": "Number Format",
+      "CN": "显示格式"
+    },
+    "setup": {
+      "0": {
+        "Global": "Norm1",
+        "CN": "常规1"
+      },
+      "4": {
+        "Global": "Norm2",
+        "CN": "常规2"
+      },
+      "8": {
+        "Global": "Fix",
+        "CN": "位数"
+      },
+      "9": {
+        "Global": "Sci",
+        "CN": "科学"
+      }
+    }
+  },
+  "DECIMAL_MARK": {
+    "name": {
+      "Global": "Decimal Mark",
+      "CN": "小数点显示"
+    },
+    "setup": {
+      "0": {
+        "Global": "Comma",
+        "CN": "逗点"
+      },
+      "1": {
+        "Global": "Dot",
+        "CN": "句点"
+      }
+    }
+  },
+  "ANGLE_UNIT": {
+    "name": {
+      "Global": "Angle Unit",
+      "CN": "角度单位"
+    },
+    "setup": {
+      "4": {
+        "Global": "Degree",
+        "CN": "度(D)"
+      },
+      "5": {
+        "Global": "Radian",
+        "CN": "弧度(R)"
+      },
+      "6": {
+        "Global": "Gradian",
+        "CN": "百分度(G)"
+      }
+    }
+  },
+  "INPUT_OUTPUT": {
+    "name": {
+      "Global": "Input/Output",
+      "CN": "输入/输出"
+    },
+    "setup": {
+      "00": {
+        "Global": "LineI/LineO",
+        "CN": "线性输入/线性输出"
+      },
+      "01": {
+        "Global": "LineI/DecimalO",
+        "CN": "线性输入/小数输出"
+      },
+      "10": {
+        "Global": "MathI/MathO",
+        "CN": "数学输入/数学输出"
+      },
+      "11": {
+        "Global": "MathI/DecimalO",
+        "CN": "数学输入/小数输出"
+      }
+    }
+  },
+  "FRACTION_RESULT": {
+    "name": {
+      "Global": "Fraction Result",
+      "CN": "分数结果"
+    },
+    "setup": {
+      "0": {
+        "Global": "d/c",
+        "CN": "假分数"
+      },
+      "1": {
+        "Global": "ab/c",
+        "CN": "带分数"
+      }
+    }
+  },
+  "COMPLEX_RESULT": {
+    "name": {
+      "Global": "Complex Result",
+      "CN": "复数结果"
+    },
+    "setup": {
+      "0": {
+        "Global": "a+bi"
+      },
+      "1": {
+        "Global": "r∠θ"
+      }
+    }
+  },
+  "STATISTICS_FREQUENCY": {
+    "name": {
+      "Global": "Statistics Frequency",
+      "CN": "统计频数"
+    },
+    "setup": {
+      "0": {
+        "Global": "Off",
+        "CN": "关"
+      },
+      "1": {
+        "Global": "On",
+        "CN": "开"
+      }
+    }
+  },
+  "RECURRING_DECIMAL": {
+    "name": {
+      "Global": "Recurring Decimal",
+      "CN": "循环小数"
+    },
+    "setup": {
+      "0": {
+        "Global": "Off",
+        "CN": "关"
+      },
+      "1": {
+        "Global": "On",
+        "CN": "开"
+      }
+    }
+  },
+  "SIMPLIFY": {
+    "name": {
+      "Global": "Simplify",
+      "CN": "化简"
+    },
+    "setup": {
+      "0": {
+        "Global": "Auto",
+        "CN": "自动"
+      },
+      "1": {
+        "Global": "Manual",
+        "CN": "手动"
+      }
+    }
+  },
+  "AUTO_POWER_OFF": {
+    "name": {
+      "Global": "Auto Power Off",
+      "CN": "自动关机"
+    },
+    "setup": {
+      "0": {
+        "Global": "10 Min.",
+        "CN": "10分钟"
+      },
+      "1": {
+        "Global": "60 Min.",
+        "CN": "60分钟"
+      }
+    }
+  },
+  "TABLE_TYPE": {
+    "name": {
+      "Global": "Table Type",
+      "CN": "函数表格类型"
+    },
+    "setup": {
+      "0": {
+        "Global": "f(x)"
+      },
+      "1": {
+        "Global": "f(x),g(x)"
+      },
+      "2": {
+        "Global": "g(x)"
+      }
+    }
+  },
+  "ENGINEER_SYMBOL": {
+    "name": {
+      "Global": "Engineer Symbol",
+      "CN": "工程符号"
+    },
+    "setup": {
+      "0": {
+        "Global": "Off",
+        "CN": "关"
+      },
+      "1": {
+        "Global": "On",
+        "CN": "开"
+      }
+    }
+  },
+  "DIGIT_SEPARATOR": {
+    "name": {
+      "Global": "Digit Separator",
+      "CN": "数字分隔符"
+    },
+    "setup": {
+      "0": {
+        "Global": "Off",
+        "CN": "关"
+      },
+      "1": {
+        "Global": "On",
+        "CN": "开"
+      }
+    }
+  },
+  "MULTI_LINE_FONT": {
+    "name": {
+      "Global": "Multi-Line Font",
+      "CN": "多行字体"
+    },
+    "setup": {
+      "A": {
+        "Global": "Small Font",
+        "CN": "小字体"
+      },
+      "E": {
+        "Global": "Normal Font",
+        "CN": "普通字体"
+      }
+    }
+  },
+  "EQUATION_COMPLEX_ROOT": {
+    "name": {
+      "Global": "Equation Complex Root",
+      "CN": "方程复数根"
+    },
+    "setup": {
+      "0": {
+        "Global": "Off",
+        "CN": "关"
+      },
+      "1": {
+        "Global": "On",
+        "CN": "开"
+      }
+    }
+  },
+  "SPREADSHEET_AUTO_CALC": {
+    "name": {
+      "Global": "Spreadsheet: Auto Calc",
+      "CN": "数据表格：自动计算"
+    },
+    "setup": {
+      "0": {
+        "Global": "Off",
+        "CN": "关"
+      },
+      "1": {
+        "Global": "On",
+        "CN": "开"
+      }
+    }
+  },
+  "SPREADSHEET_SHOW_CELL": {
+    "name": {
+      "Global": "Spreadsheet: Show Cell",
+      "CN": "数据表格：显示单元格"
+    },
+    "setup": {
+      "0": {
+        "Global": "Formula",
+        "CN": "公式"
+      },
+      "1": {
+        "Global": "Value",
+        "CN": "数值"
+      }
+    }
+  },
+  "QR_CODE_VERSION": {
+    "name": {
+      "Global": "QR Code Version",
+      "CN": "QR码版本"
+    },
+    "setup": {
+      "B": {
+        "Global": "Version 11",
+        "CN": "版本11"
+      },
+      "3": {
+        "Global": "Version 3",
+        "CN": "版本3"
+      }
+    }
+  },
+  "ALGORITHM_BACKGROUND": {
+    "name": {
+      "Global": "Algorithm: Background",
+      "CN": "算法：运行时背景"
+    },
+    "setup": {
+      "0": {
+        "Global": "Axes",
+        "CN": "坐标轴"
+      },
+      "1": {
+        "Global": "Axes/Grid",
+        "CN": "坐标轴/网格"
+      },
+      "2": {
+        "Global": "Axes/xy",
+        "CN": "坐标轴/xy标签"
+      },
+      "3": {
+        "Global": "None",
+        "CN": "无"
+      }
+    }
+  },
+  "ALGORITHM_UNIT_SETTING": {
+    "name": {
+      "Global": "Algorithm: Unit Setting",
+      "CN": "算法：移动单位设置"
+    },
+    "setup": {
+      "0": {
+        "Global": "pixels",
+        "CN": "像素"
+      },
+      "1": {
+        "Global": "units",
+        "CN": "单位长度"
+      }
+    }
+  }
+}

@@ -1,5 +1,5 @@
-import Decimal from "decimal.js";
 import { ParseVariable } from "./index.js";
+import { ParseMode } from "../mode/index.js";
 
 export const ParseSpreadsheet = (T) => {
   const position = T.slice(2, 62).match(/[\dA-F]{12}/g).map(t => {
@@ -44,8 +44,9 @@ const ParseRawStatistic = (T) => {
 }
 
 export const ParseStatistic = (T, M, S) => {
-  const mainMode = M.slice(0, 2);
-  const subMode = M.slice(2, 4);
+  const parseM = new ParseMode(M);
+  const mainMode = parseM.getMainMode();
+  const subMode = parseM.getSubMode();
   const head = [];
   let numList;
   if (mainMode === '03') {

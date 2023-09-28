@@ -1,5 +1,6 @@
 import { ParseVariable } from "./index.js";
 import inputInfo from './input.json' assert { type: "json" };
+import { ParseMode } from "../mode/index.js";
 
 const ParseMatrix = (matrix, m, n) => {
   const split = matrix.match(/.{20}/g);
@@ -75,11 +76,9 @@ export const ParseVectorList = (C) => {
 
 export const ParseEquation = (M, C) => {
   const split = C.match(/.{20}/g);
-  const mainMode = M.slice(0, 2);
-  let subMode = M.slice(2, 4);
-  if (subMode === '4B') {
-    subMode += M.slice(6, 8);
-  }
+  const parseM = new ParseMode(M);
+  const mainMode = parseM.getMainMode();
+  let subMode = parseM.getSubMode();
   let equType;
   switch (mainMode) {
     case '45':
@@ -90,7 +89,7 @@ export const ParseEquation = (M, C) => {
       break;
     case '4B':
       equType = 'INEQUALITY';
-      subMode += M.slice(6, 8);
+      subMode += parseM.getInqType();
       break;
   }
   let template = inputInfo[equType][subMode].template;
@@ -111,7 +110,7 @@ export const ParseEquation = (M, C) => {
 }
 
 export const ParseDistribution = (M, C) => {
-  const subMode = M.slice(2, 4);
+  const subMode = new ParseMode(M).getSubMode();
   const split = C.match(/.{20}/g);
   const distInfo = inputInfo['DISTRIBUTION'][subMode][split.length];
   let template = distInfo.template;

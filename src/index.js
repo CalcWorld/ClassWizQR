@@ -1,6 +1,6 @@
 import { ParseExpression } from "./expression/index.js";
 import { getModelInfo } from "./model/index.js";
-import { getModeInfo } from "./mode/index.js";
+import { ParseMode } from "./mode/index.js";
 import { ParseDistribution, ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js";
 import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
@@ -62,9 +62,11 @@ export class ClassWizQR {
 
     const serialNumber = kv.U;
 
-    let mode;
+    let _parseM, mode, _mainMode;
     if (kv.M) {
-      mode = getModeInfo(kv.M);
+      _parseM = new ParseMode(kv.M);
+      mode = _parseM.getModeInfo();
+      _mainMode = _parseM.getMainMode();
     }
 
     let expression;
@@ -111,8 +113,7 @@ export class ClassWizQR {
           result = ParseInequalityResult(R);
           break;
         default:
-          const mainMode = kv.M.slice(0, 2);
-          if (mainMode === '03' && kv.M.slice(4, 5) === 'F') {
+          if (_mainMode === '03' && _parseM.getResultTemplate().startsWith('F')) {
             result = ParseStatisticResult(R, kv.M);
           } else {
             result = ParseNumberResult(R, kv.M, modelType, modelId);
@@ -137,12 +138,11 @@ export class ClassWizQR {
       } else if (kv.C.startsWith('V')) {
         vector = ParseVectorList(kv.C);
       } else if (kv.M) {
-        const mainMode = kv.M.slice(0, 2);
-        if (['45', '4A', '4B'].includes(mainMode)) {
+        if (['45', '4A', '4B'].includes(_mainMode)) {
           equation = ParseEquation(kv.M, kv.C);
-        } else if (mainMode === '0C') {
+        } else if (_mainMode === '0C') {
           distribution = ParseDistribution(kv.M, kv.C);
-        } else if (mainMode === '4F') {
+        } else if (_mainMode === '4F') {
           // TODO: MathBox Mode input
         }
       }

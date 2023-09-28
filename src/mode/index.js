@@ -9,17 +9,65 @@ export const langDictToList = (dict) => {
   return list;
 }
 
-export const getModeInfo = (mode) => {
-  const mainMode = mode.slice(0, 2);
-  let subMode = mode.slice(2, 4);
-  if (mode.startsWith('X') || mode.startsWith('Y') || mode.startsWith('Z')) {
-    return langDictToList(menuInfo[mainMode]);
+export class ParseMode {
+  constructor(M) {
+    this.M = M;
   }
-  if (mainMode === '4B') {
-    subMode += mode.slice(6, 8);
+
+  getMainMode() {
+    if (!this.mainMode) {
+      this.mainMode = this.M.slice(0, 2);
+    }
+    return this.mainMode;
   }
-  const mainName = langDictToList(modeInfo[mainMode]['name']);
-  let subName = modeInfo[mainMode]['subMode'][subMode];
-  subName = subName ? langDictToList(subName) : [];
-  return { mainName, subName };
+
+  getSubMode() {
+    if (!this.subMode) {
+      this.subMode = this.M.slice(2, 4);
+    }
+    return this.subMode;
+  }
+
+  getResultTemplate() {
+    if (!this.resultTemplate) {
+      this.resultTemplate = this.M.slice(4, 6);
+    }
+    return this.resultTemplate;
+  }
+
+  getResultFormat() {
+    if (!this.reultFormat) {
+      this.reultFormat = this.M.slice(6, 8);
+    }
+    return this.reultFormat;
+  }
+
+  getInqType() {
+    if (!this.inqType) {
+      this.inqType = this.M.slice(6, 8);
+    }
+    return this.inqType;
+  }
+
+  getSolveFor() {
+    if (!this.solveFor) {
+      this.solveFor = this.M.slice(8, 10);
+    }
+    return this.solveFor;
+  }
+
+  getModeInfo() {
+    const mainMode = this.getMainMode();
+    if (mainMode.startsWith('X') || mainMode.startsWith('Y') || mainMode.startsWith('Z')) {
+      return langDictToList(menuInfo[mainMode]);
+    }
+    let subMode = this.getSubMode();
+    if (mainMode === '4B') {
+      subMode += this.getInqType();
+    }
+    const mainName = langDictToList(modeInfo[mainMode]['name']);
+    let subName = modeInfo[mainMode]['subMode'][subMode];
+    subName = subName ? langDictToList(subName) : [];
+    return { mainName, subName };
+  }
 }

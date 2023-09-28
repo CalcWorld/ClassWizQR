@@ -63,6 +63,7 @@ export const ParseStatistic = (T, M, S) => {
     head.push('P');
     numList = ParseRawStatistic(T);
   } else if (mainMode === '4F') {
+    // Math Box Mode
     head.push('Freq');
     numList = ParseCompressStatistic(T);
   }

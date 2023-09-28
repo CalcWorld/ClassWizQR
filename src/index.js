@@ -6,7 +6,7 @@ import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
 import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseStatisticResult } from "./variable/R.js";
-import { ParseSetup } from "../setup/index.js";
+import { ParseSetup } from "./setup/index.js";
 
 export class ClassWizQR {
   constructor() {

@@ -5,7 +5,7 @@ import { ParseDistribution, ParseEquation, ParseMatrixList, ParseVectorList } fr
 import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
-import { ParseEquationResult, ParseInequalityResult, ParseNumberResult } from "./variable/R.js";
+import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseStatisticResult } from "./variable/R.js";
 
 export class ClassWizQR {
   constructor() {
@@ -112,8 +112,12 @@ export class ClassWizQR {
           result = ParseInequalityResult(R);
           break;
         default:
-          // TODO: statistic calc list
-          result = ParseNumberResult(R, kv.M, modelType, modelId);
+          const mainMode = kv.M.slice(0, 2);
+          if (mainMode === '03' && kv.M.slice(4, 5) === 'F') {
+            result = ParseStatisticResult(R, kv.M);
+          } else {
+            result = ParseNumberResult(R, kv.M, modelType, modelId);
+          }
       }
     }
 

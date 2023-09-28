@@ -2,6 +2,7 @@ import { ParseVariable } from "./index.js";
 import { AsciiTable } from "../ascii/index.js";
 import { langDictToList } from "../mode/index.js";
 import resultInfo from './result.json' assert { type: "json" };
+import modeInfo from '../mode/mode.json' assert { type: 'json' };
 
 export const ParseNumberResult = (R, M, modelType, modelId) => {
   const ans1 = R.slice(0, R.length / 2);
@@ -128,6 +129,39 @@ export const ParseEquationResult = (R, M, S) => {
   }
   if (noLocal) {
     result.unshift(resultInfo['EQUATION']['5']);
+  }
+  result.unshift({ name: 'templated', latex: template });
+  return result;
+}
+
+export const ParseStatisticResult = (R, M) => {
+  const split = R.match(/.{20}/g);
+  const subMode = M.slice(2, 4);
+  const resultType = M.slice(4, 6);
+  let template;
+  const result = [];
+  switch (resultType) {
+    case 'F1':
+    case 'F2':
+      template = resultInfo['STATISTICS'][resultType === 'F1' ? 'ONE-VAR' : 'TWO-VAR'].template;
+      break;
+    case 'F3':
+      template = modeInfo['03']['subMode'][subMode]['name']['Global'];
+      template = template.match(/\[.*]/g)[0];
+      if (subMode === '03') {
+        template += ' \\\\ a=${0} \\\\ b=${1} \\\\ c=${2}';
+      } else {
+        template += ' \\\\ a=${0} \\\\ b=${1} \\\\ r=${2}';
+      }
+      break;
+  }
+  for (let i = 0; i < split.length; i++) {
+    const [latex, decimal] = new ParseVariable(split[i]).get();
+    template = template.replace(`\$\{${i}\}`, latex);
+    result.push({ name: `Part${i + 1}`, latex, decimal });
+  }
+  if (template.includes('$')) {
+    throw new Error('Statistic template not match');
   }
   result.unshift({ name: 'templated', latex: template });
   return result;

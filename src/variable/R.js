@@ -3,6 +3,7 @@ import { AsciiTable } from "../ascii/index.js";
 import { langDictToList, ParseMode } from "../mode/index.js";
 import resultInfo from './result.json' assert { type: "json" };
 import modeInfo from '../mode/mode.json' assert { type: 'json' };
+import { ParseSetup } from "../setup/index.js";
 
 export const ParseNumberResult = (R, M, modelType, modelId) => {
   const parseM = new ParseMode(M);
@@ -80,7 +81,7 @@ export const ParseEquationResult = (R, M, S) => {
     template = resultInfo['EQUATION'][resultCode][subMode].template;
   } else {
     if (resultInfo['EQUATION'][resultCode][subMode][split.length]['complexSetting']) {
-      const complexSetting = S.slice(16, 17)
+      const complexSetting = new ParseSetup(S).getComplexResultCode();
       template = resultInfo['EQUATION'][resultCode][subMode][split.length].template[complexSetting];
     } else {
       template = resultInfo['EQUATION'][resultCode][subMode][split.length].template;

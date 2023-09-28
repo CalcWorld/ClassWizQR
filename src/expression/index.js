@@ -1,5 +1,6 @@
 import { AsciiTable, mathTemplate, recDecOverlineModel, recDecBracketModel } from "../ascii/index.js";
 import { ParseMode } from "../mode/index.js";
+import { ParseSetup } from "../setup/index.js";
 
 export class ParseExpression {
   constructor(E, modelType, modelId) {
@@ -161,13 +162,8 @@ export class ParseExpression {
   }
 
   autoParse(M, S) {
-    const mainMode = new ParseMode(M).getMainMode();
-    if (['88', '89', 'C1', 'C4'].includes(mainMode)) {
-      const inputType = S.slice(4, 5);
-      if (inputType === '1') {
-        return this.parseMath();
-      }
-      return this.parseLine();
+    if (['88', '89', 'C1', 'C4'].includes(new ParseMode(M).getMainMode()) && new ParseSetup(S).getInputCode() === '1') {
+      return this.parseMath();
     }
     return this.parseLine();
   }

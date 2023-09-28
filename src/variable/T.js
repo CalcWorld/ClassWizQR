@@ -1,5 +1,6 @@
 import { ParseVariable } from "./index.js";
 import { ParseMode } from "../mode/index.js";
+import { ParseSetup } from "../setup/index.js";
 
 export const ParseSpreadsheet = (T) => {
   const position = T.slice(2, 62).match(/[\dA-F]{12}/g).map(t => {
@@ -53,7 +54,7 @@ export const ParseStatistic = (T, M, S) => {
     // Statistic Mode
     head.push('x');
     subMode !== '01' && head.push('y');
-    const freqOn = S.slice(7, 8) === '1';
+    const freqOn = new ParseSetup(S).getStatisticsFrequencyCode() === '1';
     freqOn && head.push('Freq');
     numList = ParseCompressStatistic(T);
   } else if (mainMode === '0C') {
@@ -62,15 +63,7 @@ export const ParseStatistic = (T, M, S) => {
     head.push('P');
     numList = ParseRawStatistic(T);
   } else if (mainMode === '4F') {
-    // MathBox Mode
-    // const type = S.slice(4, 6);
-    // if (type === 'S1') {
-    //   head.push('Sum');
-    // } else if (type === 'S2') {
-    //   head.push('Side');
-    // }
     head.push('Freq');
-    // head.push('Rel_Fr');
     numList = ParseCompressStatistic(T);
   }
   const array = [head];

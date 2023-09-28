@@ -70,23 +70,22 @@ export class ClassWizQR {
     let expression;
     if (kv.E) {
       const parseE = new ParseExpression(kv.E, modelType, modelId);
-      // TODO: base on setting
-      if (1) {
-        expression = parseE.parseMath();
+      // TODO: parse Algo
+      if (kv.M && kv.S) {
+        expression = parseE.autoParse(kv.M, kv.S);
       } else {
-        expression = parseE.parseLine();
+        expression = parseE.parseMath();
       }
     }
     if (kv.G) {
-      // TODO: base on mode
       const parseG = new ParseExpression(kv.G, modelType, modelId);
       let expr2;
-      if (1) {
-        expr2 = parseG.parseMath();
+      if (kv.M && kv.S) {
+        expr2 = parseG.autoParse(kv.M, kv.S);
       } else {
-        expr2 = parseG.parseLine();
+        expr2 = parseG.parseMath();
       }
-      expression = [`f(x)=${expression}`, `g(x)=${expr2}`]
+      expression = `f(x)=${expression} \\\\ g(x)=${expr2}`;
     }
 
     let tableRange;

@@ -1,15 +1,15 @@
 import { AsciiTable, mathTemplate, recDecOverlineModel, recDecBracketModel } from "../ascii/index.js";
 
 export class ParseExpression {
-  constructor(expression, modelType, modelId) {
-    this.expression = expression;
+  constructor(E, modelType, modelId) {
+    this.E = E;
     this.modelType = modelType;
     this.modelId = modelId;
     this.asciiTable = new AsciiTable(modelType, modelId).get();
   }
 
   parseLine() {
-    const asciiArray = this.expression.match(/F[\dA-F]{3}|[\dA-F]{2}/g);
+    const asciiArray = this.E.match(/F[\dA-F]{3}|[\dA-F]{2}/g);
     const result = [];
     for (let i = 0; i < asciiArray.length; i++) {
       result.push(this.asciiTable[asciiArray[i]]);
@@ -28,7 +28,7 @@ export class ParseExpression {
   }
 
   _parseToTree() {
-    let text = this.expression;
+    let text = this.E;
     text = text.replaceAll('1F1D1A', '1A');
     text = text.replaceAll('1D1A', '1A');
     text = text.replaceAll('1B1E', '1B');
@@ -157,5 +157,17 @@ export class ParseExpression {
     } catch (e) {
       return this.parseLine();
     }
+  }
+
+  autoParse(M, S) {
+    const mainMode = M.slice(0, 2);
+    if (['88', '89', 'C1', 'C4'].includes(mainMode)) {
+      const inputType = S.slice(4, 5);
+      if (inputType === '1') {
+        return this.parseMath();
+      }
+      return this.parseLine();
+    }
+    return this.parseLine();
   }
 }

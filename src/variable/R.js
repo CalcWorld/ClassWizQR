@@ -142,8 +142,10 @@ export const ParseStatisticResult = (R, M) => {
   const result = [];
   switch (resultType) {
     case 'F1':
+      template = resultInfo['STATISTICS']['ONE-VAR'].template;
+      break;
     case 'F2':
-      template = resultInfo['STATISTICS'][resultType === 'F1' ? 'ONE-VAR' : 'TWO-VAR'].template;
+      template = resultInfo['STATISTICS']['TWO-VAR'].template;
       break;
     case 'F3':
       template = modeInfo['03']['subMode'][subMode]['name']['Global'];

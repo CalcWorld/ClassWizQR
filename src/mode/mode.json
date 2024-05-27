@@ -2,94 +2,108 @@
   "88": {
     "name": {
       "Global": "Table",
-      "CN": "函数表格"
+      "CN": "函数表格",
+      "VN": "Bảng giá trị"
     },
     "subMode": {}
   },
   "89": {
     "name": {
       "Global": "Verify",
-      "CN": "验证"
+      "CN": "验证",
+      "VN": "Kiểm chứng"
     },
     "subMode": {}
   },
   "06": {
     "name": {
       "Global": "Matrix",
-      "CN": "矩阵"
+      "CN": "矩阵",
+      "VN": "Ma trận"
     },
     "subMode": {}
   },
   "07": {
     "name": {
       "Global": "Vector",
-      "CN": "向量"
+      "CN": "向量",
+      "VN": "Véc-tơ"
     },
     "subMode": {}
   },
   "0D": {
     "name": {
       "Global": "Spreadsheet",
-      "CN": "数据表格"
+      "CN": "数据表格",
+      "VN": "Bảng tính"
     },
     "subMode": {}
   },
   "0E": {
     "name": {
       "Global": "Algorithm",
-      "CN": "算法"
+      "CN": "算法",
+      "VN": "Thuật toán"
     },
     "subMode": {}
   },
   "4F": {
     "name": {
       "Global": "Math Box",
-      "CN": "数学盒"
+      "CN": "数学盒",
+      "VN": "Hộp Toán học"
     },
     "subMode": {}
   },
   "C1": {
     "name": {
       "Global": "Calculate",
-      "CN": "计算"
+      "CN": "计算",
+      "VN": "Phép tính thường"
     },
     "subMode": {}
   },
   "C4": {
     "name": {
       "Global": "Complex",
-      "CN": "复数"
+      "CN": "复数",
+      "VN": "Số phức"
     },
     "subMode": {}
   },
   "02": {
     "name": {
       "Global": "Base-N",
-      "CN": "基数"
+      "CN": "基数",
+      "VN": "Hệ đếm cơ số N"
     },
     "subMode": {
       "01": {
         "name": {
           "Global": "Binary",
-          "CN": "二进制"
+          "CN": "二进制",
+          "VN": "Nhị phân"
         }
       },
       "07": {
         "name": {
           "Global": "Octal",
-          "CN": "八进制"
+          "CN": "八进制",
+          "VN": "Bát phân"
         }
       },
       "09": {
         "name": {
           "Global": "Decimal",
-          "CN": "十进制"
+          "CN": "十进制",
+          "VN": "Thập phân"
         }
       },
       "0F": {
         "name": {
           "Global": "Hexadecimal",
-          "CN": "十六进制"
+          "CN": "十六进制",
+          "VN": "Thập lục phân"
         }
       }
     }
@@ -97,55 +111,64 @@
   "03": {
     "name": {
       "Global": "Statistics",
-      "CN": "统计"
+      "CN": "统计",
+      "VN": "Thống kê"
     },
     "subMode": {
       "01": {
         "name": {
           "Global": "Single-Variable Statistic",
-          "CN": "单变量统计"
+          "CN": "单变量统计",
+          "VN": "Thống kê 1 biến"
         }
       },
       "02": {
         "name": {
           "Global": "Linear Regression [y=a+bx]/[y=ax+b]",
-          "CN": "线性回归 [y=a+bx]/[y=ax+b]"
+          "CN": "线性回归 [y=a+bx]/[y=ax+b]",
+          "VN": "Hồi quy tuyến tính [y=a+bx]/[y=ax+b]"
         }
       },
       "03": {
         "name": {
           "Global": "Quadratic Regression [y=a+bx+cx²]/[y=ax²+bx+c]",
-          "CN": "二次回归 [y=a+bx+cx²]/[y=ax²+bx+c]"
+          "CN": "二次回归 [y=a+bx+cx²]/[y=ax²+bx+c]",
+          "Global": "Hồi quy bậc hai [y=a+bx+cx²]/[y=ax²+bx+c]"
         }
       },
       "04": {
         "name": {
           "Global": "Logarithmic Regression [y=a+b･ln(x)]",
-          "CN": "对数回归 [y=a+b･ln(x)]"
+          "CN": "对数回归 [y=a+b･ln(x)]",
+          "VN": "Hồi quy lôgarit [y=a+b･ln(x)]"
         }
       },
       "05": {
         "name": {
           "Global": "e exponential Regression [y=a･e^(bx)]",
-          "CN": "e 指数回归 [y=a･e^(bx)]"
+          "CN": "e 指数回归 [y=a･e^(bx)]",
+          "VN": "e hồi quy hàm số mũ [y=a･e^(bx)]"
         }
       },
       "06": {
         "name": {
           "Global": "ab exponential Regression [y=a･b^x]",
-          "CN": "ab 指数回归 [y=a･b^x]"
+          "CN": "ab 指数回归 [y=a･b^x]",
+          "VN": "ab hồi quy hàm số mũ [y=a･b^x]"
         }
       },
       "07": {
         "name": {
           "Global": "Power Regression [y=a･x^b]",
-          "CN": "乘方回归 [y=a･x^b]"
+          "CN": "乘方回归 [y=a･x^b]",
+          "VN": "Hồi quy lũy thừa [y=a･x^b]"
         }
       },
       "08": {
         "name": {
           "Global": "Inverse Regression [y=a+b/x]",
-          "CN": "逆回归 [y=a+b/x]"
+          "CN": "逆回归 [y=a+b/x]",
+          "VN": "Hồi quy nghịch đảo [y=a+b/x]"
         }
       }
     }
@@ -153,49 +176,57 @@
   "0C": {
     "name": {
       "Global": "Distribution",
-      "CN": "分布"
+      "CN": "分布",
+      "VN": "Phân phối"
     },
     "subMode": {
       "01": {
         "name": {
           "Global": "Normal Probability Density",
-          "CN": "正态概率密度"
+          "CN": "正态概率密度",
+          "VN": "Mật độ xác suất chuẩn"
         }
       },
       "02": {
         "name": {
           "Global": "Normal Cumulative Distribution",
-          "CN": "正态累积分布"
+          "CN": "正态累积分布",
+          "VN": "Phân phối tích lũy chuẩn"
         }
       },
       "03": {
         "name": {
           "Global": "Inverse Normal Cumulative Distribution",
-          "CN": "反正态累积分布"
+          "CN": "反正态累积分布",
+          "VN": "Phân phối tích lũy chuẩn nghịch đảo"
         }
       },
       "04": {
         "name": {
           "Global": "Binomial Probability",
-          "CN": "二项概率密度"
+          "CN": "二项概率密度",
+          "VN": "Xác suất nhị thức"
         }
       },
       "05": {
         "name": {
           "Global": "Binomial Cumulative Distribution",
-          "CN": "二项累积分布"
+          "CN": "二项累积分布",
+          "VN": "Phân phối tích lũy nhị thức"
         }
       },
       "06": {
         "name": {
           "Global": "Poisson Probability",
-          "CN": "泊松概率密度"
+          "CN": "泊松概率密度",
+          "VN": "Xác suất Poisson"
         }
       },
       "07": {
         "name": {
           "Global": "Poisson Cumulative Distribution",
-          "CN": "泊松累积分布"
+          "CN": "泊松累积分布",
+          "VN": "Phân phối tích lũy Poisson"
         }
       }
     }
@@ -203,47 +234,57 @@
   "45": {
     "name": {
       "Global": "Equation",
-      "CN": "方程"
+      "CN": "方程",
+      "VN": "Phương trình"
     },
     "subMode": {
       "01": {
         "name": {
           "Global": "Simultaneous Equation with 2 Unknowns",
-          "CN": "二元一次方程组"
+          "CN": "二元一次方程组",
+          "VN": "Phương trình tuyến tính đồng thời với 2 ẩn"
         }
       },
       "02": {
         "name": {
           "Global": "Simultaneous Equation with 3 Unknowns",
-          "CN": "三元一次方程组"
+          "CN": "三元一次方程组",
+          "VN": "Phương trình tuyến tính đồng thời với 3 ẩn"
         }
       },
       "03": {
         "name": {
           "Global": "Simultaneous Equation with 4 Unknowns",
-          "CN": "四元一次方程组"
-        }},
+          "CN": "四元一次方程组",
+          "VN": "Phương trình tuyến tính đồng thời với 4 ẩn"
+        }
+      },
       "04": {
         "name": {
           "Global": "Quadratic Equation [ax²+bx+c=0]",
-          "CN": "二次方程 [ax²+bx+c=0]"
-        }},
+          "CN": "二次方程 [ax²+bx+c=0]",
+          "VN": "Phương trình bậc hai [ax²+bx+c=0]"
+        }
+      },
       "05": {
         "name": {
           "Global": "Cubic Equation [ax³+bx²+cx+d=0]",
-          "CN": "三次方程 [ax³+bx²+cx+d=0]"
+          "CN": "三次方程 [ax³+bx²+cx+d=0]",
+          "VN": "Phương trình bậc hai [ax³+bx²+cx+d=0]"
         }
       },
       "06": {
         "name": {
           "Global": "Quartic Equation [ax⁴+bx³+cx²+dx+e=0]",
-          "CN": "四次方程 [ax⁴+bx³+cx²+dx+e=0]"
+          "CN": "四次方程 [ax⁴+bx³+cx²+dx+e=0]",
+          "VN": "Phương trình bậc bốn [ax⁴+bx³+cx²+dx+e=0]"
         }
       },
       "08": {
         "name": {
           "Global": "Solver",
-          "CN": "求解方程"
+          "CN": "求解方程",
+          "VN": "Bộ giải phương trình"
         }
       }
     }
@@ -251,7 +292,8 @@
   "4A": {
     "name": {
       "Global": "Ratio",
-      "CN": "比例"
+      "CN": "比例",
+      "VN": "Tỉ lệ thức"
     },
     "subMode": {
       "01": {
@@ -269,7 +311,8 @@
   "4B": {
     "name": {
       "Global": "Inequality",
-      "CN": "不等式"
+      "CN": "不等式",
+      "VN": "Bất phương trình"
     },
     "subMode": {
       "0400": {

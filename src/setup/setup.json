@@ -2,91 +2,109 @@
   "NUMBER_FORMAT": {
     "name": {
       "Global": "Number Format",
-      "CN": "显示格式"
+      "CN": "显示格式",
+      "VN": "Định dạng số"
     },
     "setup": {
       "0": {
         "Global": "Norm1",
-        "CN": "常规1"
+        "CN": "常规1",
+        "VN": "Viết số bình thường 1"
       },
       "4": {
         "Global": "Norm2",
-        "CN": "常规2"
+        "CN": "常规2",
+        "VN": "Viết số bình thường 2"
       },
       "8": {
         "Global": "Fix",
-        "CN": "位数"
+        "CN": "位数",
+        "VN": "Chọn số thập phân"
       },
       "9": {
         "Global": "Sci",
-        "CN": "科学"
+        "CN": "科学",
+        "VN": "Dạng a×10ⁿ"
       }
     }
   },
   "DECIMAL_MARK": {
     "name": {
       "Global": "Decimal Mark",
-      "CN": "小数点显示"
+      "CN": "小数点显示",
+      "VN": "Dấu thập phân"
     },
     "setup": {
       "0": {
         "Global": "Comma",
-        "CN": "逗点"
+        "CN": "逗点",
+        "VN": "Phẩy"
       },
       "1": {
         "Global": "Dot",
-        "CN": "句点"
+        "CN": "句点",
+        "VN": "Chấm"
       }
     }
   },
   "ANGLE_UNIT": {
     "name": {
       "Global": "Angle Unit",
-      "CN": "角度单位"
+      "CN": "角度单位",
+      "VN": "Đơn vị góc"
     },
     "setup": {
       "4": {
         "Global": "Degree",
-        "CN": "度(D)"
+        "CN": "度(D)",
+        "VN": "Độ"
       },
       "5": {
         "Global": "Radian",
-        "CN": "弧度(R)"
+        "CN": "弧度(R)",
+        "VN": "Radian"
       },
       "6": {
         "Global": "Gradian",
-        "CN": "百分度(G)"
+        "CN": "百分度(G)",
+        "VN": "Grad"
       }
     }
   },
   "INPUT_OUTPUT": {
     "name": {
       "Global": "Input/Output",
-      "CN": "输入/输出"
+      "CN": "输入/输出",
+      "VN": "Nhập/Xuất"
     },
     "setup": {
       "00": {
         "Global": "LineI/LineO",
-        "CN": "线性输入/线性输出"
+        "CN": "线性输入/线性输出",
+        "VN": "Dòng vào/ra"
       },
       "01": {
         "Global": "LineI/DecimalO",
-        "CN": "线性输入/小数输出"
+        "CN": "线性输入/小数输出",
+        "VN": "Dòng vào/Số thập phân ra"
       },
       "10": {
         "Global": "MathI/MathO",
-        "CN": "数学输入/数学输出"
+        "CN": "数学输入/数学输出",
+        "VN": "Số tự nhiên vào/ra"
       },
       "11": {
         "Global": "MathI/DecimalO",
-        "CN": "数学输入/小数输出"
+        "CN": "数学输入/小数输出",
+        "VN": "Số tự nhiên vào/Số thập phân ra"
       }
     }
   },
   "FRACTION_RESULT": {
     "name": {
       "Global": "Fraction Result",
-      "CN": "分数结果"
+      "CN": "分数结果",
+      "VN": "Kết quả phân số"
     },
     "setup": {
       "0": {
@@ -102,7 +120,8 @@
   "COMPLEX_RESULT": {
     "name": {
       "Global": "Complex Result",
-      "CN": "复数结果"
+      "CN": "复数结果",
+      "VN": "Kết quả số phức"
     },
     "setup": {
       "0": {
@@ -116,71 +135,84 @@
   "STATISTICS_FREQUENCY": {
     "name": {
       "Global": "Statistics Frequency",
-      "CN": "统计频数"
+      "CN": "统计频数",
+      "VN": "Tần số thống kê"
     },
     "setup": {
       "0": {
         "Global": "Off",
-        "CN": "关"
+        "CN": "关",
+        "VN": "Tắt"
       },
       "1": {
         "Global": "On",
-        "CN": "开"
+        "CN": "开",
+        "VN": "Bật"
       }
     }
   },
   "RECURRING_DECIMAL": {
     "name": {
       "Global": "Recurring Decimal",
-      "CN": "循环小数"
+      "CN": "循环小数",
+      "VN": "Số thập phân tuần hoàn"
     },
     "setup": {
       "0": {
         "Global": "Off",
-        "CN": "关"
+        "CN": "关",
+        "VN": "Tắt"
       },
       "1": {
         "Global": "On",
-        "CN": "开"
+        "CN": "开",
+        "VN": "Bật"
       }
     }
   },
   "SIMPLIFY": {
     "name": {
       "Global": "Simplify",
-      "CN": "化简"
+      "CN": "化简",
+      "VN": "Rút gọn"
     },
     "setup": {
       "0": {
         "Global": "Auto",
-        "CN": "自动"
+        "CN": "自动",
+        "VN": "Tự động"
       },
       "1": {
         "Global": "Manual",
-        "CN": "手动"
+        "CN": "手动",
+        "VN": "Bằng tay"
       }
     }
   },
   "AUTO_POWER_OFF": {
     "name": {
       "Global": "Auto Power Off",
-      "CN": "自动关机"
+      "CN": "自动关机",
+      "VN": "Tự động tắt"
     },
     "setup": {
       "0": {
         "Global": "10 Min.",
-        "CN": "10分钟"
+        "CN": "10分钟",
+        "VN": "10 phút"
       },
       "1": {
         "Global": "60 Min.",
-        "CN": "60分钟"
+        "CN": "60分钟",
+        "VN": "60 phút"
       }
     }
   },
   "TABLE_TYPE": {
     "name": {
       "Global": "Table Type",
-      "CN": "函数表格类型"
+      "CN": "函数表格类型",
+      "VN": "Loại bảng"
     },
     "setup": {
       "0": {
@@ -197,152 +229,181 @@
   "ENGINEER_SYMBOL": {
     "name": {
       "Global": "Engineer Symbol",
-      "CN": "工程符号"
+      "CN": "工程符号",
+      "VN": "Kí hiệu kĩ thuật"
     },
     "setup": {
       "0": {
         "Global": "Off",
-        "CN": "关"
+        "CN": "关",
+        "VN": "Tắt"
       },
       "1": {
         "Global": "On",
-        "CN": "开"
+        "CN": "开",
+        "VN": "Bật"
       }
     }
   },
   "DIGIT_SEPARATOR": {
     "name": {
       "Global": "Digit Separator",
-      "CN": "数字分隔符"
+      "CN": "数字分隔符",
+      "VN": "Dấu cách 3 chữ số"
     },
     "setup": {
       "0": {
         "Global": "Off",
-        "CN": "关"
+        "CN": "关",
+        "VN": "Tắt"
       },
       "1": {
         "Global": "On",
-        "CN": "开"
+        "CN": "开",
+        "VN": "Bật"
       }
     }
   },
   "MULTI_LINE_FONT": {
     "name": {
       "Global": "Multi-Line Font",
-      "CN": "多行字体"
+      "CN": "多行字体",
+      "VN": "Phông Multi-Line"
     },
     "setup": {
       "A": {
         "Global": "Small Font",
-        "CN": "小字体"
+        "CN": "小字体",
+        "VN": "Phông chữ thường"
       },
       "E": {
         "Global": "Normal Font",
-        "CN": "普通字体"
+        "CN": "普通字体",
+        "VN": "Phông chữ nhỏ"
       }
     }
   },
   "EQUATION_COMPLEX_ROOT": {
     "name": {
       "Global": "Equation Complex Root",
-      "CN": "方程复数根"
+      "CN": "方程复数根",
+      "VN": "Nghiệm Phức Phương trình"
     },
     "setup": {
       "0": {
         "Global": "Off",
-        "CN": "关"
+        "CN": "关",
+        "VN": "Tắt"
       },
       "1": {
         "Global": "On",
-        "CN": "开"
+        "CN": "开",
+        "VN": "Bật"
       }
     }
   },
   "SPREADSHEET_AUTO_CALC": {
     "name": {
       "Global": "Spreadsheet: Auto Calc",
-      "CN": "数据表格：自动计算"
+      "CN": "数据表格：自动计算",
+      "VN": "Bảng tính: Tự động tính"
     },
     "setup": {
       "0": {
         "Global": "Off",
-        "CN": "关"
+        "CN": "关",
+        "VN": "Tắt"
       },
       "1": {
         "Global": "On",
-        "CN": "开"
+        "CN": "开",
+        "VN": "Bật"
       }
     }
   },
   "SPREADSHEET_SHOW_CELL": {
     "name": {
       "Global": "Spreadsheet: Show Cell",
-      "CN": "数据表格：显示单元格"
+      "CN": "数据表格：显示单元格",
+      "VN": "Bảng tính: Hiện ô"
     },
     "setup": {
       "0": {
         "Global": "Formula",
-        "CN": "公式"
+        "CN": "公式",
+        "VN": "Công thức"
       },
       "1": {
         "Global": "Value",
-        "CN": "数值"
+        "CN": "数值",
+        "VN": "Giá trị"
       }
     }
   },
   "QR_CODE_VERSION": {
     "name": {
       "Global": "QR Code Version",
-      "CN": "QR码版本"
+      "CN": "QR码版本",
+      "VN": "Phiên bản mã QR"
     },
     "setup": {
       "B": {
         "Global": "Version 11",
-        "CN": "版本11"
+        "CN": "版本11",
+        "VN": "Phiên bản 11"
       },
       "3": {
         "Global": "Version 3",
-        "CN": "版本3"
+        "CN": "版本3",
+        "VN": "Phiên bản 3"
       }
     }
   },
   "ALGORITHM_BACKGROUND": {
     "name": {
       "Global": "Algorithm: Background",
-      "CN": "算法：运行时背景"
+      "CN": "算法：运行时背景",
+      "VN": "Thuật toán: Nền"
     },
     "setup": {
       "0": {
         "Global": "Axes",
-        "CN": "坐标轴"
+        "CN": "坐标轴",
+        "VN": "Trục"
       },
       "1": {
         "Global": "Axes/Grid",
-        "CN": "坐标轴/网格"
+        "CN": "坐标轴/网格",
+        "VN": "Trục/Lưới"
       },
       "2": {
         "Global": "Axes/xy",
-        "CN": "坐标轴/xy标签"
+        "CN": "坐标轴/xy标签",
+        "VN": "Trục/xy"
       },
       "3": {
         "Global": "None",
-        "CN": "无"
+        "CN": "无",
+        "VN": "Không có"
       }
     }
   },
   "ALGORITHM_UNIT_SETTING": {
     "name": {
       "Global": "Algorithm: Unit Setting",
-      "CN": "算法：移动单位设置"
+      "CN": "算法：移动单位设置",
+      "VN": "Thuật toán: Cài đặt đơn vị"
     },
     "setup": {
       "0": {
         "Global": "pixels",
-        "CN": "像素"
+        "CN": "像素",
+        "VN": "pixel"
       },
       "1": {
         "Global": "units",
-        "CN": "单位长度"
+        "CN": "单位长度",
+        "VN": "đơn vị"
       }
     }
   }

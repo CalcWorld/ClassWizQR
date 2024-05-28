@@ -66,8 +66,8 @@ export class ParseMode {
       subMode += this.getInqType();
     }
     const mainName = langDictToList(modeInfo[mainMode]['name']);
-    let subName = modeInfo[mainMode]['subMode'][subMode]['name'];
-    subName = subName ? langDictToList(subName) : [];
+    let subName = modeInfo[mainMode]['subMode'][subMode];
+    subName = subName ? langDictToList(subName['name']	) : [];
     return { mainName, subName };
   }
 }

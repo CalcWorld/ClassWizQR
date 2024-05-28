@@ -124,10 +124,10 @@
       "VN": "Kết quả số phức"
     },
     "setup": {
-      "0": {
+      "1": {
         "Global": "a+bi"
       },
-      "1": {
+      "0": {
         "Global": "r∠θ"
       }
     }
@@ -274,12 +274,12 @@
       "A": {
         "Global": "Small Font",
         "CN": "小字体",
-        "VN": "Phông chữ thường"
+        "VN": "Phông chữ nhỏ"
       },
       "E": {
         "Global": "Normal Font",
         "CN": "普通字体",
-        "VN": "Phông chữ nhỏ"
+        "VN": "Phông chữ thường"
       }
     }
   },

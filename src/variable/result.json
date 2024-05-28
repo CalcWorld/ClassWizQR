@@ -20,13 +20,15 @@
     "01": {
       "name": {
         "Global": "All Real Numbers",
-        "CN": "所有实数"
+        "CN": "所有实数",
+		"VN": "Tất cả số thực"
       }
     },
     "02": {
       "name": {
         "Global": "No Solution",
-        "CN": "无解"
+        "CN": "无解",
+		"VN": "Vô nghiệm"
       }
     },
     "03": {
@@ -188,25 +190,29 @@
     "1": {
       "name": {
         "Global": "Infinite Solution",
-        "CN": "无数解"
+        "CN": "无数解",
+		"VN": "Vô số nghiệm"
       }
     },
     "2": {
       "name": {
         "Global": "No Solution",
-        "CN": "无解"
+        "CN": "无解",
+		"VN": "Vô nghiệm"
       }
     },
     "4": {
       "name": {
-        "Global": "No Real Root",
-        "CN": "无实根"
+        "Global": "No Real Roots",
+        "CN": "无实根",
+		"VN": "Vô nghiệm"
       }
     },
     "5": {
       "name": {
         "Global": "No Local Max/Min",
-        "CN": "无极值"
+        "CN": "无极值",
+		"VN": "Không có CĐ/CT"
       }
     }
   },

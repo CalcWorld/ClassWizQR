@@ -21,14 +21,14 @@
       "name": {
         "Global": "All Real Numbers",
         "CN": "所有实数",
-		"VN": "Tất cả số thực"
+        "VN": "Tất cả số thực"
       }
     },
     "02": {
       "name": {
         "Global": "No Solution",
         "CN": "无解",
-		"VN": "Vô nghiệm"
+        "VN": "Vô nghiệm"
       }
     },
     "03": {
@@ -191,28 +191,28 @@
       "name": {
         "Global": "Infinite Solution",
         "CN": "无数解",
-		"VN": "Vô số nghiệm"
+        "VN": "Vô số nghiệm"
       }
     },
     "2": {
       "name": {
         "Global": "No Solution",
         "CN": "无解",
-		"VN": "Vô nghiệm"
+        "VN": "Vô nghiệm"
       }
     },
     "4": {
       "name": {
         "Global": "No Real Roots",
         "CN": "无实根",
-		"VN": "Vô nghiệm"
+        "VN": "Vô nghiệm"
       }
     },
     "5": {
       "name": {
         "Global": "No Local Max/Min",
         "CN": "无极值",
-		"VN": "Không có CĐ/CT"
+        "VN": "Không có CĐ/CT"
       }
     }
   },
@@ -221,7 +221,7 @@
       "template": "\\bar{x}=${0} \\\\ \\rm{\\Sigma}x=${1} \\\\ \\rm{\\Sigma}x^2=${2} \\\\ \\rm{\\sigma}^2x=${3} \\\\ \\rm{\\sigma}x=${4} \\\\ \\rm{s}^2x=${5} \\\\ \\rm{s}x=${6} \\\\ n=${7} \\\\ \\rm{min}(x)=${8} \\\\ \\rm{Q}_{1}=${9} \\\\ \\rm{Med}=${10} \\\\ \\rm{Q}_3=${11} \\\\ \\rm{max}(x)=${12}"
     },
     "TWO-VAR": {
-        "template": "\\bar{x}=${0} \\\\ \\rm{\\Sigma}x=${1} \\\\ \\rm{\\Sigma}x^2=${2} \\\\ \\rm{\\sigma}^2x=${3} \\\\ \\rm{\\sigma}x=${4} \\\\ \\rm{s}^2x=${5} \\\\ \\rm{s}x=${6} \\\\ n=${7} \\\\ \\bar{y}=${8} \\\\ \\rm{\\Sigma}y=${9} \\\\ \\rm{\\Sigma}y^2=${10} \\\\ \\rm{\\sigma}^2y=${11} \\\\ \\rm{\\sigma}y=${12} \\\\ \\rm{s}^2y=${13} \\\\ \\rm{s}y=${14} \\\\ \\rm{\\Sigma}xy=${15} \\\\ \\rm{\\Sigma}x^3=${16} \\\\ \\rm{\\Sigma}x^2y=${17} \\\\ \\rm{\\Sigma}x^4=${18} \\\\ \\rm{min}(x)=${19} \\\\ \\rm{max}(x)=${20} \\\\ \\rm{min}(y)=${21} \\\\ \\rm{max}(y)=${22}"
+      "template": "\\bar{x}=${0} \\\\ \\rm{\\Sigma}x=${1} \\\\ \\rm{\\Sigma}x^2=${2} \\\\ \\rm{\\sigma}^2x=${3} \\\\ \\rm{\\sigma}x=${4} \\\\ \\rm{s}^2x=${5} \\\\ \\rm{s}x=${6} \\\\ n=${7} \\\\ \\bar{y}=${8} \\\\ \\rm{\\Sigma}y=${9} \\\\ \\rm{\\Sigma}y^2=${10} \\\\ \\rm{\\sigma}^2y=${11} \\\\ \\rm{\\sigma}y=${12} \\\\ \\rm{s}^2y=${13} \\\\ \\rm{s}y=${14} \\\\ \\rm{\\Sigma}xy=${15} \\\\ \\rm{\\Sigma}x^3=${16} \\\\ \\rm{\\Sigma}x^2y=${17} \\\\ \\rm{\\Sigma}x^4=${18} \\\\ \\rm{min}(x)=${19} \\\\ \\rm{max}(x)=${20} \\\\ \\rm{min}(y)=${21} \\\\ \\rm{max}(y)=${22}"
     }
   }
 }

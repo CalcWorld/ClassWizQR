@@ -3,8 +3,8 @@ import inputInfo from './input.json' assert { type: "json" };
 import { ParseMode } from "../mode/index.js";
 
 const ParseMatrix = (matrix, m, n) => {
-  const split_ = matrix.match(/.{20}/g);
-  if (m * n !== split_.length) {
+  const split = matrix.match(/.{20}/g);
+  if (m * n !== split.length) {
     throw new Error('Matrix size not match');
   }
 
@@ -28,7 +28,7 @@ const ParseMatrix = (matrix, m, n) => {
 }
 
 export const ParseMatrixList = (C) => {
-  const regx = /M([A-DT])(\d)(\d)(\d+)/g;
+  const regx = /M([A-DT])(\d)(\d)([\dA]+)/g;
   let match;
   const result = [];
   while ((match = regx.exec(C)) !== null) {

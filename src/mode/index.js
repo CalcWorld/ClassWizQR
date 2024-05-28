@@ -59,7 +59,7 @@ export class ParseMode {
   getModeInfo() {
     const mainMode = this.getMainMode();
     if (mainMode.startsWith('X') || mainMode.startsWith('Y') || mainMode.startsWith('Z')) {
-      return langDictToList(menuInfo[mainMode]);
+      return langDictToList(menuInfo[mainMode]['name']);
     }
     let subMode = this.getSubMode();
     if (mainMode === '4B') {
@@ -67,7 +67,7 @@ export class ParseMode {
     }
     const mainName = langDictToList(modeInfo[mainMode]['name']);
     let subName = modeInfo[mainMode]['subMode'][subMode];
-    subName = subName ? langDictToList(subName) : [];
+    subName = subName ? langDictToList(subName['name']	) : [];
     return { mainName, subName };
   }
 }

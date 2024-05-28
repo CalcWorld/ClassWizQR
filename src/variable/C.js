@@ -28,7 +28,7 @@ const ParseMatrix = (matrix, m, n) => {
 }
 
 export const ParseMatrixList = (C) => {
-  const regx = /M([A-DT])(\d)(\d)(\d+)/g;
+  const regx = /M([A-DT])(\d)(\d)([\dA]+)/g;
   let match;
   const result = [];
   while ((match = regx.exec(C)) !== null) {

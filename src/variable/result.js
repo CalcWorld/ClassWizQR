@@ -1,4 +1,4 @@
-{
+export const resultInfo = {
   "NUMBER": {
     "11": {
       "template": "x=${0},y=${1}"

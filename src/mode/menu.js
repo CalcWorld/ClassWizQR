@@ -1,4 +1,4 @@
-{
+export const menuInfo = {
   "X1": {
     "name": {
       "Global": "Calculate Manual",

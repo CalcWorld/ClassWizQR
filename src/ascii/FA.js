@@ -1,4 +1,4 @@
-{
+export const asciiFA = {
   "00": "",
   "01": "\\mathrm{ch▸yd}",
   "02": "\\mathrm{yd▸ch}",

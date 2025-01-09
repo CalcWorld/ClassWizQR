@@ -1,5 +1,5 @@
-import modeInfo from './mode.json' assert { type: 'json' };
-import menuInfo from './menu.json' assert { type: 'json' };
+import { menuInfo } from './menu.js';
+import { modeInfo } from './mode.js';
 
 export const langDictToList = (dict) => {
   const list = [];
@@ -67,7 +67,7 @@ export class ParseMode {
     }
     const mainName = langDictToList(modeInfo[mainMode]['name']);
     let subName = modeInfo[mainMode]['subMode'][subMode];
-    subName = subName ? langDictToList(subName['name']	) : [];
+    subName = subName ? langDictToList(subName['name']) : [];
     return { mainName, subName };
   }
 }

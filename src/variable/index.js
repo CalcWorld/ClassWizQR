@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import menuInfo from '../mode/menu.json' assert { type: 'json' };
+import { menuInfo } from '../mode/menu.js';
 
 export class ParseVariable {
   constructor(variable) {

@@ -1,4 +1,4 @@
-{
+export const asciiFB_EY = {
   "10": "\\to \\mathrm{M}",
   "11": "\\to \\mathrm{A}",
   "12": "\\to \\mathrm{B}",

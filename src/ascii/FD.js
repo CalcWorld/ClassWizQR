@@ -1,4 +1,4 @@
-{
+export const asciiFD = {
   "00": "",
   "01": "\\Sigma \\mathrm{x}^2",
   "02": "\\Sigma \\mathrm{x}",

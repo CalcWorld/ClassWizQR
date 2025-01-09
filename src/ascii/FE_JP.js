@@ -1,4 +1,4 @@
-{
+export const asciiFE_JP = {
   "79": "\\mathrm{cmH_2O▸Pa}",
   "7A": "\\mathrm{Pa▸cmH_2O}",
   "87": "\\mathrm{W\\cdot h▸J}",

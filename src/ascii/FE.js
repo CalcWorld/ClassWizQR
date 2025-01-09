@@ -1,4 +1,4 @@
-{
+export const asciiFE = {
   "00": "",
   "01": "\\mathrm{in▸cm}",
   "02": "\\mathrm{cm▸in}",

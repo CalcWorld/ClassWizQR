@@ -1,4 +1,4 @@
-{
+export const modeInfo = {
   "88": {
     "name": {
       "Global": "Table",
@@ -133,7 +133,7 @@
         "name": {
           "Global": "Quadratic Regression [y=a+bx+cx²]/[y=ax²+bx+c]",
           "CN": "二次回归 [y=a+bx+cx²]/[y=ax²+bx+c]",
-          "Global": "Hồi quy bậc hai [y=a+bx+cx²]/[y=ax²+bx+c]"
+          "VN": "Hồi quy bậc hai [y=a+bx+cx²]/[y=ax²+bx+c]"
         }
       },
       "04": {

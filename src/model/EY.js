@@ -1,4 +1,4 @@
-{
+export const modelEY = {
   "001": [
     "fx-82CW",
     1

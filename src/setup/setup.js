@@ -1,4 +1,4 @@
-{
+export const setupInfo = {
   "NUMBER_FORMAT": {
     "name": {
       "Global": "Number Format",

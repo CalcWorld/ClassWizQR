@@ -1,8 +1,8 @@
 import { ParseVariable } from "./index.js";
 import { AsciiTable } from "../ascii/index.js";
 import { langDictToList, ParseMode } from "../mode/index.js";
-import resultInfo from './result.json' assert { type: "json" };
-import modeInfo from '../mode/mode.json' assert { type: 'json' };
+import { resultInfo } from './result.js';
+import { modeInfo } from '../mode/mode.js';
 import { ParseSetup } from "../setup/index.js";
 
 export const ParseNumberResult = (R, M, modelType, modelId) => {

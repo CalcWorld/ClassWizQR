@@ -1,5 +1,5 @@
-import modelCY from './CY.json' assert { type: 'json' };
-import modelEY from './EY.json' assert { type: 'json' };
+import { modelCY } from './CY.js';
+import { modelEY } from './EY.js';
 
 export const getModelInfo = (model, type) => {
   return (type === 'CY' ? modelCY[model] : modelEY[model]) || [undefined, undefined];

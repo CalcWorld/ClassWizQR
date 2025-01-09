@@ -1,4 +1,4 @@
-{
+export const modelCY = {
   "213": [
     "fx-83GT X",
     0

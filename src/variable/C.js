@@ -1,5 +1,5 @@
 import { ParseVariable } from "./index.js";
-import inputInfo from './input.json' assert { type: "json" };
+import { inputInfo } from './input.js';
 import { ParseMode } from "../mode/index.js";
 
 const ParseMatrix = (matrix, m, n) => {

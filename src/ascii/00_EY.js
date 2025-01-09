@@ -1,4 +1,4 @@
-{
+export const ascii00_EY = {
   "40": "\\mathrm{Ans}",
   "41": "\\mathrm{A}",
   "42": "\\mathrm{B}",

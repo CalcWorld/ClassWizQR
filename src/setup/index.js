@@ -1,4 +1,4 @@
-import setupInfo from './setup.json' assert { type: 'json' };
+import { setupInfo } from './setup.js';
 import { langDictToList } from "../mode/index.js";
 
 export class ParseSetup {

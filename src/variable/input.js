@@ -1,4 +1,4 @@
-{
+export const inputInfo = {
   "EQUATION": {
     "01": {
       "template": "\\left\\{\\begin{array}{l}\\\\${0}x${1}y=${2}\\\\${3}x${4}y=${5}\\end{array}\\right.",

@@ -37,7 +37,7 @@
     "@webpack-cli/generators": "^3.0.7",
     "babel-loader": "^8.2.5",
     "html-webpack-plugin": "^5.5.0",
-    "webpack": "^5.95.0",
+    "webpack": "^5.97.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.9.2"
   }

@@ -68,7 +68,7 @@ export class ParseVariable {
         if (b.eq(1)) {
           latex = `${a} `;
         } else {
-          latex = `\\frac {${a}} {${b}}`;
+          latex = `\\dfrac {\\displaystyle ${a}} {\\displaystyle ${b}}`;
         }
         decimal = a.div(b);
       } else {
@@ -76,7 +76,7 @@ export class ParseVariable {
         if (b.eq(1)) {
           latex = `${aLatex} \\sqrt{${r}} `;
         } else {
-          latex = `\\frac {${aLatex} \\sqrt{${r}} } {${b}}`;
+          latex = `\\dfrac {\\displaystyle ${aLatex} \\sqrt{${r}} } {\\displaystyle ${b}}`;
         }
         decimal = a.mul(r.sqrt()).div(b);
       }

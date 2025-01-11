@@ -23,9 +23,8 @@
 <div id="app">
     <label for="lang"></label>
     <select id="lang" name="lang">
-        <option value="all" selected>All</option>
         <option value="zh">zh</option>
-        <option value="en">en</option>
+        <option value="en" selected>en</option>
         <option value="vi">vi</option>
     </select>
     <label for="qrUrl"></label><input id="qrUrl" type="search"/>
@@ -60,62 +59,37 @@
   const editor = new JSONEditor(qrResult, options);
 
   lang.onchange = function () {
-    parseQr(lang.value);
+    parseQr();
   }
 
   qrUrl.onchange = qrUrl.onsubmit = function () {
     location.hash = `#${qrUrl.value}`;
-    parseQr(lang.value);
+    parseQr();
   }
 
   function parseOnHashChange() {
     qrUrl.value = location.hash.substring(1);
-    parseQr(lang.value);
+    parseQr();
   }
 
   window.onhashchange = parseOnHashChange;
 
   window.onload = function () {
-    lang.value = navigator.language.substring(0, 2);
+    const userLang = navigator.language.substring(0, 2);
+    if (cwqr.availableLanguages.includes(userLang)) {
+      lang.value = userLang;
+    }
     parseOnHashChange();
   }
 
-  function parseQr(lang) {
+  function parseQr() {
     let result = {};
     if (qrUrl.value) {
-      const qrResult = cwqr.parseUrl(qrUrl.value);
-      extractLang(qrResult, lang);
+      const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
       result = JSON.parse(JSON.stringify(qrResult));
     }
     editor.set(result);
     editor.expandAll();
-  }
-
-  function extractLang(resultObject, lang) {
-    if (lang === 'all') {
-      return resultObject;
-    }
-    for (const resKey in resultObject) {
-      const resValue = resultObject[resKey];
-      if (typeof resValue === 'object') {
-        if (resValue[0] && resValue[0].language && resValue[0].name) {
-          let langMatch = false;
-          for (const valueElement of resValue) {
-            if (valueElement.language === lang) {
-              resultObject[resKey] = valueElement.name;
-              langMatch = true;
-              break;
-            }
-          }
-          if (!langMatch) {
-            // fallback to en
-            resultObject[resKey] = resValue[0].name;
-          }
-        } else {
-          extractLang(resValue, lang);
-        }
-      }
-    }
   }
 
   async function copyToClipboard(text) {

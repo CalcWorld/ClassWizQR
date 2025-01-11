@@ -8,6 +8,8 @@ import { ParseVariableList } from "./variable/V.js";
 import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseStatisticResult } from "./variable/R.js";
 import { ParseSetup } from "./setup/index.js";
 
+export const availableLanguages = ['zh', 'en', 'vi'];
+
 export class ClassWizQR {
   constructor() {
     this.url = undefined;
@@ -25,10 +27,11 @@ export class ClassWizQR {
       P: undefined,
       V: undefined,
       Q: undefined,
-    }
+    };
+    this.language = 'en';
   }
 
-  setUrl(url) {
+  setUrl(url, language) {
     this.url = new URL(url.trim());
     const { search, pathname } = this.url;
     const modelType = pathname.slice(0, 5) === '/ncal' ? MODEL_TYPE.EY : MODEL_TYPE.CY;
@@ -37,8 +40,9 @@ export class ClassWizQR {
       acc[k] = v;
       return acc;
     }, {});
-    this.setModelType(modelType)
-    this.setKV(kv)
+    this.setModelType(modelType);
+    this.setKV(kv);
+    availableLanguages.includes(language) ? this.setLanguage(language) : this.setLanguage('en');
     return this;
   }
 
@@ -49,6 +53,11 @@ export class ClassWizQR {
 
   setKV(kv) {
     this.kv = kv;
+    return this;
+  }
+
+  setLanguage(language) {
+    this.language = language;
     return this;
   }
 
@@ -164,7 +173,7 @@ export class ClassWizQR {
       }
     }
 
-    return {
+    const qrResult = {
       model: {
         type: modelType,
         id: modelId,
@@ -187,11 +196,37 @@ export class ClassWizQR {
       mathBox,
       setup,
     };
+    extractLang(qrResult, this.language);
+    return qrResult;
   }
 
 }
 
-export const parseUrl = (url) => {
+export const parseUrl = (url, lang) => {
   const cwqr = new ClassWizQR();
-  return cwqr.setUrl(url).getResult();
+  return cwqr.setUrl(url, lang).getResult();
+}
+
+function extractLang(resultObject, lang) {
+  for (const resKey in resultObject) {
+    const resValue = resultObject[resKey];
+    if (typeof resValue === 'object') {
+      if (resValue[0] && resValue[0].language && resValue[0].name) {
+        let langMatch = false;
+        for (const valueElement of resValue) {
+          if (valueElement.language === lang) {
+            resultObject[resKey] = valueElement.name;
+            langMatch = true;
+            break;
+          }
+        }
+        if (!langMatch) {
+          // fallback to en
+          resultObject[resKey] = resValue[0].name;
+        }
+      } else {
+        extractLang(resValue, lang);
+      }
+    }
+  }
 }

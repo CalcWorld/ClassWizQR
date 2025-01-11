@@ -406,5 +406,14 @@ export const setupInfo = {
         "vi": "đơn vị"
       }
     }
-  }
+  },
+  "LANGUAGE": {
+    "name": {
+      "en": "Language",
+      "zh": "语言",
+    },
+    "setup": {
+      // this setup is based on model
+    },
+  },
 }

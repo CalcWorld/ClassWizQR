@@ -169,6 +169,13 @@ export class ParseSetup {
     return this.algorithmUnitSettingCode;
   }
 
+  getLanguageCode() {
+    if (!this.languageCode) {
+      this.languageCode = this.S.slice(0, 1);
+    }
+    return this.languageCode;
+  }
+
   parseAll() {
     const parseNumberFormat = () => {
       const main = this.getNumberFormatMainCode();
@@ -190,9 +197,10 @@ export class ParseSetup {
       return { name, value };
     }
 
-    const parseCommon = (code, setup) => {
-      const name = langDictToList(setupInfo[code].name)
-      const value = langDictToList(setupInfo[code]['setup'][setup]);
+    const parseCommon = (type, code) => {
+      const name = langDictToList(setupInfo[type].name);
+      const setupValue = setupInfo[type]['setup'][code];
+      const value = setupValue ? langDictToList(setupValue) : code;
       return { name, value };
     }
 
@@ -218,10 +226,15 @@ export class ParseSetup {
     }
 
     const result = [];
-    result.push(parseNumberFormat());
-    result.push(parseInputOutput());
-    for (const [code, setup] of Object.entries(setupMap)) {
-      result.push(parseCommon(code, setup));
+    if (this.S.length === 5) {
+      // in menu/error, only language is exported
+      result.push(parseCommon('LANGUAGE', this.getLanguageCode()));
+    } else {
+      result.push(parseNumberFormat());
+      result.push(parseInputOutput());
+      for (const [code, setup] of Object.entries(setupMap)) {
+        result.push(parseCommon(code, setup));
+      }
     }
     return result;
   }

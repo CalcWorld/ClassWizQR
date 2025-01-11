@@ -6,15 +6,83 @@
     #qrUrl {
         width: 99%;
     }
+
+    #qrResult {
+        margin: 10px auto;
+    }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
 <div id="app">
     <label for="qrUrl"></label><input id="qrUrl" type="text"/>
-    <pre id="qrResult"></pre>
+    <div id="qrResult"></div>
 </div>
 <script>
-  qrUrl.onchange = () => {
-    const result = cwqr.parseUrl(qrUrl.value);
-    qrResult.innerText = JSON.stringify(result, null, 2);
+  const qrResult = document.getElementById("qrResult");
+  const qrUrl = document.getElementById("qrUrl");
+  const options = {
+    mode: 'view',
+    name: 'cwqr',
+    onEvent: (node, event) => {
+      if (event.type === 'click' && node.value) {
+        // console.log(node, event);
+        copyToClipboard(node.value);
+        elementSelection(event.srcElement);
+      }
+    },
+    mainMenuBar: false,
+  };
+  const editor = new JSONEditor(qrResult, options);
+
+  function qrChange() {
+    const result = JSON.parse(JSON.stringify(cwqr.parseUrl(qrUrl.value)));
+    // qrResult.innerText = JSON.stringify(result, null, 2);
+    editor.set(result);
+    editor.expandAll();
+    location.hash = '#' + qrUrl.value;
+  }
+
+  qrUrl.onchange = qrChange;
+
+  window.onload = function () {
+    if (location.hash.startsWith('#http')) {
+      qrUrl.value = location.hash.substring(1);
+      qrChange();
+    }
+  }
+
+  function copyToClipboard(text) {
+    try {
+      navigator.clipboard.writeText(text)
+    } catch (e) {
+      console.log(e)
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.style.position = 'fixed'; // 避免页面滚动
+      textarea.style.opacity = '0'; // 隐藏 textarea
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand('copy');
+      } catch (err) {
+        console.error('failed to copy');
+        prompt('', text);
+      }
+      document.body.removeChild(textarea);
+    }
+  }
+
+  function elementSelection(dom) {
+    if (!dom || !(dom instanceof HTMLElement)) {
+      console.error("请传入一个有效的 DOM 元素。");
+      return;
+    }
+
+    const range = document.createRange(); // 创建一个 Range 对象
+    range.selectNodeContents(dom);       // 设置 Range 的选中内容为 DOM 元素的文本内容
+    const selection = window.getSelection(); // 获取全局 Selection 对象
+    selection.removeAllRanges();         // 清除当前的选区
+    selection.addRange(range);           // 添加新 Range 到选区
   }
 </script>
 </html>

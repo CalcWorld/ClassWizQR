@@ -44,5 +44,5 @@ export const modelCY = {
   "295": ["fx-92+ Spéciale Collège", 1],
   "296": ["fx-85SP X II", 0],
   "297": ["fx-97SG X", 1],
-  "298": ["fx-580VN X", 0]
+  "298": ["fx-580VN X", 0],
 }

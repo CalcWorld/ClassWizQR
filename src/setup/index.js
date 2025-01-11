@@ -6,6 +6,10 @@ export class ParseSetup {
     this.S = S;
   }
 
+  isFullSetup() {
+    return this.S.length !== 5;
+  }
+
   getNumberFormatMainCode() {
     if (!this.numberFormatMain) {
       this.numberFormatMain = this.S.slice(0, 1);
@@ -129,7 +133,11 @@ export class ParseSetup {
 
   getLanguageCode() {
     if (!this.languageCode) {
-      this.languageCode = this.S.slice(17, 18);
+      if (this.isFullSetup()) {
+        this.languageCode = this.S.slice(17, 18);
+      } else {
+        this.languageCode = this.S.slice(0, 1);
+      }
     }
     return this.languageCode;
   }
@@ -167,13 +175,6 @@ export class ParseSetup {
       this.algorithmUnitSettingCode = this.S.slice(22, 23);
     }
     return this.algorithmUnitSettingCode;
-  }
-
-  getLanguageCode() {
-    if (!this.languageCode) {
-      this.languageCode = this.S.slice(0, 1);
-    }
-    return this.languageCode;
   }
 
   parseAll() {
@@ -218,6 +219,7 @@ export class ParseSetup {
       "DIGIT_SEPARATOR": this.getDigitSeparatorCode(),
       "MULTI_LINE_FONT": this.getMultiLineFontCode(),
       "EQUATION_COMPLEX_ROOT": this.getEquationComplexRootCode(),
+      "LANGUAGE": this.getLanguageCode(),
       "SPREADSHEET_AUTO_CALC": this.getSpreadsheetAutoCalcCode(),
       "SPREADSHEET_SHOW_CELL": this.getSpreadsheetShowCellCode(),
       "QR_CODE_VERSION": this.getQRCodeVersionCode(),
@@ -226,15 +228,15 @@ export class ParseSetup {
     }
 
     const result = [];
-    if (this.S.length === 5) {
-      // in menu/error, only language is exported
-      result.push(parseCommon('LANGUAGE', this.getLanguageCode()));
-    } else {
+    if (this.isFullSetup()) {
       result.push(parseNumberFormat());
       result.push(parseInputOutput());
       for (const [code, setup] of Object.entries(setupMap)) {
         result.push(parseCommon(code, setup));
       }
+    } else {
+      // in menu/error, only language is exported
+      result.push(parseCommon('LANGUAGE', this.getLanguageCode()));
     }
     return result;
   }

@@ -18,7 +18,7 @@
         margin: 10px auto;
     }
 </style>
-<script src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script>
+<script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
 <div id="app">
     <label for="lang"></label>
@@ -27,39 +27,19 @@
         <option value="en" selected>en</option>
         <option value="vi">vi</option>
     </select>
-    <label for="qrUrl"></label><input id="qrUrl" type="search"/>
+    <label for="qrUrl"></label>
+    <input id="qrUrl" type="search" placeholder="http://......"/>
     <div id="qrResult"></div>
 </div>
 <script>
   const lang = document.getElementById('lang');
   const qrResult = document.getElementById("qrResult");
   const qrUrl = document.getElementById("qrUrl");
-  const options = {
-    mode: 'view',
-    name: 'cwqr',
-    onEvent: async (node, event) => {
-      if (event.type === 'click') {
-        // console.log(node, event);
-        let value
-        if (node.value) {
-          value = node.value;
-        } else {
-          value = editor.get();
-          for (const key of node.path) {
-            value = value[key];
-          }
-          value = JSON.stringify(value, null, 2);
-        }
-        await copyToClipboard(value);
-        elementSelection(event.srcElement);
-      }
-    },
-    mainMenuBar: false,
-  };
-  const editor = new JSONEditor(qrResult, options);
+  let editor;
 
   lang.onchange = function () {
     parseQr();
+    localStorage.setItem('lang', lang.value);
   }
 
   qrUrl.onchange = qrUrl.onsubmit = function () {
@@ -75,7 +55,31 @@
   window.onhashchange = parseOnHashChange;
 
   window.onload = function () {
-    const userLang = navigator.language.substring(0, 2);
+    const options = {
+      mode: 'view',
+      name: 'cwqr',
+      onEvent: async (node, event) => {
+        if (event.type === 'click') {
+          // console.log(node, event);
+          let value
+          if (node.value) {
+            value = node.value;
+          } else {
+            value = editor.get();
+            for (const key of node.path) {
+              value = value[key];
+            }
+            value = JSON.stringify(value, null, 2);
+          }
+          await copyToClipboard(value);
+          elementSelection(event.srcElement);
+        }
+      },
+      mainMenuBar: false,
+    };
+    editor = new JSONEditor(qrResult, options);
+
+    const userLang = localStorage.getItem('lang') || navigator.language.substring(0, 2);
     if (cwqr.availableLanguages.includes(userLang)) {
       lang.value = userLang;
     }

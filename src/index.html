@@ -191,30 +191,35 @@
   }
 
   function parseQr() {
-    let parseResult = {}, setup, model, mode, expression, result;
+    let parseResult = {}, setup, model, mode, expression, equation, result;
     if (qrUrl.value) {
       const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
-      ({ setup, model, mode, expression, result } = qrResult);
+      ({ setup, model, mode, expression, equation, result } = qrResult);
       parseResult = JSON.parse(JSON.stringify(qrResult));
     }
     settingsPreview(setup);
     basicPreview(model, mode);
-    calculationPreview(expression, result);
+    calculationPreview(expression, equation, result);
     editor.set(parseResult);
     editor.expandAll();
   }
 
-  function calculationPreview(expression, result) {
+  function calculationPreview(expression, equation, result) {
     const calc = document.getElementById('calc');
     calc.innerHTML = '';
-    const expressionDiv = !expression ? '' : `
+    calc.innerHTML += !expression ? '' : `
 <div class="calc-result" id="expression">
     <div class="title">${i('calc-expression')}</div>
     <div class="content">\\( ${expression} \\)</div>
 </div>
 `;
-    calc.innerHTML += expressionDiv;
-    const resultDiv = !result ? '' : `
+    calc.innerHTML += !equation ? '' : `
+<div class="calc-result" id="equation">
+    <div class="title">${i('calc-equation')}</div>
+    <div class="content">\\( ${equation.latex} \\)</div>
+</div>
+`;
+    calc.innerHTML += !result ? '' : `
 <div class="calc-result" id="result">
     <div class="title">${i('calc-result')}</div>
     <div class="content right">\\( ${result[0].latex} \\)</div>
@@ -230,9 +235,8 @@
     </tr></tbody></table>
 </div>
 `;
-    calc.innerHTML += resultDiv;
 
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
   }
 
   function basicPreview(model, mode) {
@@ -343,6 +347,7 @@
     const zh = {
       'calc-title': '计算数据',
       'calc-expression': '表达式',
+      'calc-equation': '方程',
       'calc-result': '结果',
       'calc-result-latex': 'LaTeX',
       'calc-result-decimal': '数值',
@@ -361,6 +366,7 @@
     const en = {
       'calc-title': 'Calculation',
       'calc-expression': 'Expression',
+      'calc-equation': 'Equation',
       'calc-result': 'Result',
       'calc-result-latex': 'LaTeX',
       'calc-result-decimal': 'Decimal',

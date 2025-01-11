@@ -1,18 +1,35 @@
-<!doctype html><html lang="en"><head><script defer="defer" src="cwqr.js"></script></head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ClassWiz QR</title><style>#qrUrl {
-        width: 99%;
+<!doctype html><html lang="en"><head><script defer="defer" src="cwqr.js"></script></head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ClassWiz QR</title><style>#lang {
+        width: 10%;
+        height: 1.3rem;
+    }
+
+    #qrUrl {
+        width: 88%;
+        height: 1.3rem;
     }
 
     #qrResult {
         margin: 10px auto;
-    }</style><script src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script><link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet"><div id="app"><label for="qrUrl"></label><input id="qrUrl"/><div id="qrResult"></div></div><script>const qrResult = document.getElementById("qrResult");
+    }</style><script src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script><link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet"><div id="app"><label for="lang"></label> <select id="lang" name="lang"><option value="zh">zh</option><option value="en" selected="selected">en</option><option value="vi">vi</option></select> <label for="qrUrl"></label><input id="qrUrl" type="search"/><div id="qrResult"></div></div><script>const lang = document.getElementById('lang');
+  const qrResult = document.getElementById("qrResult");
   const qrUrl = document.getElementById("qrUrl");
   const options = {
     mode: 'view',
     name: 'cwqr',
     onEvent: async (node, event) => {
-      if (event.type === 'click' && node.value) {
+      if (event.type === 'click') {
         // console.log(node, event);
-        await copyToClipboard(node.value);
+        let value
+        if (node.value) {
+          value = node.value;
+        } else {
+          value = editor.get();
+          for (const key of node.path) {
+            value = value[key];
+          }
+          value = JSON.stringify(value, null, 2);
+        }
+        await copyToClipboard(value);
         elementSelection(event.srcElement);
       }
     },
@@ -20,21 +37,38 @@
   };
   const editor = new JSONEditor(qrResult, options);
 
-  function qrChange() {
-    const result = JSON.parse(JSON.stringify(cwqr.parseUrl(qrUrl.value)));
-    // qrResult.innerText = JSON.stringify(result, null, 2);
-    editor.set(result);
-    editor.expandAll();
-    location.hash = '#' + qrUrl.value;
+  lang.onchange = function () {
+    parseQr();
   }
 
-  qrUrl.onchange = qrChange;
+  qrUrl.onchange = qrUrl.onsubmit = function () {
+    location.hash = `#${qrUrl.value}`;
+    parseQr();
+  }
+
+  function parseOnHashChange() {
+    qrUrl.value = location.hash.substring(1);
+    parseQr();
+  }
+
+  window.onhashchange = parseOnHashChange;
 
   window.onload = function () {
-    if (location.hash.startsWith('#http')) {
-      qrUrl.value = location.hash.substring(1);
-      qrChange();
+    const userLang = navigator.language.substring(0, 2);
+    if (cwqr.availableLanguages.includes(userLang)) {
+      lang.value = userLang;
     }
+    parseOnHashChange();
+  }
+
+  function parseQr() {
+    let result = {};
+    if (qrUrl.value) {
+      const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
+      result = JSON.parse(JSON.stringify(qrResult));
+    }
+    editor.set(result);
+    editor.expandAll();
   }
 
   async function copyToClipboard(text) {

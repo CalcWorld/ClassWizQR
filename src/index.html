@@ -2,8 +2,42 @@
 <html lang="en">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
 <title>ClassWiz QR</title>
 <style>
+    body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    #app {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    @media (min-width: 768px) {
+        #app {
+            width: 91.666667%
+        }
+    }
+
+    @media (min-width: 1024px) {
+        #app {
+            width: 83.333333%
+        }
+    }
+
+    @media (min-width: 1280px) {
+        #app {
+            width: 66.666667%
+        }
+    }
+
+    @media (min-width: 1536px) {
+        #app {
+            width: 58.333333%
+        }
+    }
+
     #lang {
         width: 10%;
         height: 1.3rem;
@@ -14,12 +48,35 @@
         height: 1.3rem;
     }
 
-    #qrResult {
+    details {
         margin: 10px auto;
+    }
+
+    details > :nth-child(2) {
+        margin: 10px auto;
+    }
+
+    summary {
+        cursor: pointer;
+    }
+
+    .settings-table {
+        border: thin solid #3883fa;
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+    }
+
+    .settings-table td, .settings-table th {
+        border: thin solid #3883fa;
+        border-collapse: collapse;
+        border-spacing: 0;
+        padding: 5px 5px;
     }
 </style>
 <script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <div id="app">
     <label for="lang"></label>
     <select id="lang" name="lang">
@@ -29,11 +86,17 @@
     </select>
     <label for="qrUrl"></label>
     <input id="qrUrl" type="search" placeholder="http://......"/>
-    <div id="qrResult"></div>
+    <details open>
+        <summary>Settings</summary>
+        <div id="settings"></div>
+    </details>
+    <details open>
+        <summary>QR Raw Result</summary>
+        <div id="qrResult"></div>
+    </details>
 </div>
 <script>
   const lang = document.getElementById('lang');
-  const qrResult = document.getElementById("qrResult");
   const qrUrl = document.getElementById("qrUrl");
   let editor;
 
@@ -77,23 +140,47 @@
       },
       mainMenuBar: false,
     };
+    const qrResult = document.getElementById("qrResult");
     editor = new JSONEditor(qrResult, options);
 
     const userLang = localStorage.getItem('lang') || navigator.language.substring(0, 2);
     if (cwqr.availableLanguages.includes(userLang)) {
       lang.value = userLang;
+      document.querySelector('html').setAttribute('lang', userLang);
     }
     parseOnHashChange();
   }
 
   function parseQr() {
-    let result = {};
+    let result = {}, setup = [];
     if (qrUrl.value) {
       const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
+      setup = qrResult.setup;
       result = JSON.parse(JSON.stringify(qrResult));
     }
+    settingsPreview(setup);
     editor.set(result);
     editor.expandAll();
+  }
+
+  function settingsPreview(setup) {
+    const settings = document.getElementById('settings');
+    const table = document.createElement('table');
+    table.classList.add('settings-table');
+    table.innerHTML = `<thead>
+  <tr>
+    <th>Settings</th>
+    <th>Settings Value</th>
+  </tr></thead>`;
+    const tbody = document.createElement('tbody');
+    for (const s of setup) {
+      const row = document.createElement('tr');
+      row.innerHTML = `<td>${s.name}</td><td>${s.value}</td>`;
+      tbody.appendChild(row);
+    }
+    table.appendChild(tbody);
+    settings.innerHTML = '';
+    settings.appendChild(table);
   }
 
   async function copyToClipboard(text) {

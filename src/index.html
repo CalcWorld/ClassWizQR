@@ -207,13 +207,15 @@
   function calculationPreview(expression, equation, result) {
     const calc = document.getElementById('calc');
     calc.innerHTML = '';
-    calc.innerHTML += !expression ? '' : `
+
+    calc.innerHTML += expression ? `
 <div class="calc-result" id="expression">
     <div class="title">${i('calc-expression')}</div>
     <div class="content">\\( ${expression} \\)</div>
 </div>
-`;
-    calc.innerHTML += !equation ? '' : `
+` : '';
+
+    calc.innerHTML += equation ? `
 <div class="calc-result" id="equation">
     <div class="title">${i('calc-equation')}</div>
     <div class="content">\\( ${equation.latex} \\)</div>
@@ -226,23 +228,27 @@
     }).join('</tr><tr>')}
     </tr></tbody></table>
 </div>
-`;
-    calc.innerHTML += !result ? '' : `
+` : '';
+
+    calc.innerHTML += (result && result[0]) ? `
 <div class="calc-result" id="result">
     <div class="title">${i('calc-result')}</div>
-    <div class="content right">\\( ${result[0].latex} \\)</div>
+    <div class="content right">\\( ${result[0].name === 'templated' ? result[0].latex : result[0].name} \\)</div>
+    ${result[0].name === 'templated' ? `
     <table class="content preview-table"><thead>
   <tr>
     <th></th>
     <th>${i('calc-result-latex')}</th>
     <th>${i('calc-result-decimal')}</th>
   </tr></thead><tbody><tr>
-    ${result.map((r, i) => {
+    ${result?.map((r, i) => {
       if (i > 0) return `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td>`;
     }).join('</tr><tr>')}
     </tr></tbody></table>
+    ` : ''
+    }
 </div>
-`;
+` : '';
 
     MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
   }

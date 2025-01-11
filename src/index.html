@@ -91,8 +91,12 @@
     <label for="qrUrl"></label>
     <input id="qrUrl" type="search" placeholder="http://......"/>
     <details open>
-        <summary data-i18n-tag="model-title">Model</summary>
-        <div id="model"></div>
+        <summary data-i18n-tag="calc-title">Calculation</summary>
+        <div id="calc"></div>
+    </details>
+    <details open>
+        <summary data-i18n-tag="basic-title">Basic Info</summary>
+        <div id="basic"></div>
     </details>
     <details open>
         <summary data-i18n-tag="settings-title">Settings</summary>
@@ -162,21 +166,21 @@
   }
 
   function parseQr() {
-    let result = {}, setup, model;
+    let result = {}, setup, model, mode;
     if (qrUrl.value) {
       const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
-      ({ setup, model } = qrResult);
+      ({ setup, model, mode } = qrResult);
       result = JSON.parse(JSON.stringify(qrResult));
     }
     settingsPreview(setup);
-    modelPreview(model);
+    basicPreview(model, mode);
     editor.set(result);
     editor.expandAll();
   }
 
-  function modelPreview(model) {
-    const modelDiv = document.getElementById('model');
-    modelDiv.innerHTML = '';
+  function basicPreview(model, mode) {
+    const basic = document.getElementById('basic');
+    basic.innerHTML = '';
     if (!model) {
       return;
     }
@@ -184,6 +188,14 @@
     table.classList.add('preview-table');
     table.innerHTML = `
 <tbody class="transpose">
+  <tr>
+    <td>${i('mode-main')}</td>
+    <td>${mode.mainName}</td>
+  </tr>
+  <tr>
+    <td>${i('mode-sub')}</td>
+    <td>${mode.subName || i('mode-na')}</td>
+  </tr>
   <tr>
     <td>${i('model-key')}</td>
     <td>${model.name}</td>
@@ -197,7 +209,7 @@
     <td>${model.serialNumber}</td>
   </tr>
 </tbody>`;
-    modelDiv.appendChild(table);
+    basic.appendChild(table);
   }
 
   function settingsPreview(setup) {
@@ -271,20 +283,28 @@
       language = lang.value;
     }
     const zh = {
-      'model-title': '机型',
+      'calc-title': '计算数据',
+      'basic-title': '基本信息',
       'model-key': '型号',
       'model-diag': '自检信息',
       'model-sn': '序列号',
+      'mode-main': '主模式',
+      'mode-sub': '子模式',
+      'mode-na': '/',
       'settings-title': '设置',
       'settings-key': '设置项',
       'settings-value': '设置值',
       'qr-parse-result-title': 'QR解析数据',
     };
     const en = {
-      'model-title': 'Model',
+      'calc-title': 'Calculation',
+      'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-diag': 'Diagnostic Info',
       'model-sn': 'Serial Number',
+      'mode-main': 'Main Mode',
+      'mode-sub': 'Sub Mode',
+      'mode-na': '/',
       'settings-title': 'Settings',
       'settings-key': 'Settings',
       'settings-value': 'Settings Value',

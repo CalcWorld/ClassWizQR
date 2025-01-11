@@ -174,7 +174,6 @@ export class ClassWizQR {
         serialNumber,
       },
       mode,
-      setup,
       expression,
       equation,
       tableRange,
@@ -186,6 +185,7 @@ export class ClassWizQR {
       statistic,
       distribution,
       mathBox,
+      setup,
     };
   }
 

@@ -96,15 +96,15 @@ export const inputInfo = {
         "i18n": true,
         "template": [
           {
-            "region": "Global",
+            "language": "Global",
             "template": "Lower=${0} \\\\ Upper=${1} \\\\ μ=${2} \\\\ σ=${3}"
           },
           {
-            "region": "CN",
+            "language": "CN",
             "template": "下限=${0} \\\\ 上限=${1} \\\\ μ=${2} \\\\ σ=${3}"
           },
           {
-            "region": "VN",
+            "language": "VN",
             "template": "Ldưới=${0} \\\\ Ltrên=${1} \\\\ μ=${2} \\\\ σ=${3}"
           }
         ]
@@ -115,15 +115,15 @@ export const inputInfo = {
         "i18n": true,
         "template": [
           {
-            "region": "Global",
+            "language": "Global",
             "template": "Area=${0} \\\\ μ=${1} \\\\ σ=${2}"
           },
           {
-            "region": "CN",
+            "language": "CN",
             "template": "区域=${0} \\\\ μ=${1} \\\\ σ=${2}"
           },
           {
-            "region": "VN",
+            "language": "VN",
             "template": "Vùng=${0} \\\\ μ=${1} \\\\ σ=${2}"
           }
         ]

@@ -87,11 +87,11 @@
     <label for="qrUrl"></label>
     <input id="qrUrl" type="search" placeholder="http://......"/>
     <details open>
-        <summary>Settings</summary>
+        <summary data-i18n-tag="settings-title">Settings</summary>
         <div id="settings"></div>
     </details>
     <details open>
-        <summary>QR Raw Result</summary>
+        <summary data-i18n-tag="qr-parse-result-title">QR Parse Result</summary>
         <div id="qrResult"></div>
     </details>
 </div>
@@ -103,6 +103,7 @@
   lang.onchange = function () {
     parseQr();
     localStorage.setItem('lang', lang.value);
+    i18n();
   }
 
   qrUrl.onchange = qrUrl.onsubmit = function () {
@@ -148,6 +149,7 @@
       lang.value = userLang;
       document.querySelector('html').setAttribute('lang', userLang);
     }
+    i18n();
     parseOnHashChange();
   }
 
@@ -190,8 +192,8 @@
       console.log(e)
       const textarea = document.createElement('textarea');
       textarea.value = text;
-      textarea.style.position = 'fixed'; // 避免页面滚动
-      textarea.style.opacity = '0'; // 隐藏 textarea
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
       document.body.appendChild(textarea);
       textarea.select();
       try {
@@ -206,15 +208,39 @@
 
   function elementSelection(dom) {
     if (!dom || !(dom instanceof HTMLElement)) {
-      console.error("请传入一个有效的 DOM 元素。");
       return;
     }
 
-    const range = document.createRange(); // 创建一个 Range 对象
-    range.selectNodeContents(dom);       // 设置 Range 的选中内容为 DOM 元素的文本内容
-    const selection = window.getSelection(); // 获取全局 Selection 对象
-    selection.removeAllRanges();         // 清除当前的选区
-    selection.addRange(range);           // 添加新 Range 到选区
+    const range = document.createRange();
+    range.selectNodeContents(dom);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  function i18n() {
+    document.querySelectorAll('[data-i18n-tag]').forEach(el => {
+      const tag = el.getAttribute('data-i18n-tag');
+      const text = i(tag);
+      if (text) {
+        el.innerText = text;
+      }
+    });
+  }
+
+  function i(tag, language) {
+    if (!language) {
+      language = lang.value;
+    }
+    const zh = {
+      'settings-title': '设置',
+      'qr-parse-result-title': 'QR解析数据',
+    };
+    const en = {
+      'settings-title': 'Settings',
+      'qr-parse-result-title': 'QR Parse Result',
+    };
+    return ({ 'zh': zh, 'en': en, }[language] || en)[tag];
   }
 </script>
 </html>

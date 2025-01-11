@@ -5,7 +5,6 @@ export const modeInfo = {
       "zh": "函数表格",
       "vi": "Bảng giá trị"
     },
-    "subMode": {}
   },
   "89": {
     "name": {
@@ -13,7 +12,6 @@ export const modeInfo = {
       "zh": "验证",
       "vi": "Kiểm chứng"
     },
-    "subMode": {}
   },
   "06": {
     "name": {
@@ -21,7 +19,6 @@ export const modeInfo = {
       "zh": "矩阵",
       "vi": "Ma trận"
     },
-    "subMode": {}
   },
   "07": {
     "name": {
@@ -29,7 +26,6 @@ export const modeInfo = {
       "zh": "向量",
       "vi": "Véc-tơ"
     },
-    "subMode": {}
   },
   "0D": {
     "name": {
@@ -37,7 +33,6 @@ export const modeInfo = {
       "zh": "数据表格",
       "vi": "Bảng tính"
     },
-    "subMode": {}
   },
   "0E": {
     "name": {
@@ -45,7 +40,6 @@ export const modeInfo = {
       "zh": "算法",
       "vi": "Thuật toán"
     },
-    "subMode": {}
   },
   "4F": {
     "name": {
@@ -53,7 +47,6 @@ export const modeInfo = {
       "zh": "数学盒",
       "vi": "Hộp Toán học"
     },
-    "subMode": {}
   },
   "C1": {
     "name": {
@@ -61,7 +54,6 @@ export const modeInfo = {
       "zh": "计算",
       "vi": "Phép tính thường"
     },
-    "subMode": {}
   },
   "C4": {
     "name": {
@@ -69,7 +61,6 @@ export const modeInfo = {
       "zh": "复数",
       "vi": "Số phức"
     },
-    "subMode": {}
   },
   "02": {
     "name": {

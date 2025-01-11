@@ -59,15 +59,15 @@ export class ParseMode {
   getModeInfo() {
     const mainMode = this.getMainMode();
     if (mainMode.startsWith('X') || mainMode.startsWith('Y') || mainMode.startsWith('Z')) {
-      return langDictToList(menuInfo[mainMode]['name']);
+      return { mainName: langDictToList(menuInfo[mainMode]['name']) };
     }
     let subMode = this.getSubMode();
     if (mainMode === '4B') {
       subMode += this.getInqType();
     }
     const mainName = langDictToList(modeInfo[mainMode]['name']);
-    let subName = modeInfo[mainMode]['subMode'][subMode];
-    subName = subName ? langDictToList(subName['name']) : [];
+    let subName = (modeInfo[mainMode]['subMode'] || {})[subMode];
+    subName = subName ? langDictToList(subName['name']) : undefined;
     return { mainName, subName };
   }
 }

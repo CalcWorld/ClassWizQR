@@ -85,7 +85,7 @@
 
     #calc .right {
         text-align: right;
-    }</style><script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script><link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet"><script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><div id="app"><label for="lang"></label> <select id="lang" name="lang"><option value="zh">zh</option><option value="en" selected="selected">en</option><option value="vi">vi</option></select> <label for="qrUrl"></label> <input id="qrUrl" type="search" placeholder="http://......"/><details open><summary data-i18n-tag="calc-title">Calculation</summary><div id="calc"><div class="calc-result" id="expression"><div class="title">表达式</div><div class="content">\( \dfrac{\displaystyle 4\sqrt{6} } {\displaystyle 5} +\sqrt{88} \)</div></div><div class="calc-result" id="result"><div class="title">结果</div><div class="content right">\( \dfrac {\displaystyle 4 \sqrt{6} } {\displaystyle 5}+2 \sqrt{22} \)</div></div></div></details><details open><summary data-i18n-tag="basic-title">Basic Info</summary><div id="basic"></div></details><details open><summary data-i18n-tag="settings-title">Settings</summary><div id="settings"></div></details><details open><summary data-i18n-tag="qr-parse-result-title">QR Parse Result</summary><div id="qrResult"></div></details></div><script>const lang = document.getElementById('lang');
+    }</style><script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script><link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet"><script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script><div id="app"><label for="lang"></label> <select id="lang" name="lang"><option value="zh">zh</option><option value="en" selected="selected">en</option><option value="vi">vi</option></select> <label for="qrUrl"></label> <input id="qrUrl" type="search" placeholder="http://......"/><details open><summary data-i18n-tag="calc-title">Calculation</summary><div id="calc"><div class="calc-result" id="expression"><div class="title">表达式</div><div class="content">\( \dfrac{\displaystyle 4\sqrt{6} } {\displaystyle 5} +\sqrt{88} \)</div></div><div class="calc-result" id="result"><div class="title">结果</div><div class="content right">\( \dfrac {\displaystyle 4 \sqrt{6} } {\displaystyle 5}+2 \sqrt{22} \)</div></div></div></details><details open><summary data-i18n-tag="basic-title">Basic Info</summary><div id="basic"></div></details><details open><summary data-i18n-tag="settings-title">Settings</summary><div id="settings"></div></details><details open><summary data-i18n-tag="qr-parse-result-title">QR Parse Result</summary><div id="qrResult"></div></details></div><script>const lang = document.getElementById('lang');
   const qrUrl = document.getElementById("qrUrl");
   let editor;
 
@@ -170,11 +170,21 @@
 <div class="calc-result" id="result">
     <div class="title">${i('calc-result')}</div>
     <div class="content right">\\( ${result[0].latex} \\)</div>
+    <table class="content preview-table"><thead>
+  <tr>
+    <th></th>
+    <th>LaTeX</th>
+    <th>Decimal</th>
+  </tr></thead><tbody><tr>
+    ${result.map((r, i) => {
+      if (i > 0) return `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td>`;
+    }).join('</tr><tr>')}
+    </tr></tbody></table>
 </div>
 `;
     calc.innerHTML += resultDiv;
 
-    MathJax.typeset();
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
   }
 
   function basicPreview(model, mode) {

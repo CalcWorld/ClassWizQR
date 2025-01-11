@@ -60,18 +60,22 @@
         cursor: pointer;
     }
 
-    .settings-table {
+    .preview-table {
         border: thin solid #3883fa;
         border-collapse: collapse;
         border-spacing: 0;
         width: 100%;
     }
 
-    .settings-table td, .settings-table th {
+    .preview-table td, .preview-table th {
         border: thin solid #3883fa;
         border-collapse: collapse;
         border-spacing: 0;
         padding: 5px 5px;
+    }
+
+    .transpose tr td:nth-child(1) {
+        font-weight: bold;
     }
 </style>
 <script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script>
@@ -86,6 +90,10 @@
     </select>
     <label for="qrUrl"></label>
     <input id="qrUrl" type="search" placeholder="http://......"/>
+    <details open>
+        <summary data-i18n-tag="model-title">Model</summary>
+        <div id="model"></div>
+    </details>
     <details open>
         <summary data-i18n-tag="settings-title">Settings</summary>
         <div id="settings"></div>
@@ -154,24 +162,55 @@
   }
 
   function parseQr() {
-    let result = {}, setup = [];
+    let result = {}, setup, model;
     if (qrUrl.value) {
       const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
-      setup = qrResult.setup;
+      ({ setup, model } = qrResult);
       result = JSON.parse(JSON.stringify(qrResult));
     }
     settingsPreview(setup);
+    modelPreview(model);
     editor.set(result);
     editor.expandAll();
   }
 
+  function modelPreview(model) {
+    const modelDiv = document.getElementById('model');
+    modelDiv.innerHTML = '';
+    if (!model) {
+      return;
+    }
+    const table = document.createElement('table');
+    table.classList.add('preview-table');
+    table.innerHTML = `
+<tbody class="transpose">
+  <tr>
+    <td>${i('model-key')}</td>
+    <td>${model.name}</td>
+  </tr>
+  <tr>
+    <td>${i('model-diag')}</td>
+    <td>${model.type}-${model.id} Ver${model.version}</td>
+  </tr>
+  <tr>
+    <td>${i('model-sn')}</td>
+    <td>${model.serialNumber}</td>
+  </tr>
+</tbody>`;
+    modelDiv.appendChild(table);
+  }
+
   function settingsPreview(setup) {
     const settings = document.getElementById('settings');
+    settings.innerHTML = '';
+    if (!setup) {
+      return;
+    }
     const table = document.createElement('table');
-    table.classList.add('settings-table');
+    table.classList.add('preview-table');
     table.innerHTML = `<thead>
   <tr>
-    <th>${i('settings')}</th>
+    <th>${i('settings-key')}</th>
     <th>${i('settings-value')}</th>
   </tr></thead>`;
     const tbody = document.createElement('tbody');
@@ -181,7 +220,6 @@
       tbody.appendChild(row);
     }
     table.appendChild(tbody);
-    settings.innerHTML = '';
     settings.appendChild(table);
   }
 
@@ -233,14 +271,22 @@
       language = lang.value;
     }
     const zh = {
+      'model-title': '机型',
+      'model-key': '型号',
+      'model-diag': '自检信息',
+      'model-sn': '序列号',
       'settings-title': '设置',
-      'settings': '设置项',
+      'settings-key': '设置项',
       'settings-value': '设置值',
       'qr-parse-result-title': 'QR解析数据',
     };
     const en = {
+      'model-title': 'Model',
+      'model-key': 'Product Name',
+      'model-diag': 'Diagnostic Info',
+      'model-sn': 'Serial Number',
       'settings-title': 'Settings',
-      'settings': 'Settings',
+      'settings-key': 'Settings',
       'settings-value': 'Settings Value',
       'qr-parse-result-title': 'QR Parse Result',
     };

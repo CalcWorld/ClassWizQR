@@ -171,8 +171,8 @@
     table.classList.add('settings-table');
     table.innerHTML = `<thead>
   <tr>
-    <th>Settings</th>
-    <th>Settings Value</th>
+    <th>${i('settings')}</th>
+    <th>${i('settings-value')}</th>
   </tr></thead>`;
     const tbody = document.createElement('tbody');
     for (const s of setup) {
@@ -234,10 +234,14 @@
     }
     const zh = {
       'settings-title': '设置',
+      'settings': '设置项',
+      'settings-value': '设置值',
       'qr-parse-result-title': 'QR解析数据',
     };
     const en = {
       'settings-title': 'Settings',
+      'settings': 'Settings',
+      'settings-value': 'Settings Value',
       'qr-parse-result-title': 'QR Parse Result',
     };
     return ({ 'zh': zh, 'en': en, }[language] || en)[tag];

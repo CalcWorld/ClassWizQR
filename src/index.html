@@ -221,8 +221,8 @@
     <table class="content preview-table"><thead>
   <tr>
     <th></th>
-    <th>LaTeX</th>
-    <th>Decimal</th>
+    <th>${i('calc-result-latex')}</th>
+    <th>${i('calc-result-decimal')}</th>
   </tr></thead><tbody><tr>
     ${result.map((r, i) => {
       if (i > 0) return `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td>`;
@@ -344,6 +344,8 @@
       'calc-title': '计算数据',
       'calc-expression': '表达式',
       'calc-result': '结果',
+      'calc-result-latex': 'LaTeX',
+      'calc-result-decimal': '数值',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-diag': '自检信息',
@@ -360,6 +362,8 @@
       'calc-title': 'Calculation',
       'calc-expression': 'Expression',
       'calc-result': 'Result',
+      'calc-result-latex': 'LaTeX',
+      'calc-result-decimal': 'Decimal',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-diag': 'Diagnostic Info',

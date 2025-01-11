@@ -1,5 +1,5 @@
 import { ParseExpression } from "./expression/index.js";
-import { getModelInfo } from "./model/index.js";
+import { getModelInfo, MODEL_TYPE } from "./model/index.js";
 import { ParseMode } from "./mode/index.js";
 import { ParseDistribution, ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js";
 import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
@@ -31,7 +31,7 @@ export class ClassWizQR {
   setUrl(url) {
     this.url = new URL(url.trim());
     const { search, pathname } = this.url;
-    const modelType = pathname.slice(0, 5) === '/ncal' ? 'EY' : 'CY';
+    const modelType = pathname.slice(0, 5) === '/ncal' ? MODEL_TYPE.EY : MODEL_TYPE.CY;
     const kv = search.slice(3).split('+').reduce((acc, cur) => {
       const [k, v] = cur.split('-');
       acc[k] = v;

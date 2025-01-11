@@ -6,6 +6,7 @@ import { asciiFB_EY } from './FB_EY.js';
 import { asciiFD } from './FD.js';
 import { asciiFE } from './FE.js';
 import { asciiFE_JP } from './FE_JP.js';
+import { MODEL_TYPE } from "../model/index.js";
 
 const JPModel = ['CY240', 'CY241', 'CY242', 'CY243', 'EY029', 'EY030', 'EY031', 'EY032'];
 
@@ -23,14 +24,14 @@ export class AsciiTable {
       }
     }
 
-    if (this.modelType === 'EY') {
+    if (this.modelType === MODEL_TYPE.EY) {
       for (const k in ascii00_EY) {
         asciiCopy[k] = ascii00_EY[k];
       }
     }
     combine('FA', asciiFA);
     combine('FB', asciiFB);
-    if (this.modelType === 'EY') {
+    if (this.modelType === MODEL_TYPE.EY) {
       combine('FB', asciiFB_EY);
     }
     combine('FD', asciiFD);

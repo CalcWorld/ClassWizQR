@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><script defer="defer" src="cwqr.js"></script></head><meta charset="UTF-8"><title>ClassWiz QR</title><style>#qrUrl {
+<!doctype html><html lang="en"><head><script defer="defer" src="cwqr.js"></script></head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ClassWiz QR</title><style>#qrUrl {
         width: 99%;
     }
 
@@ -9,10 +9,10 @@
   const options = {
     mode: 'view',
     name: 'cwqr',
-    onEvent: (node, event) => {
+    onEvent: async (node, event) => {
       if (event.type === 'click' && node.value) {
         // console.log(node, event);
-        copyToClipboard(node.value);
+        await copyToClipboard(node.value);
         elementSelection(event.srcElement);
       }
     },
@@ -37,9 +37,9 @@
     }
   }
 
-  function copyToClipboard(text) {
+  async function copyToClipboard(text) {
     try {
-      navigator.clipboard.writeText(text)
+      await navigator.clipboard.writeText(text);
     } catch (e) {
       console.log(e)
       const textarea = document.createElement('textarea');

@@ -64,7 +64,7 @@ export const ParseInequalityResult = (R) => {
   return returnResult;
 }
 
-export const ParseEquationResult = (R, M, S) => {
+export const ParseEquationResult = (R, M, S, C) => {
   let resultCode = R.slice(2, 3);
   if (['1', '2', '4'].includes(resultCode)) {
     return { name: langDictToList(resultInfo['EQUATION'][resultCode].name) };
@@ -119,7 +119,7 @@ export const ParseEquationResult = (R, M, S) => {
   }
 
   if (template.includes('${EXT}')) {
-    const [, firstDecimal] = new ParseVariable(split[0]).get();
+    const [, firstDecimal] = new ParseVariable(C.slice(0, 20)).get();
     if (firstDecimal.gt(0)) {
       template = template.replaceAll('${EXT}', 'min');
     } else {

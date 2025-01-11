@@ -123,7 +123,7 @@ export class ClassWizQR {
           result = ParseVectorList(R);
           break;
         case 'EQ':
-          result = ParseEquationResult(R, kv.M, kv.S);
+          result = ParseEquationResult(R, kv.M, kv.S, kv.C);
           break;
         case 'IN':
           result = ParseInequalityResult(R);

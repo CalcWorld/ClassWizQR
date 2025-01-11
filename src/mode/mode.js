@@ -1,7 +1,7 @@
 export const modeInfo = {
   "88": {
     "name": {
-      "Global": "Table",
+      "en": "Table",
       "CN": "函数表格",
       "VN": "Bảng giá trị"
     },
@@ -9,7 +9,7 @@ export const modeInfo = {
   },
   "89": {
     "name": {
-      "Global": "Verify",
+      "en": "Verify",
       "CN": "验证",
       "VN": "Kiểm chứng"
     },
@@ -17,7 +17,7 @@ export const modeInfo = {
   },
   "06": {
     "name": {
-      "Global": "Matrix",
+      "en": "Matrix",
       "CN": "矩阵",
       "VN": "Ma trận"
     },
@@ -25,7 +25,7 @@ export const modeInfo = {
   },
   "07": {
     "name": {
-      "Global": "Vector",
+      "en": "Vector",
       "CN": "向量",
       "VN": "Véc-tơ"
     },
@@ -33,7 +33,7 @@ export const modeInfo = {
   },
   "0D": {
     "name": {
-      "Global": "Spreadsheet",
+      "en": "Spreadsheet",
       "CN": "数据表格",
       "VN": "Bảng tính"
     },
@@ -41,7 +41,7 @@ export const modeInfo = {
   },
   "0E": {
     "name": {
-      "Global": "Algorithm",
+      "en": "Algorithm",
       "CN": "算法",
       "VN": "Thuật toán"
     },
@@ -49,7 +49,7 @@ export const modeInfo = {
   },
   "4F": {
     "name": {
-      "Global": "Math Box",
+      "en": "Math Box",
       "CN": "数学盒",
       "VN": "Hộp Toán học"
     },
@@ -57,7 +57,7 @@ export const modeInfo = {
   },
   "C1": {
     "name": {
-      "Global": "Calculate",
+      "en": "Calculate",
       "CN": "计算",
       "VN": "Phép tính thường"
     },
@@ -65,7 +65,7 @@ export const modeInfo = {
   },
   "C4": {
     "name": {
-      "Global": "Complex",
+      "en": "Complex",
       "CN": "复数",
       "VN": "Số phức"
     },
@@ -73,35 +73,35 @@ export const modeInfo = {
   },
   "02": {
     "name": {
-      "Global": "Base-N",
+      "en": "Base-N",
       "CN": "基数",
       "VN": "Hệ đếm cơ số N"
     },
     "subMode": {
       "01": {
         "name": {
-          "Global": "Binary",
+          "en": "Binary",
           "CN": "二进制",
           "VN": "Nhị phân"
         }
       },
       "07": {
         "name": {
-          "Global": "Octal",
+          "en": "Octal",
           "CN": "八进制",
           "VN": "Bát phân"
         }
       },
       "09": {
         "name": {
-          "Global": "Decimal",
+          "en": "Decimal",
           "CN": "十进制",
           "VN": "Thập phân"
         }
       },
       "0F": {
         "name": {
-          "Global": "Hexadecimal",
+          "en": "Hexadecimal",
           "CN": "十六进制",
           "VN": "Thập lục phân"
         }
@@ -110,63 +110,63 @@ export const modeInfo = {
   },
   "03": {
     "name": {
-      "Global": "Statistics",
+      "en": "Statistics",
       "CN": "统计",
       "VN": "Thống kê"
     },
     "subMode": {
       "01": {
         "name": {
-          "Global": "Single-Variable Statistic",
+          "en": "Single-Variable Statistic",
           "CN": "单变量统计",
           "VN": "Thống kê 1 biến"
         }
       },
       "02": {
         "name": {
-          "Global": "Linear Regression [y=a+bx]/[y=ax+b]",
+          "en": "Linear Regression [y=a+bx]/[y=ax+b]",
           "CN": "线性回归 [y=a+bx]/[y=ax+b]",
           "VN": "Hồi quy tuyến tính [y=a+bx]/[y=ax+b]"
         }
       },
       "03": {
         "name": {
-          "Global": "Quadratic Regression [y=a+bx+cx²]/[y=ax²+bx+c]",
+          "en": "Quadratic Regression [y=a+bx+cx²]/[y=ax²+bx+c]",
           "CN": "二次回归 [y=a+bx+cx²]/[y=ax²+bx+c]",
           "VN": "Hồi quy bậc hai [y=a+bx+cx²]/[y=ax²+bx+c]"
         }
       },
       "04": {
         "name": {
-          "Global": "Logarithmic Regression [y=a+b･ln(x)]",
+          "en": "Logarithmic Regression [y=a+b･ln(x)]",
           "CN": "对数回归 [y=a+b･ln(x)]",
           "VN": "Hồi quy lôgarit [y=a+b･ln(x)]"
         }
       },
       "05": {
         "name": {
-          "Global": "e exponential Regression [y=a･e^(bx)]",
+          "en": "e exponential Regression [y=a･e^(bx)]",
           "CN": "e 指数回归 [y=a･e^(bx)]",
           "VN": "e hồi quy hàm số mũ [y=a･e^(bx)]"
         }
       },
       "06": {
         "name": {
-          "Global": "ab exponential Regression [y=a･b^x]",
+          "en": "ab exponential Regression [y=a･b^x]",
           "CN": "ab 指数回归 [y=a･b^x]",
           "VN": "ab hồi quy hàm số mũ [y=a･b^x]"
         }
       },
       "07": {
         "name": {
-          "Global": "Power Regression [y=a･x^b]",
+          "en": "Power Regression [y=a･x^b]",
           "CN": "乘方回归 [y=a･x^b]",
           "VN": "Hồi quy lũy thừa [y=a･x^b]"
         }
       },
       "08": {
         "name": {
-          "Global": "Inverse Regression [y=a+b/x]",
+          "en": "Inverse Regression [y=a+b/x]",
           "CN": "逆回归 [y=a+b/x]",
           "VN": "Hồi quy nghịch đảo [y=a+b/x]"
         }
@@ -175,56 +175,56 @@ export const modeInfo = {
   },
   "0C": {
     "name": {
-      "Global": "Distribution",
+      "en": "Distribution",
       "CN": "分布",
       "VN": "Phân phối"
     },
     "subMode": {
       "01": {
         "name": {
-          "Global": "Normal Probability Density",
+          "en": "Normal Probability Density",
           "CN": "正态概率密度",
           "VN": "Mật độ xác suất chuẩn"
         }
       },
       "02": {
         "name": {
-          "Global": "Normal Cumulative Distribution",
+          "en": "Normal Cumulative Distribution",
           "CN": "正态累积分布",
           "VN": "Phân phối tích lũy chuẩn"
         }
       },
       "03": {
         "name": {
-          "Global": "Inverse Normal Cumulative Distribution",
+          "en": "Inverse Normal Cumulative Distribution",
           "CN": "反正态累积分布",
           "VN": "Phân phối tích lũy chuẩn nghịch đảo"
         }
       },
       "04": {
         "name": {
-          "Global": "Binomial Probability",
+          "en": "Binomial Probability",
           "CN": "二项概率密度",
           "VN": "Xác suất nhị thức"
         }
       },
       "05": {
         "name": {
-          "Global": "Binomial Cumulative Distribution",
+          "en": "Binomial Cumulative Distribution",
           "CN": "二项累积分布",
           "VN": "Phân phối tích lũy nhị thức"
         }
       },
       "06": {
         "name": {
-          "Global": "Poisson Probability",
+          "en": "Poisson Probability",
           "CN": "泊松概率密度",
           "VN": "Xác suất Poisson"
         }
       },
       "07": {
         "name": {
-          "Global": "Poisson Cumulative Distribution",
+          "en": "Poisson Cumulative Distribution",
           "CN": "泊松累积分布",
           "VN": "Phân phối tích lũy Poisson"
         }
@@ -233,56 +233,56 @@ export const modeInfo = {
   },
   "45": {
     "name": {
-      "Global": "Equation",
+      "en": "Equation",
       "CN": "方程",
       "VN": "Phương trình"
     },
     "subMode": {
       "01": {
         "name": {
-          "Global": "Simultaneous Equation with 2 Unknowns",
+          "en": "Simultaneous Equation with 2 Unknowns",
           "CN": "二元一次方程组",
           "VN": "Phương trình tuyến tính đồng thời với 2 ẩn"
         }
       },
       "02": {
         "name": {
-          "Global": "Simultaneous Equation with 3 Unknowns",
+          "en": "Simultaneous Equation with 3 Unknowns",
           "CN": "三元一次方程组",
           "VN": "Phương trình tuyến tính đồng thời với 3 ẩn"
         }
       },
       "03": {
         "name": {
-          "Global": "Simultaneous Equation with 4 Unknowns",
+          "en": "Simultaneous Equation with 4 Unknowns",
           "CN": "四元一次方程组",
           "VN": "Phương trình tuyến tính đồng thời với 4 ẩn"
         }
       },
       "04": {
         "name": {
-          "Global": "Quadratic Equation [ax²+bx+c=0]",
+          "en": "Quadratic Equation [ax²+bx+c=0]",
           "CN": "二次方程 [ax²+bx+c=0]",
           "VN": "Phương trình bậc hai [ax²+bx+c=0]"
         }
       },
       "05": {
         "name": {
-          "Global": "Cubic Equation [ax³+bx²+cx+d=0]",
+          "en": "Cubic Equation [ax³+bx²+cx+d=0]",
           "CN": "三次方程 [ax³+bx²+cx+d=0]",
           "VN": "Phương trình bậc hai [ax³+bx²+cx+d=0]"
         }
       },
       "06": {
         "name": {
-          "Global": "Quartic Equation [ax⁴+bx³+cx²+dx+e=0]",
+          "en": "Quartic Equation [ax⁴+bx³+cx²+dx+e=0]",
           "CN": "四次方程 [ax⁴+bx³+cx²+dx+e=0]",
           "VN": "Phương trình bậc bốn [ax⁴+bx³+cx²+dx+e=0]"
         }
       },
       "08": {
         "name": {
-          "Global": "Solver",
+          "en": "Solver",
           "CN": "求解方程",
           "VN": "Bộ giải phương trình"
         }
@@ -291,88 +291,88 @@ export const modeInfo = {
   },
   "4A": {
     "name": {
-      "Global": "Ratio",
+      "en": "Ratio",
       "CN": "比例",
       "VN": "Tỉ lệ thức"
     },
     "subMode": {
       "01": {
         "name": {
-          "Global": "A:B=X:D"
+          "en": "A:B=X:D"
         }
       },
       "02": {
         "name": {
-          "Global": "A:B=C:X"
+          "en": "A:B=C:X"
         }
       }
     }
   },
   "4B": {
     "name": {
-      "Global": "Inequality",
+      "en": "Inequality",
       "CN": "不等式",
       "VN": "Bất phương trình"
     },
     "subMode": {
       "0400": {
         "name": {
-          "Global": "ax²+bx+c>0"
+          "en": "ax²+bx+c>0"
         }
       },
       "0401": {
         "name": {
-          "Global": "ax²+bx+c<0"
+          "en": "ax²+bx+c<0"
         }
       },
       "0402": {
         "name": {
-          "Global": "ax²+bx+c≥0"
+          "en": "ax²+bx+c≥0"
         }
       },
       "0403": {
         "name": {
-          "Global": "ax²+bx+c≤0"
+          "en": "ax²+bx+c≤0"
         }
       },
       "0500": {
         "name": {
-          "Global": "ax³+bx²+cx+d>0"
+          "en": "ax³+bx²+cx+d>0"
         }
       },
       "0501": {
         "name": {
-          "Global": "ax³+bx²+cx+d<0"
+          "en": "ax³+bx²+cx+d<0"
         }
       },
       "0502": {
         "name": {
-          "Global": "ax³+bx²+cx+d≥0"
+          "en": "ax³+bx²+cx+d≥0"
         }
       },
       "0503": {
         "name": {
-          "Global": "ax³+bx²+cx+d≤0"
+          "en": "ax³+bx²+cx+d≤0"
         }
       },
       "0600": {
         "name": {
-          "Global": "ax⁴+bx³+cx²+dx+e>0"
+          "en": "ax⁴+bx³+cx²+dx+e>0"
         }
       },
       "0601": {
         "name": {
-          "Global": "ax⁴+bx³+cx²+dx+e<0"
+          "en": "ax⁴+bx³+cx²+dx+e<0"
         }
       },
       "0602": {
         "name": {
-          "Global": "ax⁴+bx³+cx²+dx+e≥0"
+          "en": "ax⁴+bx³+cx²+dx+e≥0"
         }
       },
       "0603": {
         "name": {
-          "Global": "ax⁴+bx³+cx²+dx+e≤0"
+          "en": "ax⁴+bx³+cx²+dx+e≤0"
         }
       }
     }

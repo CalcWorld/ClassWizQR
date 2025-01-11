@@ -96,7 +96,7 @@ export const inputInfo = {
         "i18n": true,
         "template": [
           {
-            "language": "Global",
+            "language": "en",
             "template": "Lower=${0} \\\\ Upper=${1} \\\\ μ=${2} \\\\ σ=${3}"
           },
           {
@@ -115,7 +115,7 @@ export const inputInfo = {
         "i18n": true,
         "template": [
           {
-            "language": "Global",
+            "language": "en",
             "template": "Area=${0} \\\\ μ=${1} \\\\ σ=${2}"
           },
           {

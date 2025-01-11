@@ -115,7 +115,7 @@ export const ParseDistribution = (M, C) => {
   const distInfo = inputInfo['DISTRIBUTION'][subMode][split.length];
   let template = distInfo.template;
   if (!distInfo['i18n']) {
-    template = [{ language: "Global", template: template }]
+    template = [{ language: "en", template: template }]
   }
   const decimalResult = [];
   for (let i = 0; i < split.length; i++) {

@@ -151,7 +151,7 @@ export const ParseStatisticResult = (R, M) => {
       template = resultInfo['STATISTICS']['TWO-VAR'].template;
       break;
     case 'F3':
-      template = modeInfo['03']['subMode'][subMode]['name']['Global'].match(/\[.*]/g)[0];
+      template = modeInfo['03']['subMode'][subMode]['name']['en'].match(/\[.*]/g)[0];
       if (subMode === '03') {
         template += ' \\\\ a=${0} \\\\ b=${1} \\\\ c=${2}';
       } else {

@@ -19,14 +19,14 @@ export const resultInfo = {
   "INEQUALITY": {
     "01": {
       "name": {
-        "Global": "All Real Numbers",
+        "en": "All Real Numbers",
         "CN": "所有实数",
         "VN": "Tất cả số thực"
       }
     },
     "02": {
       "name": {
-        "Global": "No Solution",
+        "en": "No Solution",
         "CN": "无解",
         "VN": "Vô nghiệm"
       }
@@ -189,28 +189,28 @@ export const resultInfo = {
     },
     "1": {
       "name": {
-        "Global": "Infinite Solution",
+        "en": "Infinite Solution",
         "CN": "无数解",
         "VN": "Vô số nghiệm"
       }
     },
     "2": {
       "name": {
-        "Global": "No Solution",
+        "en": "No Solution",
         "CN": "无解",
         "VN": "Vô nghiệm"
       }
     },
     "4": {
       "name": {
-        "Global": "No Real Roots",
+        "en": "No Real Roots",
         "CN": "无实根",
         "VN": "Vô nghiệm"
       }
     },
     "5": {
       "name": {
-        "Global": "No Local Max/Min",
+        "en": "No Local Max/Min",
         "CN": "无极值",
         "VN": "Không có CĐ/CT"
       }

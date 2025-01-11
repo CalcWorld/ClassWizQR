@@ -1,28 +1,28 @@
 export const setupInfo = {
   "NUMBER_FORMAT": {
     "name": {
-      "Global": "Number Format",
+      "en": "Number Format",
       "CN": "显示格式",
       "VN": "Định dạng số"
     },
     "setup": {
       "0": {
-        "Global": "Norm1",
+        "en": "Norm1",
         "CN": "常规1",
         "VN": "Viết số bình thường 1"
       },
       "4": {
-        "Global": "Norm2",
+        "en": "Norm2",
         "CN": "常规2",
         "VN": "Viết số bình thường 2"
       },
       "8": {
-        "Global": "Fix",
+        "en": "Fix",
         "CN": "位数",
         "VN": "Chọn số thập phân"
       },
       "9": {
-        "Global": "Sci",
+        "en": "Sci",
         "CN": "科学",
         "VN": "Dạng a×10ⁿ"
       }
@@ -30,18 +30,18 @@ export const setupInfo = {
   },
   "DECIMAL_MARK": {
     "name": {
-      "Global": "Decimal Mark",
+      "en": "Decimal Mark",
       "CN": "小数点显示",
       "VN": "Dấu thập phân"
     },
     "setup": {
       "0": {
-        "Global": "Comma",
+        "en": "Comma",
         "CN": "逗点",
         "VN": "Phẩy"
       },
       "1": {
-        "Global": "Dot",
+        "en": "Dot",
         "CN": "句点",
         "VN": "Chấm"
       }
@@ -49,23 +49,23 @@ export const setupInfo = {
   },
   "ANGLE_UNIT": {
     "name": {
-      "Global": "Angle Unit",
+      "en": "Angle Unit",
       "CN": "角度单位",
       "VN": "Đơn vị góc"
     },
     "setup": {
       "4": {
-        "Global": "Degree",
+        "en": "Degree",
         "CN": "度(D)",
         "VN": "Độ"
       },
       "5": {
-        "Global": "Radian",
+        "en": "Radian",
         "CN": "弧度(R)",
         "VN": "Radian"
       },
       "6": {
-        "Global": "Gradian",
+        "en": "Gradian",
         "CN": "百分度(G)",
         "VN": "Grad"
       }
@@ -73,28 +73,28 @@ export const setupInfo = {
   },
   "INPUT_OUTPUT": {
     "name": {
-      "Global": "Input/Output",
+      "en": "Input/Output",
       "CN": "输入/输出",
       "VN": "Nhập/Xuất"
     },
     "setup": {
       "00": {
-        "Global": "LineI/LineO",
+        "en": "LineI/LineO",
         "CN": "线性输入/线性输出",
         "VN": "Dòng vào/ra"
       },
       "01": {
-        "Global": "LineI/DecimalO",
+        "en": "LineI/DecimalO",
         "CN": "线性输入/小数输出",
         "VN": "Dòng vào/Số thập phân ra"
       },
       "10": {
-        "Global": "MathI/MathO",
+        "en": "MathI/MathO",
         "CN": "数学输入/数学输出",
         "VN": "Số tự nhiên vào/ra"
       },
       "11": {
-        "Global": "MathI/DecimalO",
+        "en": "MathI/DecimalO",
         "CN": "数学输入/小数输出",
         "VN": "Số tự nhiên vào/Số thập phân ra"
       }
@@ -102,50 +102,50 @@ export const setupInfo = {
   },
   "FRACTION_RESULT": {
     "name": {
-      "Global": "Fraction Result",
+      "en": "Fraction Result",
       "CN": "分数结果",
       "VN": "Kết quả phân số"
     },
     "setup": {
       "0": {
-        "Global": "d/c",
+        "en": "d/c",
         "CN": "假分数"
       },
       "1": {
-        "Global": "ab/c",
+        "en": "ab/c",
         "CN": "带分数"
       }
     }
   },
   "COMPLEX_RESULT": {
     "name": {
-      "Global": "Complex Result",
+      "en": "Complex Result",
       "CN": "复数结果",
       "VN": "Kết quả số phức"
     },
     "setup": {
       "1": {
-        "Global": "a+bi"
+        "en": "a+bi"
       },
       "0": {
-        "Global": "r∠θ"
+        "en": "r∠θ"
       }
     }
   },
   "STATISTICS_FREQUENCY": {
     "name": {
-      "Global": "Statistics Frequency",
+      "en": "Statistics Frequency",
       "CN": "统计频数",
       "VN": "Tần số thống kê"
     },
     "setup": {
       "0": {
-        "Global": "Off",
+        "en": "Off",
         "CN": "关",
         "VN": "Tắt"
       },
       "1": {
-        "Global": "On",
+        "en": "On",
         "CN": "开",
         "VN": "Bật"
       }
@@ -153,18 +153,18 @@ export const setupInfo = {
   },
   "RECURRING_DECIMAL": {
     "name": {
-      "Global": "Recurring Decimal",
+      "en": "Recurring Decimal",
       "CN": "循环小数",
       "VN": "Số thập phân tuần hoàn"
     },
     "setup": {
       "0": {
-        "Global": "Off",
+        "en": "Off",
         "CN": "关",
         "VN": "Tắt"
       },
       "1": {
-        "Global": "On",
+        "en": "On",
         "CN": "开",
         "VN": "Bật"
       }
@@ -172,18 +172,18 @@ export const setupInfo = {
   },
   "SIMPLIFY": {
     "name": {
-      "Global": "Simplify",
+      "en": "Simplify",
       "CN": "化简",
       "VN": "Rút gọn"
     },
     "setup": {
       "0": {
-        "Global": "Auto",
+        "en": "Auto",
         "CN": "自动",
         "VN": "Tự động"
       },
       "1": {
-        "Global": "Manual",
+        "en": "Manual",
         "CN": "手动",
         "VN": "Bằng tay"
       }
@@ -191,18 +191,18 @@ export const setupInfo = {
   },
   "AUTO_POWER_OFF": {
     "name": {
-      "Global": "Auto Power Off",
+      "en": "Auto Power Off",
       "CN": "自动关机",
       "VN": "Tự động tắt"
     },
     "setup": {
       "0": {
-        "Global": "10 Min.",
+        "en": "10 Min.",
         "CN": "10分钟",
         "VN": "10 phút"
       },
       "1": {
-        "Global": "60 Min.",
+        "en": "60 Min.",
         "CN": "60分钟",
         "VN": "60 phút"
       }
@@ -210,36 +210,36 @@ export const setupInfo = {
   },
   "TABLE_TYPE": {
     "name": {
-      "Global": "Table Type",
+      "en": "Table Type",
       "CN": "函数表格类型",
       "VN": "Loại bảng"
     },
     "setup": {
       "0": {
-        "Global": "f(x)"
+        "en": "f(x)"
       },
       "1": {
-        "Global": "f(x),g(x)"
+        "en": "f(x),g(x)"
       },
       "2": {
-        "Global": "g(x)"
+        "en": "g(x)"
       }
     }
   },
   "ENGINEER_SYMBOL": {
     "name": {
-      "Global": "Engineer Symbol",
+      "en": "Engineer Symbol",
       "CN": "工程符号",
       "VN": "Kí hiệu kĩ thuật"
     },
     "setup": {
       "0": {
-        "Global": "Off",
+        "en": "Off",
         "CN": "关",
         "VN": "Tắt"
       },
       "1": {
-        "Global": "On",
+        "en": "On",
         "CN": "开",
         "VN": "Bật"
       }
@@ -247,18 +247,18 @@ export const setupInfo = {
   },
   "DIGIT_SEPARATOR": {
     "name": {
-      "Global": "Digit Separator",
+      "en": "Digit Separator",
       "CN": "数字分隔符",
       "VN": "Dấu cách 3 chữ số"
     },
     "setup": {
       "0": {
-        "Global": "Off",
+        "en": "Off",
         "CN": "关",
         "VN": "Tắt"
       },
       "1": {
-        "Global": "On",
+        "en": "On",
         "CN": "开",
         "VN": "Bật"
       }
@@ -266,18 +266,18 @@ export const setupInfo = {
   },
   "MULTI_LINE_FONT": {
     "name": {
-      "Global": "Multi-Line Font",
+      "en": "Multi-Line Font",
       "CN": "多行字体",
       "VN": "Phông Multi-Line"
     },
     "setup": {
       "A": {
-        "Global": "Small Font",
+        "en": "Small Font",
         "CN": "小字体",
         "VN": "Phông chữ nhỏ"
       },
       "E": {
-        "Global": "Normal Font",
+        "en": "Normal Font",
         "CN": "普通字体",
         "VN": "Phông chữ thường"
       }
@@ -285,18 +285,18 @@ export const setupInfo = {
   },
   "EQUATION_COMPLEX_ROOT": {
     "name": {
-      "Global": "Equation Complex Root",
+      "en": "Equation Complex Root",
       "CN": "方程复数根",
       "VN": "Nghiệm Phức Phương trình"
     },
     "setup": {
       "0": {
-        "Global": "Off",
+        "en": "Off",
         "CN": "关",
         "VN": "Tắt"
       },
       "1": {
-        "Global": "On",
+        "en": "On",
         "CN": "开",
         "VN": "Bật"
       }
@@ -304,18 +304,18 @@ export const setupInfo = {
   },
   "SPREADSHEET_AUTO_CALC": {
     "name": {
-      "Global": "Spreadsheet: Auto Calc",
+      "en": "Spreadsheet: Auto Calc",
       "CN": "数据表格：自动计算",
       "VN": "Bảng tính: Tự động tính"
     },
     "setup": {
       "0": {
-        "Global": "Off",
+        "en": "Off",
         "CN": "关",
         "VN": "Tắt"
       },
       "1": {
-        "Global": "On",
+        "en": "On",
         "CN": "开",
         "VN": "Bật"
       }
@@ -323,18 +323,18 @@ export const setupInfo = {
   },
   "SPREADSHEET_SHOW_CELL": {
     "name": {
-      "Global": "Spreadsheet: Show Cell",
+      "en": "Spreadsheet: Show Cell",
       "CN": "数据表格：显示单元格",
       "VN": "Bảng tính: Hiện ô"
     },
     "setup": {
       "0": {
-        "Global": "Formula",
+        "en": "Formula",
         "CN": "公式",
         "VN": "Công thức"
       },
       "1": {
-        "Global": "Value",
+        "en": "Value",
         "CN": "数值",
         "VN": "Giá trị"
       }
@@ -342,18 +342,18 @@ export const setupInfo = {
   },
   "QR_CODE_VERSION": {
     "name": {
-      "Global": "QR Code Version",
+      "en": "QR Code Version",
       "CN": "QR码版本",
       "VN": "Phiên bản mã QR"
     },
     "setup": {
       "B": {
-        "Global": "Version 11",
+        "en": "Version 11",
         "CN": "版本11",
         "VN": "Phiên bản 11"
       },
       "3": {
-        "Global": "Version 3",
+        "en": "Version 3",
         "CN": "版本3",
         "VN": "Phiên bản 3"
       }
@@ -361,28 +361,28 @@ export const setupInfo = {
   },
   "ALGORITHM_BACKGROUND": {
     "name": {
-      "Global": "Algorithm: Background",
+      "en": "Algorithm: Background",
       "CN": "算法：运行时背景",
       "VN": "Thuật toán: Nền"
     },
     "setup": {
       "0": {
-        "Global": "Axes",
+        "en": "Axes",
         "CN": "坐标轴",
         "VN": "Trục"
       },
       "1": {
-        "Global": "Axes/Grid",
+        "en": "Axes/Grid",
         "CN": "坐标轴/网格",
         "VN": "Trục/Lưới"
       },
       "2": {
-        "Global": "Axes/xy",
+        "en": "Axes/xy",
         "CN": "坐标轴/xy标签",
         "VN": "Trục/xy"
       },
       "3": {
-        "Global": "None",
+        "en": "None",
         "CN": "无",
         "VN": "Không có"
       }
@@ -390,18 +390,18 @@ export const setupInfo = {
   },
   "ALGORITHM_UNIT_SETTING": {
     "name": {
-      "Global": "Algorithm: Unit Setting",
+      "en": "Algorithm: Unit Setting",
       "CN": "算法：移动单位设置",
       "VN": "Thuật toán: Cài đặt đơn vị"
     },
     "setup": {
       "0": {
-        "Global": "pixels",
+        "en": "pixels",
         "CN": "像素",
         "VN": "pixel"
       },
       "1": {
-        "Global": "units",
+        "en": "units",
         "CN": "单位长度",
         "VN": "đơn vị"
       }

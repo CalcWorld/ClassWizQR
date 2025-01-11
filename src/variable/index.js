@@ -116,7 +116,7 @@ export class ParseVariable {
 
   _toError() {
     const errCode = `Y${this.val.slice(1, 2)}`;
-    return [menuInfo[errCode].name.Global, NaN];
+    return [menuInfo[errCode].name.en, NaN];
   }
 
   get() {

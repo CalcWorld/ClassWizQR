@@ -20,14 +20,14 @@ export const resultInfo = {
     "01": {
       "name": {
         "en": "All Real Numbers",
-        "CN": "所有实数",
+        "zh": "所有实数",
         "VN": "Tất cả số thực"
       }
     },
     "02": {
       "name": {
         "en": "No Solution",
-        "CN": "无解",
+        "zh": "无解",
         "VN": "Vô nghiệm"
       }
     },
@@ -190,28 +190,28 @@ export const resultInfo = {
     "1": {
       "name": {
         "en": "Infinite Solution",
-        "CN": "无数解",
+        "zh": "无数解",
         "VN": "Vô số nghiệm"
       }
     },
     "2": {
       "name": {
         "en": "No Solution",
-        "CN": "无解",
+        "zh": "无解",
         "VN": "Vô nghiệm"
       }
     },
     "4": {
       "name": {
         "en": "No Real Roots",
-        "CN": "无实根",
+        "zh": "无实根",
         "VN": "Vô nghiệm"
       }
     },
     "5": {
       "name": {
         "en": "No Local Max/Min",
-        "CN": "无极值",
+        "zh": "无极值",
         "VN": "Không có CĐ/CT"
       }
     }

@@ -39,9 +39,19 @@
     mode: 'view',
     name: 'cwqr',
     onEvent: async (node, event) => {
-      if (event.type === 'click' && node.value) {
+      if (event.type === 'click') {
         // console.log(node, event);
-        await copyToClipboard(node.value);
+        let value
+        if (node.value) {
+          value = node.value;
+        } else {
+          value = editor.get();
+          for (const key of node.path) {
+            value = value[key];
+          }
+          value = JSON.stringify(value, null, 2);
+        }
+        await copyToClipboard(value);
         elementSelection(event.srcElement);
       }
     },

@@ -104,7 +104,7 @@ export const inputInfo = {
             "template": "下限=${0} \\\\ 上限=${1} \\\\ μ=${2} \\\\ σ=${3}"
           },
           {
-            "language": "VN",
+            "language": "vi",
             "template": "Ldưới=${0} \\\\ Ltrên=${1} \\\\ μ=${2} \\\\ σ=${3}"
           }
         ]
@@ -123,7 +123,7 @@ export const inputInfo = {
             "template": "区域=${0} \\\\ μ=${1} \\\\ σ=${2}"
           },
           {
-            "language": "VN",
+            "language": "vi",
             "template": "Vùng=${0} \\\\ μ=${1} \\\\ σ=${2}"
           }
         ]

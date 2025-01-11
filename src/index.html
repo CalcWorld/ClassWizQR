@@ -217,6 +217,14 @@
 <div class="calc-result" id="equation">
     <div class="title">${i('calc-equation')}</div>
     <div class="content">\\( ${equation.latex} \\)</div>
+    <table class="content preview-table"><thead>
+  <tr>
+    <th>${i('calc-equation-coefficient')}</th>
+  </tr></thead><tbody><tr>
+    ${equation.decimal.map(r => {
+      return `<td>${r}</td>`;
+    }).join('</tr><tr>')}
+    </tr></tbody></table>
 </div>
 `;
     calc.innerHTML += !result ? '' : `
@@ -348,6 +356,7 @@
       'calc-title': '计算数据',
       'calc-expression': '表达式',
       'calc-equation': '方程',
+      'calc-equation-coefficient': '系数',
       'calc-result': '结果',
       'calc-result-latex': 'LaTeX',
       'calc-result-decimal': '数值',
@@ -367,6 +376,7 @@
       'calc-title': 'Calculation',
       'calc-expression': 'Expression',
       'calc-equation': 'Equation',
+      'calc-equation-coefficient': 'Coefficients',
       'calc-result': 'Result',
       'calc-result-latex': 'LaTeX',
       'calc-result-decimal': 'Decimal',

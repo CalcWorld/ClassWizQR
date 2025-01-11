@@ -4,8 +4,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ClassWiz QR</title>
 <style>
+    #lang {
+        width: 10%;
+        height: 1.3rem;
+    }
+
     #qrUrl {
-        width: 99%;
+        width: 88%;
+        height: 1.3rem;
     }
 
     #qrResult {
@@ -15,10 +21,18 @@
 <script src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
 <div id="app">
+    <label for="lang"></label>
+    <select id="lang" name="lang">
+        <option value="all" selected>All</option>
+        <option value="zh">zh</option>
+        <option value="en">en</option>
+        <option value="vi">vi</option>
+    </select>
     <label for="qrUrl"></label><input id="qrUrl" type="search"/>
     <div id="qrResult"></div>
 </div>
 <script>
+  const lang = document.getElementById('lang');
   const qrResult = document.getElementById("qrResult");
   const qrUrl = document.getElementById("qrUrl");
   const options = {
@@ -35,23 +49,55 @@
   };
   const editor = new JSONEditor(qrResult, options);
 
-  function parseQr() {
+  lang.onchange = function () {
+    parseQr(lang.value);
+  }
+
+  qrUrl.onchange = qrUrl.onsubmit = function () {
+    location.hash = `#${qrUrl.value}`;
+    parseQr(lang.value);
+  }
+
+  function parseOnHashChange() {
+    qrUrl.value = location.hash.substring(1);
+    parseQr(lang.value);
+  }
+
+  window.onhashchange = parseOnHashChange;
+
+  window.onload = function () {
+    lang.value = navigator.language.substring(0, 2);
+    parseOnHashChange();
+  }
+
+  function parseQr(lang) {
     let result = {};
     if (qrUrl.value) {
-      result = JSON.parse(JSON.stringify(cwqr.parseUrl(qrUrl.value)));
+      const qrResult = cwqr.parseUrl(qrUrl.value);
+      extractLang(qrResult, lang);
+      result = JSON.parse(JSON.stringify(qrResult));
     }
     editor.set(result);
     editor.expandAll();
   }
 
-  qrUrl.onchange = function () {
-    location.hash = `#${qrUrl.value}`;
-    parseQr();
-  }
-
-  window.onload = window.onhashchange = function () {
-    qrUrl.value = location.hash.substring(1);
-    parseQr();
+  function extractLang(resultObject, lang) {
+    if (lang === 'all') {
+      return resultObject;
+    }
+    for (const resKey in resultObject) {
+      const resValue = resultObject[resKey];
+      if (typeof resValue === 'object' && resValue[0]?.language) {
+        for (const valueElement of resValue) {
+          if (valueElement.language === lang) {
+            resultObject[resKey] = valueElement.name;
+            break;
+          }
+        }
+      } else if (typeof resValue === 'object') {
+        extractLang(resValue, lang);
+      }
+    }
   }
 
   async function copyToClipboard(text) {

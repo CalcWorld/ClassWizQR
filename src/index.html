@@ -77,6 +77,22 @@
     .transpose tr td:nth-child(1) {
         font-weight: bold;
     }
+
+    .calc-result {
+        margin: 10px 15px;
+    }
+
+    #calc .title {
+        font-weight: bold;
+    }
+
+    #calc .content {
+        margin: 10px 15px;
+    }
+
+    #calc .right {
+        text-align: right;
+    }
 </style>
 <script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
@@ -92,7 +108,16 @@
     <input id="qrUrl" type="search" placeholder="http://......"/>
     <details open>
         <summary data-i18n-tag="calc-title">Calculation</summary>
-        <div id="calc"></div>
+        <div id="calc">
+            <div class="calc-result" id="expression">
+                <div class="title">表达式</div>
+                <div class="content">\( \dfrac{\displaystyle 4\sqrt{6} } {\displaystyle 5} +\sqrt{88} \)</div>
+            </div>
+            <div class="calc-result" id="result">
+                <div class="title">结果</div>
+                <div class="content right">\( \dfrac {\displaystyle 4 \sqrt{6} } {\displaystyle 5}+2 \sqrt{22} \)</div>
+            </div>
+        </div>
     </details>
     <details open>
         <summary data-i18n-tag="basic-title">Basic Info</summary>
@@ -166,22 +191,44 @@
   }
 
   function parseQr() {
-    let result = {}, setup, model, mode;
+    let parseResult = {}, setup, model, mode, expression, result;
     if (qrUrl.value) {
       const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
-      ({ setup, model, mode } = qrResult);
-      result = JSON.parse(JSON.stringify(qrResult));
+      ({ setup, model, mode, expression, result } = qrResult);
+      parseResult = JSON.parse(JSON.stringify(qrResult));
     }
     settingsPreview(setup);
     basicPreview(model, mode);
-    editor.set(result);
+    calculationPreview(expression, result);
+    editor.set(parseResult);
     editor.expandAll();
+  }
+
+  function calculationPreview(expression, result) {
+    const calc = document.getElementById('calc');
+    calc.innerHTML = '';
+    const expressionDiv = !expression ? '' : `
+<div class="calc-result" id="expression">
+    <div class="title">${i('calc-expression')}</div>
+    <div class="content">\\( ${expression} \\)</div>
+</div>
+`;
+    calc.innerHTML += expressionDiv;
+    const resultDiv = !result ? '' : `
+<div class="calc-result" id="result">
+    <div class="title">${i('calc-result')}</div>
+    <div class="content right">\\( ${result[0].latex} \\)</div>
+</div>
+`;
+    calc.innerHTML += resultDiv;
+
+    MathJax.typeset();
   }
 
   function basicPreview(model, mode) {
     const basic = document.getElementById('basic');
     basic.innerHTML = '';
-    if (!model) {
+    if (!model || !mode) {
       return;
     }
     const table = document.createElement('table');
@@ -208,7 +255,8 @@
     <td>${i('model-sn')}</td>
     <td>${model.serialNumber}</td>
   </tr>
-</tbody>`;
+</tbody>
+`;
     basic.appendChild(table);
   }
 
@@ -284,6 +332,8 @@
     }
     const zh = {
       'calc-title': '计算数据',
+      'calc-expression': '表达式',
+      'calc-result': '结果',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-diag': '自检信息',
@@ -298,6 +348,8 @@
     };
     const en = {
       'calc-title': 'Calculation',
+      'calc-expression': 'Expression',
+      'calc-result': 'Result',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-diag': 'Diagnostic Info',
@@ -310,7 +362,7 @@
       'settings-value': 'Settings Value',
       'qr-parse-result-title': 'QR Parse Result',
     };
-    return ({ 'zh': zh, 'en': en, }[language] || en)[tag];
+    return (({ 'zh': zh, 'en': en, }[language] || en)[tag]) || '';
   }
 </script>
 </html>

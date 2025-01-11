@@ -69,7 +69,23 @@
 
     .transpose tr td:nth-child(1) {
         font-weight: bold;
-    }</style><script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script><link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet"><script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><div id="app"><label for="lang"></label> <select id="lang" name="lang"><option value="zh">zh</option><option value="en" selected="selected">en</option><option value="vi">vi</option></select> <label for="qrUrl"></label> <input id="qrUrl" type="search" placeholder="http://......"/><details open><summary data-i18n-tag="model-title">Model</summary><div id="model"></div></details><details open><summary data-i18n-tag="settings-title">Settings</summary><div id="settings"></div></details><details open><summary data-i18n-tag="qr-parse-result-title">QR Parse Result</summary><div id="qrResult"></div></details></div><script>const lang = document.getElementById('lang');
+    }
+
+    .calc-result {
+        margin: 10px 15px;
+    }
+
+    #calc .title {
+        font-weight: bold;
+    }
+
+    #calc .content {
+        margin: 10px 15px;
+    }
+
+    #calc .right {
+        text-align: right;
+    }</style><script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script><link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet"><script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><div id="app"><label for="lang"></label> <select id="lang" name="lang"><option value="zh">zh</option><option value="en" selected="selected">en</option><option value="vi">vi</option></select> <label for="qrUrl"></label> <input id="qrUrl" type="search" placeholder="http://......"/><details open><summary data-i18n-tag="calc-title">Calculation</summary><div id="calc"><div class="calc-result" id="expression"><div class="title">表达式</div><div class="content">\( \dfrac{\displaystyle 4\sqrt{6} } {\displaystyle 5} +\sqrt{88} \)</div></div><div class="calc-result" id="result"><div class="title">结果</div><div class="content right">\( \dfrac {\displaystyle 4 \sqrt{6} } {\displaystyle 5}+2 \sqrt{22} \)</div></div></div></details><details open><summary data-i18n-tag="basic-title">Basic Info</summary><div id="basic"></div></details><details open><summary data-i18n-tag="settings-title">Settings</summary><div id="settings"></div></details><details open><summary data-i18n-tag="qr-parse-result-title">QR Parse Result</summary><div id="qrResult"></div></details></div><script>const lang = document.getElementById('lang');
   const qrUrl = document.getElementById("qrUrl");
   let editor;
 
@@ -127,28 +143,58 @@
   }
 
   function parseQr() {
-    let result = {}, setup, model;
+    let parseResult = {}, setup, model, mode, expression, result;
     if (qrUrl.value) {
       const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
-      ({ setup, model } = qrResult);
-      result = JSON.parse(JSON.stringify(qrResult));
+      ({ setup, model, mode, expression, result } = qrResult);
+      parseResult = JSON.parse(JSON.stringify(qrResult));
     }
     settingsPreview(setup);
-    modelPreview(model);
-    editor.set(result);
+    basicPreview(model, mode);
+    calculationPreview(expression, result);
+    editor.set(parseResult);
     editor.expandAll();
   }
 
-  function modelPreview(model) {
-    const modelDiv = document.getElementById('model');
-    modelDiv.innerHTML = '';
-    if (!model) {
+  function calculationPreview(expression, result) {
+    const calc = document.getElementById('calc');
+    calc.innerHTML = '';
+    const expressionDiv = !expression ? '' : `
+<div class="calc-result" id="expression">
+    <div class="title">${i('calc-expression')}</div>
+    <div class="content">\\( ${expression} \\)</div>
+</div>
+`;
+    calc.innerHTML += expressionDiv;
+    const resultDiv = !result ? '' : `
+<div class="calc-result" id="result">
+    <div class="title">${i('calc-result')}</div>
+    <div class="content right">\\( ${result[0].latex} \\)</div>
+</div>
+`;
+    calc.innerHTML += resultDiv;
+
+    MathJax.typeset();
+  }
+
+  function basicPreview(model, mode) {
+    const basic = document.getElementById('basic');
+    basic.innerHTML = '';
+    if (!model || !mode) {
       return;
     }
     const table = document.createElement('table');
     table.classList.add('preview-table');
     table.innerHTML = `
 <tbody class="transpose">
+  <tr>
+    <td>${i('mode-main')}</td>
+    <td>${mode.mainName}</td>
+  </tr>
+  <tr>
+    <td>${i('mode-sub')}</td>
+    <td>${mode.subName || i('mode-na')}</td>
+  </tr>
   <tr>
     <td>${i('model-key')}</td>
     <td>${model.name}</td>
@@ -161,8 +207,9 @@
     <td>${i('model-sn')}</td>
     <td>${model.serialNumber}</td>
   </tr>
-</tbody>`;
-    modelDiv.appendChild(table);
+</tbody>
+`;
+    basic.appendChild(table);
   }
 
   function settingsPreview(setup) {
@@ -236,24 +283,36 @@
       language = lang.value;
     }
     const zh = {
-      'model-title': '机型',
+      'calc-title': '计算数据',
+      'calc-expression': '表达式',
+      'calc-result': '结果',
+      'basic-title': '基本信息',
       'model-key': '型号',
       'model-diag': '自检信息',
       'model-sn': '序列号',
+      'mode-main': '主模式',
+      'mode-sub': '子模式',
+      'mode-na': '/',
       'settings-title': '设置',
       'settings-key': '设置项',
       'settings-value': '设置值',
       'qr-parse-result-title': 'QR解析数据',
     };
     const en = {
-      'model-title': 'Model',
+      'calc-title': 'Calculation',
+      'calc-expression': 'Expression',
+      'calc-result': 'Result',
+      'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-diag': 'Diagnostic Info',
       'model-sn': 'Serial Number',
+      'mode-main': 'Main Mode',
+      'mode-sub': 'Sub Mode',
+      'mode-na': '/',
       'settings-title': 'Settings',
       'settings-key': 'Settings',
       'settings-value': 'Settings Value',
       'qr-parse-result-title': 'QR Parse Result',
     };
-    return ({ 'zh': zh, 'en': en, }[language] || en)[tag];
+    return (({ 'zh': zh, 'en': en, }[language] || en)[tag]) || '';
   }</script></html>

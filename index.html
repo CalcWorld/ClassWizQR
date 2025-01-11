@@ -1,4 +1,37 @@
-<!doctype html><html lang="en"><head><script defer="defer" src="cwqr.js"></script></head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ClassWiz QR</title><style>#lang {
+<!doctype html><html lang="en"><head><script defer="defer" src="cwqr.js"></script></head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><title>ClassWiz QR</title><style>body {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    #app {
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    @media (min-width: 768px) {
+        #app {
+            width: 91.666667%
+        }
+    }
+
+    @media (min-width: 1024px) {
+        #app {
+            width: 83.333333%
+        }
+    }
+
+    @media (min-width: 1280px) {
+        #app {
+            width: 66.666667%
+        }
+    }
+
+    @media (min-width: 1536px) {
+        #app {
+            width: 58.333333%
+        }
+    }
+
+    #lang {
         width: 10%;
         height: 1.3rem;
     }
@@ -8,37 +41,42 @@
         height: 1.3rem;
     }
 
-    #qrResult {
+    details {
         margin: 10px auto;
-    }</style><script src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script><link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet"><div id="app"><label for="lang"></label> <select id="lang" name="lang"><option value="zh">zh</option><option value="en" selected="selected">en</option><option value="vi">vi</option></select> <label for="qrUrl"></label><input id="qrUrl" type="search"/><div id="qrResult"></div></div><script>const lang = document.getElementById('lang');
-  const qrResult = document.getElementById("qrResult");
+    }
+
+    details > :nth-child(2) {
+        margin: 10px auto;
+    }
+
+    summary {
+        cursor: pointer;
+    }
+
+    .preview-table {
+        border: thin solid #3883fa;
+        border-collapse: collapse;
+        border-spacing: 0;
+        width: 100%;
+    }
+
+    .preview-table td, .preview-table th {
+        border: thin solid #3883fa;
+        border-collapse: collapse;
+        border-spacing: 0;
+        padding: 5px 5px;
+    }
+
+    .transpose tr td:nth-child(1) {
+        font-weight: bold;
+    }</style><script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script><link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet"><script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><div id="app"><label for="lang"></label> <select id="lang" name="lang"><option value="zh">zh</option><option value="en" selected="selected">en</option><option value="vi">vi</option></select> <label for="qrUrl"></label> <input id="qrUrl" type="search" placeholder="http://......"/><details open><summary data-i18n-tag="model-title">Model</summary><div id="model"></div></details><details open><summary data-i18n-tag="settings-title">Settings</summary><div id="settings"></div></details><details open><summary data-i18n-tag="qr-parse-result-title">QR Parse Result</summary><div id="qrResult"></div></details></div><script>const lang = document.getElementById('lang');
   const qrUrl = document.getElementById("qrUrl");
-  const options = {
-    mode: 'view',
-    name: 'cwqr',
-    onEvent: async (node, event) => {
-      if (event.type === 'click') {
-        // console.log(node, event);
-        let value
-        if (node.value) {
-          value = node.value;
-        } else {
-          value = editor.get();
-          for (const key of node.path) {
-            value = value[key];
-          }
-          value = JSON.stringify(value, null, 2);
-        }
-        await copyToClipboard(value);
-        elementSelection(event.srcElement);
-      }
-    },
-    mainMenuBar: false,
-  };
-  const editor = new JSONEditor(qrResult, options);
+  let editor;
 
   lang.onchange = function () {
     parseQr();
+    localStorage.setItem('lang', lang.value);
+    i18n();
   }
 
   qrUrl.onchange = qrUrl.onsubmit = function () {
@@ -54,21 +92,100 @@
   window.onhashchange = parseOnHashChange;
 
   window.onload = function () {
-    const userLang = navigator.language.substring(0, 2);
+    const options = {
+      mode: 'view',
+      name: 'cwqr',
+      onEvent: async (node, event) => {
+        if (event.type === 'click') {
+          // console.log(node, event);
+          let value
+          if (node.value) {
+            value = node.value;
+          } else {
+            value = editor.get();
+            for (const key of node.path) {
+              value = value[key];
+            }
+            value = JSON.stringify(value, null, 2);
+          }
+          await copyToClipboard(value);
+          elementSelection(event.srcElement);
+        }
+      },
+      mainMenuBar: false,
+    };
+    const qrResult = document.getElementById("qrResult");
+    editor = new JSONEditor(qrResult, options);
+
+    const userLang = localStorage.getItem('lang') || navigator.language.substring(0, 2);
     if (cwqr.availableLanguages.includes(userLang)) {
       lang.value = userLang;
+      document.querySelector('html').setAttribute('lang', userLang);
     }
+    i18n();
     parseOnHashChange();
   }
 
   function parseQr() {
-    let result = {};
+    let result = {}, setup, model;
     if (qrUrl.value) {
       const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
+      ({ setup, model } = qrResult);
       result = JSON.parse(JSON.stringify(qrResult));
     }
+    settingsPreview(setup);
+    modelPreview(model);
     editor.set(result);
     editor.expandAll();
+  }
+
+  function modelPreview(model) {
+    const modelDiv = document.getElementById('model');
+    modelDiv.innerHTML = '';
+    if (!model) {
+      return;
+    }
+    const table = document.createElement('table');
+    table.classList.add('preview-table');
+    table.innerHTML = `
+<tbody class="transpose">
+  <tr>
+    <td>${i('model-key')}</td>
+    <td>${model.name}</td>
+  </tr>
+  <tr>
+    <td>${i('model-diag')}</td>
+    <td>${model.type}-${model.id} Ver${model.version}</td>
+  </tr>
+  <tr>
+    <td>${i('model-sn')}</td>
+    <td>${model.serialNumber}</td>
+  </tr>
+</tbody>`;
+    modelDiv.appendChild(table);
+  }
+
+  function settingsPreview(setup) {
+    const settings = document.getElementById('settings');
+    settings.innerHTML = '';
+    if (!setup) {
+      return;
+    }
+    const table = document.createElement('table');
+    table.classList.add('preview-table');
+    table.innerHTML = `<thead>
+  <tr>
+    <th>${i('settings-key')}</th>
+    <th>${i('settings-value')}</th>
+  </tr></thead>`;
+    const tbody = document.createElement('tbody');
+    for (const s of setup) {
+      const row = document.createElement('tr');
+      row.innerHTML = `<td>${s.name}</td><td>${s.value}</td>`;
+      tbody.appendChild(row);
+    }
+    table.appendChild(tbody);
+    settings.appendChild(table);
   }
 
   async function copyToClipboard(text) {
@@ -78,8 +195,8 @@
       console.log(e)
       const textarea = document.createElement('textarea');
       textarea.value = text;
-      textarea.style.position = 'fixed'; // 避免页面滚动
-      textarea.style.opacity = '0'; // 隐藏 textarea
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
       document.body.appendChild(textarea);
       textarea.select();
       try {
@@ -94,13 +211,49 @@
 
   function elementSelection(dom) {
     if (!dom || !(dom instanceof HTMLElement)) {
-      console.error("请传入一个有效的 DOM 元素。");
       return;
     }
 
-    const range = document.createRange(); // 创建一个 Range 对象
-    range.selectNodeContents(dom);       // 设置 Range 的选中内容为 DOM 元素的文本内容
-    const selection = window.getSelection(); // 获取全局 Selection 对象
-    selection.removeAllRanges();         // 清除当前的选区
-    selection.addRange(range);           // 添加新 Range 到选区
+    const range = document.createRange();
+    range.selectNodeContents(dom);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
+  function i18n() {
+    document.querySelectorAll('[data-i18n-tag]').forEach(el => {
+      const tag = el.getAttribute('data-i18n-tag');
+      const text = i(tag);
+      if (text) {
+        el.innerText = text;
+      }
+    });
+  }
+
+  function i(tag, language) {
+    if (!language) {
+      language = lang.value;
+    }
+    const zh = {
+      'model-title': '机型',
+      'model-key': '型号',
+      'model-diag': '自检信息',
+      'model-sn': '序列号',
+      'settings-title': '设置',
+      'settings-key': '设置项',
+      'settings-value': '设置值',
+      'qr-parse-result-title': 'QR解析数据',
+    };
+    const en = {
+      'model-title': 'Model',
+      'model-key': 'Product Name',
+      'model-diag': 'Diagnostic Info',
+      'model-sn': 'Serial Number',
+      'settings-title': 'Settings',
+      'settings-key': 'Settings',
+      'settings-value': 'Settings Value',
+      'qr-parse-result-title': 'QR Parse Result',
+    };
+    return ({ 'zh': zh, 'en': en, }[language] || en)[tag];
   }</script></html>

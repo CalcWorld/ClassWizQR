@@ -201,18 +201,18 @@
 
     calc.innerHTML += expression ? `
 <div class="calc-result" id="expression">
-    <div class="title">${i('calc-expression')}</div>
+    <div class="title">${t('calc-expression')}</div>
     <div class="content">\\( ${expression} \\)</div>
 </div>
 ` : '';
 
     calc.innerHTML += equation ? `
 <div class="calc-result" id="equation">
-    <div class="title">${i('calc-equation')}</div>
+    <div class="title">${t('calc-equation')}</div>
     <div class="content">\\( ${equation.latex} \\)</div>
     <table class="content preview-table"><thead>
   <tr>
-    <th>${i('calc-equation-coefficient')}</th>
+    <th>${t('calc-equation-coefficient')}</th>
   </tr></thead><tbody><tr>
     ${equation.decimal.map(r => {
       return `<td>${r}</td>`;
@@ -223,14 +223,14 @@
 
     calc.innerHTML += (result && result[0]) ? `
 <div class="calc-result" id="result">
-    <div class="title">${i('calc-result')}</div>
+    <div class="title">${t('calc-result')}</div>
     <div class="content right">\\( ${result[0].latex} \\)</div>
     ${result.length > 1 ? `
     <table class="content preview-table"><thead>
   <tr>
     <th></th>
-    <th>${i('calc-result-latex')}</th>
-    <th>${i('calc-result-decimal')}</th>
+    <th>${t('calc-result-latex')}</th>
+    <th>${t('calc-result-decimal')}</th>
   </tr></thead><tbody><tr>
     ${result?.map((r, i) => {
       if (i > 0) return `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td>`;
@@ -255,23 +255,23 @@
     table.innerHTML = `
 <tbody class="transpose">
   <tr>
-    <td>${i('mode-main')}</td>
+    <td>${t('mode-main')}</td>
     <td>${mode.mainName}</td>
   </tr>
   <tr>
-    <td>${i('mode-sub')}</td>
-    <td>${mode.subName || i('mode-na')}</td>
+    <td>${t('mode-sub')}</td>
+    <td>${mode.subName || t('mode-na')}</td>
   </tr>
   <tr>
-    <td>${i('model-key')}</td>
+    <td>${t('model-key')}</td>
     <td>${model.name}</td>
   </tr>
   <tr>
-    <td>${i('model-diag')}</td>
+    <td>${t('model-diag')}</td>
     <td>${model.type}-${model.id} Ver${model.version}</td>
   </tr>
   <tr>
-    <td>${i('model-sn')}</td>
+    <td>${t('model-sn')}</td>
     <td>${model.serialNumber}</td>
   </tr>
 </tbody>
@@ -289,8 +289,8 @@
     table.classList.add('preview-table');
     table.innerHTML = `<thead>
   <tr>
-    <th>${i('settings-key')}</th>
-    <th>${i('settings-value')}</th>
+    <th>${t('settings-key')}</th>
+    <th>${t('settings-value')}</th>
   </tr></thead>`;
     const tbody = document.createElement('tbody');
     for (const s of setup) {
@@ -338,14 +338,14 @@
   function i18n() {
     document.querySelectorAll('[data-i18n-tag]').forEach(el => {
       const tag = el.getAttribute('data-i18n-tag');
-      const text = i(tag);
+      const text = t(tag);
       if (text) {
         el.innerText = text;
       }
     });
   }
 
-  function i(tag, language) {
+  function t(tag, language) {
     if (!language) {
       language = lang.value;
     }

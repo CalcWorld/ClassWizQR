@@ -238,6 +238,53 @@
 </div>
 ` : '';
 
+    const parseVectorMatrix = (vectorMatrix, id, title) => `
+<div class="calc-result" id="${id}">
+    <div class="title">${title}</div>
+    ${vectorMatrix.map(vm => `
+<div class="content">\\( \\mathrm\{${vm.name}\} = ${vm.latex} \\)</div>
+<table class="content preview-table"><tbody><tr>
+${vm.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+`).join('')}
+</div>
+`;
+    calc.innerHTML += matrix ? parseVectorMatrix(matrix, 'matrix', t('calc-matrix')) : '';
+    calc.innerHTML += vector ? parseVectorMatrix(vector, 'vector', t('calc-vector')) : '';
+
+    calc.innerHTML += spreadsheet ? `
+<div class="calc-result" id="spreadsheet">
+    <div class="title">${t('calc-spreadsheet')}</div>
+    <button id="spreadsheet-csv-down" class="download">${t('calc-spreadsheet-csv-down')}</button>
+<table class="content preview-table fix-width"><thead>
+  <tr>
+    <th>${['', 'A', 'B', 'C', 'D', 'E'].join('</th><th>')}</th>
+  </tr></thead><tbody class="transpose"><tr>
+${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>')}</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+</div>
+` : '';
+
+    calc.innerHTML += distribution ? `
+<div class="calc-result" id="distribution">
+    <div class="title">${t('calc-distribution')}</div>
+    <div class="content">\\( ${distribution.latex} \\)</div>
+</div>
+` : '';
+
+    calc.innerHTML += statistic ? `
+<div class="calc-result" id="statistic">
+    <div class="title">${t('calc-statistic')}</div>
+    <button id="statistic-csv-down" class="download">${t('calc-statistic-csv-down')}</button>
+<table class="content preview-table fix-width"><thead>
+  <tr>
+    <th>${['', ...statistic.array[0]].join('</th><th>')}</th>
+  </tr></thead><tbody class="transpose"><tr>
+${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>')}</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+</div>
+` : '';
+
     calc.innerHTML += (result && result[0]) ? `
 <div class="calc-result" id="result">
     <div class="title">${t('calc-result')}</div>
@@ -258,48 +305,8 @@
 </div>
 ` : '';
 
-    const parseVectorMatrix = (vectorMatrix, id, title) => `
-<div class="calc-result" id="${id}">
-    <div class="title">${title}</div>
-    ${vectorMatrix.map(vm => `
-<div class="content">\\( \\mathrm\{${vm.name}\} = ${vm.latex} \\)</div>
-<table class="content preview-table"><tbody><tr>
-${vm.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).join('</tr><tr>')}
-</tr></tbody></table>
-`).join('')}
-</div>
-`;
-    calc.innerHTML += matrix ? parseVectorMatrix(matrix, 'matrix', t('calc-matrix')) : '';
-    calc.innerHTML += vector ? parseVectorMatrix(vector, 'vector', t('calc-vector')) : '';
-
     const csvFilename = `${new Date().getTime()}.csv`;
-
-    calc.innerHTML += spreadsheet ? `
-<div class="calc-result" id="spreadsheet">
-    <div class="title">${t('calc-spreadsheet')}</div>
-    <button id="spreadsheet-csv-down" class="download">${t('calc-spreadsheet-csv-down')}</button>
-<table class="content preview-table fix-width"><thead>
-  <tr>
-    <th>${['', 'A', 'B', 'C', 'D', 'E'].join('</th><th>')}</th>
-  </tr></thead><tbody class="transpose"><tr>
-${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>')}</td>`).join('</tr><tr>')}
-</tr></tbody></table>
-</div>
-` : '';
     spreadsheet && (document.getElementById('spreadsheet-csv-down').onclick = () => download(`spreadsheet-${csvFilename}`, spreadsheet.csv, 'text/plain'));
-
-    calc.innerHTML += statistic ? `
-<div class="calc-result" id="statistic">
-    <div class="title">${t('calc-statistic')}</div>
-    <button id="statistic-csv-down" class="download">${t('calc-statistic-csv-down')}</button>
-<table class="content preview-table fix-width"><thead>
-  <tr>
-    <th>${['', ...statistic.array[0]].join('</th><th>')}</th>
-  </tr></thead><tbody class="transpose"><tr>
-${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>')}</td>`).join('</tr><tr>')}
-</tr></tbody></table>
-</div>
-` : '';
     statistic && (document.getElementById('statistic-csv-down').onclick = () => download(`statistic-${csvFilename}`, statistic.csv, 'text/plain'));
 
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, calc]);
@@ -434,6 +441,7 @@ ${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</t
       'calc-spreadsheet-csv-down': '下载 (.csv)',
       'calc-statistic': '统计表格',
       'calc-statistic-csv-down': '下载 (.csv)',
+      'calc-distribution': '分布计算',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-diag': '自检信息',
@@ -460,6 +468,7 @@ ${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</t
       'calc-spreadsheet-csv-down': 'Download (.csv)',
       'calc-statistic': 'Statistic',
       'calc-statistic-csv-down': 'Download (.csv)',
+      'calc-distribution': 'Distribution',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-diag': 'Diagnostic Info',

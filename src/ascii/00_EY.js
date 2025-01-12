@@ -11,5 +11,7 @@ export const ascii00_EY = {
   "49": "z",
   "4A": "\\mathrm{PreAns}",
   "4B": "\\theta",
-  "4C": " "
+  "4C": " ",
+  "95": "f(",
+  "96": "g(",
 }

@@ -86,25 +86,31 @@ export class ClassWizQR {
       setup = parseS.parseAll();
     }
 
-    let expression;
+    let expression, expressionE, expressionG, _function;
     if (kv.E) {
       const parseE = new ParseExpression(kv.E, modelType, modelId);
       // TODO: parse Algo
       if (kv.M && kv.S) {
-        expression = parseE.autoParse(kv.M, kv.S);
+        expressionE = parseE.autoParse(kv.M, kv.S);
       } else {
-        expression = parseE.parseMath();
+        expressionE = parseE.parseMath();
       }
     }
     if (kv.G) {
       const parseG = new ParseExpression(kv.G, modelType, modelId);
-      let expr2;
       if (kv.M && kv.S) {
-        expr2 = parseG.autoParse(kv.M, kv.S);
+        expressionG = parseG.autoParse(kv.M, kv.S);
       } else {
-        expr2 = parseG.parseMath();
+        expressionG = parseG.parseMath();
       }
-      expression = `f(x)=${expression} \\\\ g(x)=${expr2}`;
+    }
+    if ('88' === _mainMode) {
+      _function = [
+        { name: 'f(x)', expression: expressionE || '' },
+        { name: 'g(x)', expression: expressionG || '' },
+      ];
+    } else {
+      expression = expressionE;
     }
 
     let tableRange;
@@ -185,6 +191,7 @@ export class ClassWizQR {
       },
       mode,
       expression,
+      function: _function,
       equation,
       tableRange,
       result,

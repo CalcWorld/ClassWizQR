@@ -317,13 +317,8 @@ ${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</t
 
   function basicPreview(model, mode) {
     const basic = document.getElementById('basic');
-    basic.innerHTML = '';
-    if (!model || !mode) {
-      return;
-    }
-    const table = document.createElement('table');
-    table.classList.add('preview-table');
-    table.innerHTML = `
+    basic.innerHTML = (model && mode) ? `
+<table class="preview-table">
 <tbody class="transpose">
   <tr>
     <td>${t('mode-main')}</td>
@@ -345,32 +340,21 @@ ${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</t
     <td>${t('model-sn')}</td>
     <td>${model.serialNumber}</td>
   </tr>
-</tbody>
-`;
-    basic.appendChild(table);
+</tbody></table>
+` : '';
   }
 
   function settingsPreview(setup) {
     const settings = document.getElementById('settings');
-    settings.innerHTML = '';
-    if (!setup) {
-      return;
-    }
-    const table = document.createElement('table');
-    table.classList.add('preview-table');
-    table.innerHTML = `<thead>
+    settings.innerHTML = setup ? `
+<table class="preview-table"><thead>
   <tr>
     <th>${t('settings-key')}</th>
     <th>${t('settings-value')}</th>
-  </tr></thead>`;
-    const tbody = document.createElement('tbody');
-    for (const s of setup) {
-      const row = document.createElement('tr');
-      row.innerHTML = `<td>${s.name}</td><td>${s.value}</td>`;
-      tbody.appendChild(row);
-    }
-    table.appendChild(tbody);
-    settings.appendChild(table);
+  </tr></thead><tbody><tr>
+  ${setup.map(s => `<td>${s.name}</td><td>${s.value}</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+` : '';
   }
 
   async function copyToClipboard(text) {

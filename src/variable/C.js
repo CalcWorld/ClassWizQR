@@ -79,34 +79,47 @@ export const ParseEquation = (M, C) => {
   const parseM = new ParseMode(M);
   const mainMode = parseM.getMainMode();
   let subMode = parseM.getSubMode();
-  let equType;
+  let equType, omitPlus, m, n;
   switch (mainMode) {
     case '45':
       equType = 'EQUATION';
       break;
     case '4A':
       equType = 'RATIO';
+      omitPlus = [0, 1, 2];
+      m = 1;
+      n = 3;
       break;
     case '4B':
       equType = 'INEQUALITY';
+      omitPlus = [0];
+      m = 1;
+      n = subMode.slice(1, 2) - 1;
       subMode += parseM.getInqType();
       break;
   }
+  omitPlus || (omitPlus = inputInfo[equType][subMode]['omitPlus']);
+  (m || n) || ([m, n] = inputInfo[equType][subMode]['coefficient']);
   let template = inputInfo[equType][subMode].template;
-  const omitPlus = inputInfo[equType][subMode]['omitPlus'];
-  const decimalResult = [];
-  for (let i = 0; i < split.length; i++) {
+  const coefficient = [];
+  let coefficientRow = [];
+  let i;
+  for (i = 0; i < split.length; i++) {
     let [latex, decimal] = new ParseVariable(split[i]).get();
     if (!omitPlus.includes(i) && decimal.gte(0)) {
       latex = '+' + latex;
     }
     template = template.replace(`\$\{${i}\}`, latex);
-    decimalResult.push(decimal);
+    coefficientRow.push(decimal);
+    if ((i + 1) % n === 0) {
+      coefficient.push(coefficientRow);
+      coefficientRow = [];
+    }
   }
-  if (template.includes('$')) {
+  if (i !== m * n || template.includes('$')) {
     throw new Error('Equation template not match');
   }
-  return { latex: template, decimal: decimalResult };
+  return { latex: template, decimal: coefficient };
 }
 
 export const ParseDistribution = (M, C) => {

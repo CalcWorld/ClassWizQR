@@ -36,10 +36,10 @@ export class ParseVariable {
     let fracLatex, fracDec;
     if (fracArr.length === 2) {
       fracDec = new Decimal(a).div(b).mul(signFix);
-      fracLatex = `${numSign} \\dfrac {${a}} {${b}}`;
+      fracLatex = `${numSign} \\dfrac {\\displaystyle ${a}} {\\displaystyle ${b}}`;
     } else if (fracArr.length === 3) {
       fracDec = new Decimal(a).add(new Decimal(b).div(c)).mul(signFix);
-      fracLatex = `${numSign} {${a}} \\dfrac {${b}} {${c}}`;
+      fracLatex = `${numSign} {\\displaystyle ${a}} \\dfrac {\\displaystyle ${b}} {\\displaystyle ${c}}`;
     }
     return [fracLatex, fracDec];
   }

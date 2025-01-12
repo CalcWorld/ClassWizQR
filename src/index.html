@@ -215,7 +215,17 @@
   }
 
   function calculationPreview(qrResult) {
-    const { expression, equation, result, matrix, vector, spreadsheet, statistic, distribution } = qrResult;
+    const {
+      expression,
+      equation,
+      result,
+      matrix,
+      vector,
+      spreadsheet,
+      statistic,
+      distribution,
+      variable,
+    } = qrResult;
 
     const calc = document.getElementById('calc');
     calc.innerHTML = '';
@@ -286,23 +296,28 @@ ${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</t
 </div>
 ` : '';
 
+    const parseVariableList = variableList => `
+<table class="content preview-table fix-width"><thead><tr>
+  <th></th>
+  <th>${t('calc-variable-latex')}</th>
+  <th>${t('calc-variable-decimal')}</th>
+</tr></thead><tbody class="transpose"><tr>
+${variableList.map(r => `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+`;
+
     calcHtml += (result && result[0]) ? `
 <div class="calc-result" id="result">
     <div class="title">${t('calc-result')}</div>
     <div class="content right">\\( ${result[0].latex} \\)</div>
-    ${result.length > 1 ? `
-    <table class="content preview-table"><thead>
-  <tr>
-    <th></th>
-    <th>${t('calc-result-latex')}</th>
-    <th>${t('calc-result-decimal')}</th>
-  </tr></thead><tbody><tr>
-    ${result?.map((r, i) => {
-      if (i > 0) return `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td>`;
-    }).join('</tr><tr>')}
-    </tr></tbody></table>
-    ` : ''
-    }
+    ${result.length > 1 ? parseVariableList(result.slice(1)) : ''}
+</div>
+` : '';
+
+    calcHtml += variable ? `
+<div class="calc-result" id="variable">
+    <div class="title">${t('calc-variable')}</div>
+${parseVariableList(variable)}
 </div>
 ` : '';
 
@@ -420,8 +435,9 @@ ${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</t
       'calc-equation': '方程',
       'calc-equation-coefficient': '系数',
       'calc-result': '结果',
-      'calc-result-latex': 'LaTeX',
-      'calc-result-decimal': '数值',
+      'calc-variable': '变量',
+      'calc-variable-latex': 'LaTeX',
+      'calc-variable-decimal': '数值',
       'calc-matrix': '矩阵预设',
       'calc-vector': '向量预设',
       'calc-spreadsheet': '数据表格',
@@ -447,8 +463,9 @@ ${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</t
       'calc-equation': 'Equation',
       'calc-equation-coefficient': 'Coefficients',
       'calc-result': 'Result',
-      'calc-result-latex': 'LaTeX',
-      'calc-result-decimal': 'Decimal',
+      'calc-variable': 'Variable',
+      'calc-variable-latex': 'LaTeX',
+      'calc-variable-decimal': 'Decimal',
       'calc-matrix': 'Matrix Presets',
       'calc-vector': 'Vector Presets',
       'calc-spreadsheet': 'Spreadsheet',

@@ -38,6 +38,10 @@
         }
     }
 
+    #MathJax_Message {
+        display: none !important;
+    }
+
     #lang {
         width: 10%;
         height: 1.3rem;
@@ -53,7 +57,7 @@
     }
 
     details > :nth-child(2) {
-        margin: 10px auto;
+        margin: 10px 15px;
     }
 
     summary {
@@ -79,7 +83,7 @@
     }
 
     .calc-result {
-        margin: 10px 15px;
+        margin: 10px auto;
     }
 
     #calc .title {
@@ -182,20 +186,20 @@
   }
 
   function parseQr() {
-    let parseResult = {}, setup, model, mode, expression, equation, result;
+    let parseResult = {}, setup, model, mode, expression, equation, result, vector;
     if (qrUrl.value) {
       const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
-      ({ setup, model, mode, expression, equation, result } = qrResult);
+      ({ setup, model, mode, expression, equation, result, vector } = qrResult);
       parseResult = JSON.parse(JSON.stringify(qrResult));
     }
     settingsPreview(setup);
     basicPreview(model, mode);
-    calculationPreview(expression, equation, result);
+    calculationPreview(expression, equation, result, vector);
     editor.set(parseResult);
     editor.expandAll();
   }
 
-  function calculationPreview(expression, equation, result) {
+  function calculationPreview(expression, equation, result, vector) {
     const calc = document.getElementById('calc');
     calc.innerHTML = '';
 
@@ -234,6 +238,18 @@
     </tr></tbody></table>
     ` : ''
     }
+</div>
+` : '';
+
+    calc.innerHTML += vector ? `
+<div class="calc-result" id="vector">
+    <div class="title">${t('calc-vector')}</div>
+    ${vector.map(vct => `
+<div class="content">\\( \\mathrm\{${vct.name}\} = ${vct.latex} \\)</div>
+<table class="content preview-table"><tbody><tr>
+${vct.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+`).join('')}
 </div>
 ` : '';
 
@@ -353,6 +369,7 @@
       'calc-result': '结果',
       'calc-result-latex': 'LaTeX',
       'calc-result-decimal': '数值',
+      'calc-vector': '向量预设',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-diag': '自检信息',
@@ -373,6 +390,7 @@
       'calc-result': 'Result',
       'calc-result-latex': 'LaTeX',
       'calc-result-decimal': 'Decimal',
+      'calc-vector': 'Vector Presets',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-diag': 'Diagnostic Info',
@@ -385,7 +403,7 @@
       'settings-value': 'Settings Value',
       'qr-parse-result-title': 'QR Parse Result',
     };
-    return (({ 'zh': zh, 'en': en, }[language] || en)[tag]) || '';
+    return (({ 'zh': zh, 'en': en, }[language] || en)[tag]) || tag;
   }
 </script>
 </html>

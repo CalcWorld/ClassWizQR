@@ -1,6 +1,6 @@
 import { ParseVariable } from "./index.js";
 import { AsciiTable } from "../ascii/index.js";
-import { langDictToList, ParseMode } from "../mode/index.js";
+import { translate, ParseMode } from "../mode/index.js";
 import { resultInfo } from './result.js';
 import { modeInfo } from '../mode/mode.js';
 import { ParseSetup } from "../setup/index.js";
@@ -47,7 +47,7 @@ export const ParseInequalityResult = (R) => {
   const resultCode = R.slice(2, 4);
   const result = resultInfo['INEQUALITY'][resultCode];
   if (!result.template) {
-    return { name: langDictToList(result.name) };
+    return { name: translate(result.name) };
   }
   const split = R.slice(4).match(/.{20}/g);
   let template = result.template;
@@ -67,7 +67,7 @@ export const ParseInequalityResult = (R) => {
 export const ParseEquationResult = (R, M, S, C) => {
   let resultCode = R.slice(2, 3);
   if (['1', '2', '4'].includes(resultCode)) {
-    return [{ name: 'templated', latex: langDictToList(resultInfo['EQUATION'][resultCode].name) }];
+    return [{ name: 'templated', latex: translate(resultInfo['EQUATION'][resultCode].name) }];
   }
   const noLocal = resultCode === '5';
   // when resultCode is '5', it still contains roots data, but indicates no Local Minimum/Maximum

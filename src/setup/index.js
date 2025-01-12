@@ -1,5 +1,5 @@
 import { setupInfo } from './setup.js';
-import { langDictToList } from "../mode/index.js";
+import { translate } from "../mode/index.js";
 
 export class ParseSetup {
   constructor(S) {
@@ -181,8 +181,8 @@ export class ParseSetup {
     const parseNumberFormat = () => {
       const main = this.getNumberFormatMainCode();
       const sub = this.getNumberFormatSubCode();
-      const name = langDictToList(setupInfo['NUMBER_FORMAT'].name);
-      let value = langDictToList(setupInfo['NUMBER_FORMAT']['setup'][main]);
+      const name = translate(setupInfo['NUMBER_FORMAT'].name);
+      let value = translate(setupInfo['NUMBER_FORMAT']['setup'][main]);
       if (['8', '9'].includes(main)) {
         for (let i = 0; i < value.length; i++) {
           value[i].name += sub;
@@ -193,15 +193,15 @@ export class ParseSetup {
 
     const parseInputOutput = () => {
       const code = this.getInputCode() + this.getOutputCode();
-      const name = langDictToList(setupInfo['INPUT_OUTPUT'].name);
-      const value = langDictToList(setupInfo['INPUT_OUTPUT']['setup'][code]);
+      const name = translate(setupInfo['INPUT_OUTPUT'].name);
+      const value = translate(setupInfo['INPUT_OUTPUT']['setup'][code]);
       return { name, value };
     }
 
     const parseCommon = (type, code) => {
-      const name = langDictToList(setupInfo[type].name);
+      const name = translate(setupInfo[type].name);
       const setupValue = setupInfo[type]['setup'][code];
-      const value = setupValue ? langDictToList(setupValue) : code;
+      const value = setupValue ? translate(setupValue) : code;
       return { name, value };
     }
 

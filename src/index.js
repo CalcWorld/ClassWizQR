@@ -175,7 +175,7 @@ export class ClassWizQR {
       }
     }
 
-    const qrResult = {
+    return {
       model: {
         type: modelType,
         id: modelId,
@@ -198,7 +198,6 @@ export class ClassWizQR {
       mathBox,
       setup,
     };
-    return qrResult;
   }
 
 }

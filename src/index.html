@@ -107,6 +107,11 @@
         width: 4rem;
         height: 1rem;
     }
+
+    button.download {
+        margin: 10px 15px 0 15px;
+        text-align: right;
+    }
 </style>
 <script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
@@ -268,6 +273,7 @@ ${vm.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).joi
     calc.innerHTML += spreadsheet ? `
 <div class="calc-result" id="spreadsheet">
     <div class="title">${t('calc-spreadsheet')}</div>
+    <button id="spreadsheet-csv-down" class="download">${t('calc-spreadsheet-csv-down')}</button>
 <table class="content preview-table"><thead>
   <tr>
     <th>${['', 'A', 'B', 'C', 'D', 'E'].join('</th><th>')}</th>
@@ -276,6 +282,8 @@ ${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>'
 </tr></tbody></table>
 </div>
 ` : '';
+    const filename = `spreadsheet-${new Date().getTime()}.csv`
+    spreadsheet && (document.getElementById('spreadsheet-csv-down').onclick = () => download(filename, spreadsheet.csv, 'text/plain'))
 
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, calc]);
   }
@@ -371,6 +379,16 @@ ${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>'
     selection.addRange(range);
   }
 
+  function download(filename, content, type) {
+    const a = document.createElement('a');
+    const file = new Blob([content], { type });
+    a.href = URL.createObjectURL(file);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
   function i18n() {
     document.querySelectorAll('[data-i18n-tag]').forEach(el => {
       const tag = el.getAttribute('data-i18n-tag');
@@ -396,6 +414,7 @@ ${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>'
       'calc-matrix': '矩阵预设',
       'calc-vector': '向量预设',
       'calc-spreadsheet': '数据表格',
+      'calc-spreadsheet-csv-down': '下载 (.csv)',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-diag': '自检信息',
@@ -419,6 +438,7 @@ ${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>'
       'calc-matrix': 'Matrix Presets',
       'calc-vector': 'Vector Presets',
       'calc-spreadsheet': 'Spreadsheet',
+      'calc-spreadsheet-csv-down': 'Download (.csv)',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-diag': 'Diagnostic Info',

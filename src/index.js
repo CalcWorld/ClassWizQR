@@ -7,8 +7,7 @@ import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
 import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseStatisticResult } from "./variable/R.js";
 import { ParseSetup } from "./setup/index.js";
-
-export const availableLanguages = ['zh', 'en', 'vi'];
+import { availableLanguages } from "./utils.js";
 
 export class ClassWizQR {
   constructor() {
@@ -206,3 +205,5 @@ export const parseUrl = (url, lang) => {
   const cwqr = new ClassWizQR();
   return cwqr.setUrl(url, lang).getResult();
 }
+
+export { availableLanguages } from "./utils.js";

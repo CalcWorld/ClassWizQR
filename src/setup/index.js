@@ -1,5 +1,5 @@
 import { setupInfo } from './setup.js';
-import { translate } from "../mode/index.js";
+import { translate } from "../utils.js";
 
 export class ParseSetup {
   constructor(S) {

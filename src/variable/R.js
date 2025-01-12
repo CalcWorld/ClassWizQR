@@ -1,9 +1,10 @@
 import { ParseVariable } from "./index.js";
 import { AsciiTable } from "../ascii/index.js";
-import { translate, ParseMode } from "../mode/index.js";
+import { ParseMode } from "../mode/index.js";
 import { resultInfo } from './result.js';
 import { modeInfo } from '../mode/mode.js';
 import { ParseSetup } from "../setup/index.js";
+import { translate } from "../utils.js";
 
 export const ParseNumberResult = (R, M, modelType, modelId) => {
   const parseM = new ParseMode(M);

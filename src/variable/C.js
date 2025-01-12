@@ -1,6 +1,7 @@
 import { ParseVariable } from "./index.js";
 import { inputInfo } from './input.js';
-import { ParseMode, translate } from "../mode/index.js";
+import { ParseMode } from "../mode/index.js";
+import { translate } from "../utils.js";
 
 const ParseMatrix = (matrix, m, n) => {
   const split = matrix.match(/.{20}/g);

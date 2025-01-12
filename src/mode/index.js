@@ -1,9 +1,6 @@
 import { menuInfo } from './menu.js';
 import { modeInfo } from './mode.js';
-
-export const translate = (dict) => {
-  return dict[globalThis.cwqrConfig.language] || dict['en'];
-}
+import { translate } from "../utils.js";
 
 export class ParseMode {
   constructor(M) {

@@ -1,5 +1,5 @@
 import { ParseVariable } from "./index.js";
-import { translate } from "../mode/index.js";
+import { translate } from "../utils.js";
 
 export const ParseTableRange = (parameter) => {
   const rangeIndex = translate({

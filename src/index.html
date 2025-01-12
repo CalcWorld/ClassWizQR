@@ -201,20 +201,22 @@
   }
 
   function parseQr() {
-    let parseResult = {}, setup, model, mode, expression, equation, result, matrix, vector, spreadsheet;
+    let parseResult = {}, qrResult = {}, setup, model, mode;
     if (qrUrl.value) {
-      const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
-      ({ setup, model, mode, expression, equation, result, matrix, vector, spreadsheet } = qrResult);
+      qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
+      ({ setup, model, mode } = qrResult);
       parseResult = JSON.parse(JSON.stringify(qrResult));
     }
     settingsPreview(setup);
     basicPreview(model, mode);
-    calculationPreview(expression, equation, result, matrix, vector, spreadsheet);
+    calculationPreview(qrResult);
     editor.set(parseResult);
     editor.expandAll();
   }
 
-  function calculationPreview(expression, equation, result, matrix, vector, spreadsheet) {
+  function calculationPreview(qrResult) {
+    const { expression, equation, result, matrix, vector, spreadsheet } = qrResult;
+
     const calc = document.getElementById('calc');
     calc.innerHTML = '';
 

@@ -2,11 +2,7 @@ import { menuInfo } from './menu.js';
 import { modeInfo } from './mode.js';
 
 export const langDictToList = (dict) => {
-  const list = [];
-  for (const key in dict) {
-    list.push({ language: key, name: dict[key] });
-  }
-  return list;
+  return dict[globalThis.cwqrConfig.language] || dict['en'];
 }
 
 export class ParseMode {

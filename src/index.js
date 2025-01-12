@@ -198,7 +198,6 @@ export class ClassWizQR {
       mathBox,
       setup,
     };
-    extractLang(qrResult, this.language);
     return qrResult;
   }
 
@@ -207,28 +206,4 @@ export class ClassWizQR {
 export const parseUrl = (url, lang) => {
   const cwqr = new ClassWizQR();
   return cwqr.setUrl(url, lang).getResult();
-}
-
-function extractLang(resultObject, lang) {
-  for (const resKey in resultObject) {
-    const resValue = resultObject[resKey];
-    if (typeof resValue === 'object') {
-      if (resValue[0] && resValue[0].language && resValue[0].name) {
-        let langMatch = false;
-        for (const valueElement of resValue) {
-          if (valueElement.language === lang) {
-            resultObject[resKey] = valueElement.name;
-            langMatch = true;
-            break;
-          }
-        }
-        if (!langMatch) {
-          // fallback to en
-          resultObject[resKey] = resValue[0].name;
-        }
-      } else {
-        extractLang(resValue, lang);
-      }
-    }
-  }
 }

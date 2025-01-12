@@ -31,6 +31,10 @@
         }
     }
 
+    #MathJax_Message {
+        display: none !important;
+    }
+
     #lang {
         width: 10%;
         height: 1.3rem;
@@ -46,7 +50,7 @@
     }
 
     details > :nth-child(2) {
-        margin: 10px auto;
+        margin: 10px 15px;
     }
 
     summary {
@@ -71,8 +75,13 @@
         font-weight: bold;
     }
 
+    #spreadsheet .transpose tr td:nth-child(1) {
+        text-align: center;
+        width: 2rem;
+    }
+
     .calc-result {
-        margin: 10px 15px;
+        margin: 10px auto;
     }
 
     #calc .title {
@@ -85,7 +94,17 @@
 
     #calc .right {
         text-align: right;
-    }</style><script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script><link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet"><script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script><div id="app"><label for="lang"></label> <select id="lang" name="lang"><option value="zh">zh</option><option value="en" selected="selected">en</option><option value="vi">vi</option></select> <label for="qrUrl"></label> <input id="qrUrl" type="search" placeholder="http://......"/><details open><summary data-i18n-tag="calc-title">Calculation</summary><div id="calc"><div class="calc-result" id="expression"><div class="title">表达式</div><div class="content">\( \dfrac{\displaystyle 4\sqrt{6} } {\displaystyle 5} +\sqrt{88} \)</div></div><div class="calc-result" id="result"><div class="title">结果</div><div class="content right">\( \dfrac {\displaystyle 4 \sqrt{6} } {\displaystyle 5}+2 \sqrt{22} \)</div></div></div></details><details open><summary data-i18n-tag="basic-title">Basic Info</summary><div id="basic"></div></details><details open><summary data-i18n-tag="settings-title">Settings</summary><div id="settings"></div></details><details open><summary data-i18n-tag="qr-parse-result-title">QR Parse Result</summary><div id="qrResult"></div></details></div><script>const lang = document.getElementById('lang');
+    }
+
+    #spreadsheet td {
+        width: 4rem;
+        height: 1rem;
+    }
+
+    button.download {
+        margin: 10px 15px 0 15px;
+        text-align: right;
+    }</style><script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script><link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet"><script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script><div id="app"><label for="lang"></label> <select id="lang" name="lang"><option value="zh">zh</option><option value="en" selected="selected">en</option><option value="vi">vi</option></select> <label for="qrUrl"></label> <input id="qrUrl" type="search" placeholder="http://......"/><details open><summary data-i18n-tag="calc-title">Calculation</summary><div id="calc"></div></details><details open><summary data-i18n-tag="basic-title">Basic Info</summary><div id="basic"></div></details><details open><summary data-i18n-tag="settings-title">Settings</summary><div id="settings"></div></details><details open><summary data-i18n-tag="qr-parse-result-title">QR Parse Result</summary><div id="qrResult"></div></details></div><script>const lang = document.getElementById('lang');
   const qrUrl = document.getElementById("qrUrl");
   let editor;
 
@@ -143,48 +162,91 @@
   }
 
   function parseQr() {
-    let parseResult = {}, setup, model, mode, expression, result;
+    let parseResult = {}, setup, model, mode, expression, equation, result, matrix, vector, spreadsheet;
     if (qrUrl.value) {
       const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
-      ({ setup, model, mode, expression, result } = qrResult);
+      ({ setup, model, mode, expression, equation, result, matrix, vector, spreadsheet } = qrResult);
       parseResult = JSON.parse(JSON.stringify(qrResult));
     }
     settingsPreview(setup);
     basicPreview(model, mode);
-    calculationPreview(expression, result);
+    calculationPreview(expression, equation, result, matrix, vector, spreadsheet);
     editor.set(parseResult);
     editor.expandAll();
   }
 
-  function calculationPreview(expression, result) {
+  function calculationPreview(expression, equation, result, matrix, vector, spreadsheet) {
     const calc = document.getElementById('calc');
     calc.innerHTML = '';
-    const expressionDiv = !expression ? '' : `
+
+    calc.innerHTML += expression ? `
 <div class="calc-result" id="expression">
-    <div class="title">${i('calc-expression')}</div>
+    <div class="title">${t('calc-expression')}</div>
     <div class="content">\\( ${expression} \\)</div>
 </div>
-`;
-    calc.innerHTML += expressionDiv;
-    const resultDiv = !result ? '' : `
+` : '';
+
+    calc.innerHTML += equation ? `
+<div class="calc-result" id="equation">
+    <div class="title">${t('calc-equation')}</div>
+    <div class="content">\\( ${equation.latex} \\)</div>
+    <div class="title">${t('calc-equation-coefficient')}</div>
+    <table class="content preview-table"><tbody><tr>
+    ${equation.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).join('</tr><tr>')}
+    </tr></tbody></table>
+</div>
+` : '';
+
+    calc.innerHTML += (result && result[0]) ? `
 <div class="calc-result" id="result">
-    <div class="title">${i('calc-result')}</div>
+    <div class="title">${t('calc-result')}</div>
     <div class="content right">\\( ${result[0].latex} \\)</div>
+    ${result.length > 1 ? `
     <table class="content preview-table"><thead>
   <tr>
     <th></th>
-    <th>LaTeX</th>
-    <th>Decimal</th>
+    <th>${t('calc-result-latex')}</th>
+    <th>${t('calc-result-decimal')}</th>
   </tr></thead><tbody><tr>
-    ${result.map((r, i) => {
+    ${result?.map((r, i) => {
       if (i > 0) return `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td>`;
     }).join('</tr><tr>')}
     </tr></tbody></table>
+    ` : ''
+    }
+</div>
+` : '';
+
+    const parseVectorMatrix = (vectorMatrix, id, title) => `
+<div class="calc-result" id="${id}">
+    <div class="title">${title}</div>
+    ${vectorMatrix.map(vm => `
+<div class="content">\\( \\mathrm\{${vm.name}\} = ${vm.latex} \\)</div>
+<table class="content preview-table"><tbody><tr>
+${vm.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+`).join('')}
 </div>
 `;
-    calc.innerHTML += resultDiv;
+    calc.innerHTML += matrix ? parseVectorMatrix(matrix, 'matrix', t('calc-matrix')) : '';
+    calc.innerHTML += vector ? parseVectorMatrix(vector, 'vector', t('calc-vector')) : '';
 
-    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+    calc.innerHTML += spreadsheet ? `
+<div class="calc-result" id="spreadsheet">
+    <div class="title">${t('calc-spreadsheet')}</div>
+    <button id="spreadsheet-csv-down" class="download">${t('calc-spreadsheet-csv-down')}</button>
+<table class="content preview-table"><thead>
+  <tr>
+    <th>${['', 'A', 'B', 'C', 'D', 'E'].join('</th><th>')}</th>
+  </tr></thead><tbody class="transpose"><tr>
+${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>')}</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+</div>
+` : '';
+    const filename = `spreadsheet-${new Date().getTime()}.csv`
+    spreadsheet && (document.getElementById('spreadsheet-csv-down').onclick = () => download(filename, spreadsheet.csv, 'text/plain'))
+
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, calc]);
   }
 
   function basicPreview(model, mode) {
@@ -198,23 +260,23 @@
     table.innerHTML = `
 <tbody class="transpose">
   <tr>
-    <td>${i('mode-main')}</td>
+    <td>${t('mode-main')}</td>
     <td>${mode.mainName}</td>
   </tr>
   <tr>
-    <td>${i('mode-sub')}</td>
-    <td>${mode.subName || i('mode-na')}</td>
+    <td>${t('mode-sub')}</td>
+    <td>${mode.subName || t('mode-na')}</td>
   </tr>
   <tr>
-    <td>${i('model-key')}</td>
+    <td>${t('model-key')}</td>
     <td>${model.name}</td>
   </tr>
   <tr>
-    <td>${i('model-diag')}</td>
+    <td>${t('model-diag')}</td>
     <td>${model.type}-${model.id} Ver${model.version}</td>
   </tr>
   <tr>
-    <td>${i('model-sn')}</td>
+    <td>${t('model-sn')}</td>
     <td>${model.serialNumber}</td>
   </tr>
 </tbody>
@@ -232,8 +294,8 @@
     table.classList.add('preview-table');
     table.innerHTML = `<thead>
   <tr>
-    <th>${i('settings-key')}</th>
-    <th>${i('settings-value')}</th>
+    <th>${t('settings-key')}</th>
+    <th>${t('settings-value')}</th>
   </tr></thead>`;
     const tbody = document.createElement('tbody');
     for (const s of setup) {
@@ -278,24 +340,42 @@
     selection.addRange(range);
   }
 
+  function download(filename, content, type) {
+    const a = document.createElement('a');
+    const file = new Blob([content], { type });
+    a.href = URL.createObjectURL(file);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+  }
+
   function i18n() {
     document.querySelectorAll('[data-i18n-tag]').forEach(el => {
       const tag = el.getAttribute('data-i18n-tag');
-      const text = i(tag);
+      const text = t(tag);
       if (text) {
         el.innerText = text;
       }
     });
   }
 
-  function i(tag, language) {
+  function t(tag, language) {
     if (!language) {
       language = lang.value;
     }
     const zh = {
       'calc-title': '计算数据',
       'calc-expression': '表达式',
+      'calc-equation': '方程',
+      'calc-equation-coefficient': '系数',
       'calc-result': '结果',
+      'calc-result-latex': 'LaTeX',
+      'calc-result-decimal': '数值',
+      'calc-matrix': '矩阵预设',
+      'calc-vector': '向量预设',
+      'calc-spreadsheet': '数据表格',
+      'calc-spreadsheet-csv-down': '下载 (.csv)',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-diag': '自检信息',
@@ -311,7 +391,15 @@
     const en = {
       'calc-title': 'Calculation',
       'calc-expression': 'Expression',
+      'calc-equation': 'Equation',
+      'calc-equation-coefficient': 'Coefficients',
       'calc-result': 'Result',
+      'calc-result-latex': 'LaTeX',
+      'calc-result-decimal': 'Decimal',
+      'calc-matrix': 'Matrix Presets',
+      'calc-vector': 'Vector Presets',
+      'calc-spreadsheet': 'Spreadsheet',
+      'calc-spreadsheet-csv-down': 'Download (.csv)',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-diag': 'Diagnostic Info',
@@ -324,5 +412,5 @@
       'settings-value': 'Settings Value',
       'qr-parse-result-title': 'QR Parse Result',
     };
-    return (({ 'zh': zh, 'en': en, }[language] || en)[tag]) || '';
+    return (({ 'zh': zh, 'en': en, }[language] || en)[tag]) || tag;
   }</script></html>

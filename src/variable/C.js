@@ -1,6 +1,6 @@
 import { ParseVariable } from "./index.js";
 import { inputInfo } from './input.js';
-import { ParseMode } from "../mode/index.js";
+import { ParseMode, translate } from "../mode/index.js";
 
 const ParseMatrix = (matrix, m, n) => {
   const split = matrix.match(/.{20}/g);
@@ -134,7 +134,7 @@ export const ParseDistribution = (M, C) => {
   const distInfo = inputInfo['DISTRIBUTION'][subMode][split.length];
   let template = distInfo.template;
   if (typeof template === 'object') {
-    template = template[globalThis.cwqrConfig.language];
+    template = translate(template);
   }
   const decimalResult = [];
   for (let i = 0; i < split.length; i++) {

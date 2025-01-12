@@ -59,7 +59,7 @@ export class ClassWizQR {
 
   setLanguage(language) {
     this.language = language;
-    globalThis.cwqrConfig.language = language;
+    globalThis.cwqrConfig.language = this.language;
     return this;
   }
 

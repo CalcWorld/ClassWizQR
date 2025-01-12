@@ -75,7 +75,7 @@
         font-weight: bold;
     }
 
-    #spreadsheet .transpose tr td:nth-child(1) {
+    .fix-width .transpose tr td:nth-child(1) {
         text-align: center;
         width: 2rem;
     }
@@ -96,7 +96,7 @@
         text-align: right;
     }
 
-    #spreadsheet td {
+    .fix-width td {
         width: 4rem;
         height: 1rem;
     }
@@ -162,31 +162,45 @@
   }
 
   function parseQr() {
-    let parseResult = {}, setup, model, mode, expression, equation, result, matrix, vector, spreadsheet;
+    let parseResult = {}, qrResult = {}, setup, model, mode;
     if (qrUrl.value) {
-      const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
-      ({ setup, model, mode, expression, equation, result, matrix, vector, spreadsheet } = qrResult);
+      qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
+      ({ setup, model, mode } = qrResult);
       parseResult = JSON.parse(JSON.stringify(qrResult));
     }
     settingsPreview(setup);
     basicPreview(model, mode);
-    calculationPreview(expression, equation, result, matrix, vector, spreadsheet);
+    calculationPreview(qrResult);
     editor.set(parseResult);
     editor.expandAll();
   }
 
-  function calculationPreview(expression, equation, result, matrix, vector, spreadsheet) {
+  function calculationPreview(qrResult) {
+    const {
+      expression,
+      equation,
+      result,
+      matrix,
+      vector,
+      spreadsheet,
+      statistic,
+      distribution,
+      variable,
+      tableRange,
+    } = qrResult;
+
     const calc = document.getElementById('calc');
     calc.innerHTML = '';
+    let calcHtml = '';
 
-    calc.innerHTML += expression ? `
+    calcHtml += expression ? `
 <div class="calc-result" id="expression">
     <div class="title">${t('calc-expression')}</div>
     <div class="content">\\( ${expression} \\)</div>
 </div>
 ` : '';
 
-    calc.innerHTML += equation ? `
+    calcHtml += equation ? `
 <div class="calc-result" id="equation">
     <div class="title">${t('calc-equation')}</div>
     <div class="content">\\( ${equation.latex} \\)</div>
@@ -194,26 +208,6 @@
     <table class="content preview-table"><tbody><tr>
     ${equation.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).join('</tr><tr>')}
     </tr></tbody></table>
-</div>
-` : '';
-
-    calc.innerHTML += (result && result[0]) ? `
-<div class="calc-result" id="result">
-    <div class="title">${t('calc-result')}</div>
-    <div class="content right">\\( ${result[0].latex} \\)</div>
-    ${result.length > 1 ? `
-    <table class="content preview-table"><thead>
-  <tr>
-    <th></th>
-    <th>${t('calc-result-latex')}</th>
-    <th>${t('calc-result-decimal')}</th>
-  </tr></thead><tbody><tr>
-    ${result?.map((r, i) => {
-      if (i > 0) return `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td>`;
-    }).join('</tr><tr>')}
-    </tr></tbody></table>
-    ` : ''
-    }
 </div>
 ` : '';
 
@@ -228,14 +222,14 @@ ${vm.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).joi
 `).join('')}
 </div>
 `;
-    calc.innerHTML += matrix ? parseVectorMatrix(matrix, 'matrix', t('calc-matrix')) : '';
-    calc.innerHTML += vector ? parseVectorMatrix(vector, 'vector', t('calc-vector')) : '';
+    calcHtml += matrix ? parseVectorMatrix(matrix, 'matrix', t('calc-matrix')) : '';
+    calcHtml += vector ? parseVectorMatrix(vector, 'vector', t('calc-vector')) : '';
 
-    calc.innerHTML += spreadsheet ? `
+    calcHtml += spreadsheet ? `
 <div class="calc-result" id="spreadsheet">
     <div class="title">${t('calc-spreadsheet')}</div>
     <button id="spreadsheet-csv-down" class="download">${t('calc-spreadsheet-csv-down')}</button>
-<table class="content preview-table"><thead>
+<table class="content preview-table fix-width"><thead>
   <tr>
     <th>${['', 'A', 'B', 'C', 'D', 'E'].join('</th><th>')}</th>
   </tr></thead><tbody class="transpose"><tr>
@@ -243,21 +237,72 @@ ${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>'
 </tr></tbody></table>
 </div>
 ` : '';
-    const filename = `spreadsheet-${new Date().getTime()}.csv`
-    spreadsheet && (document.getElementById('spreadsheet-csv-down').onclick = () => download(filename, spreadsheet.csv, 'text/plain'))
+
+    calcHtml += distribution ? `
+<div class="calc-result" id="distribution">
+    <div class="title">${t('calc-distribution')}</div>
+    <div class="content">\\( ${distribution.latex} \\)</div>
+</div>
+` : '';
+
+    calcHtml += statistic ? `
+<div class="calc-result" id="statistic">
+    <div class="title">${t('calc-statistic')}</div>
+    <button id="statistic-csv-down" class="download">${t('calc-statistic-csv-down')}</button>
+<table class="content preview-table fix-width"><thead>
+  <tr>
+    <th>${['', ...statistic.array[0]].join('</th><th>')}</th>
+  </tr></thead><tbody class="transpose"><tr>
+${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>')}</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+</div>
+` : '';
+
+    const parseVariableList = variableList => `
+<table class="content preview-table fix-width"><thead><tr>
+  <th></th>
+  <th>${t('calc-variable-latex')}</th>
+  <th>${t('calc-variable-decimal')}</th>
+</tr></thead><tbody class="transpose"><tr>
+${variableList.map(r => `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+`;
+
+    calcHtml += (result && result[0]) ? `
+<div class="calc-result" id="result">
+    <div class="title">${t('calc-result')}</div>
+    <div class="content right">\\( ${result[0].latex} \\)</div>
+    ${result.length > 1 ? parseVariableList(result.slice(1)) : ''}
+</div>
+` : '';
+
+    calcHtml += variable ? `
+<div class="calc-result" id="variable">
+    <div class="title">${t('calc-variable')}</div>
+${parseVariableList(variable)}
+</div>
+` : '';
+
+    calcHtml += tableRange ? `
+<div class="calc-result" id="table-range">
+    <div class="title">${t('calc-table-range')}</div>
+${parseVariableList(tableRange)}
+</div>
+` : '';
+
+    calc.innerHTML = calcHtml;
+
+    const csvFilename = `${new Date().getTime()}.csv`;
+    spreadsheet && (document.getElementById('spreadsheet-csv-down').onclick = () => download(`spreadsheet-${csvFilename}`, spreadsheet.csv, 'text/plain'));
+    statistic && (document.getElementById('statistic-csv-down').onclick = () => download(`statistic-${csvFilename}`, statistic.csv, 'text/plain'));
 
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, calc]);
   }
 
   function basicPreview(model, mode) {
     const basic = document.getElementById('basic');
-    basic.innerHTML = '';
-    if (!model || !mode) {
-      return;
-    }
-    const table = document.createElement('table');
-    table.classList.add('preview-table');
-    table.innerHTML = `
+    basic.innerHTML = (model && mode) ? `
+<table class="preview-table">
 <tbody class="transpose">
   <tr>
     <td>${t('mode-main')}</td>
@@ -279,32 +324,21 @@ ${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>'
     <td>${t('model-sn')}</td>
     <td>${model.serialNumber}</td>
   </tr>
-</tbody>
-`;
-    basic.appendChild(table);
+</tbody></table>
+` : '';
   }
 
   function settingsPreview(setup) {
     const settings = document.getElementById('settings');
-    settings.innerHTML = '';
-    if (!setup) {
-      return;
-    }
-    const table = document.createElement('table');
-    table.classList.add('preview-table');
-    table.innerHTML = `<thead>
+    settings.innerHTML = setup ? `
+<table class="preview-table"><thead>
   <tr>
     <th>${t('settings-key')}</th>
     <th>${t('settings-value')}</th>
-  </tr></thead>`;
-    const tbody = document.createElement('tbody');
-    for (const s of setup) {
-      const row = document.createElement('tr');
-      row.innerHTML = `<td>${s.name}</td><td>${s.value}</td>`;
-      tbody.appendChild(row);
-    }
-    table.appendChild(tbody);
-    settings.appendChild(table);
+  </tr></thead><tbody><tr>
+  ${setup.map(s => `<td>${s.name}</td><td>${s.value}</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+` : '';
   }
 
   async function copyToClipboard(text) {
@@ -370,12 +404,17 @@ ${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>'
       'calc-equation': '方程',
       'calc-equation-coefficient': '系数',
       'calc-result': '结果',
-      'calc-result-latex': 'LaTeX',
-      'calc-result-decimal': '数值',
+      'calc-variable': '变量',
+      'calc-table-range': '表格范围',
+      'calc-variable-latex': 'LaTeX',
+      'calc-variable-decimal': '数值',
       'calc-matrix': '矩阵预设',
       'calc-vector': '向量预设',
       'calc-spreadsheet': '数据表格',
       'calc-spreadsheet-csv-down': '下载 (.csv)',
+      'calc-statistic': '统计表格',
+      'calc-statistic-csv-down': '下载 (.csv)',
+      'calc-distribution': '分布计算',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-diag': '自检信息',
@@ -394,12 +433,17 @@ ${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>'
       'calc-equation': 'Equation',
       'calc-equation-coefficient': 'Coefficients',
       'calc-result': 'Result',
-      'calc-result-latex': 'LaTeX',
-      'calc-result-decimal': 'Decimal',
+      'calc-variable': 'Variable',
+      'calc-table-range': 'Table Range',
+      'calc-variable-latex': 'LaTeX',
+      'calc-variable-decimal': 'Decimal',
       'calc-matrix': 'Matrix Presets',
       'calc-vector': 'Vector Presets',
       'calc-spreadsheet': 'Spreadsheet',
       'calc-spreadsheet-csv-down': 'Download (.csv)',
+      'calc-statistic': 'Statistic',
+      'calc-statistic-csv-down': 'Download (.csv)',
+      'calc-distribution': 'Distribution',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-diag': 'Diagnostic Info',

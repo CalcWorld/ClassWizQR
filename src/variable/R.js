@@ -67,7 +67,7 @@ export const ParseInequalityResult = (R) => {
 export const ParseEquationResult = (R, M, S, C) => {
   let resultCode = R.slice(2, 3);
   if (['1', '2', '4'].includes(resultCode)) {
-    return [{ name: langDictToList(resultInfo['EQUATION'][resultCode].name) }];
+    return [{ name: 'templated', latex: langDictToList(resultInfo['EQUATION'][resultCode].name) }];
   }
   const noLocal = resultCode === '5';
   // when resultCode is '5', it still contains roots data, but indicates no Local Minimum/Maximum

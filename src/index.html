@@ -108,16 +108,7 @@
     <input id="qrUrl" type="search" placeholder="http://......"/>
     <details open>
         <summary data-i18n-tag="calc-title">Calculation</summary>
-        <div id="calc">
-            <div class="calc-result" id="expression">
-                <div class="title">表达式</div>
-                <div class="content">\( \dfrac{\displaystyle 4\sqrt{6} } {\displaystyle 5} +\sqrt{88} \)</div>
-            </div>
-            <div class="calc-result" id="result">
-                <div class="title">结果</div>
-                <div class="content right">\( \dfrac {\displaystyle 4 \sqrt{6} } {\displaystyle 5}+2 \sqrt{22} \)</div>
-            </div>
-        </div>
+        <div id="calc"></div>
     </details>
     <details open>
         <summary data-i18n-tag="basic-title">Basic Info</summary>
@@ -233,8 +224,8 @@
     calc.innerHTML += (result && result[0]) ? `
 <div class="calc-result" id="result">
     <div class="title">${i('calc-result')}</div>
-    <div class="content right">\\( ${result[0].name === 'templated' ? result[0].latex : result[0].name} \\)</div>
-    ${result[0].name === 'templated' ? `
+    <div class="content right">\\( ${result[0].latex} \\)</div>
+    ${result.length > 1 ? `
     <table class="content preview-table"><thead>
   <tr>
     <th></th>
@@ -250,7 +241,7 @@
 </div>
 ` : '';
 
-    MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, "calc"]);
   }
 
   function basicPreview(model, mode) {

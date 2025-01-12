@@ -9,22 +9,24 @@ const ParseMatrix = (matrix, m, n) => {
   }
 
   const decimalResult = [];
+  const element = [];
   let latexResult = '\\begin{bmatrix}';
   for (let i = 0; i < m; i++) {
     const row = [];
     for (let j = 0; j < n; j++) {
       const [latex, decimal] = new ParseVariable(split[i * n + j]).get();
-      row.push(decimal);
+      row.push(latex);
+      decimalResult.push(decimal);
       latexResult += `${latex} & `;
     }
-    decimalResult.push(row);
+    element.push(row);
     latexResult = latexResult.slice(0, -2);
     if (i !== m - 1) {
       latexResult += '\\\\';
     }
   }
   latexResult += '\\end{bmatrix}';
-  return [latexResult, decimalResult];
+  return [latexResult, decimalResult, element];
 }
 
 export const ParseMatrixList = (C) => {
@@ -35,8 +37,8 @@ export const ParseMatrixList = (C) => {
     const name = match[1] === 'T' ? `MatAns` : `Mat${match[1]}`;
     let m = parseInt(match[2]);
     let n = parseInt(match[3]);
-    const [latex, decimal] = ParseMatrix(match[4], m, n);
-    result.push({ name, latex, decimal });
+    const [latex, decimal, element] = ParseMatrix(match[4], m, n);
+    result.push({ name, latex, decimal, element });
   }
   return result;
 }
@@ -48,28 +50,30 @@ const ParseVector = (vector, n) => {
   }
 
   const decimalResult = [];
+  const element = [];
   let latexResult = '\\begin{bmatrix}';
   for (let i = 0; i < n; i++) {
     const [latex, decimal] = new ParseVariable(split[i]).get();
     decimalResult.push(decimal);
+    element.push(latex);
     latexResult += `${latex}`;
     if (i !== n - 1) {
       latexResult += ' \\\\ ';
     }
   }
   latexResult += '\\end{bmatrix}';
-  return [latexResult, decimalResult];
+  return [latexResult, decimalResult, [element]];
 }
 
 export const ParseVectorList = (C) => {
-  const regx = /V([A-CT])(\d)(\d)(\d+)/g;
+  const regx = /V([A-CT])(\d)(\d)([\dA]+)/g;
   let match;
   const result = [];
   while ((match = regx.exec(C)) !== null) {
     const name = match[1] === 'T' ? `VctAns` : `Vct${match[1]}`;
     const n = parseInt(match[3]);
-    const [latex, decimal] = ParseVector(match[4], n);
-    result.push({ name, latex, decimal });
+    const [latex, decimal, element] = ParseVector(match[4], n);
+    result.push({ name, latex, decimal, element });
   }
   return result;
 }
@@ -101,25 +105,27 @@ export const ParseEquation = (M, C) => {
   omitPlus || (omitPlus = inputInfo[equType][subMode]['omitPlus']);
   (m || n) || ([m, n] = inputInfo[equType][subMode]['coefficient']);
   let template = inputInfo[equType][subMode].template;
-  const coefficient = [];
-  let coefficientRow = [];
+  const decimalResult = [];
+  const element = [];
+  let elementRow = [];
   let i;
   for (i = 0; i < split.length; i++) {
     let [latex, decimal] = new ParseVariable(split[i]).get();
+    elementRow.push(latex);
+    decimalResult.push(decimal);
     if (!omitPlus.includes(i) && decimal.gte(0)) {
       latex = '+' + latex;
     }
     template = template.replace(`\$\{${i}\}`, latex);
-    coefficientRow.push(decimal);
     if ((i + 1) % n === 0) {
-      coefficient.push(coefficientRow);
-      coefficientRow = [];
+      element.push(elementRow);
+      elementRow = [];
     }
   }
   if (i !== m * n || template.includes('$')) {
     throw new Error('Equation template not match');
   }
-  return { latex: template, decimal: coefficient };
+  return { latex: template, decimal: decimalResult, element };
 }
 
 export const ParseDistribution = (M, C) => {

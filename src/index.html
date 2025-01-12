@@ -212,7 +212,7 @@
     <div class="content">\\( ${equation.latex} \\)</div>
     <div class="title">${t('calc-equation-coefficient')}</div>
     <table class="content preview-table"><tbody><tr>
-    ${equation.decimal.map(row => `<td>${row.join('</td><td>')}</td>`).join('</tr><tr>')}
+    ${equation.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).join('</tr><tr>')}
     </tr></tbody></table>
 </div>
 ` : '';

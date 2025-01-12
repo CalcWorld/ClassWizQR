@@ -1,3 +1,7 @@
-# ClassWizQR
+# ClassWiz QR
 
-Parse QR Code data of ClassWiz calculator without accessing CASIO's server.
+Standalone ClassWiz QR Code parser, no CASIO server needed.
+
+GitHub: <https://github.com/CalcWorld/ClassWizQR>
+
+Online Demo: <https://cwqr.pages.dev>

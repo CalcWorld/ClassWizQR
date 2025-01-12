@@ -219,15 +219,16 @@
 
     const calc = document.getElementById('calc');
     calc.innerHTML = '';
+    let calcHtml = '';
 
-    calc.innerHTML += expression ? `
+    calcHtml += expression ? `
 <div class="calc-result" id="expression">
     <div class="title">${t('calc-expression')}</div>
     <div class="content">\\( ${expression} \\)</div>
 </div>
 ` : '';
 
-    calc.innerHTML += equation ? `
+    calcHtml += equation ? `
 <div class="calc-result" id="equation">
     <div class="title">${t('calc-equation')}</div>
     <div class="content">\\( ${equation.latex} \\)</div>
@@ -249,10 +250,10 @@ ${vm.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).joi
 `).join('')}
 </div>
 `;
-    calc.innerHTML += matrix ? parseVectorMatrix(matrix, 'matrix', t('calc-matrix')) : '';
-    calc.innerHTML += vector ? parseVectorMatrix(vector, 'vector', t('calc-vector')) : '';
+    calcHtml += matrix ? parseVectorMatrix(matrix, 'matrix', t('calc-matrix')) : '';
+    calcHtml += vector ? parseVectorMatrix(vector, 'vector', t('calc-vector')) : '';
 
-    calc.innerHTML += spreadsheet ? `
+    calcHtml += spreadsheet ? `
 <div class="calc-result" id="spreadsheet">
     <div class="title">${t('calc-spreadsheet')}</div>
     <button id="spreadsheet-csv-down" class="download">${t('calc-spreadsheet-csv-down')}</button>
@@ -265,14 +266,14 @@ ${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>'
 </div>
 ` : '';
 
-    calc.innerHTML += distribution ? `
+    calcHtml += distribution ? `
 <div class="calc-result" id="distribution">
     <div class="title">${t('calc-distribution')}</div>
     <div class="content">\\( ${distribution.latex} \\)</div>
 </div>
 ` : '';
 
-    calc.innerHTML += statistic ? `
+    calcHtml += statistic ? `
 <div class="calc-result" id="statistic">
     <div class="title">${t('calc-statistic')}</div>
     <button id="statistic-csv-down" class="download">${t('calc-statistic-csv-down')}</button>
@@ -285,7 +286,7 @@ ${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</t
 </div>
 ` : '';
 
-    calc.innerHTML += (result && result[0]) ? `
+    calcHtml += (result && result[0]) ? `
 <div class="calc-result" id="result">
     <div class="title">${t('calc-result')}</div>
     <div class="content right">\\( ${result[0].latex} \\)</div>
@@ -304,6 +305,8 @@ ${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</t
     }
 </div>
 ` : '';
+
+    calc.innerHTML = calcHtml;
 
     const csvFilename = `${new Date().getTime()}.csv`;
     spreadsheet && (document.getElementById('spreadsheet-csv-down').onclick = () => download(`spreadsheet-${csvFilename}`, spreadsheet.csv, 'text/plain'));

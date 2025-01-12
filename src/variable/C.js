@@ -133,15 +133,13 @@ export const ParseDistribution = (M, C) => {
   const split = C.match(/.{20}/g);
   const distInfo = inputInfo['DISTRIBUTION'][subMode][split.length];
   let template = distInfo.template;
-  if (!distInfo['i18n']) {
-    template = [{ language: "en", template: template }]
+  if (typeof template === 'object') {
+    template = template[globalThis.cwqrConfig.language];
   }
   const decimalResult = [];
   for (let i = 0; i < split.length; i++) {
     const [latex, decimal] = new ParseVariable(split[i]).get();
-    for (let j = 0; j < template.length; j++) {
-      template[j].template = template[j].template.replace(`\$\{${i}\}`, latex);
-    }
+    template = template.replace(`\$\{${i}\}`, latex);
     decimalResult.push(decimal);
   }
   return { latex: template, decimal: decimalResult };

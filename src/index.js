@@ -29,6 +29,7 @@ export class ClassWizQR {
       Q: undefined,
     };
     this.language = 'en';
+    globalThis.cwqrConfig = {};
   }
 
   setUrl(url, language) {
@@ -58,6 +59,7 @@ export class ClassWizQR {
 
   setLanguage(language) {
     this.language = language;
+    globalThis.cwqrConfig.language = language;
     return this;
   }
 

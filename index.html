@@ -178,6 +178,7 @@
   function calculationPreview(qrResult) {
     const {
       expression,
+      function: _function,
       equation,
       result,
       matrix,
@@ -197,6 +198,13 @@
 <div class="calc-result" id="expression">
     <div class="title">${t('calc-expression')}</div>
     <div class="content">\\( ${expression} \\)</div>
+</div>
+` : '';
+
+    calcHtml += _function ? `
+<div class="calc-result" id="function">
+    <div class="title">${t('calc-function')}</div>
+    <div class="content">\\( ${_function.map(f => f.name + '=' + f.expression).join(' \\)</div><div class="content">\\( ')} \\)</div>
 </div>
 ` : '';
 
@@ -401,6 +409,7 @@ ${parseVariableList(tableRange)}
     const zh = {
       'calc-title': '计算数据',
       'calc-expression': '表达式',
+      'calc-function': '函数定义',
       'calc-equation': '方程',
       'calc-equation-coefficient': '系数',
       'calc-result': '结果',
@@ -430,6 +439,7 @@ ${parseVariableList(tableRange)}
     const en = {
       'calc-title': 'Calculation',
       'calc-expression': 'Expression',
+      'calc-function': 'Function',
       'calc-equation': 'Equation',
       'calc-equation-coefficient': 'Coefficients',
       'calc-result': 'Result',
@@ -456,5 +466,5 @@ ${parseVariableList(tableRange)}
       'settings-value': 'Settings Value',
       'qr-parse-result-title': 'QR Parse Result',
     };
-    return (({ 'zh': zh, 'en': en, }[language] || en)[tag]) || tag;
+    return (({ zh, en, }[language] || en)[tag]) || tag;
   }</script></html>

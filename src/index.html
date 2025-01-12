@@ -82,6 +82,11 @@
         font-weight: bold;
     }
 
+    #spreadsheet .transpose tr td:nth-child(1) {
+        text-align: center;
+        width: 2rem;
+    }
+
     .calc-result {
         margin: 10px auto;
     }
@@ -96,6 +101,11 @@
 
     #calc .right {
         text-align: right;
+    }
+
+    #spreadsheet td {
+        width: 4rem;
+        height: 1rem;
     }
 </style>
 <script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script>
@@ -186,20 +196,20 @@
   }
 
   function parseQr() {
-    let parseResult = {}, setup, model, mode, expression, equation, result, matrix, vector;
+    let parseResult = {}, setup, model, mode, expression, equation, result, matrix, vector, spreadsheet;
     if (qrUrl.value) {
       const qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
-      ({ setup, model, mode, expression, equation, result, matrix, vector } = qrResult);
+      ({ setup, model, mode, expression, equation, result, matrix, vector, spreadsheet } = qrResult);
       parseResult = JSON.parse(JSON.stringify(qrResult));
     }
     settingsPreview(setup);
     basicPreview(model, mode);
-    calculationPreview(expression, equation, result, matrix, vector);
+    calculationPreview(expression, equation, result, matrix, vector, spreadsheet);
     editor.set(parseResult);
     editor.expandAll();
   }
 
-  function calculationPreview(expression, equation, result, matrix, vector) {
+  function calculationPreview(expression, equation, result, matrix, vector, spreadsheet) {
     const calc = document.getElementById('calc');
     calc.innerHTML = '';
 
@@ -254,6 +264,18 @@ ${vm.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).joi
 `;
     calc.innerHTML += matrix ? parseVectorMatrix(matrix, 'matrix', t('calc-matrix')) : '';
     calc.innerHTML += vector ? parseVectorMatrix(vector, 'vector', t('calc-vector')) : '';
+
+    calc.innerHTML += spreadsheet ? `
+<div class="calc-result" id="spreadsheet">
+    <div class="title">${t('calc-spreadsheet')}</div>
+<table class="content preview-table"><thead>
+  <tr>
+    <th>${['', 'A', 'B', 'C', 'D', 'E'].join('</th><th>')}</th>
+  </tr></thead><tbody class="transpose"><tr>
+${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>')}</td>`).join('</tr><tr>')}
+</tr></tbody></table>
+</div>
+` : '';
 
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, calc]);
   }
@@ -373,6 +395,7 @@ ${vm.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).joi
       'calc-result-decimal': '数值',
       'calc-matrix': '矩阵预设',
       'calc-vector': '向量预设',
+      'calc-spreadsheet': '数据表格',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-diag': '自检信息',
@@ -395,6 +418,7 @@ ${vm.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).joi
       'calc-result-decimal': 'Decimal',
       'calc-matrix': 'Matrix Presets',
       'calc-vector': 'Vector Presets',
+      'calc-spreadsheet': 'Spreadsheet',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-diag': 'Diagnostic Info',

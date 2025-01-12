@@ -505,7 +505,7 @@ ${parseVariableList(tableRange)}
       'settings-value': 'Settings Value',
       'qr-parse-result-title': 'QR Parse Result',
     };
-    return (({ 'zh': zh, 'en': en, }[language] || en)[tag]) || tag;
+    return (({ zh, en, }[language] || en)[tag]) || tag;
   }
 </script>
 </html>

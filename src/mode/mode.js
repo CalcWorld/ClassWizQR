@@ -6,6 +6,12 @@ export const modeInfo = {
       "vi": "Bảng giá trị"
     },
   },
+  "09": {
+    "name": {
+      "en": "Graph",
+      "zh": "绘图",
+    },
+  },
   "89": {
     "name": {
       "en": "Verify",
@@ -367,5 +373,5 @@ export const modeInfo = {
         }
       }
     }
-  }
+  },
 }

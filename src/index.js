@@ -104,7 +104,7 @@ export class ClassWizQR {
         expressionG = parseG.parseMath();
       }
     }
-    if ('88' === _mainMode) {
+    if (['88', '09'].includes(_mainMode)) {
       _function = [
         { name: 'f(x)', expression: expressionE || '' },
         { name: 'g(x)', expression: expressionG || '' },

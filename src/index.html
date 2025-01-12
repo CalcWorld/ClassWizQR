@@ -225,6 +225,7 @@
       statistic,
       distribution,
       variable,
+      tableRange,
     } = qrResult;
 
     const calc = document.getElementById('calc');
@@ -318,6 +319,13 @@ ${variableList.map(r => `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.de
 <div class="calc-result" id="variable">
     <div class="title">${t('calc-variable')}</div>
 ${parseVariableList(variable)}
+</div>
+` : '';
+
+    calcHtml += tableRange ? `
+<div class="calc-result" id="table-range">
+    <div class="title">${t('calc-table-range')}</div>
+${parseVariableList(tableRange)}
 </div>
 ` : '';
 
@@ -436,6 +444,7 @@ ${parseVariableList(variable)}
       'calc-equation-coefficient': '系数',
       'calc-result': '结果',
       'calc-variable': '变量',
+      'calc-table-range': '表格范围',
       'calc-variable-latex': 'LaTeX',
       'calc-variable-decimal': '数值',
       'calc-matrix': '矩阵预设',
@@ -464,6 +473,7 @@ ${parseVariableList(variable)}
       'calc-equation-coefficient': 'Coefficients',
       'calc-result': 'Result',
       'calc-variable': 'Variable',
+      'calc-table-range': 'Table Range',
       'calc-variable-latex': 'LaTeX',
       'calc-variable-decimal': 'Decimal',
       'calc-matrix': 'Matrix Presets',

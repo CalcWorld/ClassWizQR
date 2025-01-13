@@ -253,7 +253,7 @@
     <div class="content">\\( ${equation.latex} \\)</div>
     <div class="title">${t('calc-equation-coefficient')}</div>
     <table class="content preview-table"><tbody>
-    ${equation.element.map(row => `<tr>${row.map(col => `<td>\\( ${col} \\)</td>`).join('')}</tr>`).join('')}
+    ${equation.element.map(row => `<tr>${row.map(col => `<td>\\( ${col || ''} \\)</td>`).join('')}</tr>`).join('')}
     </tbody></table>
 </div>
 ` : '';
@@ -264,7 +264,7 @@
     ${vectorMatrix.map(vm => `
 <div class="content">\\( \\mathrm\{${vm.name}\} = ${vm.latex} \\)</div>
 <table class="content preview-table"><tbody>
-${vm.element.map(row => `<tr>${row.map(col => `<td>\\( ${col} \\)</td>`).join('')}</tr>`).join('')}
+${vm.element.map(row => `<tr>${row.map(col => `<td>\\( ${col || ''} \\)</td>`).join('')}</tr>`).join('')}
 </tbody></table>
 `).join('')}
 </div>
@@ -280,7 +280,7 @@ ${vm.element.map(row => `<tr>${row.map(col => `<td>\\( ${col} \\)</td>`).join(''
   <tr>
     ${['', 'A', 'B', 'C', 'D', 'E'].map(h => `<th>${h}</th>`).join('')}
   </tr></thead><tbody class="transpose">
-${spreadsheet.array.map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col}</td>`).join('')}</tr>`).join('')}
+${spreadsheet.array.map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col || ''}</td>`).join('')}</tr>`).join('')}
 </tbody></table>
 </div>
 ` : '';
@@ -300,7 +300,7 @@ ${spreadsheet.array.map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>
   <tr>
     <th>${['', ...statistic.array[0]].join('</th><th>')}</th>
   </tr></thead><tbody class="transpose">
-${statistic.array.slice(1).map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col}</td>`).join('')}</tr>`).join('')}
+${statistic.array.slice(1).map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col || ''}</td>`).join('')}</tr>`).join('')}
 </tbody></table>
 </div>
 ` : '';

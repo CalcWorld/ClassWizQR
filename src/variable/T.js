@@ -6,7 +6,7 @@ export const ParseSpreadsheet = (T) => {
   const position = T.slice(2, 62).match(/[\dA-F]{12}/g).map(t => {
     return parseInt(t, 16).toString(2).padStart(48, '0').slice(0, 45);
   });
-  const array = Array.from(Array(45), () => Array(5));
+  const array = Array.from(Array(45), () => Array(5).fill(undefined));
   let k = 0;
   for (let i = 0; i < position.length; i++) {
     for (let j = 0; j < position[i].length; j++) {

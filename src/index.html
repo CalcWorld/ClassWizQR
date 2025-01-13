@@ -276,6 +276,7 @@ ${vm.element.map(row => `<tr>${row.map(col => `<td>\\( ${col || ''} \\)</td>`).j
 <div class="calc-result" id="spreadsheet">
     <div class="title">${t('calc-spreadsheet')}</div>
     <button id="spreadsheet-csv-down" class="download">${t('calc-spreadsheet-csv-down')}</button>
+    <button id="spreadsheet-csv-utf8bom-down" class="download">${t('calc-spreadsheet-csv-utf8bom-down')}</button>
 <table class="content preview-table fix-width"><thead>
   <tr>
     ${['', 'A', 'B', 'C', 'D', 'E'].map(h => `<th>${h}</th>`).join('')}
@@ -341,6 +342,7 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
 
     const csvFilename = `${new Date().getTime()}.csv`;
     spreadsheet && (document.getElementById('spreadsheet-csv-down').onclick = () => download(`spreadsheet-${csvFilename}`, spreadsheet.csv, 'text/plain'));
+    spreadsheet && (document.getElementById('spreadsheet-csv-utf8bom-down').onclick = () => download(`spreadsheet-${csvFilename}`, `\ufeff${spreadsheet.csv}`, 'text/plain'));
     statistic && (document.getElementById('statistic-csv-down').onclick = () => download(`statistic-${csvFilename}`, statistic.csv, 'text/plain'));
 
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, calc]);
@@ -460,6 +462,7 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
       'calc-vector': '向量预设',
       'calc-spreadsheet': '数据表格',
       'calc-spreadsheet-csv-down': '下载 (.csv)',
+      'calc-spreadsheet-csv-utf8bom-down': '下载 (.csv UTF-8 BOM)',
       'calc-statistic': '统计表格',
       'calc-statistic-csv-down': '下载 (.csv)',
       'calc-distribution': '分布计算',
@@ -490,6 +493,7 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
       'calc-vector': 'Vector Presets',
       'calc-spreadsheet': 'Spreadsheet',
       'calc-spreadsheet-csv-down': 'Download (.csv)',
+      'calc-spreadsheet-csv-utf8bom-down': 'Download (.csv UTF-8 BOM)',
       'calc-statistic': 'Statistic',
       'calc-statistic-csv-down': 'Download (.csv)',
       'calc-distribution': 'Distribution',

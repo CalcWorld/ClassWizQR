@@ -124,12 +124,8 @@ export const setupInfo = {
       "vi": "Kết quả số phức"
     },
     "setup": {
-      "1": {
-        "en": "a+bi"
-      },
-      "0": {
-        "en": "r∠θ"
-      }
+      "1": "a+bi",
+      "0": "r∠θ",
     }
   },
   "STATISTICS_FREQUENCY": {
@@ -214,16 +210,11 @@ export const setupInfo = {
       "zh": "函数表格类型",
       "vi": "Loại bảng"
     },
+    // TODO: CW X and CW II is different
     "setup": {
-      "0": {
-        "en": "f(x)"
-      },
-      "1": {
-        "en": "f(x),g(x)"
-      },
-      "2": {
-        "en": "g(x)"
-      }
+      "0": "f(x)",
+      "1": "f(x),g(x)",
+      "2": "g(x)",
     }
   },
   "ENGINEER_SYMBOL": {

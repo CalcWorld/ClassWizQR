@@ -243,7 +243,7 @@
     calcHtml += _function ? `
 <div class="calc-result" id="function">
     <div class="title">${t('calc-function')}</div>
-    <div class="content">\\( ${_function.map(f => f.name + '=' + f.expression).join(' \\)</div><div class="content">\\( ')} \\)</div>
+    ${_function.map(f => `<div class="content">\\( ${f.name}=${f.expression} \\)</div>`).join('')}
 </div>
 ` : '';
 
@@ -252,9 +252,9 @@
     <div class="title">${t('calc-equation')}</div>
     <div class="content">\\( ${equation.latex} \\)</div>
     <div class="title">${t('calc-equation-coefficient')}</div>
-    <table class="content preview-table"><tbody><tr>
-    ${equation.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).join('</tr><tr>')}
-    </tr></tbody></table>
+    <table class="content preview-table"><tbody>
+    ${equation.element.map(row => `<tr>${row.map(col => `<td>\\( ${col} \\)</td>`).join('')}</tr>`).join('')}
+    </tbody></table>
 </div>
 ` : '';
 
@@ -263,9 +263,9 @@
     <div class="title">${title}</div>
     ${vectorMatrix.map(vm => `
 <div class="content">\\( \\mathrm\{${vm.name}\} = ${vm.latex} \\)</div>
-<table class="content preview-table"><tbody><tr>
-${vm.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).join('</tr><tr>')}
-</tr></tbody></table>
+<table class="content preview-table"><tbody>
+${vm.element.map(row => `<tr>${row.map(col => `<td>\\( ${col} \\)</td>`).join('')}</tr>`).join('')}
+</tbody></table>
 `).join('')}
 </div>
 `;
@@ -278,10 +278,10 @@ ${vm.element.map(row => `<td>\\( ${row.join(' \\)</td><td>\\( ')} \\)</td>`).joi
     <button id="spreadsheet-csv-down" class="download">${t('calc-spreadsheet-csv-down')}</button>
 <table class="content preview-table fix-width"><thead>
   <tr>
-    <th>${['', 'A', 'B', 'C', 'D', 'E'].join('</th><th>')}</th>
-  </tr></thead><tbody class="transpose"><tr>
-${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>')}</td>`).join('</tr><tr>')}
-</tr></tbody></table>
+    ${['', 'A', 'B', 'C', 'D', 'E'].map(h => `<th>${h}</th>`).join('')}
+  </tr></thead><tbody class="transpose">
+${spreadsheet.array.map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col}</td>`).join('')}</tr>`).join('')}
+</tbody></table>
 </div>
 ` : '';
 
@@ -299,9 +299,9 @@ ${spreadsheet.array.map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>'
 <table class="content preview-table fix-width"><thead>
   <tr>
     <th>${['', ...statistic.array[0]].join('</th><th>')}</th>
-  </tr></thead><tbody class="transpose"><tr>
-${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</td><td>')}</td>`).join('</tr><tr>')}
-</tr></tbody></table>
+  </tr></thead><tbody class="transpose">
+${statistic.array.slice(1).map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col}</td>`).join('')}</tr>`).join('')}
+</tbody></table>
 </div>
 ` : '';
 
@@ -310,9 +310,9 @@ ${statistic.array.slice(1).map((row, i) => `<td>${i + 1}</td><td>${row.join('</t
   <th></th>
   <th>${t('calc-variable-latex')}</th>
   <th>${t('calc-variable-decimal')}</th>
-</tr></thead><tbody class="transpose"><tr>
-${variableList.map(r => `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td>`).join('</tr><tr>')}
-</tr></tbody></table>
+</tr></thead><tbody class="transpose">
+${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td></tr>`).join('')}
+</tbody></table>
 `;
 
     calcHtml += (result && result[0]) ? `
@@ -326,14 +326,14 @@ ${variableList.map(r => `<td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.de
     calcHtml += variable ? `
 <div class="calc-result" id="variable">
     <div class="title">${t('calc-variable')}</div>
-${parseVariableList(variable)}
+    ${parseVariableList(variable)}
 </div>
 ` : '';
 
     calcHtml += tableRange ? `
 <div class="calc-result" id="table-range">
     <div class="title">${t('calc-table-range')}</div>
-${parseVariableList(tableRange)}
+    ${parseVariableList(tableRange)}
 </div>
 ` : '';
 
@@ -382,9 +382,9 @@ ${parseVariableList(tableRange)}
   <tr>
     <th>${t('settings-key')}</th>
     <th>${t('settings-value')}</th>
-  </tr></thead><tbody><tr>
-  ${setup.map(s => `<td>${s.name}</td><td>${s.value}</td>`).join('</tr><tr>')}
-</tr></tbody></table>
+  </tr></thead><tbody>
+  ${setup.map(s => `<tr><td>${s.name}</td><td>${s.value}</td></tr>`).join('')}
+</tbody></table>
 ` : '';
   }
 

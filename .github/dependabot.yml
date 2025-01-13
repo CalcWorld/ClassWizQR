@@ -8,4 +8,9 @@ updates:
   - package-ecosystem: "npm" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      interval: "weekly"
+      interval: "weekly" # Weekly updates
+    ignore:
+      - dependency-type: "all" # Ignore all non-security updates
+    labels:
+      - "security" # Optional: Add a label to security-related PRs
+    security-only: true # Focus only on security updates

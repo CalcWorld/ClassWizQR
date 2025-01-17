@@ -3,6 +3,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production' || false;
 
+const minify = isProduction ? {
+  removeComments: true,
+  collapseWhitespace: true,
+  removeRedundantAttributes: true,
+  minifyCSS: true,
+  minifyJS: true,
+} : false;
+
 const config = {
   entry: './src/index.js',
   output: {
@@ -19,6 +27,13 @@ const config = {
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
+      minify,
+    }),
+    new HtmlWebpackPlugin({
+      template: './src/404.html',
+      filename: '404.html',
+      inject: false,
+      minify,
     }),
   ],
   optimization: {
@@ -41,7 +56,7 @@ const config = {
       },
     ],
   },
-  devtool: isProduction ? 'source-map' : 'eval-source-map',
+  devtool: isProduction ? false : 'eval-source-map',
 };
 
 module.exports = () => {

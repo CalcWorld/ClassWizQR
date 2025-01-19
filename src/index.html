@@ -182,6 +182,16 @@
   window.onhashchange = parseOnHashChange;
 
   window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const searchLang = urlParams.get('lang');
+    if (searchLang) {
+      lang.style.display = 'none';
+    }
+    const isEmbed = urlParams.get('embed') === 'true';
+    if (isEmbed) {
+      qrUrl.style.display = 'none';
+    }
+
     const options = {
       mode: 'view',
       name: 'cwqr',
@@ -207,7 +217,7 @@
     const qrResult = document.getElementById("qrResult");
     editor = new JSONEditor(qrResult, options);
 
-    const userLang = localStorage.getItem('lang') || navigator.language.substring(0, 2);
+    const userLang = searchLang || localStorage.getItem('lang') || navigator.language.substring(0, 2);
     if (cwqr.availableLanguages.includes(userLang)) {
       lang.value = userLang;
       document.querySelector('html').setAttribute('lang', userLang);

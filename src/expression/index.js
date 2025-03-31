@@ -1,4 +1,4 @@
-import { AsciiTable, mathTemplate, recDecOverlineModel, recDecBracketModel } from "../ascii/index.js";
+import { AsciiTable, mathTemplate, recDecBracketModel, recDecOverlineModel } from "../ascii/index.js";
 import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from "../setup/index.js";
 
@@ -73,7 +73,7 @@ export class ParseExpression {
     }
 
     if (Array.isArray(tree)) {
-      return tree.map(item => this._parseToLatex(item)).join('');
+      return tree.map(item => this._parseToLatex(item)).join(' ');
     }
 
     if (typeof tree === 'object') {

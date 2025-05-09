@@ -6,6 +6,10 @@ GitHub: <https://github.com/CalcWorld/ClassWizQR>
 
 Online Demo: <https://cwqr.pages.dev>
 
+[A detailed explanation of how QR works on ClassWiz (Chinese Only)](https://blog.ca510.com/classwiz-qr-feature-and-data-structure)
+
+[ClassWiz QR 功能原理详解（仅中文）](https://blog.ca510.com/classwiz-qr-feature-and-data-structure)
+
 ## Implemented Features
 
 - Internationalization (i18n) implemented

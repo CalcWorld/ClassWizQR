@@ -394,6 +394,10 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
     <td>${mode.subName || t('mode-na')}</td>
   </tr>
   <tr>
+    <td>${t('model-type')}</td>
+    <td>${model.type}</td>
+  </tr>
+  <tr>
     <td>${t('model-key')}</td>
     <td>${model.name}</td>
   </tr>
@@ -500,6 +504,7 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
       'calc-distribution': '分布计算',
       'basic-title': '基本信息',
       'model-key': '型号',
+      'model-type': '类型',
       'model-diag': '自检信息',
       'model-sn': '序列号',
       'mode-main': '主模式',
@@ -531,6 +536,7 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
       'calc-distribution': 'Distribution',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
+      'model-type': 'Product Type',
       'model-diag': 'Diagnostic Info',
       'model-sn': 'Serial Number',
       'mode-main': 'Main Mode',
@@ -541,7 +547,7 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
       'settings-value': 'Settings Value',
       'qr-parse-result-title': 'QR Parse Result',
     };
-    return (({ zh, en, }[language] || en)[tag]) || tag;
+    return (({ zh, en }[language] || en)[tag]) || tag;
   }
 </script>
 </html>

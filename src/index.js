@@ -11,21 +11,22 @@ import { availableLanguages } from "./utils.js";
 
 export class ClassWizQR {
   constructor() {
-    this.url = undefined;
-    this.modelType = undefined;
+    this.url = void 0;
+    this.modelType = void 0;
+    this.modelPrefix = void 0;
     this.kv = {
-      I: undefined,
-      U: undefined,
-      M: undefined,
-      S: undefined,
-      R: undefined,
-      E: undefined,
-      T: undefined,
-      C: undefined,
-      G: undefined,
-      P: undefined,
-      V: undefined,
-      Q: undefined,
+      I: void 0,
+      U: void 0,
+      M: void 0,
+      S: void 0,
+      R: void 0,
+      E: void 0,
+      T: void 0,
+      C: void 0,
+      G: void 0,
+      P: void 0,
+      V: void 0,
+      Q: void 0,
     };
     this.language = 'en';
     globalThis.cwqrConfig = {};
@@ -40,14 +41,27 @@ export class ClassWizQR {
       acc[k] = v;
       return acc;
     }, {});
-    this.setModelType(modelType);
-    this.setKV(kv);
-    availableLanguages.includes(language) ? this.setLanguage(language) : this.setLanguage('en');
+    let modelPrefix = modelType;
+    if (modelType === MODEL_TYPE.EY) {
+      if (kv.I?.slice(0, 3) > 500) {
+        modelPrefix = MODEL_TYPE.FY;
+      }
+    }
+    language = availableLanguages.includes(language) ? language : 'en'
+    this.setModelType(modelType)
+      .setModelPrefix(modelPrefix)
+      .setKV(kv)
+      .setLanguage(language);
     return this;
   }
 
   setModelType(modelType) {
     this.modelType = modelType;
+    return this;
+  }
+
+  setModelPrefix(modelPrefix) {
+    this.modelPrefix = modelPrefix;
     return this;
   }
 
@@ -63,7 +77,7 @@ export class ClassWizQR {
   }
 
   getResult() {
-    const { modelType, kv } = this;
+    const { modelType, modelPrefix, kv } = this;
     let modelId, modelName, qr, modelVersion;
     if (kv.I) {
       modelId = kv.I.slice(0, 3);
@@ -171,7 +185,7 @@ export class ClassWizQR {
       }
     }
 
-    let spreadsheet, statistic
+    let spreadsheet, statistic;
     if (kv.T) {
       if (kv.T.startsWith('SP')) {
         spreadsheet = ParseSpreadsheet(kv.T);
@@ -183,6 +197,7 @@ export class ClassWizQR {
     return {
       model: {
         type: modelType,
+        prefix: modelPrefix,
         id: modelId,
         name: modelName,
         version: modelVersion,
@@ -211,6 +226,6 @@ export class ClassWizQR {
 export const parseUrl = (url, lang) => {
   const cwqr = new ClassWizQR();
   return cwqr.setUrl(url, lang).getResult();
-}
+};
 
 export { availableLanguages } from "./utils.js";

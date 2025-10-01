@@ -1,5 +1,5 @@
 import { ParseExpression } from "./expression/index.js";
-import { getModelInfo, MODEL_TYPE } from "./model/index.js";
+import { getModelInfo, MODEL_PREFIX, MODEL_TYPE, MODEL_TYPE_NAME } from "./model/index.js";
 import { ParseMode } from "./mode/index.js";
 import { ParseDistribution, ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js";
 import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
@@ -41,11 +41,14 @@ export class ClassWizQR {
       acc[k] = v;
       return acc;
     }, {});
-    let modelPrefix = modelType;
+    let modelPrefix;
     if (modelType === MODEL_TYPE.EY) {
+      modelPrefix = MODEL_PREFIX.EY;
       if (kv.I?.slice(0, 3) > 500) {
-        modelPrefix = MODEL_TYPE.FY;
+        modelPrefix = MODEL_PREFIX.FY;
       }
+    } else {
+      modelPrefix = MODEL_PREFIX.CY;
     }
     language = availableLanguages.includes(language) ? language : 'en'
     this.setModelType(modelType)
@@ -196,7 +199,7 @@ export class ClassWizQR {
 
     return {
       model: {
-        type: modelType,
+        type: MODEL_TYPE_NAME[modelType],
         prefix: modelPrefix,
         id: modelId,
         name: modelName,

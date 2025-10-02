@@ -190,7 +190,7 @@ export class ClassWizQR {
         } else if (_mainMode === '0C') {
           distribution = ParseDistribution(kv.M, kv.C);
         } else if (_mainMode === '4F') {
-          mathBox.parameter = ParseMathBoxParameter(kv.M, kv.C);
+          mathBox.parameter = ParseMathBoxParameter(kv.C);
         }
       }
     }

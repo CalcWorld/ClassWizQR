@@ -151,38 +151,17 @@ export const ParseDistribution = (M, C) => {
  */
 
 /**
- * @param {string} M
  * @param {string} C
- * @return {{subMode: (string), quantity: (Decimal), attempts: (Decimal), freqResultType: (Decimal|null), freqResultTypeName: (string)}}
+ * @return {{quantity: (Decimal), attempts: (Decimal)}}
  * @constructor
  */
-export const ParseMathBoxParameter = (M, C) => {
+export const ParseMathBoxParameter = (C) => {
   const split = C.match(/.{20}/g);
-  const parseM = new ParseMode(M);
-  const subMode = parseM.getResultTemplate();
-  let freqResultType, freqResultTypeName
   const quantity = (new ParseVariable(split[0]).get())[1];
   const attempts = (new ParseVariable(split[1]).get())[1];
-  switch (subMode) {
-    case 'S1':
-      // Dice Roll
-      freqResultType = (new ParseVariable(split[2]).get())[1];
-      freqResultTypeName = freqResultType.eq(0) ? 'Sum' : 'Diff';
-      break;
-    case 'S2':
-      // Coin Toss
-      freqResultType = null;
-      freqResultTypeName = 'Side';
-      break;
-    default:
-      throw new Error('Unsupported MathBox');
-  }
 
   return {
-    subMode,
     quantity,
     attempts,
-    freqResultType,
-    freqResultTypeName,
   };
 }

@@ -1,7 +1,6 @@
 import { ParseVariable } from "./index.js";
 import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from "../setup/index.js";
-import { ParseMathBoxParameter } from './C.js';
 import Decimal from 'decimal.js';
 
 /**
@@ -85,20 +84,25 @@ export const ParseStatistic = (T, M, S) => {
 const generateArray = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => new Decimal(a).plus(i));
 
 export const ParseMathBoxResult = (T, M, C) => {
-  const mathBoxParameter = ParseMathBoxParameter(M, C);
-  const { subMode, freqResultTypeName, quantity, freqResultType } = mathBoxParameter;
-  const head = [freqResultTypeName, 'Freq', 'Rel Fr'];
+  const split = C.match(/.{20}/g);
+  const parseM = new ParseMode(M);
+  const subMode = parseM.getResultTemplate();
+  const quantity = (new ParseVariable(split[0]).get())[1];
+  let freqResultTypeName;
   let typeList;
   const freqList = ParseCompressStatistic(T);
 
   switch (subMode) {
     case 'S1':
+      const freqResultType = (new ParseVariable(split[2]).get())[1];
+      freqResultTypeName = 'Sum';
       if (quantity.eq(1)) {
         typeList = generateArray(1, 6);
       } else if (quantity.eq(2)) {
         if (freqResultType.eq(0)) {
           typeList = generateArray(2, 12);
         } else {
+          freqResultTypeName = 'Diff';
           typeList = generateArray(0, 5);
         }
       } else if (quantity.eq(3)) {
@@ -106,6 +110,7 @@ export const ParseMathBoxResult = (T, M, C) => {
       }
       break;
     case 'S2':
+      freqResultTypeName = 'Side';
       if (quantity.eq(1)) {
         freqList.reverse();
         typeList = generateArray(0, 1);
@@ -126,7 +131,7 @@ export const ParseMathBoxResult = (T, M, C) => {
   const numSum = freqList.reduce((acc, curr) => acc.plus(curr));
   const relFrList = freqList.map(i => i.div(numSum));
 
-  const array = [head];
+  const array = [[freqResultTypeName, 'Freq', 'Rel Fr']];
   for (let i = 0; i < freqList.length; i++) {
     array.push([typeList[i], freqList[i], relFrList[i]]);
   }

@@ -81,7 +81,7 @@ export const ParseStatistic = (T, M, S) => {
   return { array, csv };
 }
 
-export const ParseMathBoxResult = (T, M, C) => {
+export const ParseMathBox = (T, M, C) => {
   const generateArray = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => new Decimal(a).plus(i));
 
   const split = C.match(/.{20}/g);

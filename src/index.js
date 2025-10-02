@@ -1,7 +1,13 @@
 import { ParseExpression } from "./expression/index.js";
 import { getModelInfo, MODEL_PREFIX, MODEL_TYPE, MODEL_TYPE_NAME } from "./model/index.js";
 import { ParseMode } from "./mode/index.js";
-import { ParseDistribution, ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js";
+import {
+  ParseDistribution,
+  ParseEquation,
+  ParseMathBoxParameter,
+  ParseMatrixList,
+  ParseVectorList
+} from "./variable/C.js";
 import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
@@ -170,8 +176,9 @@ export class ClassWizQR {
     // any calculate in Vector or Matrix contains its defined vector or matrix in C
     // in Equation, Inequality or Ratio mode, it's the entered coefficients
     // in Distribution mode, it's the entered data
-    // in MathBox mode, it's the dice/coin number and attempts
-    let vector, matrix, equation, distribution, mathBox;
+    // in MathBox mode, it's the dice/coin number, attempts and relative frequency type (sum/diff) in Dice Roll
+    let vector, matrix, equation, distribution;
+    let mathBox = {};
     if (kv.C) {
       if (kv.C.startsWith('M')) {
         matrix = ParseMatrixList(kv.C);
@@ -183,7 +190,7 @@ export class ClassWizQR {
         } else if (_mainMode === '0C') {
           distribution = ParseDistribution(kv.M, kv.C);
         } else if (_mainMode === '4F') {
-          // TODO: MathBox Mode input
+          mathBox.parameter = ParseMathBoxParameter(kv.M, kv.C);
         }
       }
     }
@@ -192,6 +199,8 @@ export class ClassWizQR {
     if (kv.T) {
       if (kv.T.startsWith('SP')) {
         spreadsheet = ParseSpreadsheet(kv.T);
+      } else if (_mainMode === '4F') {
+
       } else {
         statistic = ParseStatistic(kv.T, kv.M, kv.S);
       }

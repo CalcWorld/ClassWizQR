@@ -145,3 +145,30 @@ export const ParseDistribution = (M, C) => {
   }
   return { latex: template, decimal: decimalResult };
 }
+
+export const ParseMathBoxParameter = (M, C) => {
+  const split = C.match(/.{20}/g);
+  const parseM = new ParseMode(M);
+  const subMode = parseM.getResultTemplate();
+  switch (subMode) {
+    case 'S1':
+      // Dice Roll
+      const freqResultType = (new ParseVariable(split[2]).get())[1]
+      return {
+        subMode,
+        dice: (new ParseVariable(split[0]).get())[1],
+        attempts: (new ParseVariable(split[1]).get())[1],
+        freqResultType,
+        freqResultTypeName: freqResultType.eq(0) ? 'Sum' : 'Diff',
+      };
+    case 'S2':
+      // Coin Toss
+      return {
+        subMode,
+        coins: (new ParseVariable(split[0]).get())[1],
+        attempts: (new ParseVariable(split[1]).get())[1],
+      };
+    default:
+      throw new Error('Unsupported MathBox Parameter');
+  }
+}

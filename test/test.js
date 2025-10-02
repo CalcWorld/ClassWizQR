@@ -1,4 +1,4 @@
-import { parseUrl } from './index.js';
+import { parseUrl } from '../src/index.js';
 
 let url;
 url = `

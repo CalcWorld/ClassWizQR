@@ -57,6 +57,8 @@ export class ParseMode {
     let subMode = this.getSubMode();
     if (mainMode === '4B') {
       subMode += this.getInqType();
+    } else if (mainMode === '4F') {
+      subMode = this.getResultTemplate();
     }
     const mainName = translate(modeInfo[mainMode]['name']);
     let subName = (modeInfo[mainMode]['subMode'] || {})[subMode];

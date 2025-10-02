@@ -53,6 +53,20 @@ export const modeInfo = {
       "zh": "数学盒",
       "vi": "Hộp Toán học"
     },
+    "subMode": {
+      "S1": {
+        "name": {
+          "en": "Dice Roll",
+          "zh": "掷骰子",
+        }
+      },
+      "S2": {
+        "name": {
+          "en": "Coin Toss",
+          "zh": "抛硬币",
+        }
+      },
+    }
   },
   "C1": {
     "name": {

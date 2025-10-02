@@ -326,16 +326,20 @@ ${spreadsheet.array.map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>
 </div>
 ` : '';
 
+    const parseTabularArray = (array) => `
+<table class="content preview-table fix-width"><thead>
+  <tr>
+    <th>${['', ...array[0]].join('</th><th>')}</th>
+  </tr></thead><tbody class="transpose">
+${array.slice(1).map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col || ''}</td>`).join('')}</tr>`).join('')}
+</tbody></table>
+`;
+
     calcHtml += statistic ? `
 <div class="calc-result" id="statistic">
     <div class="title">${t('calc-statistic')}</div>
     <button id="statistic-csv-down" class="download">${t('calc-statistic-csv-down')}</button>
-<table class="content preview-table fix-width"><thead>
-  <tr>
-    <th>${['', ...statistic.array[0]].join('</th><th>')}</th>
-  </tr></thead><tbody class="transpose">
-${statistic.array.slice(1).map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col || ''}</td>`).join('')}</tr>`).join('')}
-</tbody></table>
+${parseTabularArray(statistic.array)}
 </div>
 ` : '';
 
@@ -377,13 +381,7 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
     <div class="content">${mathBox.parameter.subMode === 'S1' ? `${t('calc-math-box-dice')}` : `${t('calc-math-box-coin')}`}: ${mathBox.parameter.quantity}</div>
     <div class="content">${t('calc-math-box-attempts')}: ${mathBox.parameter.attempts}</div>
     <button id="math-box-csv-down" class="download">${t('calc-math-box-csv-down')}</button>
-<table class="content preview-table fix-width">
-<thead><tr>
-    <th>${['', ...mathBox.result.array[0]].join('</th><th>')}</th>
-</tr></thead>
-<tbody class="transpose">
-${mathBox.result.array.slice(1).map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col || ''}</td>`).join('')}</tr>`).join('')}
-</tbody></table>
+${parseTabularArray(mathBox.result.array)}
 </div>
 ` : '';
 

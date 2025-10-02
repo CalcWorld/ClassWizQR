@@ -259,6 +259,7 @@
       distribution,
       variable,
       tableRange,
+      mathBox,
     } = qrResult;
 
     const calc = document.getElementById('calc');
@@ -370,12 +371,29 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
 </div>
 ` : '';
 
+    calcHtml += mathBox && mathBox.parameter && mathBox.result ? `
+<div class="calc-result" id="math-box">
+    <div class="title">${t('calc-math-box')}</div>
+    <div class="content">${mathBox.parameter.subMode === 'S1' ? `${t('calc-math-box-dice')}` : `${t('calc-math-box-coin')}`}: ${mathBox.parameter.quantity}</div>
+    <div class="content">${t('calc-math-box-attempts')}: ${mathBox.parameter.attempts}</div>
+    <button id="math-box-csv-down" class="download">${t('calc-math-box-csv-down')}</button>
+<table class="content preview-table fix-width">
+<thead><tr>
+    <th>${['', ...mathBox.result.array[0]].join('</th><th>')}</th>
+</tr></thead>
+<tbody class="transpose">
+${mathBox.result.array.slice(1).map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col || ''}</td>`).join('')}</tr>`).join('')}
+</tbody></table>
+</div>
+` : '';
+
     calc.innerHTML = calcHtml;
 
     const csvFilename = `${new Date().getTime()}.csv`;
     spreadsheet && (document.getElementById('spreadsheet-csv-down').onclick = () => download(`spreadsheet-${csvFilename}`, spreadsheet.csv, 'text/plain'));
     spreadsheet && (document.getElementById('spreadsheet-csv-utf8bom-down').onclick = () => download(`spreadsheet-${csvFilename}`, `\ufeff${spreadsheet.csv}`, 'text/plain'));
     statistic && (document.getElementById('statistic-csv-down').onclick = () => download(`statistic-${csvFilename}`, statistic.csv, 'text/plain'));
+    mathBox.result && (document.getElementById('math-box-csv-down').onclick = () => download(`math-box-${csvFilename}`, mathBox.result.csv, 'text/plain'));
 
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, calc]);
   }
@@ -502,6 +520,11 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
       'calc-statistic': '统计表格',
       'calc-statistic-csv-down': '下载 (.csv)',
       'calc-distribution': '分布计算',
+      'calc-math-box': '数学盒',
+      'calc-math-box-csv-down': '下载 (.csv)',
+      'calc-math-box-dice': '骰子个数',
+      'calc-math-box-coin': '硬币枚数',
+      'calc-math-box-attempts': '出手次数',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-type': '类型',
@@ -534,6 +557,11 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
       'calc-statistic': 'Statistic',
       'calc-statistic-csv-down': 'Download (.csv)',
       'calc-distribution': 'Distribution',
+      'calc-math-box': 'Math Box',
+      'calc-math-box-csv-down': 'Download (.csv)',
+      'calc-math-box-dice': 'Dice',
+      'calc-math-box-coin': 'Coins',
+      'calc-math-box-attempts': 'Attempts',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-type': 'Product Type',
@@ -547,7 +575,7 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
       'settings-value': 'Settings Value',
       'qr-parse-result-title': 'QR Parse Result',
     };
-    return (({ zh, en }[language] || en)[tag]) || tag;
+    return (({ zh, en }[language] || en)[tag]) || en[tag] || tag;
   }
 </script>
 </html>

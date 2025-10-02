@@ -81,13 +81,14 @@ export const ParseStatistic = (T, M, S) => {
   return { array, csv };
 }
 
-const generateArray = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => new Decimal(a).plus(i));
-
 export const ParseMathBoxResult = (T, M, C) => {
+  const generateArray = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => new Decimal(a).plus(i));
+
   const split = C.match(/.{20}/g);
   const parseM = new ParseMode(M);
   const subMode = parseM.getResultTemplate();
   const quantity = (new ParseVariable(split[0]).get())[1];
+  const attempts = (new ParseVariable(split[1]).get())[1];
   let freqResultTypeName;
   let typeList;
   const freqList = ParseCompressStatistic(T);
@@ -137,5 +138,5 @@ export const ParseMathBoxResult = (T, M, C) => {
   }
 
   const csv = array2Csv(array);
-  return { array, csv };
+  return { subMode, quantity, attempts, array, csv };
 }

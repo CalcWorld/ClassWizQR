@@ -145,23 +145,3 @@ export const ParseDistribution = (M, C) => {
   }
   return { latex: template, decimal: decimalResult };
 }
-
-/**
- * @typedef {import('decimal.js').default} Decimal
- */
-
-/**
- * @param {string} C
- * @return {{quantity: (Decimal), attempts: (Decimal)}}
- * @constructor
- */
-export const ParseMathBoxParameter = (C) => {
-  const split = C.match(/.{20}/g);
-  const quantity = (new ParseVariable(split[0]).get())[1];
-  const attempts = (new ParseVariable(split[1]).get())[1];
-
-  return {
-    quantity,
-    attempts,
-  };
-}

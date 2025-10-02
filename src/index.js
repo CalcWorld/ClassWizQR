@@ -4,7 +4,6 @@ import { ParseMode } from "./mode/index.js";
 import {
   ParseDistribution,
   ParseEquation,
-  ParseMathBoxParameter,
   ParseMatrixList,
   ParseVectorList
 } from "./variable/C.js";
@@ -178,7 +177,6 @@ export class ClassWizQR {
     // in Distribution mode, it's the entered data
     // in MathBox mode, it's the dice/coin number, attempts and relative frequency type (sum/diff) in Dice Roll
     let vector, matrix, equation, distribution;
-    let mathBox = {};
     if (kv.C) {
       if (kv.C.startsWith('M')) {
         matrix = ParseMatrixList(kv.C);
@@ -189,18 +187,16 @@ export class ClassWizQR {
           equation = ParseEquation(kv.M, kv.C);
         } else if (_mainMode === '0C') {
           distribution = ParseDistribution(kv.M, kv.C);
-        } else if (_mainMode === '4F') {
-          mathBox.parameter = ParseMathBoxParameter(kv.C);
         }
       }
     }
 
-    let spreadsheet, statistic;
+    let spreadsheet, statistic, mathBox;
     if (kv.T) {
       if (kv.T.startsWith('SP')) {
         spreadsheet = ParseSpreadsheet(kv.T);
       } else if (_mainMode === '4F') {
-        mathBox.result = ParseMathBoxResult(kv.T, kv.M, kv.C);
+        mathBox = ParseMathBoxResult(kv.T, kv.M, kv.C);
       } else {
         statistic = ParseStatistic(kv.T, kv.M, kv.S);
       }

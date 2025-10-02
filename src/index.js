@@ -8,7 +8,7 @@ import {
   ParseMatrixList,
   ParseVectorList
 } from "./variable/C.js";
-import { ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
+import { ParseMathBoxResult, ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
 import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseStatisticResult } from "./variable/R.js";
@@ -200,7 +200,7 @@ export class ClassWizQR {
       if (kv.T.startsWith('SP')) {
         spreadsheet = ParseSpreadsheet(kv.T);
       } else if (_mainMode === '4F') {
-
+        mathBox.result = ParseMathBoxResult(kv.T, kv.M, kv.C);
       } else {
         statistic = ParseStatistic(kv.T, kv.M, kv.S);
       }

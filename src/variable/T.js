@@ -1,6 +1,8 @@
 import { ParseVariable } from "./index.js";
 import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from "../setup/index.js";
+import { ParseMathBoxParameter } from './C.js';
+import Decimal from 'decimal.js';
 
 export const ParseSpreadsheet = (T) => {
   const position = T.slice(2, 62).match(/[\dA-F]{12}/g).map(t => {
@@ -62,10 +64,6 @@ export const ParseStatistic = (T, M, S) => {
     head.push('x');
     head.push('P');
     numList = ParseRawStatistic(T);
-  } else if (mainMode === '4F') {
-    // Math Box Mode
-    head.push('Freq');
-    numList = ParseCompressStatistic(T);
   }
   const array = [head];
   for (let i = 0; i < numList.length; i++) {
@@ -74,6 +72,59 @@ export const ParseStatistic = (T, M, S) => {
     }
     array[array.length - 1].push(numList[i]);
   }
+  const csv = array.map(row => row.join(',')).join('\n');
+  return { array, csv };
+}
+
+const generateArray = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => new Decimal(a).plus(i));
+
+export const ParseMathBoxResult = (T, M, C) => {
+  const mathBoxParameter = ParseMathBoxParameter(M, C);
+  const { subMode, freqResultTypeName, quantity, freqResultType } = mathBoxParameter;
+  const head = [freqResultTypeName, 'Freq', 'Rel Fr'];
+  let typeList;
+  const freqList = ParseCompressStatistic(T);
+
+  switch (subMode) {
+    case 'S1':
+      if (quantity.eq(1)) {
+        typeList = generateArray(1, 6);
+      } else if (quantity.eq(2)) {
+        if (freqResultType.eq(0)) {
+          typeList = generateArray(2, 12);
+        } else {
+          typeList = generateArray(0, 5);
+        }
+      } else if (quantity.eq(3)) {
+        typeList = generateArray(3, 18);
+      }
+      break;
+    case 'S2':
+      if (quantity.eq(1)) {
+        freqList.reverse();
+        typeList = generateArray(0, 1);
+      } else if (quantity.eq(2)) {
+        typeList = generateArray(0, 2);
+      } else if (quantity.eq(3)) {
+        typeList = generateArray(0, 3);
+      }
+      break;
+    default:
+      throw new Error('Unsupported MathBox');
+  }
+
+  if (typeList.length !== freqList.length) {
+    throw new Error('Parse Error MathBox');
+  }
+
+  const numSum = freqList.reduce((acc, curr) => acc.plus(curr));
+  const relFrList = freqList.map(i => i.div(numSum));
+
+  const array = [head];
+  for (let i = 0; i < freqList.length; i++) {
+    array.push([typeList[i], freqList[i], relFrList[i]]);
+  }
+
   const csv = array.map(row => row.join(',')).join('\n');
   return { array, csv };
 }

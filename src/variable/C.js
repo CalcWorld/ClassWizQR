@@ -146,29 +146,43 @@ export const ParseDistribution = (M, C) => {
   return { latex: template, decimal: decimalResult };
 }
 
+/**
+ * @typedef {import('decimal.js').default} Decimal
+ */
+
+/**
+ * @param {string} M
+ * @param {string} C
+ * @return {{subMode: (string), quantity: (Decimal), attempts: (Decimal), freqResultType: (Decimal|null), freqResultTypeName: (string)}}
+ * @constructor
+ */
 export const ParseMathBoxParameter = (M, C) => {
   const split = C.match(/.{20}/g);
   const parseM = new ParseMode(M);
   const subMode = parseM.getResultTemplate();
+  let freqResultType, freqResultTypeName
+  const quantity = (new ParseVariable(split[0]).get())[1];
+  const attempts = (new ParseVariable(split[1]).get())[1];
   switch (subMode) {
     case 'S1':
       // Dice Roll
-      const freqResultType = (new ParseVariable(split[2]).get())[1]
-      return {
-        subMode,
-        dice: (new ParseVariable(split[0]).get())[1],
-        attempts: (new ParseVariable(split[1]).get())[1],
-        freqResultType,
-        freqResultTypeName: freqResultType.eq(0) ? 'Sum' : 'Diff',
-      };
+      freqResultType = (new ParseVariable(split[2]).get())[1];
+      freqResultTypeName = freqResultType.eq(0) ? 'Sum' : 'Diff';
+      break;
     case 'S2':
       // Coin Toss
-      return {
-        subMode,
-        coins: (new ParseVariable(split[0]).get())[1],
-        attempts: (new ParseVariable(split[1]).get())[1],
-      };
+      freqResultType = null;
+      freqResultTypeName = 'Side';
+      break;
     default:
-      throw new Error('Unsupported MathBox Parameter');
+      throw new Error('Unsupported MathBox');
   }
+
+  return {
+    subMode,
+    quantity,
+    attempts,
+    freqResultType,
+    freqResultTypeName,
+  };
 }

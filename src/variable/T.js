@@ -4,6 +4,12 @@ import { ParseSetup } from "../setup/index.js";
 import { ParseMathBoxParameter } from './C.js';
 import Decimal from 'decimal.js';
 
+/**
+ * @param {*[][]} array
+ * @return {string}
+ */
+const array2Csv = (array) => array.map(row => row.join(',')).join('\n');
+
 export const ParseSpreadsheet = (T) => {
   const position = T.slice(2, 62).match(/[\dA-F]{12}/g).map(t => {
     return parseInt(t, 16).toString(2).padStart(48, '0').slice(0, 45);
@@ -25,7 +31,7 @@ export const ParseSpreadsheet = (T) => {
       }
     }
   }
-  const csv = array.map(row => row.join(',')).join('\n');
+  const csv = array2Csv(array);
   return { array, csv };
 }
 
@@ -72,7 +78,7 @@ export const ParseStatistic = (T, M, S) => {
     }
     array[array.length - 1].push(numList[i]);
   }
-  const csv = array.map(row => row.join(',')).join('\n');
+  const csv = array2Csv(array);
   return { array, csv };
 }
 
@@ -125,6 +131,6 @@ export const ParseMathBoxResult = (T, M, C) => {
     array.push([typeList[i], freqList[i], relFrList[i]]);
   }
 
-  const csv = array.map(row => row.join(',')).join('\n');
+  const csv = array2Csv(array);
   return { array, csv };
 }

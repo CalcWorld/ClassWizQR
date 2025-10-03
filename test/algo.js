@@ -1,0 +1,138 @@
+import util from 'util';
+
+util.inspect.defaultOptions.depth = null;
+
+function algoTest(E) {
+  const asciiArray = E.match(/F[\dA-F]{3}|[\dA-F]{2}/g);
+// console.log(asciiArray);
+  const algoMap = {
+    'F901': '[F901]\n',
+    'F902': '[F902]',
+    'F903': '[F903] ',
+    // 'F905': 'Move ${0} pixels',
+    // 'F906': 'Turn ⟲ ${0} degrees',
+    // 'F907': 'Direction ${0} degrees',
+    // 'F908': 'Goto x=${0}, y=${1}',
+    // 'F909': 'Pen Down',
+    // 'F90A': 'Pen Up',
+    // 'F90B': '${0}→${1}',
+    // 'F90C': '?→${0}',
+  };
+
+  const algoStart = [
+    // 'F902',
+    'F903',
+    'F905',
+    'F906',
+    'F907',
+    'F908',
+    'F909',
+    'F90A',
+    'F90B',
+    'F90C',
+    'F90D',
+    'F90E',
+    'F90F',
+    'F910',
+    'F911',
+    'F912',
+    'F913',
+    'F914',
+    'F915',
+    'F916',
+    'F917',
+    'F918',
+    'F919',
+  ];
+
+  const algoMid = [
+    '00',
+  ];
+
+  const algoEnd = [
+    'F901',
+    // 'F902',
+    // 'F912',
+    // 'F914',
+    // 'F916',
+    // 'F918',
+    // 'F919',
+  ];
+
+  const algoTabOpen = [
+    'F911',
+    'F913',
+    'F915',
+    'F917',
+    'F918',
+  ];
+
+  const algoTabClose = [
+    'F912',
+    'F914',
+    'F916',
+    'F918',
+    'F919',
+  ];
+
+  const res = asciiArray.map(a => algoMap[a] || `[${a}]`);
+  console.log(res);
+  console.log(res.join(''));
+
+// process.exit(0);
+
+  let result = '[';
+  // let stack = [];
+  for (let i = 0; i < asciiArray.length; i++) {
+    const cur = asciiArray[i];
+    // const next = i + 1 < asciiArray.length ? asciiArray[i + 1] : null;
+    if (algoStart.includes(cur)) {
+      result += `{"${cur}": [[`;
+      // stack.push(cur);
+      continue;
+    }
+    if (algoMid.includes(cur)) {
+      result = result.endsWith(', ') ? result.slice(0, -2) : result;
+      result += `], [`;
+      continue;
+    }
+    if (algoEnd.includes(cur)) { // F901
+      result = result.endsWith(', ') ? result.slice(0, -2) : result;
+      result += ']';
+      // const last = stack[stack.length - 1];
+      // if (algoTabOpen.includes(last)) {
+      //   result += `, [`;
+      // } else {
+      //   stack.pop();
+        result += `]}, `;
+      // }
+      continue;
+    }
+    // if (algoTabClose.includes(cur)) {
+    //   result = result.endsWith(', ') ? result.slice(0, -2) : result;
+    //   result += ']]}, [';
+    //   stack.pop();
+    // }
+    result += `"${cur}", `;
+  }
+  result = result.endsWith(', ') ? result.slice(0, -2) : result;
+  result += ']';
+  console.log(result);
+
+  result = JSON.parse(result);
+  console.log(result);
+}
+
+algoTest('F90532333300F901F903F901F902');
+algoTest('F90532333300F901F906313200F901F903F901F902');
+algoTest('F90532333300F901F906313200F901F907333400F901F903F901F902');
+algoTest('F90532333300F901F906313200F901F907333400F901F908A600A700F901F903F901F902');
+algoTest('F909F901F903F901F902');
+algoTest('F909F901F90AF901F90B30004100F901F903F901F902');
+algoTest('F909F901F90AF901F90B30004100F901F90C4900F901F903F901F902');
+algoTest('F90D3100F901F90D3200F901F90D3300F901F90D3400F901F903F901F902');
+algoTest('F90E47474700F901F90F3100F901F90F3200F901F910F901F903F901F902');
+
+algoTest('F91132333300F901F903F901F912F901F903F901F902');
+algoTest('F90639393900F901F91132333300F901F91134353600F901F90538383800F901F912F901F912F901F903F901F902');
+algoTest('F91341A53000F901F91541A53200F901F91741A53300F901F90537373700F901F918F901F903F901F919F901F916F901F914F901F91741A53500F901F905312E00F901F918F901F9063300F901F919F901F903F901F902');

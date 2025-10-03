@@ -125,7 +125,7 @@ function algoTest2(E) {
 
   let result = [];
   let currentCmd;
-  let currentArg = [[]];
+  let currentArg = [];
   for (let i = 0; i < asciiArray.length; i++) {
     const cur = asciiArray[i];
     const next = i + 1 < asciiArray.length ? asciiArray[i + 1] : null;

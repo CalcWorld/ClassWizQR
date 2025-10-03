@@ -1,6 +1,7 @@
 import { AsciiTable, mathTemplate, recDecBracketModel, recDecOverlineModel } from "../ascii/index.js";
 import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from "../setup/index.js";
+import { toAsciiArray } from '../utils.js';
 
 export class ParseExpression {
   constructor(E, modelType, modelId) {
@@ -11,12 +12,8 @@ export class ParseExpression {
   }
 
   parseLine() {
-    const asciiArray = this.E.match(/F[\dA-F]{3}|[\dA-F]{2}/g);
-    const result = [];
-    for (let i = 0; i < asciiArray.length; i++) {
-      result.push(this.asciiTable[asciiArray[i]]);
-    }
-    return result.join(' ');
+    const asciiArray = toAsciiArray(this.E);
+    return asciiArray.map(a => this.asciiTable[a]).join(' ');
   }
 
   _setRecDecType() {
@@ -35,7 +32,7 @@ export class ParseExpression {
     text = text.replaceAll('1D1A', '1A');
     text = text.replaceAll('1B1E', '1B');
     text = text.replaceAll('1B1A', '1C');
-    const asciiArray = text.match(/F[\dA-F]{3}|[\dA-F]{2}/g);
+    const asciiArray = toAsciiArray(text);
     let result = '[';
     for (let i = 0; i < asciiArray.length; i++) {
       const cur = asciiArray[i];

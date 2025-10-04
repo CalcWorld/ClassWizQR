@@ -56,6 +56,35 @@ const zhLatexCmd = {
   'F919': () => `结束`,
 };
 
+const frLatexCmd = {
+  'F903': () => '',
+
+  'F905': (a) => `Avancer\\ de\\ ${a}\\ pixels`,
+  'F906': (a) => `Tourner\\ de\\ ⟲\\ ${a}\\ degrés`,
+  'F907': (a) => `S'orienter\\ à\\ ${a}\\ degrés`,
+  'F908': (a, b) => `Aller\\ à\\ x=${a};\\ y=${b}`,
+
+  'F909': () => `Stylo\\ écrit`,
+  'F90A': () => `Stylo\\ relevé`,
+  'F90B': (a, b) => `${a}→${b}`,
+  'F90C': (a) => `?→${a}`,
+
+  'F90D': (a) => ({ '1': `"Oui"`, '2': `"Non"`, '3': `"Nombre?"`, '4': `"Résultat\\ :"` }[a] || a),
+  'F90E': (a) => `Afficher\\ résult\\ ${a}`,
+  'F90F': (a) => `Style\\ ${{ '1': `Flèche`, '2': `Croix` }[a] || a}`,
+  'F910': () => `Attendre`,
+
+  'F911': (a) => `Répéter\\ ${a}`,
+  'F912': () => `↻`,
+  'F913': (a) => `Répéter\\ jusqu'à\\ ${a}`,
+  'F914': () => `↻`,
+  'F915': (a) => `Si\\ ${a}\\ Alors`,
+  'F916': () => `Fin`,
+  'F917': (a) => `Si\\ ${a}\\ Alors`,
+  'F918': () => `Sinon`,
+  'F919': () => `Fin`,
+};
+
 const enScratch = {
   'F903': () => '', // empty line
 
@@ -94,6 +123,7 @@ export default {
   latex: {
     en: enLatexCmd,
     zh: zhLatexCmd,
+    fr: frLatexCmd,
   },
   scratch: {
     en: enScratch,

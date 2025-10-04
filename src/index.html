@@ -140,7 +140,6 @@
     <select id="lang" name="lang">
         <option value="zh">zh</option>
         <option value="en" selected>en</option>
-        <option value="vi">vi</option>
     </select>
     <label for="qrUrl"></label>
     <input id="qrUrl" type="search" placeholder="http://......"/>
@@ -189,6 +188,8 @@
   window.onhashchange = parseOnHashChange;
 
   window.onload = function () {
+    lang.innerHTML = cwqr.availableLanguages.map(i => `<option value="${i}">${i}</option>`).join('');
+
     const urlParams = new URLSearchParams(window.location.search);
     const searchLang = urlParams.get('lang');
     if (searchLang) {
@@ -227,8 +228,10 @@
     const userLang = searchLang || localStorage.getItem('lang') || navigator.language.substring(0, 2);
     if (cwqr.availableLanguages.includes(userLang)) {
       lang.value = userLang;
-      document.querySelector('html').setAttribute('lang', userLang);
+    } else {
+      lang.value = 'en';
     }
+    document.querySelector('html').setAttribute('lang', lang.value);
     i18n();
     parseOnHashChange();
   }

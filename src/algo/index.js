@@ -109,7 +109,7 @@ export class ParseAlgorithm {
   parseToCmdList(tab = '  ') {
     this.parseToTree();
     const { asciiTable, tree, algoTabOpen, algoTabClose } = this;
-    let result = [];
+    const result = [];
     let tabWidth = 0;
     for (const i of tree) {
       const cmd = Object.entries(i)[0];

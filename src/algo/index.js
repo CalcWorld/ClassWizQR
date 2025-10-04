@@ -3,6 +3,11 @@ import { toAsciiArray } from '../utils.js';
 import algoCmdMap from './cmd.js';
 
 export class ParseAlgorithm {
+  /**
+   * @param {string} E
+   * @param {string} modelType
+   * @param {string} modelId
+   */
   constructor(E, modelType, modelId) {
     this.E = E;
     this.asciiTable = new AsciiTable(modelType, modelId).get();
@@ -43,9 +48,26 @@ export class ParseAlgorithm {
       'F902',
     ];
 
+    this.algoTabOpen = [
+      'F911',
+      'F913',
+      'F915',
+      'F917',
+      'F918',
+    ];
+
+    this.algoTabClose = [
+      'F912',
+      'F914',
+      'F916',
+      'F918',
+      'F919',
+    ];
+
   }
 
   parseToTree() {
+    if (this.tree) return this.tree;
     const { E, algoCmd, algoSep, algoEnd } = this;
     const asciiArray = toAsciiArray(E);
 
@@ -80,17 +102,25 @@ export class ParseAlgorithm {
     return result;
   }
 
-  parseToCmd() {
+  parseToCmdList(tabOn = true) {
     this.parseToTree();
-    const { asciiTable, tree } = this;
-    let result = '';
+    const { asciiTable, tree, algoTabOpen, algoTabClose } = this;
+    let result = [];
+    let tab = 0;
     for (const i of tree) {
       const cmd = Object.entries(i)[0];
       const key = cmd[0];
+      if (tabOn && algoTabClose.includes(key)) {
+        tab--;
+      }
       const value = cmd[1].map(i => i.map(i => asciiTable[i]).join(''));
-      result += algoCmdMap[key](...value) + '\n'
+      result.push('  '.repeat(tab) + algoCmdMap[key](...value));
+      if (tabOn && algoTabOpen.includes(key)) {
+        tab++;
+      }
     }
 
     return result;
   }
+
 }

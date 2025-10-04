@@ -21,10 +21,10 @@ const cmd = {
   'F913': (a) => `Repeat until ${a}`,
   'F914': () => `↻`,
   'F915': (a) => `If ${a} then`,
-  'F916': () => `↻`,
+  'F916': () => `End`,
   'F917': (a) => `If ${a} then`,
   'F918': () => `Else`,
-  'F919': () => `↻`,
+  'F919': () => `End`,
 };
 
 export default cmd;

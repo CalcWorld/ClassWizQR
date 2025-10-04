@@ -116,7 +116,7 @@ export class ParseAlgorithm {
     for (const i of tree) {
       const key = i.key;
       if (tab && algoTabClose.includes(key)) tabWidth--;
-      const value = i.value.map(i => i.map(i => asciiTable[i]).join(''));
+      const value = i.value.map(i => i.map(i => asciiTable[i]).join(' '));
       result.push(`${tab ? tab.repeat(tabWidth) : ''}${algoCmdMap[key](...value)}`);
       if (tab && algoTabOpen.includes(key)) tabWidth++;
     }

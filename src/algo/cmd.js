@@ -8,6 +8,8 @@ const algoMsg = {
     'f90d-4': `Result :`,
     'f90f-1': `Arrow`,
     'f90f-2': `Cross`,
+    'scratch-value': 'value?',
+    'scratch-any': 'any',
   },
   zh: {
     'f90d-1': `是`,
@@ -16,6 +18,8 @@ const algoMsg = {
     'f90d-4': `结果 :`,
     'f90f-1': `箭头`,
     'f90f-2': `十字`,
+    'scratch-value': '输入值?',
+    'scratch-any': '任意',
   },
   fr: {
     'f90d-1': `Oui`,
@@ -24,6 +28,8 @@ const algoMsg = {
     'f90d-4': `Résultat :`,
     'f90f-1': `Flèche`,
     'f90f-2': `Croix`,
+    'scratch-value': 'valeur?',
+    'scratch-any': `n'importe laquelle`,
   },
 };
 
@@ -125,12 +131,12 @@ const enScratch = {
   'F909': () => `pen down`,
   'F90A': () => `pen up`,
   'F90B': (a, b) => `set [${b} v] to (${a})`,
-  'F90C': (a) => `ask [value?] and wait\nset [${a} v] to (answer)`,
+  'F90C': (a) => `ask [${translate(algoMsg)['scratch-value']}] and wait\nset [${a} v] to (answer)`,
 
-  'F90D': (a) => `say [${translate(algoMsg)[`f90d-${a}`] || a}]\nwait until <key [any v] pressed?>`,
-  'F90E': (a) => `say (${a})\nwait until <key [any v] pressed?>`,
+  'F90D': (a) => `say [${translate(algoMsg)[`f90d-${a}`] || a}]\nwait until <key [${translate(algoMsg)['scratch-any']} v] pressed?>`,
+  'F90E': (a) => `say (${a})\nwait until <key [${translate(algoMsg)['scratch-any']} v] pressed?>`,
   'F90F': (a) => `switch costume to [${translate(algoMsg)[`f90f-${a}`] || a} v]`,
-  'F910': () => `wait until <key [any v] pressed?>`,
+  'F910': () => `wait until <key [${translate(algoMsg)['scratch-any']} v] pressed?>`,
 
   'F911': (a) => `repeat (${a})`,
   'F912': () => `end`,

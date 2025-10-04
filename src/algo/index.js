@@ -1,15 +1,13 @@
 import { AsciiTable } from '../ascii/index.js';
 import { toAsciiArray } from '../utils.js';
-import algoCmd from './cmd.js';
+import algoCmdMap from './cmd.js';
 
 export class ParseAlgorithm {
   constructor(E, modelType, modelId) {
     this.E = E;
-    this.modelType = modelType;
-    this.modelId = modelId;
     this.asciiTable = new AsciiTable(modelType, modelId).get();
 
-    this.result = void 0;
+    this.tree = void 0;
 
     this.algoCmd = [
       'F903',
@@ -47,7 +45,7 @@ export class ParseAlgorithm {
 
   }
 
-  _parseToTree() {
+  parseToTree() {
     const { E, algoCmd, algoSep, algoEnd } = this;
     const asciiArray = toAsciiArray(E);
 
@@ -78,7 +76,21 @@ export class ParseAlgorithm {
       currentArg[currentArg.length - 1].push(cur);
     }
 
-    this.result = result;
+    this.tree = result;
+    return result;
+  }
+
+  parseToCmd() {
+    this.parseToTree();
+    const { asciiTable, tree } = this;
+    let result = '';
+    for (const i of tree) {
+      const cmd = Object.entries(i)[0];
+      const key = cmd[0];
+      const value = cmd[1].map(i => i.map(i => asciiTable[i]).join(''));
+      result += algoCmdMap[key](...value) + '\n'
+    }
+
     return result;
   }
 }

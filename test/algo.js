@@ -180,6 +180,6 @@ E_list.forEach(e => {
   const algoParser = new ParseAlgorithm(e, 'EY', '007',)
   console.log(algoParser.parseToCmdList());
   console.log(algoParser.parseToCmdList().join('\n'));
-  console.log(algoParser.parseToCmdList(''));
-  console.log(algoParser.parseToCmdList('').join('\n'));
+  console.log(algoParser.parseToCmdList({ tab: '' }));
+  console.log(algoParser.parseToCmdList({ tab: '' }).join('\n'));
 });

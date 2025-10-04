@@ -107,9 +107,10 @@ export class ParseAlgorithm {
    * @param {object} map
    * @param {object} asciiTable
    * @param {string} tab
+   * @param {string} joinSeparator
    * @return {string[]}
    */
-  #parseToList(map, asciiTable, tab = '') {
+  #parseToList(map, asciiTable, tab = '', joinSeparator = '') {
     this.parseToTree();
     const { tree, algoTabOpen, algoTabClose } = this;
     const result = [];
@@ -117,7 +118,7 @@ export class ParseAlgorithm {
     for (const i of tree) {
       const key = i.key;
       if (tab && algoTabClose.includes(key)) tabWidth--;
-      const value = i.value.map(i => i.map(i => asciiTable[i]).join(' '));
+      const value = i.value.map(i => i.map(i => asciiTable[i]).join(joinSeparator));
       result.push(`${tab ? tab.repeat(tabWidth) : ''}${map[key](...value)}`);
       if (tab && algoTabOpen.includes(key)) tabWidth++;
     }
@@ -129,7 +130,7 @@ export class ParseAlgorithm {
    */
   parseToLaTexCmdList() {
     const latexMap = translate(algoCmdMap.latex);
-    return this.#parseToList(latexMap, this.asciiLatexTable, '\\ \\ ');
+    return this.#parseToList(latexMap, this.asciiLatexTable, '\\ \\ ', ' ');
   }
 
   /**
@@ -138,7 +139,9 @@ export class ParseAlgorithm {
   parseToScratch() {
     const scratchMap = translate(algoCmdMap.scratch);
     // TODO: use a plain text ascii table
-    return this.#parseToList(scratchMap, this.asciiLatexTable, '');
+    return this.#parseToList(scratchMap, Object.fromEntries(
+      Object.entries(this.asciiLatexTable).map(([key, value]) => [key, value.replace(/[<>{}()\[\]\\]/g, m => '\\' + m)])
+    ));
   }
 
   parseAll() {

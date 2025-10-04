@@ -81,11 +81,11 @@ const enScratch = {
 
   'F911': (a) => `repeat (${a})`,
   'F912': () => `end`,
-  'F913': (a) => `repeat until <${a}>`,
+  'F913': (a) => `repeat until [${a}]`,
   'F914': () => `end`,
-  'F915': (a) => `if <${a}> then`,
+  'F915': (a) => `if [${a}] then`,
   'F916': () => `end`,
-  'F917': (a) => `if <${a}> then`,
+  'F917': (a) => `if [${a}] then`,
   'F918': () => `else`,
   'F919': () => `end`,
 };

@@ -1,3 +1,32 @@
+import { translate } from '../utils.js';
+
+const algoMsg = {
+  en: {
+    'f90d-1': `Yes`,
+    'f90d-2': `No`,
+    'f90d-3': `Number?`,
+    'f90d-4': `Result :`,
+    'f90f-1': `Arrow`,
+    'f90f-2': `Cross`,
+  },
+  zh: {
+    'f90d-1': `是`,
+    'f90d-2': `否`,
+    'f90d-3': `数值?`,
+    'f90d-4': `结果 :`,
+    'f90f-1': `箭头`,
+    'f90f-2': `十字`,
+  },
+  fr: {
+    'f90d-1': `Oui`,
+    'f90d-2': `Non`,
+    'f90d-3': `Nombre?`,
+    'f90d-4': `Résultat :`,
+    'f90f-1': `Flèche`,
+    'f90f-2': `Croix`,
+  },
+};
+
 const enLatexCmd = {
   'F903': () => '', // empty line
 
@@ -11,9 +40,9 @@ const enLatexCmd = {
   'F90B': (a, b) => `${a}→${b}`,
   'F90C': (a) => `?→${a}`,
 
-  'F90D': (a) => ({ '1': `"Yes"`, '2': `"No"`, '3': `"Number?"`, '4': `"Result\\ :"` }[a] || a), // Comment
+  'F90D': (a) => `"${algoMsg.en[`f90d-${a}`] || a}"`, // Comment
   'F90E': (a) => `Show\\ Result\\ ${a}`,
-  'F90F': (a) => `Style\\ ${{ '1': `Arrow`, '2': `Cross` }[a] || a}`,
+  'F90F': (a) => `Style\\ ${algoMsg.en[`f90f-${a}`] || a}`,
   'F910': () => `Wait`,
 
   'F911': (a) => `Repeat\\ ${a}`,
@@ -40,9 +69,9 @@ const zhLatexCmd = {
   'F90B': (a, b) => `${a}→${b}`,
   'F90C': (a) => `?→${a}`,
 
-  'F90D': (a) => ({ '1': `"是"`, '2': `"否"`, '3': `"数值?"`, '4': `"结果\\ :"` }[a] || a),
+  'F90D': (a) => `"${algoMsg.zh[`f90d-${a}`] || a}"`,
   'F90E': (a) => `显示结果\\ ${a}`,
-  'F90F': (a) => `样式\\ ${{ '1': `箭头`, '2': `十字` }[a] || a}`,
+  'F90F': (a) => `样式\\ ${algoMsg.zh[`f90f-${a}`] || a}`,
   'F910': () => `等待`,
 
   'F911': (a) => `循环\\ ${a}`,
@@ -69,9 +98,9 @@ const frLatexCmd = {
   'F90B': (a, b) => `${a}→${b}`,
   'F90C': (a) => `?→${a}`,
 
-  'F90D': (a) => ({ '1': `"Oui"`, '2': `"Non"`, '3': `"Nombre?"`, '4': `"Résultat\\ :"` }[a] || a),
+  'F90D': (a) => `"${algoMsg.fr[`f90d-${a}`] || a}"`, // Comment
   'F90E': (a) => `Afficher\\ résult\\ ${a}`,
-  'F90F': (a) => `Style\\ ${{ '1': `Flèche`, '2': `Croix` }[a] || a}`,
+  'F90F': (a) => `Style\\ ${algoMsg.fr[`f90f-${a}`] || a}`,
   'F910': () => `Attendre`,
 
   'F911': (a) => `Répéter\\ ${a}`,
@@ -98,14 +127,9 @@ const enScratch = {
   'F90B': (a, b) => `set [${b} v] to (${a})`,
   'F90C': (a) => `ask [value?] and wait\nset [${a} v] to (answer)`,
 
-  'F90D': (a) => `say [${{
-    '1': `Yes`,
-    '2': `No`,
-    '3': `Number?`,
-    '4': `Result :`,
-  }[a] || a}]\nwait until <key [any v] pressed?>`,
+  'F90D': (a) => `say [${translate(algoMsg)[`f90d-${a}`] || a}]\nwait until <key [any v] pressed?>`,
   'F90E': (a) => `say (${a})\nwait until <key [any v] pressed?>`,
-  'F90F': (a) => `switch costume to [${{ '1': `Arrow`, '2': `Cross` }[a] || a} v]`,
+  'F90F': (a) => `switch costume to [${translate(algoMsg)[`f90f-${a}`] || a} v]`,
   'F910': () => `wait until <key [any v] pressed?>`,
 
   'F911': (a) => `repeat (${a})`,

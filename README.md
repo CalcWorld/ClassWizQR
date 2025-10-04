@@ -14,13 +14,14 @@ Online Demo: <https://cwqr.pages.dev>
 
 - Internationalization (i18n) implemented
 - Optimized adaptations for specific calculator models, such as JP models
-- Support for ClassWiz EX and ClassWiz CW series calculators
+- Support for ClassWiz EX, ClassWiz CW and ClassWiz CW+ series calculators
 - Detailed information on the calculator model, settings, and active modes or errors
 - Natural display input and output rendered as LaTeX formulas in Calculate, Complex, Verify and other modes
 - LaTeX and tabular representation of equations and results in Equation, Inequality, and Ratio modes
 - LaTeX and tabular representation of vector and matrix data
 - Data entered in Spreadsheet, Table, Distribution, and Statistics modes, with CSV export support
 - Defined functions, table range and variables in Table mode
+- Supports showing Algorithm mode commands in LaTeX, plain text, and Scratch block formats
 
 ## Todo
 
@@ -28,7 +29,7 @@ Online Demo: <https://cwqr.pages.dev>
 - [x] ~~MathBox mode~~
 - [ ] `W` data in Graph mode
 - [ ] Refactor i18n
-- [ ] Optimized adaptations for DE, CE, SP, and other models
+- [ ] Optimized adaptations for FR, DE, CE, SP, and other models
 
 ## License
 

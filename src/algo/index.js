@@ -103,26 +103,39 @@ export class ParseAlgorithm {
   }
 
   /**
+   *
+   * @param {object} map
+   * @param {string} tab
+   * @return {string[]}
+   */
+  #parseToList(map, tab = '') {
+    this.parseToTree();
+    const { asciiTable, tree, algoTabOpen, algoTabClose } = this;
+    const result = [];
+    let tabWidth = 0;
+    for (const i of tree) {
+      const key = i.key;
+      if (tab && algoTabClose.includes(key)) tabWidth--;
+      const value = i.value.map(i => i.map(i => asciiTable[i]).join(' '));
+      result.push(`${tab ? tab.repeat(tabWidth) : ''}${map[key](...value)}`);
+      if (tab && algoTabOpen.includes(key)) tabWidth++;
+    }
+    return result;
+  }
+
+  /**
    * @param {object} [options={}]
    * @param {string} [options.tab='\\ \\ '] Defines the indentation string.
    * @return {string[]}
    */
   parseToLaTexCmdList(options = {}) {
     const { tab = '\\ \\ ' } = options;
-    this.parseToTree();
-    const { asciiTable, tree, algoTabOpen, algoTabClose } = this;
-    const result = [];
-    let tabWidth = 0;
     const latexMap = translate(algoCmdMap.latex);
-    for (const i of tree) {
-      const key = i.key;
-      if (tab && algoTabClose.includes(key)) tabWidth--;
-      const value = i.value.map(i => i.map(i => asciiTable[i]).join(' '));
-      result.push(`${tab ? tab.repeat(tabWidth) : ''}${latexMap[key](...value)}`);
-      if (tab && algoTabOpen.includes(key)) tabWidth++;
-    }
-
-    return result;
+    return this.#parseToList(latexMap, tab);
   }
 
+  parseToScratch() {
+    const scratchMap = translate(algoCmdMap.scratch);
+    return this.#parseToList(scratchMap, '');
+  }
 }

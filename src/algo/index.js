@@ -141,7 +141,8 @@ export class ParseAlgorithm {
 
   parseToTextCmdList() {
     const latexMap = translate(algoCmdMap.latex);
-    return this.#parseToList(latexMap, this.asciiUnicodeTable, '  ', '').map(i => i.replace(/\\ /g, ' '));
+    return this.#parseToList(latexMap, this.asciiUnicodeTable, '  ', '')
+      .map(i => i.replace(/\\ /g, ' '));
   }
 
   /**
@@ -151,7 +152,7 @@ export class ParseAlgorithm {
     const scratchMap = translate(algoCmdMap.scratch);
     return this.#parseToList(scratchMap, Object.fromEntries(
       Object.entries(this.asciiUnicodeTable).map(([key, value]) => [key, value.replace(/[<>{}()\[\]\\]/g, m => '\\' + m)])
-    ));
+    ), '  ', '');
   }
 
   parseAll() {

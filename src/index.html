@@ -400,8 +400,12 @@ ${parseTabularArray(mathBox.array)}
 
     <div class="title">${t('calc-algorithm-scratch-blocks')}</div>
     <div class="content"><pre id="algorithm-scratch-blocks-pre"></pre></div>
-    <div class="content"><a href="https://scratchblocks.github.io/#?style=scratch3&script=${encodeURIComponent(algorithm.scratchBlocks.join('\n'))}"
-     target="_blank">${t('calc-algorithm-scratch-blocks-render')}</a></div>
+    <div class="content">
+    <a href="https://scratchblocks.github.io/#?style=scratch3&script=${encodeURIComponent(algorithm.scratchBlocks.join('\n'))}"
+     target="_blank">${t('calc-algorithm-scratch-blocks-render')}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+    <a href="https://scratchblocks.github.io/translator/#?lang=${{ zh: 'zh_cn' }[lang.value] ?? lang.value}&script=${encodeURIComponent(algorithm.scratchBlocks.join('\n'))}"
+     target="_blank">${t('calc-algorithm-scratch-blocks-translator')}</a>
+    </div>
 </div>
 ` : '';
 
@@ -550,6 +554,7 @@ ${parseTabularArray(mathBox.array)}
       'calc-algorithm-text-command': '算法（纯文本）',
       'calc-algorithm-scratch-blocks': '算法 (Scratch Blocks)',
       'calc-algorithm-scratch-blocks-render': '渲染此 Scratch Blocks [↗]',
+      'calc-algorithm-scratch-blocks-translator': '翻译此 Scratch Blocks [↗]',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-series': '所属系列',
@@ -591,6 +596,7 @@ ${parseTabularArray(mathBox.array)}
       'calc-algorithm-text-command': 'Algorithm (Text)',
       'calc-algorithm-scratch-blocks': 'Algorithm (Scratch Blocks)',
       'calc-algorithm-scratch-blocks-render': 'Render Scratch Blocks [↗]',
+      'calc-algorithm-scratch-blocks-translator': 'Translate Scratch Blocks [↗]',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-series': 'Series',

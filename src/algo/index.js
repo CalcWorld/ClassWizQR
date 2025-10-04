@@ -79,7 +79,7 @@ export class ParseAlgorithm {
       const next = i + 1 < asciiArray.length ? asciiArray[i + 1] : null;
       if (algoCmd.includes(cur)) {
         currentArg = [];
-        currentCmd = { [cur]: currentArg };
+        currentCmd = { key: cur, value: currentArg };
         result.push(currentCmd);
         continue;
       }
@@ -112,10 +112,9 @@ export class ParseAlgorithm {
     const result = [];
     let tabWidth = 0;
     for (const i of tree) {
-      const cmd = Object.entries(i)[0];
-      const key = cmd[0];
+      const key = i.key;
       if (tab && algoTabClose.includes(key)) tabWidth--;
-      const value = cmd[1].map(i => i.map(i => asciiTable[i]).join(''));
+      const value = i.value.map(i => i.map(i => asciiTable[i]).join(''));
       result.push(`${tab ? tab.repeat(tabWidth) : ''}${algoCmdMap[key](...value)}`);
       if (tab && algoTabOpen.includes(key)) tabWidth++;
     }

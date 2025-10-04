@@ -1,18 +1,14 @@
 import { ParseExpression } from "./expression/index.js";
 import { getModelInfo, MODEL_PREFIX, MODEL_TYPE, MODEL_TYPE_NAME } from "./model/index.js";
 import { ParseMode } from "./mode/index.js";
-import {
-  ParseDistribution,
-  ParseEquation,
-  ParseMatrixList,
-  ParseVectorList
-} from "./variable/C.js";
+import { ParseDistribution, ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js";
 import { ParseMathBox, ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
 import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseStatisticResult } from "./variable/R.js";
 import { ParseSetup } from "./setup/index.js";
 import { availableLanguages } from "./utils.js";
+import { ParseAlgorithm } from './algo/index.js';
 
 export class ClassWizQR {
   constructor() {
@@ -108,14 +104,20 @@ export class ClassWizQR {
       setup = parseS.parseAll();
     }
 
-    let expression, expressionE, expressionG, _function;
+    let expression, expressionE, expressionG, _function, algorithm;
     if (kv.E) {
-      const parseE = new ParseExpression(kv.E, modelType, modelId);
-      // TODO: parse Algo
-      if (kv.M && kv.S) {
-        expressionE = parseE.autoParse(kv.M, kv.S);
+      if (_mainMode === '0E') {
+        const parseE = new ParseAlgorithm(kv.E, modelType, modelId);
+        algorithm = {
+          cmd: parseE.parseToCmdList(),
+        };
       } else {
-        expressionE = parseE.parseMath();
+        const parseE = new ParseExpression(kv.E, modelType, modelId);
+        if (kv.M && kv.S) {
+          expressionE = parseE.autoParse(kv.M, kv.S);
+        } else {
+          expressionE = parseE.parseMath();
+        }
       }
     }
     if (kv.G) {
@@ -225,6 +227,7 @@ export class ClassWizQR {
       statistic,
       distribution,
       mathBox,
+      algorithm,
       setup,
     };
   }

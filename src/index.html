@@ -260,6 +260,7 @@
       variable,
       tableRange,
       mathBox,
+      algorithm,
     } = qrResult;
 
     const calc = document.getElementById('calc');
@@ -382,6 +383,13 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
     <div class="content">${t('calc-math-box-attempts')}: ${mathBox.attempts}</div>
     <button id="math-box-csv-down" class="download">${t('calc-math-box-csv-down')}</button>
 ${parseTabularArray(mathBox.array)}
+</div>
+` : '';
+
+    calcHtml += algorithm ? `
+<div class="calc-result" id="algorithm">
+    <div class="title">${t('calc-algorithm')}</div>
+    <div class="content"><ol>${algorithm.cmd.map(i => `<li>\\( ${i.replace(/ /g, '\\ ')} \\)</li>`).join('')}</ol></div>
 </div>
 ` : '';
 
@@ -523,6 +531,7 @@ ${parseTabularArray(mathBox.array)}
       'calc-math-box-dice': '骰子个数',
       'calc-math-box-coin': '硬币枚数',
       'calc-math-box-attempts': '出手次数',
+      'calc-algorithm': '算法',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-series': '所属系列',
@@ -560,6 +569,7 @@ ${parseTabularArray(mathBox.array)}
       'calc-math-box-dice': 'Dice',
       'calc-math-box-coin': 'Coins',
       'calc-math-box-attempts': 'Attempts',
+      'calc-algorithm': 'Algorithm',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-series': 'Series',

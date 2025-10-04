@@ -107,7 +107,7 @@ export class ClassWizQR {
     let expression, expressionE, expressionG, _function, algorithm;
     if (kv.E) {
       if (_mainMode === '0E') {
-        const parseE = new ParseAlgorithm(kv.E, modelType, modelId);
+        const parseE = new ParseAlgorithm(kv.S, kv.E, modelType, modelId);
         algorithm = parseE.parseAll();
       } else {
         const parseE = new ParseExpression(kv.E, modelType, modelId);

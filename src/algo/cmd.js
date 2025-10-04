@@ -1,7 +1,7 @@
 const enLatexCmd = {
   'F903': () => '', // empty line
 
-  'F905': (a) => `Move\\ ${a}\\ pixels`,
+  'F905': (a, unitSetting) => `Move\\ ${a}\\ ${unitSetting === '0' ? 'pixels' : 'units'}`,
   'F906': (a) => `Turn\\ ⟲\\ ${a}\\ degrees`,
   'F907': (a) => `Direction\\ ${a}\\ degrees`,
   'F908': (a, b) => `Goto\\ x=${a},\\ y=${b}`,
@@ -30,7 +30,7 @@ const enLatexCmd = {
 const zhLatexCmd = {
   'F903': () => '',
 
-  'F905': (a) => `前进\\ ${a}\\ 像素`,
+  'F905': (a, unitSetting) => `前进\\ ${a}\\ ${unitSetting === '0' ? '像素' : '×10像素'}`,
   'F906': (a) => `旋转⟲\\ ${a}\\ 度`,
   'F907': (a) => `面向θ\\ ${a}\\ 度`,
   'F908': (a, b) => `移到\\ x=${a},\\ y=${b}`,
@@ -59,7 +59,7 @@ const zhLatexCmd = {
 const frLatexCmd = {
   'F903': () => '',
 
-  'F905': (a) => `Avancer\\ de\\ ${a}\\ pixels`,
+  'F905': (a, unitSetting) => `Avancer\\ de\\ ${a}\\ ${unitSetting === '0' ? 'pixels' : 'unités'}`,
   'F906': (a) => `Tourner\\ de\\ ⟲\\ ${a}\\ degrés`,
   'F907': (a) => `S'orienter\\ à\\ ${a}\\ degrés`,
   'F908': (a, b) => `Aller\\ à\\ x=${a};\\ y=${b}`,

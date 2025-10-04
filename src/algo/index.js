@@ -1,14 +1,17 @@
 import { AsciiTable } from '../ascii/index.js';
 import { toAsciiArray, translate } from '../utils.js';
 import algoCmdMap from './cmd.js';
+import { ParseSetup } from '../setup/index.js';
 
 export class ParseAlgorithm {
   /**
+   * @param {string} S
    * @param {string} E
    * @param {string} modelType
    * @param {string} modelId
    */
-  constructor(E, modelType, modelId) {
+  constructor(S, E, modelType, modelId) {
+    this.unitSetiing = new ParseSetup(S || '').getAlgorithmUnitSettingCode() || '0'; // default to 0-pixels
     this.E = E;
     this.asciiLatexTable = new AsciiTable(modelType, modelId).get();
 
@@ -119,6 +122,7 @@ export class ParseAlgorithm {
       const key = i.key;
       if (tab && algoTabClose.includes(key)) tabWidth--;
       const value = i.value.map(i => i.map(i => asciiTable[i]).join(joinSeparator));
+      value.push(this.unitSetiing); // the last argument passes to map function is always the unit setting
       result.push(`${tab ? tab.repeat(tabWidth) : ''}${map[key](...value)}`);
       if (tab && algoTabOpen.includes(key)) tabWidth++;
     }

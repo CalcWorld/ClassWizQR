@@ -181,8 +181,8 @@ E_list.forEach(e => {
   const algoParser = new ParseAlgorithm(e, 'EY', '007',)
   console.log(algoParser.parseToLaTexCmdList());
   console.log(algoParser.parseToLaTexCmdList().join('\n'));
-  console.log(algoParser.parseToLaTexCmdList({ tab: '' }));
-  console.log(algoParser.parseToLaTexCmdList({ tab: '' }).join('\n'));
+  console.log(algoParser.parseToLaTexCmdList());
+  console.log(algoParser.parseToLaTexCmdList().join('\n'));
   console.log(algoParser.parseToScratch());
   console.log(algoParser.parseToScratch().join('\n'));
 });

@@ -108,10 +108,7 @@ export class ClassWizQR {
     if (kv.E) {
       if (_mainMode === '0E') {
         const parseE = new ParseAlgorithm(kv.E, modelType, modelId);
-        algorithm = {
-          latexCommand: parseE.parseToLaTexCmdList(),
-          scratchblocks: parseE.parseToScratch(),
-        };
+        algorithm = parseE.parseAll();
       } else {
         const parseE = new ParseExpression(kv.E, modelType, modelId);
         if (kv.M && kv.S) {

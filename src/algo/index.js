@@ -10,7 +10,7 @@ export class ParseAlgorithm {
    */
   constructor(E, modelType, modelId) {
     this.E = E;
-    this.asciiTable = new AsciiTable(modelType, modelId).get();
+    this.asciiLatexTable = new AsciiTable(modelType, modelId).get();
 
     this.tree = void 0;
 
@@ -105,12 +105,13 @@ export class ParseAlgorithm {
   /**
    *
    * @param {object} map
+   * @param {object} asciiTable
    * @param {string} tab
    * @return {string[]}
    */
-  #parseToList(map, tab = '') {
+  #parseToList(map, asciiTable, tab = '') {
     this.parseToTree();
-    const { asciiTable, tree, algoTabOpen, algoTabClose } = this;
+    const { tree, algoTabOpen, algoTabClose } = this;
     const result = [];
     let tabWidth = 0;
     for (const i of tree) {
@@ -124,18 +125,25 @@ export class ParseAlgorithm {
   }
 
   /**
-   * @param {object} [options={}]
-   * @param {string} [options.tab='\\ \\ '] Defines the indentation string.
    * @return {string[]}
    */
-  parseToLaTexCmdList(options = {}) {
-    const { tab = '\\ \\ ' } = options;
+  parseToLaTexCmdList() {
     const latexMap = translate(algoCmdMap.latex);
-    return this.#parseToList(latexMap, tab);
+    return this.#parseToList(latexMap, this.asciiLatexTable, '\\ \\ ');
   }
 
+  /**
+   * @return {string[]}
+   */
   parseToScratch() {
     const scratchMap = translate(algoCmdMap.scratch);
-    return this.#parseToList(scratchMap, '');
+    return this.#parseToList(scratchMap, this.asciiLatexTable, '');
+  }
+
+  parseAll() {
+    return {
+      latexCommand: this.parseToLaTexCmdList(),
+      scratchBlocks: this.parseToScratch(),
+    };
   }
 }

@@ -24,7 +24,7 @@ Online Demo: <https://cwqr.pages.dev>
 
 ## Todo
 
-- [ ] Algorithm mode
+- [x] ~~Algorithm mode~~
 - [x] ~~MathBox mode~~
 - [ ] `W` data in Graph mode
 - [ ] Refactor i18n

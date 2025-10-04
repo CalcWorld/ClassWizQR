@@ -157,6 +157,7 @@ export class ParseAlgorithm {
   parseAll() {
     return {
       latexCommand: this.parseToLaTeXCmdList(),
+      textCommand: this.parseToTextCmdList(),
       scratchBlocks: this.parseToScratch(),
     };
   }

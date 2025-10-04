@@ -42,14 +42,14 @@ export class AsciiTable {
           .replace(/\\mathrm/g, '')
           .replace(/\{/g, '')
           .replace(/}/g, '')
-          // .replace(/\\/g, '')
+        // .replace(/\\/g, '')
       ])) : ascii;
 
     combine('', ascii00);
-    type === 'unicode' ? combine('', ascii00_unicode) : void 0;
+    type === 'unicode' && combine('', ascii00_unicode);
     if (this.modelType === MODEL_TYPE.EY) {
       combine('', ascii00_EY);
-      type === 'unicode' ? combine('', ascii00_unicode_EY) : void 0;
+      type === 'unicode' && combine('', ascii00_unicode_EY);
     }
 
     combine('FA', toUnicodeTypeOrNot(asciiFA));
@@ -60,7 +60,7 @@ export class AsciiTable {
     }
 
     combine('FD', asciiFD);
-    type === 'unicode' ? combine('FD', asciiFD_unicode) : void 0;
+    type === 'unicode' && combine('FD', asciiFD_unicode);
 
     combine('FE', toUnicodeTypeOrNot(asciiFE));
     if (JPModel.includes(`${this.modelType}${this.modelId}`)) {

@@ -103,12 +103,12 @@ export class ParseAlgorithm {
   }
 
   /**
-   * @param {object} [options]
-   * @param {string} [options.tab=' '] Defines the indentation string. Pass '' to prevent indentation, or '\t' to employ a tab character.
+   * @param {object} [options={}]
+   * @param {string} [options.tab='\\ \\ '] Defines the indentation string.
    * @return {string[]}
    */
-  parseToCmdList(options = {}) {
-    const { tab = '  ' } = options;
+  parseToLaTexCmdList(options = {}) {
+    const { tab = '\\ \\ ' } = options;
     this.parseToTree();
     const { asciiTable, tree, algoTabOpen, algoTabClose } = this;
     const result = [];

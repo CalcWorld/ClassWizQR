@@ -179,8 +179,8 @@ const E_list = ['F90532333300F901F903F901F902',
 E_list.forEach(e => {
   // printAlgo(e.match(/F[\dA-F]{3}|[\dA-F]{2}/g))
   const algoParser = new ParseAlgorithm(e, 'EY', '007',)
-  console.log(algoParser.parseToCmdList());
-  console.log(algoParser.parseToCmdList().join('\n'));
-  console.log(algoParser.parseToCmdList({ tab: '' }));
-  console.log(algoParser.parseToCmdList({ tab: '' }).join('\n'));
+  console.log(algoParser.parseToLaTexCmdList());
+  console.log(algoParser.parseToLaTexCmdList().join('\n'));
+  console.log(algoParser.parseToLaTexCmdList({ tab: '' }));
+  console.log(algoParser.parseToLaTexCmdList({ tab: '' }).join('\n'));
 });

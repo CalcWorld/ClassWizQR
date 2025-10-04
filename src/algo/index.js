@@ -137,6 +137,7 @@ export class ParseAlgorithm {
    */
   parseToScratch() {
     const scratchMap = translate(algoCmdMap.scratch);
+    // TODO: use a plain text ascii table
     return this.#parseToList(scratchMap, this.asciiLatexTable, '');
   }
 

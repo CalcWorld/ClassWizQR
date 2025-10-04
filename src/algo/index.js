@@ -13,7 +13,9 @@ export class ParseAlgorithm {
   constructor(S, E, modelType, modelId) {
     this.unitSetiing = new ParseSetup(S || '').getAlgorithmUnitSettingCode() || '0'; // default to 0-pixels
     this.E = E;
-    this.asciiLatexTable = new AsciiTable(modelType, modelId).get();
+    const asciiTable = new AsciiTable(modelType, modelId);
+    this.asciiLatexTable = asciiTable.get('latex');
+    this.asciiUnicodeTable = asciiTable.get('unicode');
 
     this.tree = void 0;
 
@@ -132,9 +134,14 @@ export class ParseAlgorithm {
   /**
    * @return {string[]}
    */
-  parseToLaTexCmdList() {
+  parseToLaTeXCmdList() {
     const latexMap = translate(algoCmdMap.latex);
     return this.#parseToList(latexMap, this.asciiLatexTable, '\\ \\ ', ' ');
+  }
+
+  parseToTextCmdList() {
+    const latexMap = translate(algoCmdMap.latex);
+    return this.#parseToList(latexMap, this.asciiUnicodeTable, '  ', '').map(i => i.replace(/\\ /g, ' '));
   }
 
   /**
@@ -142,15 +149,14 @@ export class ParseAlgorithm {
    */
   parseToScratch() {
     const scratchMap = translate(algoCmdMap.scratch);
-    // TODO: use a plain text ascii table
     return this.#parseToList(scratchMap, Object.fromEntries(
-      Object.entries(this.asciiLatexTable).map(([key, value]) => [key, value.replace(/[<>{}()\[\]\\]/g, m => '\\' + m)])
+      Object.entries(this.asciiUnicodeTable).map(([key, value]) => [key, value.replace(/[<>{}()\[\]\\]/g, m => '\\' + m)])
     ));
   }
 
   parseAll() {
     return {
-      latexCommand: this.parseToLaTexCmdList(),
+      latexCommand: this.parseToLaTeXCmdList(),
       scratchBlocks: this.parseToScratch(),
     };
   }

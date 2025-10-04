@@ -7,6 +7,9 @@ import { asciiFD } from './FD.js';
 import { asciiFE } from './FE.js';
 import { asciiFE_JP } from './FE_JP.js';
 import { MODEL_TYPE } from "../model/index.js";
+import { ascii00_unicode } from './00_unicode.js';
+import { ascii00_unicode_EY } from './00_unicode_EY.js';
+import { asciiFD_unicode } from './FD_unicode.js';
 
 const JPModel = ['CY240', 'CY241', 'CY242', 'CY243', 'EY029', 'EY030', 'EY031', 'EY032'];
 
@@ -16,29 +19,54 @@ export class AsciiTable {
     this.modelId = modelId;
   }
 
-  get() {
-    const asciiCopy = { ...ascii00 };
+  /**
+   *
+   * @param {'latex'|'unicode'} [type='latex']
+   */
+  get(type = 'latex') {
+    const asciiCopy = {};
+
     const combine = (prefix, map) => {
       for (const key in map) {
         asciiCopy[`${prefix}${key}`] = map[key];
       }
     }
+    const toUnicodeTypeOrNot = (ascii) => type === 'unicode' ? Object.fromEntries(
+      Object.entries(ascii).map(([key, value]) => [
+        key,
+        value
+          .replace(/\\circ/g, '·')
+          .replace(/\\ /g, ' ')
+          .replace(/\\cdot /g, '°')
+          .replace(/\\to /g, '→')
+          .replace(/\\mathrm/g, '')
+          .replace(/\{/g, '')
+          .replace(/}/g, '')
+          // .replace(/\\/g, '')
+      ])) : ascii;
 
+    combine('', ascii00);
+    type === 'unicode' ? combine('', ascii00_unicode) : void 0;
     if (this.modelType === MODEL_TYPE.EY) {
-      for (const k in ascii00_EY) {
-        asciiCopy[k] = ascii00_EY[k];
-      }
+      combine('', ascii00_EY);
+      type === 'unicode' ? combine('', ascii00_unicode_EY) : void 0;
     }
-    combine('FA', asciiFA);
-    combine('FB', asciiFB);
+
+    combine('FA', toUnicodeTypeOrNot(asciiFA));
+
+    combine('FB', toUnicodeTypeOrNot(asciiFB));
     if (this.modelType === MODEL_TYPE.EY) {
-      combine('FB', asciiFB_EY);
+      combine('FB', toUnicodeTypeOrNot(asciiFB_EY));
     }
+
     combine('FD', asciiFD);
-    combine('FE', asciiFE);
+    type === 'unicode' ? combine('FD', asciiFD_unicode) : void 0;
+
+    combine('FE', toUnicodeTypeOrNot(asciiFE));
     if (JPModel.includes(`${this.modelType}${this.modelId}`)) {
-      combine('FE', asciiFE_JP);
+      combine('FE', toUnicodeTypeOrNot(asciiFE_JP));
     }
+
     return asciiCopy;
   }
 }

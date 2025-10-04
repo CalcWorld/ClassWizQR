@@ -392,12 +392,18 @@ ${parseTabularArray(mathBox.array)}
 
     calcHtml += algorithm ? `
 <div class="calc-result" id="algorithm">
-    <div class="title">${t('calc-algorithm')}</div>
+    <div class="title">${t('calc-algorithm-latex-command')}</div>
     <div class="content"><ol>${algorithm.latexCommand.map(i => `<li> \\( \\mathtt{ ${i}} \\)</li>`).join('')}</ol></div>
+    <div class="title">${t('calc-algorithm-scratch-blocks')}</div>
+    <div class="content"><pre id="algorithm-scratch-blocks-pre"></pre></div>
+    <div class="content"><a href="https://scratchblocks.github.io/#?style=scratch3&script=${encodeURIComponent(algorithm.scratchBlocks.join('\n'))}"
+     target="_blank">${t('calc-algorithm-scratch-blocks-render')}</a></div>
 </div>
 ` : '';
 
     calc.innerHTML = calcHtml;
+
+    algorithm && (document.getElementById('algorithm-scratch-blocks-pre').innerText = algorithm.scratchBlocks.join('\n'));
 
     const csvFilename = `${new Date().getTime()}.csv`;
     spreadsheet && (document.getElementById('spreadsheet-csv-down').onclick = () => download(`spreadsheet-${csvFilename}`, spreadsheet.csv, 'text/plain'));
@@ -535,7 +541,9 @@ ${parseTabularArray(mathBox.array)}
       'calc-math-box-dice': '骰子个数',
       'calc-math-box-coin': '硬币枚数',
       'calc-math-box-attempts': '出手次数',
-      'calc-algorithm': '算法',
+      'calc-algorithm-latex-command': '算法 (LaTeX)',
+      'calc-algorithm-scratch-blocks': '算法 (Scratch Blocks)',
+      'calc-algorithm-scratch-blocks-render': '渲染此 Scratch Blocks [↗]',
       'basic-title': '基本信息',
       'model-key': '型号',
       'model-series': '所属系列',
@@ -573,7 +581,9 @@ ${parseTabularArray(mathBox.array)}
       'calc-math-box-dice': 'Dice',
       'calc-math-box-coin': 'Coins',
       'calc-math-box-attempts': 'Attempts',
-      'calc-algorithm': 'Algorithm',
+      'calc-algorithm-latex-command': 'Algorithm (LaTeX)',
+      'calc-algorithm-scratch-blocks': 'Algorithm (Scratch Blocks)',
+      'calc-algorithm-scratch-blocks-render': 'Render Scratch Blocks [↗]',
       'basic-title': 'Basic Info',
       'model-key': 'Product Name',
       'model-series': 'Series',

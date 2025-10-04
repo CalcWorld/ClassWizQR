@@ -73,7 +73,7 @@ const enScratch = {
     '1': `Yes`,
     '2': `No`,
     '3': `Number?`,
-    '4': `Result\\ :`,
+    '4': `Result :`,
   }[a] || a}]\nwait until <key [any v] pressed?>`,
   'F90E': (a) => `say (${a})\nwait until <key [any v] pressed?>`,
   'F90F': (a) => `switch costume to [${{ '1': `Arrow`, '2': `Cross` }[a] || a} v]`,

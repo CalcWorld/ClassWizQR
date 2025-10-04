@@ -389,7 +389,7 @@ ${parseTabularArray(mathBox.array)}
     calcHtml += algorithm ? `
 <div class="calc-result" id="algorithm">
     <div class="title">${t('calc-algorithm')}</div>
-    <div class="content"><ol>${algorithm.cmd.map(i => `<li>\\( ${i.replace(/ /g, '\\ ')} \\)</li>`).join('')}</ol></div>
+    <div class="content"><ol>${algorithm.command.map(i => `<li> ${i} </li>`).join('')}</ol></div>
 </div>
 ` : '';
 

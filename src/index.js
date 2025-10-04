@@ -109,7 +109,7 @@ export class ClassWizQR {
       if (_mainMode === '0E') {
         const parseE = new ParseAlgorithm(kv.E, modelType, modelId);
         algorithm = {
-          command: parseE.parseToCmdList({ valueOpen: '\\(', valueClose: '\\)' }),
+          command: parseE.parseToCmdList(),
         };
       } else {
         const parseE = new ParseExpression(kv.E, modelType, modelId);

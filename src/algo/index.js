@@ -102,6 +102,10 @@ export class ParseAlgorithm {
     return result;
   }
 
+  /**
+   * @param {boolean} tabOn
+   * @return {string[]}
+   */
   parseToCmdList(tabOn = true) {
     this.parseToTree();
     const { asciiTable, tree, algoTabOpen, algoTabClose } = this;
@@ -110,14 +114,10 @@ export class ParseAlgorithm {
     for (const i of tree) {
       const cmd = Object.entries(i)[0];
       const key = cmd[0];
-      if (tabOn && algoTabClose.includes(key)) {
-        tab--;
-      }
+      if (tabOn && algoTabClose.includes(key)) tab--;
       const value = cmd[1].map(i => i.map(i => asciiTable[i]).join(''));
       result.push('  '.repeat(tab) + algoCmdMap[key](...value));
-      if (tabOn && algoTabOpen.includes(key)) {
-        tab++;
-      }
+      if (tabOn && algoTabOpen.includes(key)) tab++;
     }
 
     return result;

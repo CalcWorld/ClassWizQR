@@ -103,21 +103,21 @@ export class ParseAlgorithm {
   }
 
   /**
-   * @param {boolean} tabOn
+   * @param {string} [tab=' '] Defines the indentation string. Pass '' to prevent indentation, or '\t' to employ a tab character.
    * @return {string[]}
    */
-  parseToCmdList(tabOn = true) {
+  parseToCmdList(tab = '  ') {
     this.parseToTree();
     const { asciiTable, tree, algoTabOpen, algoTabClose } = this;
     let result = [];
-    let tab = 0;
+    let tabWidth = 0;
     for (const i of tree) {
       const cmd = Object.entries(i)[0];
       const key = cmd[0];
-      if (tabOn && algoTabClose.includes(key)) tab--;
+      if (tab && algoTabClose.includes(key)) tabWidth--;
       const value = cmd[1].map(i => i.map(i => asciiTable[i]).join(''));
-      result.push('  '.repeat(tab) + algoCmdMap[key](...value));
-      if (tabOn && algoTabOpen.includes(key)) tab++;
+      result.push(`${tab ? tab.repeat(tabWidth) : ''}${algoCmdMap[key](...value)}`);
+      if (tab && algoTabOpen.includes(key)) tabWidth++;
     }
 
     return result;

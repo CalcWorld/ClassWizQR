@@ -1,15 +1,9 @@
-import { ascii00 } from './00.js';
-import { ascii00_EY } from './00_EY.js';
+import { ascii00, ascii00_EY, ascii00_unicode, ascii00_unicode_EY } from './00.js';
 import { asciiFA } from './FA.js';
-import { asciiFB } from './FB.js';
-import { asciiFB_EY } from './FB_EY.js';
-import { asciiFD } from './FD.js';
-import { asciiFE } from './FE.js';
-import { asciiFE_JP } from './FE_JP.js';
+import { asciiFB, asciiFB_EY } from './FB.js';
+import { asciiFD, asciiFD_unicode } from './FD.js';
+import { asciiFE, asciiFE_JP } from './FE.js';
 import { MODEL_TYPE } from "../model/index.js";
-import { ascii00_unicode } from './00_unicode.js';
-import { ascii00_unicode_EY } from './00_unicode_EY.js';
-import { asciiFD_unicode } from './FD_unicode.js';
 
 const JPModel = ['CY240', 'CY241', 'CY242', 'CY243', 'EY029', 'EY030', 'EY031', 'EY032'];
 
@@ -26,24 +20,20 @@ export class AsciiTable {
   get(type = 'latex') {
     const asciiCopy = {};
 
-    const combine = (prefix, map) => {
+    const combine = (prefix, map, removeLatex = false) => {
       for (const key in map) {
-        asciiCopy[`${prefix}${key}`] = map[key];
+        asciiCopy[`${prefix}${key}`] = removeLatex ?
+          map[key].replace(/\\circ/g, '·')
+            .replace(/\\ /g, ' ')
+            .replace(/\\cdot /g, '°')
+            .replace(/\\to /g, '→')
+            .replace(/\\mathrm/g, '')
+            .replace(/\{/g, '')
+            .replace(/}/g, '')
+          // .replace(/\\/g, '')
+          : map[key];
       }
     }
-    const toUnicodeTypeOrNot = (ascii) => type === 'unicode' ? Object.fromEntries(
-      Object.entries(ascii).map(([key, value]) => [
-        key,
-        value
-          .replace(/\\circ/g, '·')
-          .replace(/\\ /g, ' ')
-          .replace(/\\cdot /g, '°')
-          .replace(/\\to /g, '→')
-          .replace(/\\mathrm/g, '')
-          .replace(/\{/g, '')
-          .replace(/}/g, '')
-        // .replace(/\\/g, '')
-      ])) : ascii;
 
     combine('', ascii00);
     type === 'unicode' && combine('', ascii00_unicode);
@@ -52,19 +42,19 @@ export class AsciiTable {
       type === 'unicode' && combine('', ascii00_unicode_EY);
     }
 
-    combine('FA', toUnicodeTypeOrNot(asciiFA));
+    combine('FA', asciiFA, type === 'unicode');
 
-    combine('FB', toUnicodeTypeOrNot(asciiFB));
+    combine('FB', asciiFB, type === 'unicode');
     if (this.modelType === MODEL_TYPE.EY) {
-      combine('FB', toUnicodeTypeOrNot(asciiFB_EY));
+      combine('FB', asciiFB_EY, type === 'unicode');
     }
 
     combine('FD', asciiFD);
     type === 'unicode' && combine('FD', asciiFD_unicode);
 
-    combine('FE', toUnicodeTypeOrNot(asciiFE));
+    combine('FE', asciiFE, type === 'unicode');
     if (JPModel.includes(`${this.modelType}${this.modelId}`)) {
-      combine('FE', toUnicodeTypeOrNot(asciiFE_JP));
+      combine('FE', asciiFE_JP, type === 'unicode');
     }
 
     return asciiCopy;

@@ -1,5 +1,4 @@
-import { modeInfo } from './mode.js';
-import { translate, tt } from "../utils.js";
+import { tt } from "../utils.js";
 import { MODEL_TYPE_EY_FY } from '../model/index.js';
 
 export class ParseMode {
@@ -54,8 +53,7 @@ export class ParseMode {
     if (mainMode.startsWith('X') || mainMode.startsWith('Y') || mainMode.startsWith('Z')) {
       let mainName;
       if (MODEL_TYPE_EY_FY.includes(modelType)) {
-        // mainName = translate({ ...menuInfo, ...menuInfo_EY_FY }[mainMode]?.['name']);
-        mainName = tt(`menu.${mainMode}`);
+        mainName = tt(`menu.${mainMode}-${modelType}`) || tt(`menu.${mainMode}`);
       } else {
         mainName = tt(`menu.${mainMode}`);
       }
@@ -67,9 +65,8 @@ export class ParseMode {
     } else if (mainMode === '4F') {
       subMode = this.getResultTemplate();
     }
-    const mainName = translate(modeInfo[mainMode]['name']);
-    let subName = (modeInfo[mainMode]['subMode'] || {})[subMode];
-    subName = subName ? translate(subName['name']) : undefined;
+    const mainName = tt(`mode.${mainMode}`);
+    const subName = tt(`mode.${mainMode}${subMode}`);
     return { mainName, subName };
   }
 

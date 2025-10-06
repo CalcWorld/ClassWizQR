@@ -2,9 +2,8 @@ import { ParseVariable } from "./index.js";
 import { AsciiTable } from "../ascii/index.js";
 import { ParseMode } from "../mode/index.js";
 import { resultInfo } from './result.js';
-import { modeInfo } from '../mode/mode.js';
 import { ParseSetup } from "../setup/index.js";
-import { translate } from "../utils.js";
+import { translate, tt } from "../utils.js";
 
 export const ParseNumberResult = (R, M, modelType, modelId) => {
   const parseM = new ParseMode(M);
@@ -152,7 +151,7 @@ export const ParseStatisticResult = (R, M) => {
       template = resultInfo['STATISTICS']['TWO-VAR'].template;
       break;
     case 'F3':
-      template = modeInfo['03']['subMode'][subMode]['name']['en'].match(/\[.*]/g)[0];
+      template = tt(`mode.03${subMode}`).match(/\[.*]/g)[0];
       if (subMode === '03') {
         template += ' \\\\ a=${0} \\\\ b=${1} \\\\ c=${2}';
       } else {

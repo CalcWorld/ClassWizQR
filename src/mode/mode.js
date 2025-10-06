@@ -1,85 +1,9 @@
 export const modeInfo = {
-  "88": {
-    "name": {
-      "en": "Table",
-      "zh": "函数表格",
-      "vi": "Bảng giá trị"
-    },
-  },
-  "09": {
-    "name": {
-      "en": "Graph",
-      "zh": "绘图",
-    },
-  },
-  "89": {
-    "name": {
-      "en": "Verify",
-      "zh": "验证",
-      "vi": "Kiểm chứng"
-    },
-  },
-  "06": {
-    "name": {
-      "en": "Matrix",
-      "zh": "矩阵",
-      "vi": "Ma trận"
-    },
-  },
-  "07": {
-    "name": {
-      "en": "Vector",
-      "zh": "向量",
-      "vi": "Véc-tơ"
-    },
-  },
-  "0D": {
-    "name": {
-      "en": "Spreadsheet",
-      "zh": "数据表格",
-      "vi": "Bảng tính"
-    },
-  },
-  "0E": {
-    "name": {
-      "en": "Algorithm",
-      "zh": "算法",
-      "vi": "Thuật toán"
-    },
-  },
-  "4F": {
-    "name": {
-      "en": "Math Box",
-      "zh": "数学盒",
-      "vi": "Hộp Toán học"
-    },
-    "subMode": {
-      "S1": {
-        "name": {
-          "en": "Dice Roll",
-          "zh": "掷骰子",
-        }
-      },
-      "S2": {
-        "name": {
-          "en": "Coin Toss",
-          "zh": "抛硬币",
-        }
-      },
-    }
-  },
   "C1": {
     "name": {
       "en": "Calculate",
       "zh": "计算",
       "vi": "Phép tính thường"
-    },
-  },
-  "C4": {
-    "name": {
-      "en": "Complex",
-      "zh": "复数",
-      "vi": "Số phức"
     },
   },
   "02": {
@@ -184,63 +108,12 @@ export const modeInfo = {
       }
     }
   },
-  "0C": {
+  "C4": {
     "name": {
-      "en": "Distribution",
-      "zh": "分布",
-      "vi": "Phân phối"
+      "en": "Complex",
+      "zh": "复数",
+      "vi": "Số phức"
     },
-    "subMode": {
-      "01": {
-        "name": {
-          "en": "Normal Probability Density",
-          "zh": "正态概率密度",
-          "vi": "Mật độ xác suất chuẩn"
-        }
-      },
-      "02": {
-        "name": {
-          "en": "Normal Cumulative Distribution",
-          "zh": "正态累积分布",
-          "vi": "Phân phối tích lũy chuẩn"
-        }
-      },
-      "03": {
-        "name": {
-          "en": "Inverse Normal Cumulative Distribution",
-          "zh": "反正态累积分布",
-          "vi": "Phân phối tích lũy chuẩn nghịch đảo"
-        }
-      },
-      "04": {
-        "name": {
-          "en": "Binomial Probability",
-          "zh": "二项概率密度",
-          "vi": "Xác suất nhị thức"
-        }
-      },
-      "05": {
-        "name": {
-          "en": "Binomial Cumulative Distribution",
-          "zh": "二项累积分布",
-          "vi": "Phân phối tích lũy nhị thức"
-        }
-      },
-      "06": {
-        "name": {
-          "en": "Poisson Probability",
-          "zh": "泊松概率密度",
-          "vi": "Xác suất Poisson"
-        }
-      },
-      "07": {
-        "name": {
-          "en": "Poisson Cumulative Distribution",
-          "zh": "泊松累积分布",
-          "vi": "Phân phối tích lũy Poisson"
-        }
-      }
-    }
   },
   "45": {
     "name": {
@@ -299,6 +172,40 @@ export const modeInfo = {
         }
       }
     }
+  },
+  "06": {
+    "name": {
+      "en": "Matrix",
+      "zh": "矩阵",
+      "vi": "Ma trận"
+    },
+  },
+  "07": {
+    "name": {
+      "en": "Vector",
+      "zh": "向量",
+      "vi": "Véc-tơ"
+    },
+  },
+  "88": {
+    "name": {
+      "en": "Table",
+      "zh": "函数表格",
+      "vi": "Bảng giá trị"
+    },
+  },
+  "09": {
+    "name": {
+      "en": "Graph",
+      "zh": "绘图",
+    },
+  },
+  "89": {
+    "name": {
+      "en": "Verify",
+      "zh": "验证",
+      "vi": "Kiểm chứng"
+    },
   },
   "4A": {
     "name": {
@@ -386,6 +293,99 @@ export const modeInfo = {
           "en": "ax⁴+bx³+cx²+dx+e≤0"
         }
       }
+    }
+  },
+  "0C": {
+    "name": {
+      "en": "Distribution",
+      "zh": "分布",
+      "vi": "Phân phối"
+    },
+    "subMode": {
+      "01": {
+        "name": {
+          "en": "Normal Probability Density",
+          "zh": "正态概率密度",
+          "vi": "Mật độ xác suất chuẩn"
+        }
+      },
+      "02": {
+        "name": {
+          "en": "Normal Cumulative Distribution",
+          "zh": "正态累积分布",
+          "vi": "Phân phối tích lũy chuẩn"
+        }
+      },
+      "03": {
+        "name": {
+          "en": "Inverse Normal Cumulative Distribution",
+          "zh": "反正态累积分布",
+          "vi": "Phân phối tích lũy chuẩn nghịch đảo"
+        }
+      },
+      "04": {
+        "name": {
+          "en": "Binomial Probability",
+          "zh": "二项概率密度",
+          "vi": "Xác suất nhị thức"
+        }
+      },
+      "05": {
+        "name": {
+          "en": "Binomial Cumulative Distribution",
+          "zh": "二项累积分布",
+          "vi": "Phân phối tích lũy nhị thức"
+        }
+      },
+      "06": {
+        "name": {
+          "en": "Poisson Probability",
+          "zh": "泊松概率密度",
+          "vi": "Xác suất Poisson"
+        }
+      },
+      "07": {
+        "name": {
+          "en": "Poisson Cumulative Distribution",
+          "zh": "泊松累积分布",
+          "vi": "Phân phối tích lũy Poisson"
+        }
+      }
+    }
+  },
+  "0D": {
+    "name": {
+      "en": "Spreadsheet",
+      "zh": "数据表格",
+      "vi": "Bảng tính"
+    },
+  },
+  "0E": {
+    "name": {
+      "en": "Algorithm",
+      "zh": "算法",
+      "vi": "Thuật toán"
+    },
+  },
+  "4F": {
+    "name": {
+      "en": "Math Box",
+      "zh": "数学盒",
+      "vi": "Hộp Toán học"
+    },
+    "subMode": {
+      "S1": {
+        "name": {
+          "en": "Dice Roll",
+          "zh": "掷骰子",
+        }
+      },
+      "S2": {
+        "name": {
+          "en": "Coin Toss",
+          "zh": "抛硬币",
+        }
+      },
     }
   },
 }

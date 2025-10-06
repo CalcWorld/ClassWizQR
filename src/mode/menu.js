@@ -86,7 +86,7 @@ export const menuInfo = {
   "XD": {
     "name": {
       "en": "Spreadsheet Manual",
-      "zh": "电子表格模式说明",
+      "zh": "数据表格模式说明",
       "vi": "Mô tả Bảng tính"
     }
   },

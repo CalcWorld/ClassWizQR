@@ -36,6 +36,16 @@ export class Response_ {
   }
 }
 
+export const handelApiRequest = (url, lang) => {
+  try {
+    const qr = new ClassWizQR();
+    const res = qr.setUrl(url).setLanguage(lang).getResult();
+    return Response_.jsonSuccess(res);
+  } catch (e) {
+    return Response_.jsonError(e.message);
+  }
+}
+
 export const handelRequest = (context) => {
   const headers = context.request.headers;
   const url = context.request.url;
@@ -43,12 +53,6 @@ export const handelRequest = (context) => {
   if (accept.startsWith('text/html')) {
     return Response_.redirect(`/#${url}`);
   }
-  try {
-    const lang = headers.get('accept-language')?.slice(0, 2) || 'en';
-    const qr = new ClassWizQR();
-    const res = qr.setUrl(url).setLanguage(lang).getResult();
-    return Response_.jsonSuccess(res);
-  } catch (e) {
-    return Response_.jsonError(e.message);
-  }
+  const lang = headers.get('accept-language')?.slice(0, 2) || 'en';
+  return handelApiRequest(url, lang);
 }

@@ -36,6 +36,12 @@ const config = {
       inject: false,
       minify,
     }),
+    new HtmlWebpackPlugin({
+      template: './src/api.html',
+      filename: 'api.html',
+      inject: false,
+      minify,
+    }),
   ],
   optimization: {
     // concatenateModules: false, // 临时禁用模块拼接

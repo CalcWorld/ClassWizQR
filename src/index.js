@@ -95,7 +95,7 @@ export class ClassWizQR {
     let modelId, modelName, qr, modelVersion;
     if (kv.I) {
       modelId = kv.I.slice(0, 3);
-      [modelName, qr] = getModelInfo(modelId, modelType);
+      [modelName, qr] = getModelInfo(modelType, modelId);
       modelVersion = kv.I.slice(3, 4);
     }
 

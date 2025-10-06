@@ -19,7 +19,7 @@ const MODEL_INFO = {
   [MODEL_TYPE.FY]: modelFY,
 }
 
-export const getModelInfo = (model, type) => {
+export const getModelInfo = (type, model) => {
   return MODEL_INFO[type]?.[model] || [void 0, void 0];
 }
 

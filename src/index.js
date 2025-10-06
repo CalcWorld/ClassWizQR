@@ -92,7 +92,7 @@ export class ClassWizQR {
   }
 
   getResult() {
-    const { modelType, kv, calcId } = this;
+    const { url, modelType, kv, calcId } = this;
     let modelId, modelName, qr, modelVersion;
     if (kv.I) {
       modelId = kv.I.slice(0, 3);
@@ -240,6 +240,7 @@ export class ClassWizQR {
       mathBox,
       algorithm,
       setup,
+      kv,
     };
   }
 

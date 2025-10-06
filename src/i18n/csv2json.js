@@ -91,7 +91,8 @@ langs.forEach(lang => {
 rows.forEach(row => {
   const key = row[0];
   langs.forEach((lang, idx) => {
-    const value = row[idx + 1] || '';
+    const value = row[idx + 1];
+    if (!value) return; // will auto fallback to en
     setNested(langObjects[lang], key, value);
   });
 });

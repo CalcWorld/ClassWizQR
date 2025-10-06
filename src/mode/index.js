@@ -55,9 +55,9 @@ export class ParseMode {
       let mainName;
       if (MODEL_TYPE_EY_FY.includes(modelType)) {
         // mainName = translate({ ...menuInfo, ...menuInfo_EY_FY }[mainMode]?.['name']);
-        mainName = tt(`menu-info.${mainMode}`);
+        mainName = tt(`menu.${mainMode}`);
       } else {
-        mainName = tt(`menu-info.${mainMode}`);
+        mainName = tt(`menu.${mainMode}`);
       }
       return { mainName };
     }
@@ -74,6 +74,6 @@ export class ParseMode {
   }
 
   getGetStarted() {
-    return { mainName: tt(`menu-info.GS`) };
+    return { mainName: tt(`menu.GS`) };
   }
 }

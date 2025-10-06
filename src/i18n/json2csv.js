@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 // 配置要处理的 JSON 文件
 const sourceDir = path.resolve(__dirname, '../i18n-res');
 const targetFile = path.resolve(__dirname, './resource.csv');
-const langs = ['en', 'zh', 'vi']; // 可扩展 ['en', 'zh', 'jp', 'fr', ...]
+const langs = ['en', 'zh', 'vi', 'fr']; // 可扩展 ['en', 'zh', 'jp', 'fr', ...]
 
 // 递归展开 JSON 对象，生成扁平化 key
 function flattenJSON(obj, prefix = '') {
@@ -47,7 +47,8 @@ let csv = ['key,' + langs.join(',')];
 allKeys.forEach((key) => {
   const row = [key];
   langs.forEach((lang) => {
-    row.push(`"${(langData[lang][key] || '').replace(/"/g, '""')}"`); // 转义双引号
+    if (!langData[lang][key]) row.push('');
+    else row.push(`"${(langData[lang][key] || '').replace(/"/g, '""')}"`); // 转义双引号
   });
   csv.push(row.join(','));
 });

@@ -1,6 +1,5 @@
 import Decimal from "decimal.js";
-import { menuInfo } from '../mode/menu.js';
-import { translate } from "../utils.js";
+import { tt } from "../utils.js";
 
 export class ParseVariable {
   constructor(variable) {
@@ -117,7 +116,7 @@ export class ParseVariable {
 
   _toError() {
     const errCode = `Y${this.val.slice(1, 2)}`;
-    return [translate(menuInfo[errCode].name), NaN];
+    return [tt(`menu.${errCode}`), NaN];
   }
 
   get() {

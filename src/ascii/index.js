@@ -3,7 +3,7 @@ import { asciiFA } from './FA.js';
 import { asciiFB, asciiFB_EY } from './FB.js';
 import { asciiFD, asciiFD_unicode } from './FD.js';
 import { asciiFE, asciiFE_JP } from './FE.js';
-import { MODEL_TYPE } from "../model/index.js";
+import { MODEL_TYPE_EY_FY } from "../model/index.js";
 
 const JPModel = ['CY240', 'CY241', 'CY242', 'CY243', 'EY029', 'EY030', 'EY031', 'EY032'];
 
@@ -37,7 +37,7 @@ export class AsciiTable {
 
     combine('', ascii00);
     type === 'unicode' && combine('', ascii00_unicode);
-    if (this.modelType === MODEL_TYPE.EY) {
+    if (MODEL_TYPE_EY_FY.includes(this.modelType)) {
       combine('', ascii00_EY);
       type === 'unicode' && combine('', ascii00_unicode_EY);
     }
@@ -45,7 +45,7 @@ export class AsciiTable {
     combine('FA', asciiFA, type === 'unicode');
 
     combine('FB', asciiFB, type === 'unicode');
-    if (this.modelType === MODEL_TYPE.EY) {
+    if (MODEL_TYPE_EY_FY.includes(this.modelType)) {
       combine('FB', asciiFB_EY, type === 'unicode');
     }
 

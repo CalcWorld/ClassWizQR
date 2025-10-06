@@ -2,6 +2,7 @@ import { AsciiTable, mathTemplate, recDecBracketModel, recDecOverlineModel } fro
 import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from "../setup/index.js";
 import { toAsciiArray } from '../utils.js';
+import { MODEL_TYPE } from '../model/index.js';
 
 export class ParseExpression {
   constructor(E, modelType, modelId) {
@@ -125,6 +126,7 @@ export class ParseExpression {
             result += `e^{${a}} `;
             break;
           case '73':
+            result += this.modelType === MODEL_TYPE.FY ? '\\times ' : '\\ ';
             result += `10^{${a}} `;
             break;
           case '74':

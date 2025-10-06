@@ -1,5 +1,5 @@
 import { ParseExpression } from "./expression/index.js";
-import { getModelInfo, MODEL_PREFIX, MODEL_TYPE, MODEL_TYPE_NAME } from "./model/index.js";
+import { getModelInfo, MODEL_TYPE, MODEL_TYPE_NAME } from "./model/index.js";
 import { ParseMode } from "./mode/index.js";
 import { ParseDistribution, ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js";
 import { ParseMathBox, ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
@@ -14,7 +14,6 @@ export class ClassWizQR {
   constructor() {
     this.url = void 0;
     this.modelType = void 0;
-    this.modelPrefix = void 0;
     this.kv = {
       I: void 0,
       U: void 0,
@@ -39,7 +38,7 @@ export class ClassWizQR {
     this.url = new URL(url.trim());
     const { search, pathname } = this.url;
     const route = pathname.slice(0, 5);
-    let modelType, modelPrefix;
+    let modelType;
     let kv = {}
     if (route === '/calc') {
       modelType = MODEL_TYPE.EY;
@@ -61,16 +60,10 @@ export class ClassWizQR {
     }
 
     if (modelType === MODEL_TYPE.EY) {
-      modelPrefix = MODEL_PREFIX.EY;
-      if (kv.I?.slice(0, 3) > 500) {
-        modelPrefix = MODEL_PREFIX.FY;
-      }
-    } else {
-      modelPrefix = MODEL_PREFIX.CY;
+      if (kv.I?.slice(0, 3) > 500) modelType = MODEL_TYPE.FY;
     }
 
     this.setModelType(modelType)
-      .setModelPrefix(modelPrefix)
       .setKV(kv)
       .setLanguage(language);
     return this;
@@ -78,11 +71,6 @@ export class ClassWizQR {
 
   setModelType(modelType) {
     this.modelType = modelType;
-    return this;
-  }
-
-  setModelPrefix(modelPrefix) {
-    this.modelPrefix = modelPrefix;
     return this;
   }
 
@@ -103,7 +91,7 @@ export class ClassWizQR {
   }
 
   getResult() {
-    const { modelType, modelPrefix, kv, calcId } = this;
+    const { modelType, kv, calcId } = this;
     let modelId, modelName, qr, modelVersion;
     if (kv.I) {
       modelId = kv.I.slice(0, 3);
@@ -229,7 +217,7 @@ export class ClassWizQR {
     return {
       model: {
         type: MODEL_TYPE_NAME[modelType],
-        prefix: modelPrefix,
+        prefix: modelType,
         id: modelId,
         name: modelName,
         version: modelVersion,

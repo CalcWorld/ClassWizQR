@@ -65,4 +65,8 @@ export class ParseMode {
     subName = subName ? translate(subName['name']) : undefined;
     return { mainName, subName };
   }
+
+  getGetStarted() {
+    return { mainName: translate(menuInfo['GS']['name']) };
+  }
 }

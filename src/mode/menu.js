@@ -236,5 +236,11 @@ export const menuInfo = {
       "zh": "设置(二级)菜单说明",
       "vi": "Mô tả Trình cài đặt (phụ)"
     }
-  }
+  },
+  "GS": {
+    "name": {
+      "en": "Get Started Menu",
+      "zh": "开始菜单",
+    },
+  },
 }

@@ -29,20 +29,37 @@ export class ClassWizQR {
       V: void 0,
       Q: void 0,
     };
+    this.calcId = void 0;
     this.language = 'en';
     globalThis.cwqrConfig = {};
   }
 
   setUrl(url, language) {
+    language = availableLanguages.includes(language) ? language : 'en'
     this.url = new URL(url.trim());
     const { search, pathname } = this.url;
-    const modelType = pathname.slice(0, 5) === '/ncal' ? MODEL_TYPE.EY : MODEL_TYPE.CY;
-    const kv = search.slice(3).split('+').reduce((acc, cur) => {
-      const [k, v] = cur.split('-');
-      acc[k] = v;
-      return acc;
-    }, {});
-    let modelPrefix;
+    const route = pathname.slice(0, 5);
+    let modelType, modelPrefix;
+    let kv = {}
+    if (route === '/calc') {
+      modelType = MODEL_TYPE.EY;
+      const calcId = pathname.slice(9);
+      this.setCalcId(calcId);
+      kv.I = calcId.slice(0, 4);
+      kv.U = calcId.slice(4, 16);
+    } else {
+      if (route === '/math') {
+        modelType = MODEL_TYPE.CY;
+      } else if (route === '/ncal') {
+        modelType = MODEL_TYPE.EY;
+      }
+      kv = search.slice(3).split('+').reduce((acc, cur) => {
+        const [k, v] = cur.split('-');
+        acc[k] = v;
+        return acc;
+      }, {});
+    }
+
     if (modelType === MODEL_TYPE.EY) {
       modelPrefix = MODEL_PREFIX.EY;
       if (kv.I?.slice(0, 3) > 500) {
@@ -51,7 +68,7 @@ export class ClassWizQR {
     } else {
       modelPrefix = MODEL_PREFIX.CY;
     }
-    language = availableLanguages.includes(language) ? language : 'en'
+
     this.setModelType(modelType)
       .setModelPrefix(modelPrefix)
       .setKV(kv)
@@ -74,6 +91,11 @@ export class ClassWizQR {
     return this;
   }
 
+  setCalcId(calcId) {
+    this.calcId = calcId;
+    return this;
+  }
+
   setLanguage(language) {
     this.language = language;
     globalThis.cwqrConfig.language = this.language;
@@ -81,7 +103,7 @@ export class ClassWizQR {
   }
 
   getResult() {
-    const { modelType, modelPrefix, kv } = this;
+    const { modelType, modelPrefix, kv, calcId } = this;
     let modelId, modelName, qr, modelVersion;
     if (kv.I) {
       modelId = kv.I.slice(0, 3);
@@ -96,6 +118,8 @@ export class ClassWizQR {
       _parseM = new ParseMode(kv.M);
       mode = _parseM.getModeInfo();
       _mainMode = _parseM.getMainMode();
+    } else if (calcId) {
+      mode = new ParseMode().getGetStarted()
     }
 
     let setup;

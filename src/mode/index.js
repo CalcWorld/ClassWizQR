@@ -1,6 +1,7 @@
-import { menuInfo } from './menu.js';
+import { menuInfo, menuInfo_EY_FY } from './menu.js';
 import { modeInfo } from './mode.js';
 import { translate } from "../utils.js";
+import { MODEL_TYPE_EY_FY } from '../model/index.js';
 
 export class ParseMode {
   constructor(M) {
@@ -49,10 +50,16 @@ export class ParseMode {
     return this.solveFor;
   }
 
-  getModeInfo() {
+  getModeInfo(modelType) {
     const mainMode = this.getMainMode();
     if (mainMode.startsWith('X') || mainMode.startsWith('Y') || mainMode.startsWith('Z')) {
-      return { mainName: translate(menuInfo[mainMode]['name']) };
+      let mainName;
+      if (MODEL_TYPE_EY_FY.includes(modelType)) {
+        mainName = translate({ ...menuInfo, ...menuInfo_EY_FY }[mainMode]['name']);
+      } else {
+        mainName = translate(menuInfo[mainMode]['name']);
+      }
+      return { mainName };
     }
     let subMode = this.getSubMode();
     if (mainMode === '4B') {

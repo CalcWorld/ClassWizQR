@@ -243,4 +243,14 @@ export const menuInfo = {
       "zh": "开始菜单",
     },
   },
-}
+};
+
+export const menuInfo_EY_FY = {
+  "X9": {
+    "name": {
+      "en": "Graph Manual",
+      "zh": "绘图模式说明",
+    }
+  },
+};
+

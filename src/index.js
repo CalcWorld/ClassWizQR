@@ -104,7 +104,7 @@ export class ClassWizQR {
     let _parseM, mode, _mainMode;
     if (kv.M) {
       _parseM = new ParseMode(kv.M);
-      mode = _parseM.getModeInfo();
+      mode = _parseM.getModeInfo(modelType);
       _mainMode = _parseM.getMainMode();
     } else if (calcId) {
       mode = new ParseMode().getGetStarted()

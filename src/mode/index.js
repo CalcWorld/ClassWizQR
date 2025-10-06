@@ -55,9 +55,9 @@ export class ParseMode {
     if (mainMode.startsWith('X') || mainMode.startsWith('Y') || mainMode.startsWith('Z')) {
       let mainName;
       if (MODEL_TYPE_EY_FY.includes(modelType)) {
-        mainName = translate({ ...menuInfo, ...menuInfo_EY_FY }[mainMode]['name']);
+        mainName = translate({ ...menuInfo, ...menuInfo_EY_FY }[mainMode]?.['name']);
       } else {
-        mainName = translate(menuInfo[mainMode]['name']);
+        mainName = translate(menuInfo[mainMode]?.['name']);
       }
       return { mainName };
     }

@@ -1,5 +1,4 @@
-import { setupInfo } from './setup.js';
-import { translate } from "../utils.js";
+import { tt } from "../utils.js";
 
 export class ParseSetup {
   constructor(S) {
@@ -95,6 +94,7 @@ export class ParseSetup {
     return this.autoPowerOffCode;
   }
 
+  // TODO: CW X and CW II is different
   getTableTypeCode() {
     if (!this.tableTypeCode) {
       this.tableTypeCode = this.S.slice(12, 13);
@@ -131,6 +131,7 @@ export class ParseSetup {
     return this.equationComplexRootCode;
   }
 
+  // this setup is based on model
   getLanguageCode() {
     if (!this.languageCode) {
       if (this.isFullSetup()) {
@@ -181,27 +182,24 @@ export class ParseSetup {
     const parseNumberFormat = () => {
       const main = this.getNumberFormatMainCode();
       const sub = this.getNumberFormatSubCode();
-      const name = translate(setupInfo['NUMBER_FORMAT'].name);
-      let value = translate(setupInfo['NUMBER_FORMAT']['setup'][main]);
+      const name = tt('setup.NUMBER_FORMAT.name');
+      let value = tt(`setup.NUMBER_FORMAT.${main}`);
       if (['8', '9'].includes(main)) {
-        for (let i = 0; i < value.length; i++) {
-          value[i].name += sub;
-        }
+        value += sub;
       }
       return { name, value };
     }
 
     const parseInputOutput = () => {
       const code = this.getInputCode() + this.getOutputCode();
-      const name = translate(setupInfo['INPUT_OUTPUT'].name);
-      const value = translate(setupInfo['INPUT_OUTPUT']['setup'][code]);
+      const name = tt('setup.INPUT_OUTPUT.name');
+      const value = tt(`setup.INPUT_OUTPUT.${code}`);
       return { name, value };
     }
 
     const parseCommon = (type, code) => {
-      const name = translate(setupInfo[type].name);
-      const setupValue = setupInfo[type]['setup'][code];
-      const value = setupValue ? translate(setupValue) : code;
+      const name = tt(`setup.${type}.name`);
+      const value = tt(`setup.${type}.${code}`) || code;
       return { name, value };
     }
 

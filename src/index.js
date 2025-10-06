@@ -33,8 +33,11 @@ export class ClassWizQR {
     globalThis.cwqrConfig = {};
   }
 
-  setUrl(url, language) {
-    language = availableLanguages.includes(language) ? language : 'en'
+  /**
+   * @param {string} url
+   * @return {ClassWizQR}
+   */
+  setUrl(url) {
     this.url = new URL(url.trim());
     const { search, pathname } = this.url;
     const route = pathname.slice(0, 5);
@@ -63,9 +66,7 @@ export class ClassWizQR {
       if (kv.I?.slice(0, 3) > 500) modelType = MODEL_TYPE.FY;
     }
 
-    this.setModelType(modelType)
-      .setKV(kv)
-      .setLanguage(language);
+    this.setModelType(modelType).setKV(kv);
     return this;
   }
 
@@ -85,7 +86,7 @@ export class ClassWizQR {
   }
 
   setLanguage(language) {
-    this.language = language;
+    this.language = availableLanguages.includes(language) ? language : 'en';
     globalThis.cwqrConfig.language = this.language;
     return this;
   }
@@ -246,7 +247,7 @@ export class ClassWizQR {
 
 export const parseUrl = (url, lang) => {
   const cwqr = new ClassWizQR();
-  return cwqr.setUrl(url, lang).getResult();
+  return cwqr.setUrl(url).setLanguage(lang).getResult();
 };
 
 export { availableLanguages } from "./utils.js";

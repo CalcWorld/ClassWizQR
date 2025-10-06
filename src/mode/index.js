@@ -1,6 +1,5 @@
-import { menuInfo, menuInfo_EY_FY } from './menu.js';
 import { modeInfo } from './mode.js';
-import { translate } from "../utils.js";
+import { translate, tt } from "../utils.js";
 import { MODEL_TYPE_EY_FY } from '../model/index.js';
 
 export class ParseMode {
@@ -55,9 +54,10 @@ export class ParseMode {
     if (mainMode.startsWith('X') || mainMode.startsWith('Y') || mainMode.startsWith('Z')) {
       let mainName;
       if (MODEL_TYPE_EY_FY.includes(modelType)) {
-        mainName = translate({ ...menuInfo, ...menuInfo_EY_FY }[mainMode]?.['name']);
+        // mainName = translate({ ...menuInfo, ...menuInfo_EY_FY }[mainMode]?.['name']);
+        mainName = tt(`menu-info.${mainMode}`);
       } else {
-        mainName = translate(menuInfo[mainMode]?.['name']);
+        mainName = tt(`menu-info.${mainMode}`);
       }
       return { mainName };
     }
@@ -74,6 +74,6 @@ export class ParseMode {
   }
 
   getGetStarted() {
-    return { mainName: translate(menuInfo['GS']['name']) };
+    return { mainName: tt(`menu-info.GS`) };
   }
 }

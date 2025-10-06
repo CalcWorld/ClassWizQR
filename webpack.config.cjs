@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production' || false;
 
@@ -42,6 +43,11 @@ const config = {
       inject: false,
       minify,
     }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'src/i18n-res', to: 'i18n-res' },
+      ]
+    })
   ],
   optimization: {
     // concatenateModules: false, // 临时禁用模块拼接

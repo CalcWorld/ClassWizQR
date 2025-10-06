@@ -166,12 +166,14 @@
 </div>
 <script>
   const lang = document.getElementById('lang');
+  const cwqrI18nRes = {};
   const qrUrl = document.getElementById("qrUrl");
   let editor;
 
-  lang.onchange = function () {
-    parseQr();
+  lang.onchange = async function () {
     localStorage.setItem('lang', lang.value);
+    await loadI18nRes();
+    parseQr();
     i18n();
   }
 
@@ -185,9 +187,14 @@
     parseQr();
   }
 
+  async function loadI18nRes() {
+    if (lang.value === 'en' || cwqrI18nRes[lang.value]) return;
+    cwqrI18nRes[lang.value] = await (await fetch(`/i18n-res/${lang.value}.json`)).json();
+  }
+
   window.onhashchange = parseOnHashChange;
 
-  window.onload = function () {
+  window.onload = async function () {
     lang.innerHTML = cwqr.availableLanguages.map(i => `<option value="${i}">${i}</option>`).join('');
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -228,6 +235,7 @@
     const userLang = searchLang || localStorage.getItem('lang') || navigator.language.substring(0, 2);
     if (cwqr.availableLanguages.includes(userLang)) {
       lang.value = userLang;
+      await loadI18nRes();
     } else {
       lang.value = 'en';
     }
@@ -239,7 +247,7 @@
   function parseQr() {
     let parseResult = {}, qrResult = {}, setup, model, mode;
     if (qrUrl.value) {
-      qrResult = cwqr.parseUrl(qrUrl.value, lang.value);
+      qrResult = cwqr.parseUrl(qrUrl.value, lang.value, cwqrI18nRes[lang.value]);
       ({ setup, model, mode } = qrResult);
       parseResult = JSON.parse(JSON.stringify(qrResult));
     }

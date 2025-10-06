@@ -7,8 +7,9 @@ import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
 import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseStatisticResult } from "./variable/R.js";
 import { ParseSetup } from "./setup/index.js";
-import { availableLanguages } from "./utils.js";
+import { availableLanguages, loadResource } from "./utils.js";
 import { ParseAlgorithm } from './algo/index.js';
+import enI18n from './i18n-res/en.json';
 
 export class ClassWizQR {
   constructor() {
@@ -30,6 +31,7 @@ export class ClassWizQR {
     };
     this.calcId = void 0;
     this.language = 'en';
+    globalThis.i18nResource = { en: enI18n };
     globalThis.cwqrConfig = {};
   }
 
@@ -88,6 +90,15 @@ export class ClassWizQR {
   setLanguage(language) {
     this.language = availableLanguages.includes(language) ? language : 'en';
     globalThis.cwqrConfig.language = this.language;
+    return this;
+  }
+
+  /**
+   * @param {object} resource
+   * @return {ClassWizQR}
+   */
+  loadI18nResource(resource) {
+    loadResource(this.language, resource);
     return this;
   }
 
@@ -246,9 +257,20 @@ export class ClassWizQR {
 
 }
 
-export const parseUrl = (url, lang) => {
+/**
+ *
+ * @param {string} url
+ * @param {string} lang
+ * @param {object} i18nRes
+ */
+export const parseUrl = (url, lang, i18nRes) => {
   const cwqr = new ClassWizQR();
-  return cwqr.setUrl(url).setLanguage(lang).getResult();
+  if (i18nRes) {
+    cwqr.setLanguage(lang).loadI18nResource(i18nRes);
+  } else {
+    cwqr.setLanguage('en');
+  }
+  return cwqr.setUrl(url).getResult();
 };
 
 export { availableLanguages } from "./utils.js";

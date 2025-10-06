@@ -48,11 +48,13 @@ export const handelApiRequest = (url, lang) => {
 
 export const handelRequest = (context) => {
   const headers = context.request.headers;
-  const url = context.request.url;
+  const url = new URL(context.request.url);
+  url.host = 'wes.casio.com';
+  url.port = '80';
   const accept = headers.get('accept');
   if (accept.startsWith('text/html')) {
-    return Response_.redirect(`/#${url}`);
+    return Response_.redirect(`/#${url.href}`);
   }
   const lang = headers.get('accept-language')?.slice(0, 2) || 'en';
-  return handelApiRequest(url, lang);
+  return handelApiRequest(url.href, lang);
 }

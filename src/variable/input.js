@@ -1,3 +1,5 @@
+import { tt } from '../utils.js';
+
 export const inputInfo = {
   "EQUATION": {
     "01": {
@@ -85,20 +87,12 @@ export const inputInfo = {
     },
     "02": {
       "4": {
-        "template": {
-          "en": "Lower=${0} \\\\ Upper=${1} \\\\ μ=${2} \\\\ σ=${3}",
-          "zh": "下限=${0} \\\\ 上限=${1} \\\\ μ=${2} \\\\ σ=${3}",
-          "vi": "Ldưới=${0} \\\\ Ltrên=${1} \\\\ μ=${2} \\\\ σ=${3}",
-        }
+        "template": () => tt('input.DISTRIBUTION.024'),
       }
     },
     "03": {
       "3": {
-        "template": {
-          "en": "Area=${0} \\\\ μ=${1} \\\\ σ=${2}",
-          "zh": "区域=${0} \\\\ μ=${1} \\\\ σ=${2}",
-          "vi": "Vùng=${0} \\\\ μ=${1} \\\\ σ=${2}",
-        }
+        "template": () => tt('input.DISTRIBUTION.033'),
       }
     },
     "04": {

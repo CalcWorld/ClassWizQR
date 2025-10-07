@@ -160,3 +160,6 @@ setup.ALGORITHM_UNIT_SETTING.name,"Algorithm: Unit Setting","算法：移动单�
 setup.LANGUAGE.name,"Language","语言",,
 input.DISTRIBUTION.024,"Lower=${0} \\ Upper=${1} \\ μ=${2} \\ σ=${3}","下限=${0} \\ 上限=${1} \\ μ=${2} \\ σ=${3}","Ldưới=${0} \\ Ltrên=${1} \\ μ=${2} \\ σ=${3}",
 input.DISTRIBUTION.033,"Area=${0} \\ μ=${1} \\ σ=${2}","区域=${0} \\ μ=${1} \\ σ=${2}","Vùng=${0} \\ μ=${1} \\ σ=${2}",
+input.TABLE.0,"Start","开始值",,
+input.TABLE.1,"End","终止值",,
+input.TABLE.2,"Step","步长",,

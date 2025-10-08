@@ -1,8 +1,8 @@
 import { ClassWizQR } from '../src/index.js';
-import en from '../src/i18n-res/en.json' with { type: 'json' };
-import zh from '../src/i18n-res/zh.json' with { type: 'json' };
-import vi from '../src/i18n-res/vi.json' with { type: 'json' };
-import fr from '../src/i18n-res/fr.json' with { type: 'json' };
+import en from '../src/i18n-res/en.json';
+import zh from '../src/i18n-res/zh.json';
+import vi from '../src/i18n-res/vi.json';
+import fr from '../src/i18n-res/fr.json';
 
 export class Response_ {
   static redirect(url) {

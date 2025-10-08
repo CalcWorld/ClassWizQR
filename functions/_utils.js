@@ -1,4 +1,8 @@
 import { ClassWizQR } from '../src/index.js';
+import en from '../src/i18n-res/en.json' with { type: 'json' };
+import zh from '../src/i18n-res/zh.json' with { type: 'json' };
+import vi from '../src/i18n-res/vi.json' with { type: 'json' };
+import fr from '../src/i18n-res/fr.json' with { type: 'json' };
 
 export class Response_ {
   static redirect(url) {
@@ -39,7 +43,11 @@ export class Response_ {
 export const handelApiRequest = (url, lang) => {
   try {
     const qr = new ClassWizQR();
-    const res = qr.setUrl(url).setLanguage(lang).getResult();
+    const res = qr
+      .setUrl(url)
+      .setLanguage(lang)
+      .loadI18nResource({ en, zh, vi, fr })
+      .getResult();
     return Response_.jsonSuccess(res);
   } catch (e) {
     return Response_.jsonError(e.message);

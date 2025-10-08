@@ -1,6 +1,5 @@
 import { AsciiTable } from '../ascii/index.js';
-import { toAsciiArray, translate, tt } from '../utils.js';
-import algoCmdMap from './cmd.js';
+import { toAsciiArray, tt } from '../utils.js';
 import { ParseSetup } from '../setup/index.js';
 
 export class ParseAlgorithm {
@@ -109,7 +108,7 @@ export class ParseAlgorithm {
 
   /**
    * @param {string} tab
-   * @param {function(string, string[][]): string} getAlgo
+   * @param {function(string, string[][], function(string, string[]): string[]): string} getAlgo
    * @return {string[]}
    */
   #parseToList(getAlgo, tab = '') {
@@ -120,7 +119,17 @@ export class ParseAlgorithm {
     for (const i of tree) {
       const key = i.key;
       if (tab && algoTabClose.includes(key)) tabWidth--;
-      result.push(`${tab ? tab.repeat(tabWidth) : ''}${getAlgo(key, i.value)}`);
+      result.push(`${tab ? tab.repeat(tabWidth) : ''}${getAlgo(key, i.value, (key, value) => {
+        switch (key) {
+          case 'F905':
+            value.push(tt(`setup.ALGORITHM_UNIT_SETTING.${this.unitSetiing}`));
+            return value;
+          case 'F90D':
+          case 'F90F':
+            return value.map(i => (tt(`algo.${key}-${i}`) || i));
+        }
+        return value;
+      })}`);
       if (tab && algoTabOpen.includes(key)) tabWidth++;
     }
     return result;
@@ -130,40 +139,24 @@ export class ParseAlgorithm {
    * @return {string[]}
    */
   parseToLaTeX() {
-    /**
-     * @param {string} key
-     * @param {string[][]} values
-     * @return {string}
-     */
-    const getAlgo = (key, values) => {
-      const value = values.map(i => i.map(i => this.asciiLatexTable[i]).join(' '));
-      if (key === 'F905') value.push(tt(`setup.ALGORITHM_UNIT_SETTING.${this.unitSetiing}`));
+    return this.#parseToList((key, values, valueFunc) => {
+      const value = valueFunc(key, values.map(i => i.map(i => this.asciiLatexTable[i]).join(' ')));
       let algoCmd = tt(`algo.${key}`).replace(/ /g, '\\ ');
       for (const [i, v] of value.entries()) {
         algoCmd = algoCmd?.replace(`\$\{${i}\}`, v);
       }
       return algoCmd;
-    };
-
-    return this.#parseToList(getAlgo, '\\ \\ ');
+    }, '\\ \\ ');
   }
 
   /**
    * @return {string[]}
    */
   parseToText() {
-    /**
-     * @param {string} key
-     * @param {string[][]} values
-     * @return {string}
-     */
-    const getAlgo = (key, values) => {
-      const value = values.map(i => i.map(i => this.asciiUnicodeTable[i]).join(''));
-      if (key === 'F905') value.push(tt(`setup.ALGORITHM_UNIT_SETTING.${this.unitSetiing}`));
+    return this.#parseToList((key, values, valueFunc) => {
+      const value = valueFunc(key, values.map(i => i.map(i => this.asciiUnicodeTable[i]).join('')));
       return tt(`algo.${key}`, ...value);
-    };
-
-    return this.#parseToList(getAlgo, '  ');
+    }, '  ');
   }
 
   /**

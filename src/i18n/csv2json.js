@@ -116,8 +116,6 @@ langNames.forEach(lang => {
     if (!isProd) {
       fs.renameSync(filePath, backupPath);
       console.log(`📦 已备份 ${filePath} -> ${backupPath}`);
-    } else {
-      console.log(`📦 [开发模式] 若写入将备份 ${filePath} -> ${backupPath}`);
     }
   }
 

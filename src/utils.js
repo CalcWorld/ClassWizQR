@@ -3,7 +3,7 @@ export const translate = (dict) => {
   return dict?.[globalThis.cwqrConfig?.language] || dict?.['en'];
 }
 
-export const availableLanguages = ['zh', 'en', 'fr', 'vi'];
+export const availableLanguages = ['en', 'zh', 'vi', 'fr'];
 
 export const loadResource = (language, resource) => {
   if (!globalThis.i18nResource) globalThis.i18nResource = {};

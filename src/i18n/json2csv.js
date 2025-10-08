@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { stringify } from 'csv-stringify/sync';
+import { availableLanguages } from '../utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -10,8 +11,7 @@ const __dirname = path.dirname(__filename);
 const sourceDir = path.resolve(__dirname, '../i18n-res');
 const targetFile = path.resolve(__dirname, './resource.csv');
 
-// 如果你希望从命令行传入要处理的语言，可以改这里；默认会尝试读取 sourceDir 下的 *.json 文件
-const langs = ['en', 'zh', 'vi', 'fr'];
+const langs = availableLanguages;
 
 // 递归展开 JSON 对象
 function flattenJSON(obj, prefix = '') {

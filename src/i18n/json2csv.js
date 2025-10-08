@@ -1,24 +1,30 @@
+// i18n/json2csv.js
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import { stringify } from 'csv-stringify/sync';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 配置要处理的 JSON 文件
 const sourceDir = path.resolve(__dirname, '../i18n-res');
 const targetFile = path.resolve(__dirname, './resource.csv');
-const langs = ['en', 'zh', 'vi', 'fr']; // 可扩展 ['en', 'zh', 'jp', 'fr', ...]
 
-// 递归展开 JSON 对象，生成扁平化 key
+// 如果你希望从命令行传入要处理的语言，可以改这里；默认会尝试读取 sourceDir 下的 *.json 文件
+const langs = ['en', 'zh', 'vi', 'fr'];
+
+// 递归展开 JSON 对象
 function flattenJSON(obj, prefix = '') {
   let result = {};
   for (const key in obj) {
+    if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
     const newKey = prefix ? `${prefix}.${key}` : key;
-    if (typeof obj[key] === 'object' && obj[key] !== null) {
-      Object.assign(result, flattenJSON(obj[key], newKey));
+    const val = obj[key];
+    if (val !== null && typeof val === 'object' && !Array.isArray(val)) {
+      Object.assign(result, flattenJSON(val, newKey));
     } else {
-      result[newKey] = obj[key];
+      // 对于数组或原始类型也作为最终值处理（数组会被 toString）
+      result[newKey] = val === undefined || val === null ? '' : String(val);
     }
   }
   return result;
@@ -29,8 +35,9 @@ let langData = {};
 langs.forEach((lang) => {
   const filePath = path.join(sourceDir, `${lang}.json`);
   if (!fs.existsSync(filePath)) {
-    console.error(`❌ 文件不存在: ${filePath}`);
-    // process.exit(1);
+    console.warn(`⚠️ 文件不存在，跳过: ${filePath}`);
+    langData[lang] = {};
+    return;
   }
   const json = JSON.parse(fs.readFileSync(filePath, 'utf8'));
   langData[lang] = flattenJSON(json);
@@ -39,20 +46,25 @@ langs.forEach((lang) => {
 // 收集所有 key
 const allKeys = new Set();
 Object.values(langData).forEach((data) => {
-  Object.keys(data).forEach((k) => allKeys.add(k));
+  Object.keys(data).forEach(k => allKeys.add(k));
 });
+const allKeysArray = Array.from(allKeys);
 
-// 生成 CSV 内容
-let csv = ['key,' + langs.join(',')];
-allKeys.forEach((key) => {
+// 生成 records（数组的数组），第一行为 header
+const header = ['key', ...langs];
+const records = [header];
+
+allKeysArray.forEach((key) => {
   const row = [key];
-  langs.forEach((lang) => {
-    if (!langData[lang][key]) row.push('');
-    else row.push(`"${(langData[lang][key] || '').replace(/"/g, '""')}"`); // 转义双引号
+  langs.forEach(lang => {
+    const v = langData[lang] && langData[lang][key] !== undefined ? langData[lang][key] : '';
+    row.push(v);
   });
-  csv.push(row.join(','));
+  records.push(row);
 });
 
-// 保存到文件
-fs.writeFileSync(targetFile, csv.join('\n'), 'utf8');
+// 使用 csv-stringify 生成 CSV
+const csv = stringify(records);
+
+fs.writeFileSync(targetFile, csv, 'utf8');
 console.log(`✅ 已生成 CSV: ${targetFile}`);

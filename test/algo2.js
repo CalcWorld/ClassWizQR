@@ -7,13 +7,14 @@ const args = Array.from({ length: 4 }).map((_, i) => `\$\{${i}\}`);
 console.log(args);
 const i18nRes = {}
 
-for (const [locale, latex] of Object.entries(algoCmd.latex)) {
-  for (const [key, val] of Object.entries(latex)) {
+for (const [locale, scratch] of Object.entries(algoCmd.scratch)) {
+  for (const [key, val] of Object.entries(scratch)) {
     const valText = val(...args).replace(/\\ /g, ' ');
-    console.log(`algo.${key}`, valText);
+    console.log(`algo.scratch.${key}`, valText);
     i18nRes[locale] || (i18nRes[locale] = {});
     i18nRes[locale].algo || (i18nRes[locale].algo = {});
-    i18nRes[locale].algo[key] = valText;
+    i18nRes[locale].algo.scratch || (i18nRes[locale].algo.scratch = {});
+    i18nRes[locale].algo.scratch[key] = valText;
   }
 }
 
@@ -26,5 +27,5 @@ const params = [['31', '31', '34'], ['35', '31', '34']]
   .map(i => i.map(i => asciiTable[i]).join(''))
 
 
-console.log(tt('algo.F908', ...params));
+console.log(tt('algo.scratch.F908', ...params));
 

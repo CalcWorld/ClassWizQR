@@ -70,7 +70,7 @@ export class ParseAlgorithm {
 
   }
 
-  parseToTree() {
+  #parseToTree() {
     if (this.tree) return this.tree;
     const { E, algoCmd, algoSep, algoEnd } = this;
     const asciiArray = toAsciiArray(E);
@@ -112,7 +112,7 @@ export class ParseAlgorithm {
    * @return {string[]}
    */
   #parseToList(getAlgo, tab = '') {
-    this.parseToTree();
+    this.#parseToTree();
     const { tree, algoTabOpen, algoTabClose } = this;
     const result = [];
     let tabWidth = 0;
@@ -163,8 +163,22 @@ export class ParseAlgorithm {
    * @return {string[]}
    */
   parseToScratch() {
-    // TODO
-    return this.#parseToList(() => '', '  ');
+    return this.#parseToList((key, values, valueFunc) => {
+      const value = valueFunc(key, values.map(i => i.map(i =>
+        this.asciiUnicodeTable[i].replace(/[<>{}()\[\]\\]/g, m => `\\${m}`)
+      ).join('')));
+      switch (key) {
+        case 'F90C':
+          value.push(tt('algo.scratch.value'));
+          break;
+        case 'F90D':
+        case 'F90E':
+        case 'F910':
+          value.push(tt('algo.scratch.any'));
+          break;
+      }
+      return tt(`algo.scratch.${key}`, ...value);
+    }, '  ');
   }
 
   parseAll() {

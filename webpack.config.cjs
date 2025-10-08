@@ -45,7 +45,11 @@ const config = {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'src/i18n-res', to: 'i18n-res' },
+        {
+          from: 'src/i18n-res',
+          to: 'i18n-res',
+          filter: (filepath) => filepath.length <= 7,
+        },
       ]
     })
   ],

@@ -247,7 +247,7 @@
   function parseQr() {
     let parseResult = {}, qrResult = {}, setup, model, mode;
     if (qrUrl.value) {
-      qrResult = cwqr.parseUrl(qrUrl.value, lang.value, cwqrI18nRes[lang.value]);
+      qrResult = cwqr.parseUrl(qrUrl.value, lang.value, cwqrI18nRes);
       ({ setup, model, mode } = qrResult);
       parseResult = JSON.parse(JSON.stringify(qrResult));
     }

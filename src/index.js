@@ -9,7 +9,7 @@ import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseSta
 import { ParseSetup } from "./setup/index.js";
 import { availableLanguages, loadResource } from "./utils.js";
 import { ParseAlgorithm } from './algo/index.js';
-import enI18n from './i18n-res/en.json';
+import enI18n from './i18n-res/en.json' with { type: 'json' };
 
 export class ClassWizQR {
   constructor() {
@@ -94,11 +94,13 @@ export class ClassWizQR {
   }
 
   /**
-   * @param {object} resource
+   * @param {object} resources
    * @return {ClassWizQR}
    */
-  loadI18nResource(resource) {
-    loadResource(this.language, resource);
+  loadI18nResource(resources) {
+    for (const [language, resource] of Object.entries(resources)) {
+      loadResource(language, resource);
+    }
     return this;
   }
 

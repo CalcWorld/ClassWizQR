@@ -48,7 +48,7 @@ const config = {
         {
           from: 'src/i18n-res',
           to: 'i18n-res',
-          filter: (filepath) => filepath.length <= 7,
+          filter: (filepath) => filepath.split(/[.\/]/).reverse()[1].length === 2,
         },
       ]
     })
@@ -70,6 +70,11 @@ const config = {
       {
         test: /\.json$/i,
         type: 'json',
+      },
+      {
+        test: /\.m?js$/,
+        exclude: /node_modules/,
+        use: [path.resolve(__dirname, './strip-import-attributes-loader.js')],
       },
     ],
   },

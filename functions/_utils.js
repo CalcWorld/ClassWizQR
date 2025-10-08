@@ -1,5 +1,4 @@
 import { ClassWizQR } from '../src/index.js';
-import en from '../src/i18n-res/en.json';
 import zh from '../src/i18n-res/zh.json';
 import vi from '../src/i18n-res/vi.json';
 import fr from '../src/i18n-res/fr.json';
@@ -46,7 +45,7 @@ export const handelApiRequest = (url, lang) => {
     const res = qr
       .setUrl(url)
       .setLanguage(lang)
-      .loadI18nResource({ en, zh, vi, fr })
+      .loadI18nResource({ zh, vi, fr })
       .getResult();
     return Response_.jsonSuccess(res);
   } catch (e) {

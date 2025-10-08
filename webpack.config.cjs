@@ -71,11 +71,6 @@ const config = {
         test: /\.json$/i,
         type: 'json',
       },
-      {
-        test: /\.m?js$/,
-        exclude: /node_modules/,
-        use: [path.resolve(__dirname, './strip-import-attributes-loader.js')],
-      },
     ],
   },
   devtool: isProduction ? false : 'eval-source-map',

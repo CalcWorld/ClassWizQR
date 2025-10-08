@@ -26,5 +26,5 @@ export const getModelInfo = (type, model) => {
 export const MODEL_TYPE_NAME = {
   [MODEL_TYPE.CY]: 'ClassWiz EX',
   [MODEL_TYPE.EY]: 'ClassWiz CW',
-  [MODEL_TYPE.FY]: 'ClassWiz CW+',
+  [MODEL_TYPE.FY]: 'ClassWiz CW 2nd edition',
 };

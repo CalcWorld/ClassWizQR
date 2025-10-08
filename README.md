@@ -14,7 +14,7 @@ Online Demo: <https://cwqr.pages.dev>
 
 - Internationalization (i18n) implemented
 - Optimized adaptations for specific calculator models, such as JP models
-- Support for ClassWiz EX, ClassWiz CW and ClassWiz CW+ series calculators
+- Support for ClassWiz EX, ClassWiz CW and ClassWiz CW 2nd edition series calculators
 - Detailed information on the calculator model, settings, and active modes or errors
 - Natural display input and output rendered as LaTeX formulas in Calculate, Complex, Verify and other modes
 - LaTeX and tabular representation of equations and results in Equation, Inequality, and Ratio modes

@@ -191,3 +191,30 @@ algo.F916,"End","结束",,"Fin"
 algo.F917,"If ${0} then","如果 ${0} 则",,"Si ${0} Alors"
 algo.F918,"Else","否则",,"Sinon"
 algo.F919,"End","结束",,"Fin"
+algo.scratch.F903," ",,,
+algo.scratch.F905,"move (${0}) steps",,,
+algo.scratch.F906,"turn @turnLeft (${0}) degrees",,,
+algo.scratch.F907,"point in direction (${0})",,,
+algo.scratch.F908,"go to x:(${0}) y:(${1})",,,
+algo.scratch.F909,"pen down",,,
+algo.scratch.F90A,"pen up",,,
+algo.scratch.F90B,"set [${1} v] to (${0})",,,
+algo.scratch.F90C,"ask [${1}] and wait
+set [${0} v] to (answer)",,,
+algo.scratch.F90D,"say [${0}]
+wait until <key [${1} v] pressed?>",,,
+algo.scratch.F90E,"say (${0})
+wait until <key [${1} v] pressed?>",,,
+algo.scratch.F90F,"switch costume to [${0} v]",,,
+algo.scratch.F910,"wait until <key [${0} v] pressed?>",,,
+algo.scratch.F911,"repeat (${0})",,,
+algo.scratch.F912,"end",,,
+algo.scratch.F913,"repeat until [${0}]",,,
+algo.scratch.F914,"end",,,
+algo.scratch.F915,"if [${0}] then",,,
+algo.scratch.F916,"end",,,
+algo.scratch.F917,"if [${0}] then",,,
+algo.scratch.F918,"else",,,
+algo.scratch.F919,"end",,,
+algo.scratch.value,"value?","输入值?",,"valeur?"
+algo.scratch.any,"any","任意",,"n'importe laquelle"

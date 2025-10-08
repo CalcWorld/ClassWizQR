@@ -1,5 +1,5 @@
 import { AsciiTable } from '../ascii/index.js';
-import { toAsciiArray, translate } from '../utils.js';
+import { toAsciiArray, translate, tt } from '../utils.js';
 import algoCmdMap from './cmd.js';
 import { ParseSetup } from '../setup/index.js';
 
@@ -108,14 +108,11 @@ export class ParseAlgorithm {
   }
 
   /**
-   *
-   * @param {object} map
-   * @param {object} asciiTable
    * @param {string} tab
-   * @param {string} joinSeparator
+   * @param {function(string, string[][]): string} getAlgo
    * @return {string[]}
    */
-  #parseToList(map, asciiTable, tab = '', joinSeparator = '') {
+  #parseToList(getAlgo, tab = '') {
     this.parseToTree();
     const { tree, algoTabOpen, algoTabClose } = this;
     const result = [];
@@ -123,9 +120,7 @@ export class ParseAlgorithm {
     for (const i of tree) {
       const key = i.key;
       if (tab && algoTabClose.includes(key)) tabWidth--;
-      const value = i.value.map(i => i.map(i => asciiTable[i]).join(joinSeparator));
-      value.push(this.unitSetiing); // the last argument passes to map function is always the unit setting
-      result.push(`${tab ? tab.repeat(tabWidth) : ''}${map[key](...value)}`);
+      result.push(`${tab ? tab.repeat(tabWidth) : ''}${getAlgo(key, i.value)}`);
       if (tab && algoTabOpen.includes(key)) tabWidth++;
     }
     return result;
@@ -134,31 +129,55 @@ export class ParseAlgorithm {
   /**
    * @return {string[]}
    */
-  parseToLaTeXCmdList() {
-    const latexMap = translate(algoCmdMap.latex);
-    return this.#parseToList(latexMap, this.asciiLatexTable, '\\ \\ ', ' ');
+  parseToLaTeX() {
+    /**
+     * @param {string} key
+     * @param {string[][]} values
+     * @return {string}
+     */
+    const getAlgo = (key, values) => {
+      const value = values.map(i => i.map(i => this.asciiLatexTable[i]).join(' '));
+      if (key === 'F905') value.push(tt(`setup.ALGORITHM_UNIT_SETTING.${this.unitSetiing}`));
+      let algoCmd = tt(`algo.${key}`).replace(/ /g, '\\ ');
+      for (const [i, v] of value.entries()) {
+        algoCmd = algoCmd?.replace(`\$\{${i}\}`, v);
+      }
+      return algoCmd;
+    };
+
+    return this.#parseToList(getAlgo, '\\ \\ ');
   }
 
-  parseToTextCmdList() {
-    const latexMap = translate(algoCmdMap.latex);
-    return this.#parseToList(latexMap, this.asciiUnicodeTable, '  ', '')
-      .map(i => i.replace(/\\ /g, ' '));
+  /**
+   * @return {string[]}
+   */
+  parseToText() {
+    /**
+     * @param {string} key
+     * @param {string[][]} values
+     * @return {string}
+     */
+    const getAlgo = (key, values) => {
+      const value = values.map(i => i.map(i => this.asciiUnicodeTable[i]).join(''));
+      if (key === 'F905') value.push(tt(`setup.ALGORITHM_UNIT_SETTING.${this.unitSetiing}`));
+      return tt(`algo.${key}`, ...value);
+    };
+
+    return this.#parseToList(getAlgo, '  ');
   }
 
   /**
    * @return {string[]}
    */
   parseToScratch() {
-    const scratchMap = translate(algoCmdMap.scratch);
-    return this.#parseToList(scratchMap, Object.fromEntries(
-      Object.entries(this.asciiUnicodeTable).map(([key, value]) => [key, value.replace(/[<>{}()\[\]\\]/g, m => '\\' + m)])
-    ), '  ', '');
+    // TODO
+    return this.#parseToList(() => '', '  ');
   }
 
   parseAll() {
     return {
-      latexCommand: this.parseToLaTeXCmdList(),
-      textCommand: this.parseToTextCmdList(),
+      latexCommand: this.parseToLaTeX(),
+      textCommand: this.parseToText(),
       scratchBlocks: this.parseToScratch(),
     };
   }

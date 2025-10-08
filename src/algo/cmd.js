@@ -2,39 +2,39 @@ import { translate } from '../utils.js';
 
 const algoMsg = {
   en: {
-    'f90d-1': `Yes`,
-    'f90d-2': `No`,
-    'f90d-3': `Number?`,
-    'f90d-4': `Result :`,
-    'f90f-1': `Arrow`,
-    'f90f-2': `Cross`,
+    "f90d-1": "Yes",
+    "f90d-2": "No",
+    "f90d-3": "Number?",
+    "f90d-4": "Result :",
+    "f90f-1": "Arrow",
+    "f90f-2": "Cross",
     'scratch-value': 'value?',
     'scratch-any': 'any',
   },
   zh: {
-    'f90d-1': `是`,
-    'f90d-2': `否`,
-    'f90d-3': `数值?`,
-    'f90d-4': `结果 :`,
-    'f90f-1': `箭头`,
-    'f90f-2': `十字`,
+    "F90D-1": "是",
+    "F90D-2": "否",
+    "F90D-3": "数值?",
+    "F90D-4": "结果 :",
+    "F90F-1": "箭头",
+    "F90F-2": "十字",
     'scratch-value': '输入值?',
     'scratch-any': '任意',
   },
   fr: {
-    'f90d-1': `Oui`,
-    'f90d-2': `Non`,
-    'f90d-3': `Nombre?`,
-    'f90d-4': `Résultat :`,
-    'f90f-1': `Flèche`,
-    'f90f-2': `Croix`,
+    "F90D-1": "Oui",
+    "F90D-2": "Non",
+    "F90D-3": "Nombre?",
+    "F90D-4": "Résultat :",
+    "F90F-1": "Flèche",
+    "F90F-2": "Croix",
     'scratch-value': 'valeur?',
     'scratch-any': `n'importe laquelle`,
   },
 };
 
 const enLatexCmd = {
-  'F903': () => '', // empty line
+  'F903': () => ' ', // empty line
 
   'F905': (a, unitSetting) => `Move\\ ${a}\\ ${unitSetting === '0' ? 'pixels' : 'units'}`,
   'F906': (a) => `Turn\\ ⟲\\ ${a}\\ degrees`,
@@ -63,7 +63,7 @@ const enLatexCmd = {
 };
 
 const zhLatexCmd = {
-  'F903': () => '',
+  'F903': () => ' ',
 
   'F905': (a, unitSetting) => `前进\\ ${a}\\ ${unitSetting === '0' ? '像素' : '×10像素'}`,
   'F906': (a) => `旋转⟲\\ ${a}\\ 度`,
@@ -92,7 +92,7 @@ const zhLatexCmd = {
 };
 
 const frLatexCmd = {
-  'F903': () => '',
+  'F903': () => ' ',
 
   'F905': (a, unitSetting) => `Avancer\\ de\\ ${a}\\ ${unitSetting === '0' ? 'pixels' : 'unités'}`,
   'F906': (a) => `Tourner\\ de\\ ⟲\\ ${a}\\ degrés`,

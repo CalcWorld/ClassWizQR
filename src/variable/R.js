@@ -3,7 +3,7 @@ import { AsciiTable } from "../ascii/index.js";
 import { ParseMode } from "../mode/index.js";
 import { resultInfo } from './result.js';
 import { ParseSetup } from "../setup/index.js";
-import { translate, tt } from "../utils.js";
+import { tt } from "../utils.js";
 
 export const ParseNumberResult = (R, M, modelType, modelId) => {
   const parseM = new ParseMode(M);
@@ -27,7 +27,6 @@ export const ParseNumberResult = (R, M, modelType, modelId) => {
       template = `${ans1Latex} ${ans2Latex}i`;
     }
   } else {
-    template = template.template;
     template = template.replace('${0}', ans1Latex);
     template = template.replace('${1}', ans2Latex);
     if (template.includes('${2}')) {
@@ -46,11 +45,11 @@ export const ParseNumberResult = (R, M, modelType, modelId) => {
 export const ParseInequalityResult = (R) => {
   const resultCode = R.slice(2, 4);
   const result = resultInfo['INEQUALITY'][resultCode];
-  if (!result.template) {
-    return { name: translate(result.name) };
+  if (typeof result === 'function') {
+    return [{ name: 'templated', latex: result() }];
   }
   const split = R.slice(4).match(/.{20}/g);
-  let template = result.template;
+  let template = result;
   const returnResult = [];
   for (let i = 0; i < split.length; i++) {
     const [latex, decimal] = new ParseVariable(split[i]).get();
@@ -67,29 +66,27 @@ export const ParseInequalityResult = (R) => {
 export const ParseEquationResult = (R, M, S, C) => {
   let resultCode = R.slice(2, 3);
   if (['1', '2', '4'].includes(resultCode)) {
-    return [{ name: 'templated', latex: translate(resultInfo['EQUATION'][resultCode].name) }];
+    return [{ name: 'templated', latex: resultInfo['EQUATION'][resultCode](), decimal: NaN }];
   }
   const noLocal = resultCode === '5';
-  // when resultCode is '5', it still contains roots data, but indicates no Local Minimum/Maximum
-  // just set to 0 to get the template
-  resultCode = '0';
 
+  const SIMUL_SUB_MODE = ['01', '02', '03'];
   const split = R.slice(3).match(/.{20}/g);
-  let template;
   const subMode = new ParseMode(M).getSubMode();
-  if (['01', '02', '03'].includes(subMode)) {
-    template = resultInfo['EQUATION'][resultCode][subMode].template;
+  let template;
+  const EQ0 = resultInfo['EQUATION']['0'];
+  if (SIMUL_SUB_MODE.includes(subMode)) {
+    template = EQ0[subMode];
   } else {
-    if (resultInfo['EQUATION'][resultCode][subMode][split.length]['complexSetting']) {
-      const complexSetting = new ParseSetup(S).getComplexResultCode();
-      template = resultInfo['EQUATION'][resultCode][subMode][split.length].template[complexSetting];
-    } else {
-      template = resultInfo['EQUATION'][resultCode][subMode][split.length].template;
+    template = EQ0[`${subMode}-${split.length}`];
+    if (!template) {
+      const complexRoot = new ParseSetup(S).getEquationComplexRootCode();
+      template = EQ0[`${subMode}-${split.length}-${complexRoot}`];
     }
   }
 
-  let result = [];
-  if (['01', '02', '03'].includes(subMode)) {
+  const result = [];
+  if (SIMUL_SUB_MODE.includes(subMode)) {
     for (let i = 0; i < split.length; i++) {
       const [latex, decimal] = new ParseVariable(split[i]).get();
       template = template.replace(`\$\{${i}\}`, latex);
@@ -130,7 +127,7 @@ export const ParseEquationResult = (R, M, S, C) => {
     throw new Error('Equation template not match');
   }
   if (noLocal) {
-    result.unshift(resultInfo['EQUATION']['5']);
+    template += `\\\\${resultInfo['EQUATION']['5']()}`;
   }
   result.unshift({ name: 'templated', latex: template });
   return result;

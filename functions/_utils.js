@@ -45,7 +45,7 @@ export const handelApiRequest = (url, lang) => {
     const res = qr
       .setUrl(url)
       .setLanguage(lang)
-      .loadI18nResource({ zh, vi, fr })
+      .setI18nResource({ zh, vi, fr })
       .getResult();
     return Response_.jsonSuccess(res);
   } catch (e) {

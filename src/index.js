@@ -97,7 +97,7 @@ export class ClassWizQR {
    * @param {object} resources
    * @return {ClassWizQR}
    */
-  loadI18nResource(resources) {
+  setI18nResource(resources) {
     for (const [language, resource] of Object.entries(resources)) {
       loadResource(language, resource);
     }
@@ -262,13 +262,13 @@ export class ClassWizQR {
 /**
  *
  * @param {string} url
- * @param {string} lang
- * @param {object} i18nRes
+ * @param {string} [lang]
+ * @param {object} [i18nRes]
  */
 export const parseUrl = (url, lang, i18nRes) => {
   const cwqr = new ClassWizQR();
   if (i18nRes) {
-    cwqr.setLanguage(lang).loadI18nResource(i18nRes);
+    cwqr.setLanguage(lang).setI18nResource(i18nRes);
   } else {
     cwqr.setLanguage('en');
   }

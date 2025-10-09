@@ -163,6 +163,12 @@ input.DISTRIBUTION.033,Area=${0} \\ μ=${1} \\ σ=${2},区域=${0} \\ μ=${1} \\
 input.TABLE.0,Start,开始值,,
 input.TABLE.1,End,终止值,,
 input.TABLE.2,Step,步长,,
+result.INEQUALITY.01,All Real Numbers,所有实数,Tất cả số thực,
+result.INEQUALITY.02,No Solution,无解,Vô nghiệm,
+result.EQUATION.1,Infinite Solution,无数解,Vô số nghiệm,
+result.EQUATION.2,No Solution,无解,Vô nghiệm,
+result.EQUATION.4,No Real Roots,无实根,Vô nghiệm,
+result.EQUATION.5,No Local Max/Min,无极值,Không có CĐ/CT,
 algo.F903, , ,, 
 algo.F905,Move ${0} ${1},前进 ${0} ${1},,Avancer de ${0} ${1}
 algo.F906,Turn ⟲ ${0} degrees,旋转⟲ ${0} 度,,Tourner de ⟲ ${0} degrés

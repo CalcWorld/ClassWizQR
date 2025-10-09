@@ -369,7 +369,7 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
     calcHtml += (result && result[0]) ? `
 <div class="calc-result" id="result">
     <div class="title">${t('calc-result')}</div>
-    <div class="content right">\\( ${result[0].latex} \\)</div>
+    <div class="content right" id="result-content"></div>
     ${result.length > 1 ? parseVariableList(result.slice(1)) : ''}
 </div>
 ` : '';
@@ -419,6 +419,7 @@ ${parseTabularArray(mathBox.array)}
 
     calc.innerHTML = calcHtml;
 
+    result && result[0] && (document.getElementById('result-content').innerText = `\\( ${result[0].latex} \\)`);
     algorithm && (document.getElementById('algorithm-scratch-blocks-pre').innerText = algorithm.scratchBlocks.join('\n'));
     algorithm && (document.getElementById('algorithm-text-command-pre').innerText = algorithm.textCommand.join('\n'));
 

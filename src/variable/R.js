@@ -85,6 +85,7 @@ export const ParseEquationResult = (R, M, S, C) => {
       template = EQ0[`${subMode}-${split.length}-${complexRoot}`];
     }
   }
+  template = template.join(' \\\\ ');
 
   const result = [];
   if (SIMUL_SUB_MODE.includes(subMode)) {
@@ -143,10 +144,8 @@ export const ParseStatisticResult = (R, M) => {
   const result = [];
   switch (resultType) {
     case 'F1':
-      template = resultInfo['STATISTICS']['ONE-VAR'];
-      break;
     case 'F2':
-      template = resultInfo['STATISTICS']['TWO-VAR'];
+      template = resultInfo['STATISTICS'][resultType].join(' \\\\ ');
       break;
     case 'F3':
       template = tt(`mode.03${subMode}`).match(/\[.*]/g)[0];

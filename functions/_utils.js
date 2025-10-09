@@ -1,7 +1,7 @@
-import { ClassWizQR } from '../dist/cwqr.cjs';
-import zh from '../dist/i18n-res/zh.json';
-import vi from '../dist/i18n-res/vi.json';
-import fr from '../dist/i18n-res/fr.json';
+import { ClassWizQR } from '../src/index.js';
+import zh from '../src/i18n-res/zh.json';
+import vi from '../src/i18n-res/vi.json';
+import fr from '../src/i18n-res/fr.json';
 
 export class Response_ {
   static redirect(url) {

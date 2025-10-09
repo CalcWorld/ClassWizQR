@@ -119,7 +119,7 @@ langNames.forEach(lang => {
     }
   }
 
-  const outStr = JSON.stringify(langObjects[lang]);
+  const outStr = JSON.stringify(langObjects[lang], null, 2);
 
   fs.writeFileSync(filePath, outStr, 'utf8');
   console.log(`✅ 已生成 ${filePath}`);

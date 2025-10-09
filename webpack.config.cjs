@@ -48,10 +48,16 @@ const config = {
         {
           from: 'src/i18n-res',
           to: 'i18n-res',
-          filter: (filepath) => filepath.split(/[.\/\\]/).reverse()[1].length === 2,
+          filter: (filepath) => {
+            const s = filepath.split(/[.\/\\]/).reverse();
+            return s[0] === 'json' && s[1].length === 2;
+          },
+          transform(content) {
+            return JSON.stringify(JSON.parse(content.toString()));
+          },
         },
       ]
-    })
+    }),
   ],
   optimization: {
     // concatenateModules: false, // 临时禁用模块拼接

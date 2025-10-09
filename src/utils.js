@@ -1,8 +1,3 @@
-export const translate = (dict) => {
-  if (typeof dict === 'string') return dict;
-  return dict?.[globalThis.cwqrConfig?.language] || dict?.['en'];
-}
-
 export const availableLanguages = ['en', 'zh', 'vi', 'fr'];
 
 export const loadResource = (language, resource) => {

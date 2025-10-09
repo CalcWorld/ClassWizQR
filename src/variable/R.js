@@ -80,6 +80,7 @@ export const ParseEquationResult = (R, M, S, C) => {
   } else {
     template = EQ0[`${subMode}-${split.length}`];
     if (!template) {
+      // TODO: may be incorrect
       const complexRoot = new ParseSetup(S).getEquationComplexRootCode();
       template = EQ0[`${subMode}-${split.length}-${complexRoot}`];
     }
@@ -100,7 +101,7 @@ export const ParseEquationResult = (R, M, S, C) => {
       rootCount = (split.length - 4) / 2;
     }
     for (let i = 0; i < rootCount; i++) {
-      const numberResult = ParseNumberResult(split[2 * i] + split[2 * i + 1], M);
+      const numberResult = ParseNumberResult(`${split[2 * i]}${split[2 * i + 1]}`, M);
       const latex = numberResult[0].latex;
       template = template.replace(`\$\{${i}\}`, latex);
       result.push({ name: `Part${2 * i + 1}`, latex: numberResult[1].latex, decimal: numberResult[1].decimal });
@@ -142,10 +143,10 @@ export const ParseStatisticResult = (R, M) => {
   const result = [];
   switch (resultType) {
     case 'F1':
-      template = resultInfo['STATISTICS']['ONE-VAR'].template;
+      template = resultInfo['STATISTICS']['ONE-VAR'];
       break;
     case 'F2':
-      template = resultInfo['STATISTICS']['TWO-VAR'].template;
+      template = resultInfo['STATISTICS']['TWO-VAR'];
       break;
     case 'F3':
       template = tt(`mode.03${subMode}`).match(/\[.*]/g)[0];

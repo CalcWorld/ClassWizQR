@@ -48,7 +48,7 @@ const config = {
         {
           from: 'src/i18n-res',
           to: 'i18n-res',
-          filter: (filepath) => filepath.split(/[.\/]/).reverse()[1].length === 2,
+          filter: (filepath) => filepath.split(/[.\/\\]/).reverse()[1].length === 2,
         },
       ]
     })
@@ -74,13 +74,53 @@ const config = {
     ],
   },
   devtool: isProduction ? false : 'eval-source-map',
+  mode: isProduction ? 'production' : 'development',
 };
 
-module.exports = () => {
-  if (isProduction) {
-    config.mode = 'production';
-  } else {
-    config.mode = 'development';
-  }
-  return config;
-};
+module.exports = [
+  config,
+  {
+    entry: './src/index.js',
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'cwqr.cjs',
+      library: {
+        type: 'commonjs2',
+      },
+    },
+    target: 'node',
+    module: {
+      rules: [
+        {
+          test: /\.(js|jsx)$/i,
+          loader: 'babel-loader',
+        },
+      ],
+    },
+    mode: isProduction ? 'production' : 'development',
+  },
+
+  {
+    entry: './src/index.js',
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'cwqr.mjs',
+      library: {
+        type: 'module',
+      },
+    },
+    experiments: {
+      outputModule: true,
+    },
+    target: ['web', 'es2020'],
+    module: {
+      rules: [
+        {
+          test: /\.(js|jsx)$/i,
+          loader: 'babel-loader',
+        },
+      ],
+    },
+    mode: isProduction ? 'production' : 'development',
+  },
+];

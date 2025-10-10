@@ -9,7 +9,6 @@ import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseSta
 import { ParseSetup } from "./setup/index.js";
 import { availableLanguages, loadResource } from "./utils.js";
 import { ParseAlgorithm } from './algo/index.js';
-import enI18n from './i18n-res/en.json' with { type: 'json' };
 
 export class ClassWizQR {
   constructor() {
@@ -31,7 +30,7 @@ export class ClassWizQR {
     };
     this.calcId = void 0;
     this.language = 'en';
-    globalThis.i18nResource = { en: enI18n };
+    globalThis.i18nResource = {};
     globalThis.cwqrConfig = {};
   }
 
@@ -267,10 +266,11 @@ export class ClassWizQR {
  */
 export const parseUrl = (url, lang, i18nRes) => {
   const cwqr = new ClassWizQR();
-  if (i18nRes) {
+  if (lang && i18nRes && i18nRes[lang]) {
     cwqr.setLanguage(lang).setI18nResource(i18nRes);
   } else {
     cwqr.setLanguage('en');
+    console.warn('Language not specified. Fallback to en.');
   }
   return cwqr.setUrl(url).getResult();
 };

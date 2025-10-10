@@ -1,3 +1,5 @@
+import enI18n from './i18n-res/en.json' with { type: 'json' };
+
 export const availableLanguages = ['en', 'zh', 'vi', 'fr'];
 
 export const loadResource = (language, resource) => {
@@ -6,10 +8,7 @@ export const loadResource = (language, resource) => {
 };
 
 export const getResource = (language) => {
-  if (!availableLanguages.includes(language)) {
-    console.error(`${language} is not available, fallback to en`);
-    language = 'en';
-  }
+  if (language === 'en') return enI18n;
   if (globalThis.i18nResource?.[language]) return globalThis.i18nResource[language];
   else throw new Error(`${language} is not available, load it first`);
 };

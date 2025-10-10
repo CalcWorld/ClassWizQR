@@ -80,9 +80,15 @@ export const ParseEquationResult = (R, M, S, C) => {
   } else {
     template = EQ0[`${subMode}-${split.length}`];
     if (!template) {
-      // TODO: may be incorrect
       const complexRoot = new ParseSetup(S).getEquationComplexRootCode();
-      template = EQ0[`${subMode}-${split.length}-${complexRoot}`];
+      const [, lastR] = new ParseVariable(split[split.length - 1]).get();
+      let variants;
+      if (complexRoot === '1' || lastR.eq(0)) {
+        variants = '1'
+      } else {
+        variants = '0';
+      }
+      template = EQ0[`${subMode}-${split.length}-${variants}`];
     }
   }
   template = template.join(' \\\\ ');
@@ -118,8 +124,8 @@ export const ParseEquationResult = (R, M, S, C) => {
   }
 
   if (template.includes('${EXT}')) {
-    const [, firstDecimal] = new ParseVariable(C.slice(0, 20)).get();
-    if (firstDecimal.gt(0)) {
+    const [, firstC] = new ParseVariable(C.slice(0, 20)).get();
+    if (firstC.gt(0)) {
       template = template.replaceAll('${EXT}', 'min');
     } else {
       template = template.replaceAll('${EXT}', 'max');

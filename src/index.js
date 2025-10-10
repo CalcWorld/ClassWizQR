@@ -104,7 +104,7 @@ export class ClassWizQR {
   }
 
   getResult() {
-    const { url, modelType, kv, calcId } = this;
+    const { modelType, kv, calcId } = this;
     let modelId, modelName, qr, modelVersion;
     if (kv.I) {
       modelId = kv.I.slice(0, 3);
@@ -126,7 +126,7 @@ export class ClassWizQR {
     let setup;
     if (kv.S) {
       const parseS = new ParseSetup(kv.S);
-      setup = parseS.parseAll();
+      setup = parseS.parseAll(modelType);
     }
 
     let expression, expressionE, expressionG, _function, algorithm;

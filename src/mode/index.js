@@ -1,5 +1,4 @@
 import { tt } from "../utils.js";
-import { MODEL_TYPE_EY_FY } from '../model/index.js';
 
 export class ParseMode {
   constructor(M) {
@@ -48,14 +47,15 @@ export class ParseMode {
     return this.solveFor;
   }
 
+  /**
+   * @param {CY|EY|FY} modelType
+   */
   getModeInfo(modelType) {
     const mainMode = this.getMainMode();
     if (mainMode.startsWith('X') || mainMode.startsWith('Y') || mainMode.startsWith('Z')) {
-      let mainName;
-      if (MODEL_TYPE_EY_FY.includes(modelType)) {
-        mainName = tt(`menu.${mainMode}-${modelType}`) || tt(`menu.${mainMode}`);
-      } else {
-        mainName = tt(`menu.${mainMode}`);
+      let mainName = tt(`menu.${mainMode}`);
+      if (!mainName) {
+        mainName = tt(`menu.${mainMode}-${modelType}`);
       }
       return { mainName };
     }

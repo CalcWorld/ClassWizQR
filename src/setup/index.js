@@ -94,7 +94,6 @@ export class ParseSetup {
     return this.autoPowerOffCode;
   }
 
-  // TODO: CW X and CW II is different
   getTableTypeCode() {
     if (!this.tableTypeCode) {
       this.tableTypeCode = this.S.slice(12, 13);
@@ -178,7 +177,10 @@ export class ParseSetup {
     return this.algorithmUnitSettingCode;
   }
 
-  parseAll() {
+  /**
+   * @param {CY|EY|FY} modelType
+   */
+  parseAll(modelType) {
     const parseNumberFormat = () => {
       const main = this.getNumberFormatMainCode();
       const sub = this.getNumberFormatSubCode();
@@ -199,7 +201,7 @@ export class ParseSetup {
 
     const parseCommon = (type, code) => {
       const name = tt(`setup.${type}.name`);
-      const value = tt(`setup.${type}.${code}`) || code;
+      const value = tt(`setup.${type}.${code}`) || tt(`setup.${type}.${code}-${modelType}`) || code;
       return { name, value };
     }
 

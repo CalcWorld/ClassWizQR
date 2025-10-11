@@ -103,4 +103,7 @@ export const recDecOverlineModel = [
   "EY047",
 ];
 
-export const recDecBracketModel = ['CY298', 'EY023'];
+export const recDecBracketModel = [
+  'CY298',
+  'EY023',
+];

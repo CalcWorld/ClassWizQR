@@ -3,7 +3,6 @@ import { AsciiTable } from "../ascii/index.js";
 import { ParseMode } from "../mode/index.js";
 import { resultInfo } from './result.js';
 import { ParseSetup } from "../setup/index.js";
-import { tt } from "../utils.js";
 
 export const ParseNumberResult = (R, M, modelType, modelId) => {
   const parseM = new ParseMode(M);
@@ -154,7 +153,7 @@ export const ParseEquationResult = (R, M, S, C) => {
   return result;
 }
 
-export const ParseStatisticResult = (R, M) => {
+export const ParseStatisticResult = (R, M, modelType, modelId) => {
   const split = R.match(/.{20}/g);
   const parseM = new ParseMode(M);
   const subMode = parseM.getSubMode();
@@ -167,7 +166,7 @@ export const ParseStatisticResult = (R, M) => {
       template = resultInfo['STATISTICS'][resultType].join(' \\\\ ');
       break;
     case 'F3':
-      template = tt(`mode.03${subMode}`).match(/\[.*]/g)[0];
+      template = parseM.getStatSubName(modelType, modelId).replace('(bx)', '{(bx)}');
       template += ' \\\\ a=${0} \\\\ b=${1} \\\\ ';
       if (subMode === '03') {
         template += 'c=${2}';

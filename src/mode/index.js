@@ -1,5 +1,9 @@
 import { tt } from "../utils.js";
 
+export const STAT_DESC_MODEL = [
+  'EY015',
+];
+
 export class ParseMode {
   constructor(M) {
     this.M = M;
@@ -47,10 +51,24 @@ export class ParseMode {
     return this.solveFor;
   }
 
+  getStatSubName(modelType, modelId) {
+    const subMode = this.getSubMode();
+    if (['02', '03'].includes(subMode)) {
+      if (STAT_DESC_MODEL.includes(`${modelType}${modelId}`)) {
+        return tt(`mode.03T.${subMode}DESC`);
+      } else {
+        return tt(`mode.03T.${subMode}ASC`);
+      }
+    } else {
+      return tt(`mode.03T.${subMode}`);
+    }
+  }
+
   /**
    * @param {CY|EY|FY} modelType
+   * @param {string} modelId
    */
-  getModeInfo(modelType) {
+  getModeInfo(modelType, modelId) {
     const mainMode = this.getMainMode();
     if (mainMode.startsWith('X') || mainMode.startsWith('Y') || mainMode.startsWith('Z')) {
       let mainName = tt(`menu.${mainMode}`);
@@ -66,7 +84,11 @@ export class ParseMode {
       subMode = this.getResultTemplate();
     }
     const mainName = tt(`mode.${mainMode}`);
-    const subName = tt(`mode.${mainMode}${subMode}`);
+    let subName;
+    subName = tt(`mode.${mainMode}${subMode}`);
+    if (mainMode === '03' && subMode !== '01') {
+      subName += ` [${this.getStatSubName(modelType, modelId)}]`;
+    }
     return { mainName, subName };
   }
 

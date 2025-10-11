@@ -117,7 +117,7 @@ export class ClassWizQR {
     let _parseM, mode, _mainMode;
     if (kv.M) {
       _parseM = new ParseMode(kv.M);
-      mode = _parseM.getModeInfo(modelType);
+      mode = _parseM.getModeInfo(modelType, modelId);
       _mainMode = _parseM.getMainMode();
     } else if (calcId) {
       mode = new ParseMode().getGetStarted()
@@ -184,7 +184,7 @@ export class ClassWizQR {
           break;
         default:
           if (_mainMode === '03' && _parseM.getResultTemplate().startsWith('F')) {
-            result = ParseStatisticResult(R, kv.M);
+            result = ParseStatisticResult(R, kv.M, modelType, modelId);
           } else {
             result = ParseNumberResult(R, kv.M, modelType, modelId);
           }

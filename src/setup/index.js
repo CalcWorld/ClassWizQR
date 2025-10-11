@@ -182,27 +182,29 @@ export class ParseSetup {
    */
   parseAll(modelType) {
     const parseNumberFormat = () => {
+      const type = 'NUMBER_FORMAT';
       const main = this.getNumberFormatMainCode();
       const sub = this.getNumberFormatSubCode();
-      const name = tt('setup.NUMBER_FORMAT.name');
-      let value = tt(`setup.NUMBER_FORMAT.${main}`);
+      const name = tt(`setup.${type}.name`);
+      let value = tt(`setup.${type}.${main}`);
       if (['8', '9'].includes(main)) {
         value += sub;
       }
-      return { name, value };
+      return { name, value, type, code: `${main}${sub}` };
     }
 
     const parseInputOutput = () => {
-      const code = this.getInputCode() + this.getOutputCode();
-      const name = tt('setup.INPUT_OUTPUT.name');
-      const value = tt(`setup.INPUT_OUTPUT.${code}`);
-      return { name, value };
+      const type = 'INPUT_OUTPUT';
+      const code = `${this.getInputCode()}${this.getOutputCode()}`;
+      const name = tt(`setup.${type}.name`);
+      const value = tt(`setup.${type}.${code}`);
+      return { name, value, type, code };
     }
 
     const parseCommon = (type, code) => {
       const name = tt(`setup.${type}.name`);
       const value = tt(`setup.${type}.${code}`) || tt(`setup.${type}.${code}-${modelType}`) || code;
-      return { name, value };
+      return { name, value, type, code };
     }
 
     const setupMap = {

@@ -68,7 +68,7 @@ export const ParseEquationResult = (R, M, S, C) => {
   const split = R.slice(3).match(/.{20}/g);
   const subMode = new ParseMode(M).getSubMode();
   if (['1', '2', '4'].includes(resultCode)) {
-    if (!(resultCode === '4' && subMode === '04' && split.length === 4)) {
+    if (split.length === 0) {
       return [{ name: 'templated', latex: resultInfo['EQUATION'][resultCode]() }];
     }
   }

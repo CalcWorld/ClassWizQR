@@ -168,10 +168,11 @@ export const ParseStatisticResult = (R, M) => {
       break;
     case 'F3':
       template = tt(`mode.03${subMode}`).match(/\[.*]/g)[0];
+      template += ' \\\\ a=${0} \\\\ b=${1} \\\\ ';
       if (subMode === '03') {
-        template += ' \\\\ a=${0} \\\\ b=${1} \\\\ c=${2}';
+        template += 'c=${2}';
       } else {
-        template += ' \\\\ a=${0} \\\\ b=${1} \\\\ r=${2}';
+        template += 'r=${2}';
       }
       break;
   }

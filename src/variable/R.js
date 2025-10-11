@@ -64,31 +64,44 @@ export const ParseInequalityResult = (R) => {
 }
 
 export const ParseEquationResult = (R, M, S, C) => {
-  let resultCode = R.slice(2, 3);
+  const resultCode = R.slice(2, 3);
+  const split = R.slice(3).match(/.{20}/g);
+  const subMode = new ParseMode(M).getSubMode();
   if (['1', '2', '4'].includes(resultCode)) {
-    return [{ name: 'templated', latex: resultInfo['EQUATION'][resultCode](), decimal: NaN }];
+    if (!(resultCode === '4' && subMode === '04' && split.length === 4)) {
+      return [{ name: 'templated', latex: resultInfo['EQUATION'][resultCode]() }];
+    }
   }
   const noLocal = resultCode === '5';
 
-  const SIMUL_SUB_MODE = ['01', '02', '03'];
-  const split = R.slice(3).match(/.{20}/g);
-  const subMode = new ParseMode(M).getSubMode();
   let template;
+  const SIMUL_SUB_MODE = ['01', '02', '03'];
   const EQ0 = resultInfo['EQUATION']['0'];
   if (SIMUL_SUB_MODE.includes(subMode)) {
     template = EQ0[subMode];
   } else {
-    template = EQ0[`${subMode}-${split.length}`];
-    if (!template) {
+    if (subMode === '05' && split.length === 6) {
       const complexRoot = new ParseSetup(S).getEquationComplexRootCode();
       const [, lastR] = new ParseVariable(split[split.length - 1]).get();
       let variants;
       if (complexRoot === '1' || lastR.eq(0)) {
-        variants = '1'
+        variants = '1';
       } else {
         variants = '0';
       }
       template = EQ0[`${subMode}-${split.length}-${variants}`];
+    } else if (subMode === '04' && split.length === 4) {
+      let variants;
+      if (resultCode === '4') {
+        variants = '0';
+        template = [resultInfo['EQUATION'][resultCode]()];
+      } else {
+        variants = '1';
+        template = [];
+      }
+      template = template.concat(EQ0[`${subMode}-${split.length}-${variants}`]);
+    } else {
+      template = EQ0[`${subMode}-${split.length}`];
     }
   }
   template = template.join(' \\\\ ');
@@ -135,7 +148,7 @@ export const ParseEquationResult = (R, M, S, C) => {
     throw new Error('Equation template not match');
   }
   if (noLocal) {
-    template += `\\\\${resultInfo['EQUATION']['5']()}`;
+    template += ` \\\\ ${resultInfo['EQUATION']['5']()}`;
   }
   result.unshift({ name: 'templated', latex: template });
   return result;

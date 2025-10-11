@@ -1,0 +1,204 @@
+{
+  "mode": {
+    "45": "Phương trình",
+    "88": "Bảng giá trị",
+    "89": "Kiểm chứng",
+    "4501": "Phương trình tuyến tính đồng thời với 2 ẩn",
+    "4502": "Phương trình tuyến tính đồng thời với 3 ẩn",
+    "4503": "Phương trình tuyến tính đồng thời với 4 ẩn",
+    "4504": "Phương trình bậc hai [ax²+bx+c=0]",
+    "4505": "Phương trình bậc hai [ax³+bx²+cx+d=0]",
+    "4506": "Phương trình bậc bốn [ax⁴+bx³+cx²+dx+e=0]",
+    "4508": "Bộ giải phương trình",
+    "C1": "Phép tính thường",
+    "02": "Hệ đếm cơ số N",
+    "0201": "Nhị phân",
+    "0207": "Bát phân",
+    "0209": "Thập phân",
+    "020F": "Thập lục phân",
+    "03": "Thống kê",
+    "0301": "Thống kê 1 biến",
+    "0302": "Hồi quy tuyến tính [y=a+bx]/[y=ax+b]",
+    "0303": "Hồi quy bậc hai [y=a+bx+cx²]/[y=ax²+bx+c]",
+    "0304": "Hồi quy lôgarit [y=a+b･ln(x)]",
+    "0305": "e hồi quy hàm số mũ [y=a･e^(bx)]",
+    "0306": "ab hồi quy hàm số mũ [y=a･b^x]",
+    "0307": "Hồi quy lũy thừa [y=a･x^b]",
+    "0308": "Hồi quy nghịch đảo [y=a+b/x]",
+    "C4": "Số phức",
+    "06": "Ma trận",
+    "07": "Véc-tơ",
+    "4A": "Tỉ lệ thức",
+    "4B": "Bất phương trình",
+    "0C": "Phân phối",
+    "0C01": "Mật độ xác suất chuẩn",
+    "0C02": "Phân phối tích lũy chuẩn",
+    "0C03": "Phân phối tích lũy chuẩn nghịch đảo",
+    "0C04": "Xác suất nhị thức",
+    "0C05": "Phân phối tích lũy nhị thức",
+    "0C06": "Xác suất Poisson",
+    "0C07": "Phân phối tích lũy Poisson",
+    "0D": "Bảng tính",
+    "0E": "Thuật toán",
+    "4F": "Hộp Toán học"
+  },
+  "menu": {
+    "X1": "Mô tả Phép tính thường",
+    "X2": "Mô tả Hệ đếm cơ số N",
+    "X3": "Mô tả Thống kê",
+    "X4": "Mô tả Số phức",
+    "X5": "Mô tả Phương trình",
+    "X6": "Mô tả Ma trận",
+    "X7": "Mô tả Véc-tơ",
+    "X8": "Mô tả Bảng giá trị",
+    "X9-CY": "Mô tả Kiểm chứng",
+    "X9-EY": "Mô tả Kiểm chứng",
+    "X9-FY": "Mô tả Kiểm chứng",
+    "XA": "Mô tả Tỉ lệ thức",
+    "XB": "Mô tả Bất phương trình",
+    "XC": "Mô tả Phân phối",
+    "XD": "Mô tả Bảng tính",
+    "XE": "Mô tả Thuật toán",
+    "XF": "Mô tả Hộp toán học",
+    "Y1": "Ngắt AC",
+    "Y2": "Lỗi cú pháp",
+    "Y3": "Lỗi phép tính",
+    "Y4": "Lỗi phạm vi",
+    "Y5": "Không thể rút gọn",
+    "Y6": "Lỗi vòng lặp",
+    "Y7": "Lỗi nhóm phép tính",
+    "Y8": "Lỗi đối số",
+    "Y9": "Lỗi kích thước",
+    "YA": "Không giải được",
+    "YB": "Hết thời gian",
+    "YC": "Lỗi biến số",
+    "YD": "Lỗi NULL",
+    "YE": "Lỗi bộ nhớ",
+    "YG": "Không có Toán tử",
+    "YH": "Không xác định",
+    "YZ": "Lỗi lồng hàm",
+    "Z0": "Mô tả Trình cài đặt",
+    "Z1": "Mô tả Trình cài đặt (phụ)"
+  },
+  "setup": {
+    "NUMBER_FORMAT": {
+      "0": "Viết số bình thường 1",
+      "4": "Viết số bình thường 2",
+      "8": "Chọn số thập phân",
+      "9": "Dạng a×10ⁿ",
+      "name": "Định dạng số"
+    },
+    "DECIMAL_MARK": {
+      "0": "Phẩy",
+      "1": "Chấm",
+      "name": "Dấu thập phân"
+    },
+    "ANGLE_UNIT": {
+      "4": "Độ",
+      "5": "Radian",
+      "6": "Grad",
+      "name": "Đơn vị góc"
+    },
+    "INPUT_OUTPUT": {
+      "10": "Số tự nhiên vào/ra",
+      "11": "Số tự nhiên vào/Số thập phân ra",
+      "00": "Dòng vào/ra",
+      "01": "Dòng vào/Số thập phân ra",
+      "name": "Nhập/Xuất"
+    },
+    "FRACTION_RESULT": {
+      "name": "Kết quả phân số"
+    },
+    "COMPLEX_RESULT": {
+      "name": "Kết quả số phức"
+    },
+    "STATISTICS_FREQUENCY": {
+      "0": "Tắt",
+      "1": "Bật",
+      "name": "Tần số thống kê"
+    },
+    "RECURRING_DECIMAL": {
+      "0": "Tắt",
+      "1": "Bật",
+      "name": "Số thập phân tuần hoàn"
+    },
+    "SIMPLIFY": {
+      "0": "Tự động",
+      "1": "Bằng tay",
+      "name": "Rút gọn"
+    },
+    "AUTO_POWER_OFF": {
+      "0": "10 phút",
+      "1": "60 phút",
+      "name": "Tự động tắt"
+    },
+    "TABLE_TYPE": {
+      "name": "Loại bảng"
+    },
+    "ENGINEER_SYMBOL": {
+      "0": "Tắt",
+      "1": "Bật",
+      "name": "Kí hiệu kĩ thuật"
+    },
+    "DIGIT_SEPARATOR": {
+      "0": "Tắt",
+      "1": "Bật",
+      "name": "Dấu cách 3 chữ số"
+    },
+    "MULTI_LINE_FONT": {
+      "A": "Phông chữ nhỏ",
+      "E": "Phông chữ thường",
+      "name": "Phông Multi-Line"
+    },
+    "EQUATION_COMPLEX_ROOT": {
+      "0": "Tắt",
+      "1": "Bật",
+      "name": "Nghiệm Phức Phương trình"
+    },
+    "SPREADSHEET_AUTO_CALC": {
+      "0": "Tắt",
+      "1": "Bật",
+      "name": "Bảng tính: Tự động tính"
+    },
+    "SPREADSHEET_SHOW_CELL": {
+      "0": "Công thức",
+      "1": "Giá trị",
+      "name": "Bảng tính: Hiện ô"
+    },
+    "QR_CODE_VERSION": {
+      "3": "Phiên bản 3",
+      "B": "Phiên bản 11",
+      "name": "Phiên bản mã QR"
+    },
+    "ALGORITHM_BACKGROUND": {
+      "0": "Trục",
+      "1": "Trục/Lưới",
+      "2": "Trục/xy",
+      "3": "Không có",
+      "name": "Thuật toán: Nền"
+    },
+    "ALGORITHM_UNIT_SETTING": {
+      "0": "pixel",
+      "1": "đơn vị",
+      "name": "Thuật toán: Cài đặt đơn vị"
+    }
+  },
+  "input": {
+    "DISTRIBUTION": {
+      "024": "Ldưới=${0} \\\\ Ltrên=${1} \\\\ μ=${2} \\\\ σ=${3}",
+      "033": "Vùng=${0} \\\\ μ=${1} \\\\ σ=${2}"
+    }
+  },
+  "result": {
+    "INEQUALITY": {
+      "01": "Tất cả số thực",
+      "02": "Vô nghiệm"
+    },
+    "EQUATION": {
+      "1": "Vô số nghiệm",
+      "2": "Vô nghiệm",
+      "4": "Vô nghiệm",
+      "5": "Không có CĐ/CT"
+    }
+  }
+}

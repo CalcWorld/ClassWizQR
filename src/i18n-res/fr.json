@@ -1,0 +1,36 @@
+{
+  "algo": {
+    "F903": " ",
+    "F905": "Avancer de ${0} ${1}",
+    "F906": "Tourner de ⟲ ${0} degrés",
+    "F907": "S'orienter à ${0} degrés",
+    "F908": "Aller à x=${0}; y=${1}",
+    "F909": "Stylo écrit",
+    "F90A": "Stylo relevé",
+    "F90B": "${0}→${1}",
+    "F90C": "?→${0}",
+    "F90D": "\"${0}\"",
+    "F90D-1": "Oui",
+    "F90D-2": "Non",
+    "F90D-3": "Nombre?",
+    "F90D-4": "Résultat :",
+    "F90E": "Afficher résult ${0}",
+    "F90F": "Style ${0}",
+    "F90F-1": "Flèche",
+    "F90F-2": "Croix",
+    "F910": "Attendre",
+    "F911": "Répéter ${0}",
+    "F912": "↻",
+    "F913": "Répéter jusqu'à ${0}",
+    "F914": "↻",
+    "F915": "Si ${0} Alors",
+    "F916": "Fin",
+    "F917": "Si ${0} Alors",
+    "F918": "Sinon",
+    "F919": "Fin",
+    "scratch": {
+      "value": "valeur?",
+      "any": "n'importe laquelle"
+    }
+  }
+}

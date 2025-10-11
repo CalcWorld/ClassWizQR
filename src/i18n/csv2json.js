@@ -90,13 +90,15 @@ if (!fs.existsSync(targetDir)) {
 
 langNames.forEach(lang => {
   const filePath = path.join(targetDir, `${lang}.json`);
-  if (fs.existsSync(filePath)) {
-    const backupPath = path.join(targetDir, `${lang}.${timestamp()}.json`);
-    if (!isProd) {
-      fs.renameSync(filePath, backupPath);
-      console.log(`Backed up ${filePath} -> ${backupPath}`);
+  /*if (fs.existsSync(filePath) && !isProd) {
+    const backupDir = path.join(targetDir, 'bak');
+    if (!fs.existsSync(backupDir)) {
+      fs.mkdirSync(backupDir, { recursive: true });
     }
-  }
+    const backupPath = path.join(backupDir, `${lang}.${timestamp()}.json`);
+    fs.renameSync(filePath, backupPath);
+    console.log(`Backed up ${filePath} -> ${backupPath}`);
+  }*/
 
   const outStr = JSON.stringify(langObjects[lang], null, 2);
 

@@ -120,7 +120,9 @@ export class ParseVariable {
       }
 
       const commonDenominator = lcm(aRoot.b, bRoot.b);
-      if (!commonDenominator.eq(1)) {
+      if (commonDenominator.eq(1)) {
+        latex = originLatex;
+      } else {
         const aMul = commonDenominator.div(aRoot.b);
         const bMul = commonDenominator.div(bRoot.b);
         const aCoe = aMul.mul(aRoot.a);
@@ -128,9 +130,7 @@ export class ParseVariable {
         latex = `${aSign ? '' : '-'} ${aCoe.eq(1) ? '' : aCoe} ${aRoot.r.eq(1) ? '' : `\\sqrt{${aRoot.r}}`} ${aCoe.eq(1) && aRoot.r.eq(1) ? '1' : ''}`
           + `${bSign ? '+' : '-'} ${bCoe.eq(1) ? '' : bCoe} ${bRoot.r.eq(1) ? '' : `\\sqrt{${bRoot.r}}`} ${bCoe.eq(1) && bRoot.r.eq(1) ? '1' : ''}`;
         latex = `\\dfrac { \\displaystyle ${latex} } {\\displaystyle ${commonDenominator}}`;
-        latex += `\\ \\left( ${originLatex} \\right)`
-      } else {
-        latex = originLatex;
+        // latex += `\\ \\left( ${originLatex} \\right)`
       }
     } else {
       decimal = !aDecimal.isZero() ? aDecimal : bDecimal;

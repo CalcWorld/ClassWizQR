@@ -14,8 +14,8 @@ export const ParseNumberResult = (R, M, modelType, modelId) => {
   let template = RESULT_INFO['NUMBER'][parseM.getResultTemplate()];
   let result = [];
   if (!template) {
-    const real_is_zero = ans1Decimal.eq(0);
-    const imaginary_is_zero = ans2Decimal.eq(0);
+    const real_is_zero = ans1Decimal.isZero();
+    const imaginary_is_zero = ans2Decimal.isZero();
 
     let template_i;
     const plus_sign_i = real_is_zero ? '' : ' + ';
@@ -94,7 +94,7 @@ export const ParseEquationResult = (R, M, S, C) => {
       const complexRoot = new ParseSetup(S).getEquationComplexRootCode();
       const [, lastR] = new ParseVariable(split[split.length - 1]).get();
       let variants;
-      if (complexRoot === '1' || lastR.eq(0)) {
+      if (complexRoot === '1' || lastR.isZero()) {
         variants = '1';
       } else {
         variants = '0';

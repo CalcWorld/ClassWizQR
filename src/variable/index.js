@@ -90,7 +90,7 @@ export class ParseVariable {
     const [aLatex, aDecimal] = toOneSqrt(a);
     const [bLatex, bDecimal] = toOneSqrt(b);
     let latex, decimal;
-    if (!aDecimal.eq(0) && !bDecimal.eq(0)) {
+    if (!aDecimal.isZero() && !bDecimal.isZero()) {
       if (aSign && bSign) {
         latex = `${aLatex}+${bLatex}`;
         decimal = aDecimal.add(bDecimal);
@@ -105,9 +105,9 @@ export class ParseVariable {
         decimal = aDecimal.add(bDecimal).neg();
       }
     } else {
-      decimal = !aDecimal.eq(0) ? aDecimal : bDecimal;
-      latex = !aDecimal.eq(0) ? aLatex : bLatex;
-      const sign = !aDecimal.eq(0) ? aSign : bSign;
+      decimal = !aDecimal.isZero() ? aDecimal : bDecimal;
+      latex = !aDecimal.isZero() ? aLatex : bLatex;
+      const sign = !aDecimal.isZero() ? aSign : bSign;
       latex = sign ? latex : `-${latex}`;
       decimal = sign ? decimal : decimal.neg();
     }

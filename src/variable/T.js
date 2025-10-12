@@ -99,7 +99,7 @@ export const ParseMathBox = (T, M, C) => {
       if (quantity.eq(1)) {
         typeList = generateArray(1, 6);
       } else if (quantity.eq(2)) {
-        if (freqResultType.eq(0)) {
+        if (freqResultType.isZero()) {
           typeList = generateArray(2, 12);
         } else {
           freqResultTypeName = 'Diff';

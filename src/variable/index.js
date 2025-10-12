@@ -103,32 +103,34 @@ export class ParseVariable {
     const bSign = this.valExp.slice(-1) !== '6';
     const [aLatex, aDecimal, aRoot] = toOneSqrt(a);
     const [bLatex, bDecimal, bRoot] = toOneSqrt(b);
-    let latex, decimal;
+    let latex, originLatex, decimal;
     if (!aDecimal.isZero() && !bDecimal.isZero()) {
       if (aSign && bSign) {
-        // latex = `${aLatex}+${bLatex}`;
+        originLatex = `${aLatex}+${bLatex}`;
         decimal = aDecimal.add(bDecimal);
       } else if (aSign && !bSign) {
-        // latex = `${aLatex}-${bLatex}`;
+        originLatex = `${aLatex}-${bLatex}`;
         decimal = aDecimal.sub(bDecimal);
       } else if (!aSign && bSign) {
-        // latex = `-${aLatex}+${bLatex}`;
+        originLatex = `-${aLatex}+${bLatex}`;
         decimal = bDecimal.sub(aDecimal);
       } else {
-        // latex = `-${aLatex}-${bLatex}`;
+        originLatex = `-${aLatex}-${bLatex}`;
         decimal = aDecimal.add(bDecimal).neg();
       }
 
       const commonDenominator = lcm(aRoot.b, bRoot.b);
-      const aMul = commonDenominator.div(aRoot.b);
-      const bMul = commonDenominator.div(bRoot.b);
-      const aCoe = aMul.mul(aRoot.a);
-      const bCoe = bMul.mul(bRoot.a);
-
-      latex = `${aSign ? '' : '-'} ${aCoe.eq(1) ? '' : aCoe} ${aRoot.r.eq(1) ? '' : `\\sqrt{${aRoot.r}}`} ${aCoe.eq(1) && aRoot.r.eq(1) ? '1' : ''}`
-        + `${bSign ? '+' : '-'} ${bCoe.eq(1) ? '' : bCoe} ${bRoot.r.eq(1) ? '' : `\\sqrt{${bRoot.r}}`} ${bCoe.eq(1) && bRoot.r.eq(1) ? '1' : ''}`;
       if (!commonDenominator.eq(1)) {
+        const aMul = commonDenominator.div(aRoot.b);
+        const bMul = commonDenominator.div(bRoot.b);
+        const aCoe = aMul.mul(aRoot.a);
+        const bCoe = bMul.mul(bRoot.a);
+        latex = `${aSign ? '' : '-'} ${aCoe.eq(1) ? '' : aCoe} ${aRoot.r.eq(1) ? '' : `\\sqrt{${aRoot.r}}`} ${aCoe.eq(1) && aRoot.r.eq(1) ? '1' : ''}`
+          + `${bSign ? '+' : '-'} ${bCoe.eq(1) ? '' : bCoe} ${bRoot.r.eq(1) ? '' : `\\sqrt{${bRoot.r}}`} ${bCoe.eq(1) && bRoot.r.eq(1) ? '1' : ''}`;
         latex = `\\dfrac { \\displaystyle ${latex} } {\\displaystyle ${commonDenominator}}`;
+        latex += `\\ \\left( ${originLatex} \\right)`
+      } else {
+        latex = originLatex;
       }
     } else {
       decimal = !aDecimal.isZero() ? aDecimal : bDecimal;

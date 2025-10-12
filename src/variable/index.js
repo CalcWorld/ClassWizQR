@@ -41,6 +41,7 @@ export class ParseVariable {
   }
 
   #toFrac() {
+    // TODO: mixed number or improper fraction or decimal based on M data
     const numSign = this.valSign < 5 ? '' : '-';
     const signFix = this.valSign < 5 ? 1 : -1;
     const fracArr = this.valNum.slice(0, this.valExp % 100).split('A');

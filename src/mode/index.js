@@ -99,7 +99,7 @@ export class ParseMode {
       if (!mainName) {
         mainName = tt(`menu.${mainMode}-${modelType}`);
       }
-      return { mainName };
+      return { mainName, mainMode };
     }
     let subMode = this.getSubMode();
     if (mainMode === '4B') {

@@ -7,7 +7,7 @@ export const ParseVariableList = (variable, modelType) => {
   const split = variable.match(/.{9}/g);
   const result = [];
   for (let i = 0; i < split.length; i++) {
-    const [latex, decimal] = new ParseVariable(`0${split[i]}`).get();
+    const [latex, decimal] = new ParseVariable(split[i].match(/^[0-9]+$/) ? `0${split[i]}` : split[i]).get();
     result.push({ name: varIndex[i], latex, decimal });
   }
   return result;

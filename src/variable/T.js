@@ -21,8 +21,7 @@ export const ParseSpreadsheet = (T) => {
       if (hasData) {
         const cell = T.slice(62 + 9 * k, 62 + 9 * (k + 1));
         if (cell.match(/^[0-9]+$/)) {
-          const [, decimal] = new ParseVariable(`0${cell}`).get();
-          array[j][i] = decimal;
+          array[j][i] = new ParseVariable(`0${cell}`).get()[1];
         } else {
           array[j][i] = new ParseVariable(cell).get()[0];
         }

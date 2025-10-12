@@ -391,7 +391,7 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
     calcHtml += mathBox ? `
 <div class="calc-result" id="math-box">
     <div class="title">${t('calc-math-box')}</div>
-    <div class="content">${mathBox.subMode === 'S1' ? `${t('calc-math-box-dice')}` : `${t('calc-math-box-coin')}`}: ${mathBox.quantity}</div>
+    <div class="content">${qrResult?.mode?.subMode === 'S1' ? `${t('calc-math-box-dice')}` : `${t('calc-math-box-coin')}`}: ${mathBox.quantity}</div>
     <div class="content">${t('calc-math-box-attempts')}: ${mathBox.attempts}</div>
     <button id="math-box-csv-down" class="download">${t('calc-math-box-csv-down')}</button>
 ${parseTabularArray(mathBox.array)}

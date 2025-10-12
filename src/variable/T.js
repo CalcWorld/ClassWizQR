@@ -138,5 +138,5 @@ export const ParseMathBox = (T, M, C) => {
   }
 
   const csv = array2Csv(array);
-  return { subMode, quantity, attempts, array, csv };
+  return { quantity, attempts, array, csv };
 }

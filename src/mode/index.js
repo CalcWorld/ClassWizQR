@@ -113,7 +113,7 @@ export class ParseMode {
     if (mainMode === '03' && subMode !== '01') {
       subName += ` [${this.getStatSubName(modelType, modelId)}]`;
     }
-    return { mainName, subName };
+    return { mainName, subName, mainMode, subMode };
   }
 
   getGetStarted() {

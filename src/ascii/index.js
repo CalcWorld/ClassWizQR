@@ -61,7 +61,7 @@ export class AsciiTable {
   }
 }
 
-export const mathTemplate = [
+export const MATH_TEMPLATE = [
   '18',  // mixed fraction
   '2F',  // recurring decimal
   '50',  // Σ
@@ -78,7 +78,7 @@ export const mathTemplate = [
   'CA',  // x sqrt
 ]
 
-export const recDecOverlineModel = [
+export const REC_DEC_OVERLINE_MODEL = [
   "CY215",
   "CY216",
   "CY252",
@@ -103,7 +103,7 @@ export const recDecOverlineModel = [
   "EY047",
 ];
 
-export const recDecBracketModel = [
+export const REC_DEC_BRACKET_MODEL = [
   'CY298',
   'EY023',
 ];

@@ -1,7 +1,7 @@
 import { ParseVariable } from "./index.js";
 import { AsciiTable } from "../ascii/index.js";
 import { ParseMode } from "../mode/index.js";
-import { resultInfo } from './result.js';
+import { RESULT_INFO } from './result.js';
 import { ParseSetup } from "../setup/index.js";
 
 export const ParseNumberResult = (R, M, modelType, modelId) => {
@@ -11,7 +11,7 @@ export const ParseNumberResult = (R, M, modelType, modelId) => {
   const [ans1Latex, ans1Decimal] = new ParseVariable(ans1).get();
   const [ans2Latex, ans2Decimal] = new ParseVariable(ans2).get();
 
-  let template = resultInfo['NUMBER'][parseM.getResultTemplate()];
+  let template = RESULT_INFO['NUMBER'][parseM.getResultTemplate()];
   let result = [];
   if (!template) {
     if (ans2Decimal.eq(0)) {
@@ -43,7 +43,7 @@ export const ParseNumberResult = (R, M, modelType, modelId) => {
 
 export const ParseInequalityResult = (R) => {
   const resultCode = R.slice(2, 4);
-  const result = resultInfo['INEQUALITY'][resultCode];
+  const result = RESULT_INFO['INEQUALITY'][resultCode];
   if (typeof result === 'function') {
     return [{ name: 'templated', latex: result() }];
   }
@@ -68,14 +68,14 @@ export const ParseEquationResult = (R, M, S, C) => {
   const subMode = new ParseMode(M).getSubMode();
   if (['1', '2', '4'].includes(resultCode)) {
     if (split.length === 0) {
-      return [{ name: 'templated', latex: resultInfo['EQUATION'][resultCode]() }];
+      return [{ name: 'templated', latex: RESULT_INFO['EQUATION'][resultCode]() }];
     }
   }
   const noLocal = resultCode === '5';
 
   let template;
   const SIMUL_SUB_MODE = ['01', '02', '03'];
-  const EQ0 = resultInfo['EQUATION']['0'];
+  const EQ0 = RESULT_INFO['EQUATION']['0'];
   if (SIMUL_SUB_MODE.includes(subMode)) {
     template = EQ0[subMode];
   } else {
@@ -93,7 +93,7 @@ export const ParseEquationResult = (R, M, S, C) => {
       let variants;
       if (resultCode === '4') {
         variants = '0';
-        template = [resultInfo['EQUATION'][resultCode]()];
+        template = [RESULT_INFO['EQUATION'][resultCode]()];
       } else {
         variants = '1';
         template = [];
@@ -147,7 +147,7 @@ export const ParseEquationResult = (R, M, S, C) => {
     throw new Error('Equation template not match');
   }
   if (noLocal) {
-    template += ` \\\\ ${resultInfo['EQUATION']['5']()}`;
+    template += ` \\\\ ${RESULT_INFO['EQUATION']['5']()}`;
   }
   result.unshift({ name: 'templated', latex: template });
   return result;
@@ -163,7 +163,7 @@ export const ParseStatisticResult = (R, M, modelType, modelId) => {
   switch (resultType) {
     case 'F1':
     case 'F2':
-      template = resultInfo['STATISTICS'][resultType].join(' \\\\ ');
+      template = RESULT_INFO['STATISTICS'][resultType].join(' \\\\ ');
       break;
     case 'F3':
       template = parseM.getStatSubName(modelType, modelId).replace('(bx)', '{(bx)}');

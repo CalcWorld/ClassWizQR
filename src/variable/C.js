@@ -1,5 +1,5 @@
 import { ParseVariable } from "./index.js";
-import { inputInfo } from './input.js';
+import { INPUT_INFO } from './input.js';
 import { ParseMode } from "../mode/index.js";
 
 const ParseMatrix = (matrix, m, n) => {
@@ -102,9 +102,9 @@ export const ParseEquation = (M, C) => {
       subMode += parseM.getInqType();
       break;
   }
-  omitPlus || (omitPlus = inputInfo[equType][subMode]['omitPlus']);
-  (m || n) || ([m, n] = inputInfo[equType][subMode]['coefficient']);
-  let template = inputInfo[equType][subMode].template;
+  omitPlus || (omitPlus = INPUT_INFO[equType][subMode]['omitPlus']);
+  (m || n) || ([m, n] = INPUT_INFO[equType][subMode]['coefficient']);
+  let template = INPUT_INFO[equType][subMode].template;
   const decimalResult = [];
   const element = [];
   let elementRow = [];
@@ -131,7 +131,7 @@ export const ParseEquation = (M, C) => {
 export const ParseDistribution = (M, C) => {
   const subMode = new ParseMode(M).getSubMode();
   const split = C.match(/.{20}/g);
-  const distInfo = inputInfo['DISTRIBUTION'][subMode][split.length];
+  const distInfo = INPUT_INFO['DISTRIBUTION'][subMode][split.length];
   let template = distInfo.template;
   if (typeof template === 'function') {
     template = template();

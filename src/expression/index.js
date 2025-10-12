@@ -1,4 +1,4 @@
-import { AsciiTable, mathTemplate, recDecBracketModel, recDecOverlineModel } from "../ascii/index.js";
+import { AsciiTable, MATH_TEMPLATE, REC_DEC_BRACKET_MODEL, REC_DEC_OVERLINE_MODEL } from "../ascii/index.js";
 import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from "../setup/index.js";
 import { toAsciiArray } from '../utils.js';
@@ -18,9 +18,9 @@ export class ParseExpression {
   }
 
   _setRecDecType() {
-    if (recDecOverlineModel.includes(`${this.modelType}${this.modelId}`)) {
+    if (REC_DEC_OVERLINE_MODEL.includes(`${this.modelType}${this.modelId}`)) {
       this.recDecType = 1;
-    } else if (recDecBracketModel.includes(`${this.modelType}${this.modelId}`)) {
+    } else if (REC_DEC_BRACKET_MODEL.includes(`${this.modelType}${this.modelId}`)) {
       this.recDecType = 2;
     } else {
       this.recDecType = 0;
@@ -38,7 +38,7 @@ export class ParseExpression {
     for (let i = 0; i < asciiArray.length; i++) {
       const cur = asciiArray[i];
       const next = i + 1 < asciiArray.length ? asciiArray[i + 1] : null;
-      if (mathTemplate.includes(cur) && next === '1A') {
+      if (MATH_TEMPLATE.includes(cur) && next === '1A') {
         result += `{"${cur}": [`;
         continue;
       }

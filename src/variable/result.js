@@ -1,6 +1,6 @@
 import { tt } from '../utils.js';
 
-export const resultInfo = {
+export const RESULT_INFO = {
   "NUMBER": {
     "11": "x=${0},y=${1}",
     "12": "r=${0},θ=${1}",

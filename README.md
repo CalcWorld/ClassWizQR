@@ -28,7 +28,7 @@ Online Demo: <https://cwqr.pages.dev>
 - [x] ~~Algorithm mode~~
 - [x] ~~MathBox mode~~
 - [ ] `W` data in Graph mode
-- [ ] Refactor i18n
+- [x] ~~Refactor i18n~~
 - [ ] Optimized adaptations for FR, DE, CE, SP, and other models
 
 ## License

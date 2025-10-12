@@ -1,27 +1,32 @@
 import { tt } from "../utils.js";
+import { MODEL_TYPE } from '../model/index.js';
 
-export const STAT_DESC_MODEL = [
-  'CY236',
-  'CY237',
-  'CY238',
-  'CY239',
-  'CY246',
-  'CY247',
-  'CY295',
-  'EY006',
-  'EY007',
-  'EY012',
-  'EY013',
-  'EY014',
-  'EY015',
-  'EY021',
-  'EY024',
-  'EY025',
-  'EY026',
-  'EY027',
-  'EY028',
-  'EY090',
-];
+export const STAT_DESC_MODEL = {
+  [MODEL_TYPE.CY]: [
+    '236',
+    '237',
+    '238',
+    '239',
+    '246',
+    '247',
+    '295',
+  ],
+  [MODEL_TYPE.EY]: [
+    '006',
+    '007',
+    '012',
+    '013',
+    '014',
+    '015',
+    '021',
+    '024',
+    '025',
+    '026',
+    '027',
+    '028',
+    '090',
+  ],
+};
 
 export class ParseMode {
   constructor(M) {
@@ -73,7 +78,7 @@ export class ParseMode {
   getStatSubName(modelType, modelId) {
     const subMode = this.getSubMode();
     if (['02', '03'].includes(subMode)) {
-      if (STAT_DESC_MODEL.includes(`${modelType}${modelId}`)) {
+      if (STAT_DESC_MODEL[modelType]?.includes(modelId)) {
         return tt(`mode.03T.${subMode}DESC`);
       } else {
         return tt(`mode.03T.${subMode}ASC`);

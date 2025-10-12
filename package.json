@@ -7,9 +7,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npm run build:prod && npx wrangler pages dev ./dist --ip=0.0.0.0 --port=8792",
-    "prebuild": "node src/i18n/csv2json.js production",
-    "prebuild:dev": "node src/i18n/csv2json.js development",
-    "prebuild:prod": "node src/i18n/csv2json.js production",
+    "prebuild": "node i18n/csv2json.js production",
+    "prebuild:dev": "node i18n/csv2json.js development",
+    "prebuild:prod": "node i18n/csv2json.js production",
     "build": "webpack --mode=production --node-env=production",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",

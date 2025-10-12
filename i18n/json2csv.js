@@ -2,12 +2,12 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { stringify } from 'csv-stringify/sync';
-import { availableLanguages } from '../utils.js';
+import { availableLanguages } from '../src/utils.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const sourceDir = path.resolve(__dirname, '../i18n-res');
+const sourceDir = path.resolve(__dirname, '../src/i18n-res');
 const targetFile = path.resolve(__dirname, './resource.csv');
 
 const langs = availableLanguages;

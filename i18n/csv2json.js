@@ -7,7 +7,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const sourceFile = path.resolve(__dirname, './resource.csv');
-const targetDir = path.resolve(__dirname, '../i18n-res');
+const targetDir = path.resolve(__dirname, '../src/i18n-res');
 
 // node i18n/csv2json.js [production]
 const arg = process.argv[2] || '';

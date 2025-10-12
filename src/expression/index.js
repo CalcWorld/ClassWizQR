@@ -18,9 +18,9 @@ export class ParseExpression {
   }
 
   _setRecDecType() {
-    if (REC_DEC_OVERLINE_MODEL.includes(`${this.modelType}${this.modelId}`)) {
+    if (REC_DEC_OVERLINE_MODEL[this.modelType]?.includes(this.modelId)) {
       this.recDecType = 1;
-    } else if (REC_DEC_BRACKET_MODEL.includes(`${this.modelType}${this.modelId}`)) {
+    } else if (REC_DEC_BRACKET_MODEL[this.modelType].includes(this.modelId)) {
       this.recDecType = 2;
     } else {
       this.recDecType = 0;

@@ -3,9 +3,22 @@ import { asciiFA } from './FA.js';
 import { asciiFB, asciiFB_EY } from './FB.js';
 import { asciiFD, asciiFD_unicode } from './FD.js';
 import { asciiFE, asciiFE_JP } from './FE.js';
-import { MODEL_TYPE_EY_FY } from "../model/index.js";
+import { MODEL_TYPE, MODEL_TYPE_EY_FY } from "../model/index.js";
 
-const JPModel = ['CY240', 'CY241', 'CY242', 'CY243', 'EY029', 'EY030', 'EY031', 'EY032'];
+export const JP_MODEL = {
+  [MODEL_TYPE.CY]: [
+    '240',
+    '241',
+    '242',
+    '243',
+  ],
+  [MODEL_TYPE.EY]: [
+    '029',
+    '030',
+    '031',
+    '032',
+  ],
+};
 
 export class AsciiTable {
   constructor(modelType, modelId) {
@@ -53,7 +66,7 @@ export class AsciiTable {
     type === 'unicode' && combine('FD', asciiFD_unicode);
 
     combine('FE', asciiFE, type === 'unicode');
-    if (JPModel.includes(`${this.modelType}${this.modelId}`)) {
+    if (JP_MODEL[this.modelType]?.includes(this.modelId)) {
       combine('FE', asciiFE_JP, type === 'unicode');
     }
 
@@ -78,32 +91,39 @@ export const MATH_TEMPLATE = [
   'CA',  // x sqrt
 ]
 
-export const REC_DEC_OVERLINE_MODEL = [
-  "CY215",
-  "CY216",
-  "CY252",
-  "CY253",
-  "CY254",
-  "CY255",
-  "CY266",
-  "CY267",
-  "CY268",
-  "CY269",
-  "CY296",
+export const REC_DEC_OVERLINE_MODEL = {
+  [MODEL_TYPE.CY]: [
+    "215",
+    "216",
+    "252",
+    "253",
+    "254",
+    "255",
+    "266",
+    "267",
+    "268",
+    "269",
+    "296",
+  ],
+  [MODEL_TYPE.EY]: [
+    "008",
+    "009",
+    "010",
+    "011",
+    "012",
+    "013",
+    "014",
+    "015",
+    "016",
+    "047",
+  ],
+};
 
-  "EY008",
-  "EY009",
-  "EY010",
-  "EY011",
-  "EY012",
-  "EY013",
-  "EY014",
-  "EY015",
-  "EY016",
-  "EY047",
-];
-
-export const REC_DEC_BRACKET_MODEL = [
-  'CY298',
-  'EY023',
-];
+export const REC_DEC_BRACKET_MODEL = {
+  [MODEL_TYPE.CY]: [
+    '298',
+  ],
+  [MODEL_TYPE.EY]: [
+    '023',
+  ],
+};

@@ -4,17 +4,17 @@ import { tt } from "../utils.js";
 export class ParseVariable {
   constructor(variable) {
     this.val = variable;
-    this._parseProperty();
+    this.#parseProperty();
   }
 
-  _parseProperty() {
+  #parseProperty() {
     this.valType = this.val.slice(0, 1);
     this.valSign = this.val.slice(-3, -2);
     this.valExp = this.val.slice(-3);
     this.valNum = this.val.slice(1, -3);
   }
 
-  _toDecimal() {
+  #toDecimal() {
     const exp = this.valExp < 500 ? this.valExp - 100 : this.valExp - 600;
     let numSign, int, dec;
     numSign = this.valSign < 5 ? '' : '-';
@@ -26,7 +26,7 @@ export class ParseVariable {
     return [numLatex, numDec];
   }
 
-  _toFrac() {
+  #toFrac() {
     const numSign = this.valSign < 5 ? '' : '-';
     const signFix = this.valSign < 5 ? 1 : -1;
     const fracArr = this.valNum.slice(0, this.valExp % 100).split('A');
@@ -44,8 +44,8 @@ export class ParseVariable {
     return [fracLatex, fracDec];
   }
 
-  _toDMS() {
-    const [, decimal] = this._toDecimal();
+  #toDMS() {
+    const [, decimal] = this.#toDecimal();
     const d = decimal.floor();
     const mm = decimal.sub(d).times(60);
     const m = mm.floor();
@@ -54,7 +54,7 @@ export class ParseVariable {
     return [dms, decimal];
   }
 
-  _toSqrt() {
+  #toSqrt() {
     // TODO: get common denominator
     const toOneSqrt = (sqrt) => {
       const r = new Decimal(sqrt.slice(0, 3));
@@ -114,7 +114,7 @@ export class ParseVariable {
     return [latex, decimal];
   }
 
-  _toError() {
+  #toError() {
     const errCode = `Y${this.val.slice(1, 2)}`;
     return [tt(`menu.${errCode}`), NaN];
   }
@@ -122,15 +122,15 @@ export class ParseVariable {
   get() {
     switch (this.valType) {
       case '0':
-        return this._toDecimal();
+        return this.#toDecimal();
       case '2':
-        return this._toFrac();
+        return this.#toFrac();
       case '4':
-        return this._toDMS();
+        return this.#toDMS();
       case '8':
-        return this._toSqrt();
+        return this.#toSqrt();
       case 'F':
-        return this._toError();
+        return this.#toError();
     }
   }
 }

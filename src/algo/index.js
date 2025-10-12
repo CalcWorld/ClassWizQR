@@ -10,7 +10,7 @@ export class ParseAlgorithm {
    * @param {string} modelId
    */
   constructor(S, E, modelType, modelId) {
-    this.unitSetiing = new ParseSetup(S || '').getAlgorithmUnitSettingCode() || '0'; // default to 0-pixels
+    this.unitSetiing = new ParseSetup(S || '').getAlgorithmUnitSettingCode() || '0';
     this.E = E;
     const asciiTable = new AsciiTable(modelType, modelId);
     this.asciiLatexTable = asciiTable.get('latex');

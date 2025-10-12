@@ -5,4 +5,5 @@ util.inspect.defaultOptions.depth = null;
 
 let E = 'C81D1A741A381B1B1A351B1E'
 const parseE = new ParseExpression(E, 'EY', '007');
-console.log(parseE._parseToTree());
+parseE.parseMath();
+console.log(parseE.tree);

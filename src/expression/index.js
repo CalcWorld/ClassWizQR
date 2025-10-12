@@ -17,7 +17,7 @@ export class ParseExpression {
     return asciiArray.map(a => this.asciiTable[a]).join(' ');
   }
 
-  _setRecDecType() {
+  #setRecDecType() {
     if (REC_DEC_OVERLINE_MODEL[this.modelType]?.includes(this.modelId)) {
       this.recDecType = 1;
     } else if (REC_DEC_BRACKET_MODEL[this.modelType]?.includes(this.modelId)) {
@@ -27,7 +27,7 @@ export class ParseExpression {
     }
   }
 
-  _parseToTree() {
+  #parseToTree() {
     let text = this.E;
     text = text.replaceAll('1F1D1A', '1A');
     text = text.replaceAll('1D1A', '1A');
@@ -61,17 +61,18 @@ export class ParseExpression {
     result = result.endsWith(', ') ? result.slice(0, -2) : result;
     result += ']';
     result = JSON.parse(result);
+    this.tree = result;
     return result;
   }
 
-  _parseToLatex(tree) {
+  #parseToLatex(tree) {
     let result = "";
     if (typeof tree === 'string') {
       return this.asciiTable[tree];
     }
 
     if (Array.isArray(tree)) {
-      return tree.map(item => this._parseToLatex(item)).join(' ');
+      return tree.map(item => this.#parseToLatex(item)).join(' ');
     }
 
     if (typeof tree === 'object') {
@@ -79,9 +80,9 @@ export class ParseExpression {
       for (let i = 0; i < keys.length; i++) {
         const curKey = keys[i];
         const curVal = tree[curKey];
-        const a = this._parseToLatex(curVal[0]);
-        const b = curVal[1] ? this._parseToLatex(curVal[1]) : ' ';
-        const c = curVal[2] ? this._parseToLatex(curVal[2]) : ' ';
+        const a = this.#parseToLatex(curVal[0]);
+        const b = curVal[1] ? this.#parseToLatex(curVal[1]) : ' ';
+        const c = curVal[2] ? this.#parseToLatex(curVal[2]) : ' ';
         switch (curKey) {
           case '18':
             result += `{${a}} \\dfrac {\\displaystyle ${b}} {\\displaystyle ${c}} `;
@@ -151,11 +152,12 @@ export class ParseExpression {
   }
 
   parseMath() {
-    this._setRecDecType();
+    this.#setRecDecType();
     try {
-      const tree = this._parseToTree();
-      return this._parseToLatex(tree);
+      const tree = this.#parseToTree();
+      return this.#parseToLatex(tree);
     } catch (e) {
+      console.error(e);
       return this.parseLine();
     }
   }

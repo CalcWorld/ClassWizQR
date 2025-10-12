@@ -1,6 +1,20 @@
 import Decimal from "decimal.js";
 import { tt } from "../utils.js";
 
+function gcd(a, b) {
+  while (!b.isZero()) {
+    const temp = b;
+    b = a.mod(b);
+    a = temp;
+  }
+  return a.abs();
+}
+
+function lcm(a, b) {
+  if (a.isZero() || b.isZero()) return new Decimal(0);
+  return a.mul(b).abs().div(gcd(a, b));
+}
+
 export class ParseVariable {
   constructor(variable) {
     this.val = variable;
@@ -55,11 +69,11 @@ export class ParseVariable {
   }
 
   #toSqrt() {
-    // TODO: get common denominator
     const toOneSqrt = (sqrt) => {
-      const r = new Decimal(sqrt.slice(0, 3));
-      const a = new Decimal(sqrt.slice(3, 5));
-      const b = new Decimal(sqrt.slice(5, 7));
+      // sqrt(r) * (a/b)
+      const r = new Decimal(sqrt.slice(0, 3)); // root
+      const a = new Decimal(sqrt.slice(3, 5)); // numerator
+      const b = new Decimal(sqrt.slice(5, 7)); // denominator
       let latex, decimal;
       if (a.isZero() || r.isZero() || b.isZero()) {
         latex = '0';
@@ -80,29 +94,41 @@ export class ParseVariable {
         }
         decimal = a.mul(r.sqrt()).div(b);
       }
-      return [latex, decimal];
+      return [latex, decimal, { r, a, b }];
     }
 
     const a = this.valNum.slice(0, 7);
     const b = this.valNum.slice(8, 15);
     const aSign = this.valExp.slice(-3, -2) === '1';
     const bSign = this.valExp.slice(-1) !== '6';
-    const [aLatex, aDecimal] = toOneSqrt(a);
-    const [bLatex, bDecimal] = toOneSqrt(b);
+    const [aLatex, aDecimal, aRoot] = toOneSqrt(a);
+    const [bLatex, bDecimal, bRoot] = toOneSqrt(b);
     let latex, decimal;
     if (!aDecimal.isZero() && !bDecimal.isZero()) {
       if (aSign && bSign) {
-        latex = `${aLatex}+${bLatex}`;
+        // latex = `${aLatex}+${bLatex}`;
         decimal = aDecimal.add(bDecimal);
       } else if (aSign && !bSign) {
-        latex = `${aLatex}-${bLatex}`;
+        // latex = `${aLatex}-${bLatex}`;
         decimal = aDecimal.sub(bDecimal);
       } else if (!aSign && bSign) {
-        latex = `-${aLatex}+${bLatex}`;
+        // latex = `-${aLatex}+${bLatex}`;
         decimal = bDecimal.sub(aDecimal);
       } else {
-        latex = `-${aLatex}-${bLatex}`;
+        // latex = `-${aLatex}-${bLatex}`;
         decimal = aDecimal.add(bDecimal).neg();
+      }
+
+      const commonDenominator = lcm(aRoot.b, bRoot.b);
+      const aMul = commonDenominator.div(aRoot.b);
+      const bMul = commonDenominator.div(bRoot.b);
+      const aCoe = aMul.mul(aRoot.a);
+      const bCoe = bMul.mul(bRoot.a);
+
+      latex = `${aSign ? '' : '-'} ${aCoe.eq(1) ? '' : aCoe} ${aRoot.r.eq(1) ? '' : `\\sqrt{${aRoot.r}}`} ${aCoe.eq(1) && aRoot.r.eq(1) ? '1' : ''}`
+        + `${bSign ? '+' : '-'} ${bCoe.eq(1) ? '' : bCoe} ${bRoot.r.eq(1) ? '' : `\\sqrt{${bRoot.r}}`} ${bCoe.eq(1) && bRoot.r.eq(1) ? '1' : ''}`;
+      if (!commonDenominator.eq(1)) {
+        latex = `\\dfrac { \\displaystyle ${latex} } {\\displaystyle ${commonDenominator}}`;
       }
     } else {
       decimal = !aDecimal.isZero() ? aDecimal : bDecimal;

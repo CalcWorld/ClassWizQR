@@ -1,7 +1,26 @@
 import { tt } from "../utils.js";
 
 export const STAT_DESC_MODEL = [
+  'CY236',
+  'CY237',
+  'CY238',
+  'CY239',
+  'CY246',
+  'CY247',
+  'CY295',
+  'EY006',
+  'EY007',
+  'EY012',
+  'EY013',
+  'EY014',
   'EY015',
+  'EY021',
+  'EY024',
+  'EY025',
+  'EY026',
+  'EY027',
+  'EY028',
+  'EY090',
 ];
 
 export class ParseMode {

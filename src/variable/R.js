@@ -14,16 +14,27 @@ export const ParseNumberResult = (R, M, modelType, modelId) => {
   let template = RESULT_INFO['NUMBER'][parseM.getResultTemplate()];
   let result = [];
   if (!template) {
-    if (ans2Decimal.eq(0)) {
-      template = ans1Latex;
-    } else if (ans2Decimal.eq(1)) {
-      template = `${ans1Latex} + i`;
+    const real_is_zero = ans1Decimal.eq(0);
+    const imaginary_is_zero = ans2Decimal.eq(0);
+
+    let template_i;
+    const plus_sign_i = real_is_zero ? '' : ' + ';
+    if (ans2Decimal.eq(1)) {
+      template_i = `${plus_sign_i}i`;
     } else if (ans2Decimal.gt(0)) {
-      template = `${ans1Latex} + ${ans2Latex}i`;
+      template_i = `${plus_sign_i}${ans2Latex}i`;
     } else if (ans2Decimal.eq(-1)) {
-      template = `${ans1Latex} - i`;
+      template_i = `- i`;
     } else {
-      template = `${ans1Latex} ${ans2Latex}i`;
+      template_i = `${ans2Latex}i`;
+    }
+
+    if (imaginary_is_zero) {
+      template = ans1Latex;
+    } else if (real_is_zero) {
+      template = template_i;
+    } else {
+      template = `${ans1Latex} ${template_i}`;
     }
   } else {
     template = template.replace('${0}', ans1Latex);

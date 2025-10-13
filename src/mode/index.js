@@ -119,4 +119,12 @@ export class ParseMode {
   getGetStarted() {
     return { mainName: tt(`menu.GS`) };
   }
+
+  getFormatInfo() {
+    const formatCode = this.getResultFormat().split('');
+    const [displayCode, storeCode] = formatCode;
+    const [displayName, storeName] = formatCode.map(f => tt(`format.${f}`));
+
+    return { displayName, storeName, displayCode, storeCode };
+  }
 }

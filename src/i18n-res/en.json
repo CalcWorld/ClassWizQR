@@ -70,6 +70,23 @@
     "4FS1": "Dice Roll",
     "4FS2": "Coin Toss"
   },
+  "format": {
+    "1": "Sexagesimal",
+    "2": "ENG Notation 4 times",
+    "3": "ENG Notation 3 times",
+    "4": "ENG Notation 2 times",
+    "5": "ENG Notation 1 times",
+    "6": "Reverse ENG Notation 1 times",
+    "7": "Reverse ENG Notation 2 times",
+    "8": "Reverse ENG Notation 3 times",
+    "9": "Reverse ENG Notation 4 times",
+    "A": "Decimal",
+    "B": "Improper Fraction",
+    "C": "Mixed Number",
+    "D": "Standard",
+    "E": "Recurring Decimal",
+    "F": "Prime Factor"
+  },
   "menu": {
     "X1": "Calculate Manual",
     "X2": "Base-N Manual",

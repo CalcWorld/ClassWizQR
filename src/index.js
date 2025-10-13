@@ -114,11 +114,12 @@ export class ClassWizQR {
 
     const serialNumber = kv.U;
 
-    let _parseM, mode, _mainMode;
+    let _parseM, mode, _mainMode, format;
     if (kv.M) {
       _parseM = new ParseMode(kv.M);
       mode = _parseM.getModeInfo(modelType, modelId);
       _mainMode = _parseM.getMainMode();
+      format = _parseM.getFormatInfo();
     } else if (calcId) {
       mode = new ParseMode().getGetStarted()
     }
@@ -238,6 +239,7 @@ export class ClassWizQR {
         serialNumber,
       },
       mode,
+      format,
       expression,
       function: _function,
       equation,

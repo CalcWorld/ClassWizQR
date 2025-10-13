@@ -282,14 +282,14 @@
     calcHtml += expression ? `
 <div class="calc-result" id="expression">
     <div class="title">${t('calc-expression')}</div>
-    <div class="content">\\( ${expression} \\)</div>
+    <div class="content">\\( \\displaystyle ${expression} \\)</div>
 </div>
 ` : '';
 
     calcHtml += _function ? `
 <div class="calc-result" id="function">
     <div class="title">${t('calc-function')}</div>
-    ${_function.map(f => `<div class="content">\\( ${f.name}=${f.expression} \\)</div>`).join('')}
+    ${_function.map(f => `<div class="content">\\( \\displaystyle ${f.name}=${f.expression} \\)</div>`).join('')}
 </div>
 ` : '';
 

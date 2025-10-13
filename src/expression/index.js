@@ -109,16 +109,16 @@ export class ParseExpression {
             }
             break;
           case '50':
-            result += `\\sum_{x=${b}}^{${c}}{(${a})} `;
+            result += `\\sum_{x=${b}}^{${c}}{\\left(${a}\\right)} `;
             break;
           case '51':
             result += `\\int_{${b}}^{${c}}{${a}}\\mathrm{d}x `;
             break;
           case '52':
-            result += `\\dfrac{\\mathrm{d}}{\\mathrm{d}x} {(${a})} \\Bigg|_{x=${b}} `;
+            result += `\\dfrac{\\mathrm{d}}{\\mathrm{d}x} {\\left(${a}\\right)} \\Bigg|_{x=${b}} `;
             break;
           case '53':
-            result += `\\prod_{x=${b}}^{${c}}{(${a})} `;
+            result += `\\prod\\limits_{x=${b}}^{${c}}{\\left(${a}\\right)} `;
             break;
           case '68':
             result += `\\left | ${a} \\right | `;

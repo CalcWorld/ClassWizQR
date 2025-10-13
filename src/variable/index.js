@@ -100,8 +100,8 @@ export class ParseVariable {
 
     const a = this.valNum.slice(0, 7);
     const b = this.valNum.slice(8, 15);
-    const aSign = this.valExp.slice(-3, -2) === '1';
-    const bSign = this.valExp.slice(-1) !== '6';
+    let aSign = this.valExp.slice(-3, -2) === '1';
+    let bSign = this.valExp.slice(-1) !== '6';
     const [aLatex, aDecimal, aRoot] = toOneSqrt(a);
     const [bLatex, bDecimal, bRoot] = toOneSqrt(b);
     let latex, originLatex, decimal;
@@ -124,13 +124,16 @@ export class ParseVariable {
       if (commonDenominator.eq(1)) {
         latex = originLatex;
       } else {
-        const aMul = commonDenominator.div(aRoot.b);
-        const bMul = commonDenominator.div(bRoot.b);
-        const aCoe = aMul.mul(aRoot.a);
-        const bCoe = bMul.mul(bRoot.a);
+        let allSign = '';
+        if (!aSign && !bSign) {
+          allSign = '-';
+          aSign = bSign = true;
+        }
+        const aCoe = commonDenominator.div(aRoot.b).mul(aRoot.a);
+        const bCoe = commonDenominator.div(bRoot.b).mul(bRoot.a);
         latex = `${aSign ? '' : '-'} ${aCoe.eq(1) ? '' : aCoe} ${aRoot.r.eq(1) ? '' : `\\sqrt{${aRoot.r}}`} ${aCoe.eq(1) && aRoot.r.eq(1) ? '1' : ''}`
           + `${bSign ? '+' : '-'} ${bCoe.eq(1) ? '' : bCoe} ${bRoot.r.eq(1) ? '' : `\\sqrt{${bRoot.r}}`} ${bCoe.eq(1) && bRoot.r.eq(1) ? '1' : ''}`;
-        latex = `\\dfrac { \\displaystyle ${latex} } {\\displaystyle ${commonDenominator}}`;
+        latex = `${allSign} \\dfrac { \\displaystyle ${latex} } {\\displaystyle ${commonDenominator}}`;
         // latex += `\\ \\left( ${originLatex} \\right)`
       }
     } else {

@@ -56,7 +56,16 @@ export class ParseMode {
 
   getResultFormat() {
     if (!this.reultFormat) {
-      this.reultFormat = this.M.slice(6, 8);
+      // won't fix:
+      // in a List screen (e.g. Stat variable list, Dist List, or Spreadsheet), result format is 4-6.
+      // but it's useless on these cases
+      const mainMode = this.getMainMode();
+      const subMode = this.getSubMode();
+      if ((mainMode === '45' && subMode !== '08') || ['4A', '4B'].includes(mainMode)) {
+        this.reultFormat = this.M.slice(4, 6);
+      } else {
+        this.reultFormat = this.M.slice(6, 8);
+      }
     }
     return this.reultFormat;
   }

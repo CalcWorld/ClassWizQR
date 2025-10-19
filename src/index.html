@@ -245,14 +245,13 @@
   }
 
   function parseQr() {
-    let parseResult = {}, qrResult = {}, setup, model, mode;
+    let parseResult = {}, qrResult = {};
     if (qrUrl.value) {
       qrResult = cwqr.parseUrl(qrUrl.value, lang.value, cwqrI18nRes);
-      ({ setup, model, mode } = qrResult);
       parseResult = JSON.parse(JSON.stringify(qrResult));
     }
-    settingsPreview(setup);
-    basicPreview(model, mode);
+    settingsPreview(qrResult);
+    basicPreview(qrResult);
     calculationPreview(qrResult);
     editor.set(parseResult);
     editor.expandAll();
@@ -432,11 +431,12 @@ ${parseTabularArray(mathBox.array)}
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, calc]);
   }
 
-  function basicPreview(model, mode) {
+  function basicPreview(qrResult) {
+    const { model, mode, format } = qrResult;
+
     const basic = document.getElementById('basic');
     basic.innerHTML = (model && mode) ? `
-<table class="preview-table">
-<tbody class="transpose">
+<table class="preview-table"><tbody class="transpose">
   <tr>
     <td>${t('mode-main')}</td>
     <td>${mode.mainName}</td>
@@ -444,6 +444,14 @@ ${parseTabularArray(mathBox.array)}
   <tr>
     <td>${t('mode-sub')}</td>
     <td>${mode.subName || t('mode-na')}</td>
+  </tr>
+  <tr>
+    <td>${t('format-display')}</td>
+    <td>${format.displayName}</td>
+  </tr>
+  <tr>
+    <td>${t('format-store')}</td>
+    <td>${format.storeName}</td>
   </tr>
   <tr>
     <td>${t('model-series')}</td>
@@ -465,7 +473,9 @@ ${parseTabularArray(mathBox.array)}
 ` : '';
   }
 
-  function settingsPreview(setup) {
+  function settingsPreview(qrResult) {
+    const { setup } = qrResult;
+
     const settings = document.getElementById('settings');
     settings.innerHTML = setup ? `
 <table class="preview-table"><thead>
@@ -572,6 +582,8 @@ ${parseTabularArray(mathBox.array)}
       'mode-main': '主模式',
       'mode-sub': '子模式',
       'mode-na': '/',
+      'format-display': '显示格式',
+      'format-store': '存储格式',
       'settings-title': '设置',
       'settings-key': '设置项',
       'settings-value': '设置值',
@@ -614,6 +626,8 @@ ${parseTabularArray(mathBox.array)}
       'mode-main': 'Main Mode',
       'mode-sub': 'Sub Mode',
       'mode-na': '/',
+      'format-display': 'Display Result Format',
+      'format-store': 'Store Result Format',
       'settings-title': 'Settings',
       'settings-key': 'Settings',
       'settings-value': 'Settings Value',

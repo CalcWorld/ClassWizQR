@@ -40,8 +40,7 @@ export class ParseVariable {
     return [numLatex, numDec];
   }
 
-  #toFrac() {
-    // TODO: mixed number or improper fraction or decimal based on M data
+  #toFrac(displayCode) {
     const numSign = this.valSign < 5 ? '' : '-';
     const signFix = this.valSign < 5 ? 1 : -1;
     const fracArr = this.valNum.slice(0, this.valExp % 100).split('A');
@@ -49,12 +48,17 @@ export class ParseVariable {
     const b = fracArr[1];
     const c = fracArr[2] || '';
     let fracLatex, fracDec;
+    const getImpFrac = (d, c) => `${numSign} \\dfrac {\\displaystyle ${d}} {\\displaystyle ${c}}`;
     if (fracArr.length === 2) {
       fracDec = new Decimal(a).div(b).mul(signFix);
-      fracLatex = `${numSign} \\dfrac {\\displaystyle ${a}} {\\displaystyle ${b}}`;
+      fracLatex = getImpFrac(a, b);
     } else if (fracArr.length === 3) {
       fracDec = new Decimal(a).add(new Decimal(b).div(c)).mul(signFix);
-      fracLatex = `${numSign} {\\displaystyle ${a}} \\dfrac {\\displaystyle ${b}} {\\displaystyle ${c}}`;
+      if (displayCode === 'C') {
+        fracLatex = `${numSign} {\\displaystyle ${a}} \\dfrac {\\displaystyle ${b}} {\\displaystyle ${c}}`;
+      } else {
+        fracLatex = getImpFrac(a * c + +b, c);
+      }
     }
     return [fracLatex, fracDec];
   }
@@ -151,12 +155,12 @@ export class ParseVariable {
     return [tt(`menu.${errCode}`), NaN];
   }
 
-  get() {
+  get(displayCode) {
     switch (this.valType) {
       case '0':
         return this.#toDecimal();
       case '2':
-        return this.#toFrac();
+        return this.#toFrac(displayCode);
       case '4':
         return this.#toDMS();
       case '8':

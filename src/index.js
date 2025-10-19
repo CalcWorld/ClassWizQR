@@ -181,7 +181,7 @@ export class ClassWizQR {
           result = ParseEquationResult(R, kv.M, kv.S, kv.C);
           break;
         case 'IN':
-          result = ParseInequalityResult(R);
+          result = ParseInequalityResult(R, kv.M);
           break;
         default:
           if (_mainMode === '03' && _parseM.getResultTemplate().startsWith('F')) {

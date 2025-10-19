@@ -81,6 +81,7 @@ export const ParseVectorList = (C) => {
 export const ParseEquation = (M, C) => {
   const split = C.match(/.{20}/g);
   const parseM = new ParseMode(M);
+  const { displayCode } = parseM.getFormatInfo();
   const mainMode = parseM.getMainMode();
   let subMode = parseM.getSubMode();
   let equType, omitPlus, m, n;
@@ -110,7 +111,7 @@ export const ParseEquation = (M, C) => {
   let elementRow = [];
   let i;
   for (i = 0; i < split.length; i++) {
-    let [latex, decimal] = new ParseVariable(split[i]).get();
+    let [latex, decimal] = new ParseVariable(split[i]).get(displayCode);
     elementRow.push(latex);
     decimalResult.push(decimal);
     if (!omitPlus.includes(i) && decimal.gte(0)) {

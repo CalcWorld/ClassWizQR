@@ -210,9 +210,9 @@ export class ClassWizQR {
         vector = ParseVectorList(kv.C, kv.S);
       } else if (kv.M) {
         if (['45', '4A', '4B'].includes(_mainMode)) {
-          equation = ParseEquation(kv.M, kv.C);
+          equation = ParseEquation(kv.C, kv.M, kv.S);
         } else if (_mainMode === '0C') {
-          distribution = ParseDistribution(kv.M, kv.C);
+          distribution = ParseDistribution(kv.C, kv.M);
         }
       }
     }

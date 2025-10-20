@@ -104,10 +104,18 @@ export const ParseVectorList = (C, S) => {
   return result;
 }
 
-export const ParseEquation = (M, C) => {
+/**
+ *
+ * @param {string} C
+ * @param {string} M
+ * @param {string} S
+ * @return {{latex: *, decimal: *[], element: *[]}}
+ */
+export const ParseEquation = (C, M, S) => {
+  const parseS = new ParseSetup(S);
+  const fractionResult = parseS.getFractionResult();
   const split = C.match(/.{20}/g);
   const parseM = new ParseMode(M);
-  const { displayCode } = parseM.getFormatInfo();
   const mainMode = parseM.getMainMode();
   let subMode = parseM.getSubMode();
   let equType, omitPlus, m, n;
@@ -137,7 +145,7 @@ export const ParseEquation = (M, C) => {
   let elementRow = [];
   let i;
   for (i = 0; i < split.length; i++) {
-    let [latex, decimal] = new ParseVariable(split[i]).get({ displayCode });
+    let [latex, decimal] = new ParseVariable(split[i]).get({ fractionResult });
     elementRow.push(latex);
     decimalResult.push(decimal);
     if (!omitPlus.includes(i) && decimal.gte(0)) {
@@ -155,7 +163,12 @@ export const ParseEquation = (M, C) => {
   return { latex: template, decimal: decimalResult, element };
 }
 
-export const ParseDistribution = (M, C) => {
+/**
+ * @param C
+ * @param M
+ * @return {{latex: *, decimal: *[]}}
+ */
+export const ParseDistribution = (C, M) => {
   const subMode = new ParseMode(M).getSubMode();
   const split = C.match(/.{20}/g);
   const distInfo = INPUT_INFO['DISTRIBUTION'][subMode][split.length];

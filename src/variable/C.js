@@ -111,7 +111,7 @@ export const ParseEquation = (M, C) => {
   let elementRow = [];
   let i;
   for (i = 0; i < split.length; i++) {
-    let [latex, decimal] = new ParseVariable(split[i]).get(displayCode);
+    let [latex, decimal] = new ParseVariable(split[i]).get({ displayCode });
     elementRow.push(latex);
     decimalResult.push(decimal);
     if (!omitPlus.includes(i) && decimal.gte(0)) {

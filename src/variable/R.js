@@ -9,8 +9,8 @@ export const ParseNumberResult = (R, M, modelType, modelId) => {
   const { displayCode } = parseM.getFormatInfo();
   const ans1 = R.slice(0, R.length / 2);
   const ans2 = R.slice(R.length / 2);
-  const [ans1Latex, ans1Decimal] = new ParseVariable(ans1).get(displayCode);
-  const [ans2Latex, ans2Decimal] = new ParseVariable(ans2).get(displayCode);
+  const [ans1Latex, ans1Decimal] = new ParseVariable(ans1).get({ displayCode });
+  const [ans2Latex, ans2Decimal] = new ParseVariable(ans2).get({ displayCode });
 
   let template = RESULT_INFO['NUMBER'][parseM.getResultTemplate()];
   let result = [];
@@ -65,7 +65,7 @@ export const ParseInequalityResult = (R, M) => {
   let template = result;
   const returnResult = [];
   for (let i = 0; i < split.length; i++) {
-    const [latex, decimal] = new ParseVariable(split[i]).get(displayCode);
+    const [latex, decimal] = new ParseVariable(split[i]).get({ displayCode });
     template = template.replace(`\$\{${i}\}`, latex);
     returnResult.push({ name: `Part${i + 1}`, latex, decimal });
   }
@@ -98,7 +98,7 @@ export const ParseEquationResult = (R, M, S, C) => {
   } else {
     if (subMode === '05' && split.length === 6) {
       const complexRoot = new ParseSetup(S).getEquationComplexRootCode();
-      const [, lastR] = new ParseVariable(split[split.length - 1]).get(displayCode);
+      const [, lastR] = new ParseVariable(split[split.length - 1]).get({ displayCode });
       let variants;
       if (complexRoot === '1' || lastR.isZero()) {
         variants = '1';
@@ -125,7 +125,7 @@ export const ParseEquationResult = (R, M, S, C) => {
   const result = [];
   if (SIMUL_SUB_MODE.includes(subMode)) {
     for (let i = 0; i < split.length; i++) {
-      const [latex, decimal] = new ParseVariable(split[i]).get(displayCode);
+      const [latex, decimal] = new ParseVariable(split[i]).get({ displayCode });
       template = template.replace(`\$\{${i}\}`, latex);
       result.push({ name: `Part${i + 1}`, latex, decimal });
     }
@@ -145,7 +145,7 @@ export const ParseEquationResult = (R, M, S, C) => {
     }
     if ('05' === subMode && template.includes('max')) {
       for (let i = 0; i < 4; i++) {
-        const [latex, decimal] = new ParseVariable(split[rootCount * 2 + i]).get(displayCode);
+        const [latex, decimal] = new ParseVariable(split[rootCount * 2 + i]).get({ displayCode });
         template = template.replace(`\$\{${rootCount + i}\}`, latex);
         result.push({ name: `Part${rootCount * 2 + i + 1}`, latex, decimal });
       }

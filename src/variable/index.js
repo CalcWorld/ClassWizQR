@@ -156,10 +156,12 @@ export class ParseVariable {
   }
 
   /**
-   * @param {string} [displayCode]
+   * @param {object} [options]
+   * @param {string} [options.displayCode]
    * @return {[string,Decimal]}
    */
-  get(displayCode) {
+  get(options) {
+    const { displayCode } = options || {};
     switch (this.valType) {
       case '0':
         return this.#toDecimal();

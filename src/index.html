@@ -445,6 +445,7 @@ ${parseTabularArray(mathBox.array)}
     <td>${t('mode-sub')}</td>
     <td>${mode.subName || t('mode-na')}</td>
   </tr>
+  ${format ? `
   <tr>
     <td>${t('format-display')}</td>
     <td>${format.displayName}</td>
@@ -453,6 +454,7 @@ ${parseTabularArray(mathBox.array)}
     <td>${t('format-store')}</td>
     <td>${format.storeName}</td>
   </tr>
+` : ''}
   <tr>
     <td>${t('model-series')}</td>
     <td>${model.type}</td>

@@ -13,6 +13,11 @@ export const getResource = (language) => {
   else throw new Error(`${language} is not available, load it first`);
 };
 
+/**
+ * @param {string} key
+ * @param {...string[]} [params]
+ * @return {string}
+ */
 export const tt = (key, ...params) => {
   const language = globalThis.cwqrConfig?.language || 'en';
   let current = getResource(language);

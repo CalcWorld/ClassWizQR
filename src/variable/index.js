@@ -152,9 +152,13 @@ export class ParseVariable {
 
   #toError() {
     const errCode = `Y${this.val.slice(1, 2)}`;
-    return [tt(`menu.${errCode}`), NaN];
+    return [tt(`menu.${errCode}`), new Decimal(NaN)];
   }
 
+  /**
+   * @param {string} [displayCode]
+   * @return {[string,Decimal]}
+   */
   get(displayCode) {
     switch (this.valType) {
       case '0':

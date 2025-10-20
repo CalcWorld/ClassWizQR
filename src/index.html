@@ -104,6 +104,10 @@
         text-align: right;
     }
 
+    #loading {
+        text-align: center;
+    }
+
     .fix-width td {
         width: 4rem;
         height: 1rem;
@@ -146,6 +150,7 @@
     <details open>
         <summary data-i18n-tag="calc-title">Calculation</summary>
         <div id="calc"></div>
+        <div id="loading" hidden></div>
     </details>
     <details open>
         <summary data-i18n-tag="basic-title">Basic Info</summary>
@@ -275,6 +280,7 @@
     } = qrResult;
 
     const calc = document.getElementById('calc');
+    calc.hidden = true;
     calc.innerHTML = '';
     let calcHtml = '';
 
@@ -428,7 +434,17 @@ ${parseTabularArray(mathBox.array)}
     statistic && (document.getElementById('statistic-csv-down').onclick = () => download(`statistic-${csvFilename}`, statistic.csv, 'text/plain'));
     mathBox && (document.getElementById('math-box-csv-down').onclick = () => download(`math-box-${csvFilename}`, mathBox.csv, 'text/plain'));
 
+    const loading = document.getElementById('loading');
+    if (calcHtml) {
+      loading.innerHTML = t('loading');
+      loading.hidden = false;
+    }
+
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, calc]);
+    MathJax.Hub.Queue(function () {
+      calc.hidden = false;
+      loading.hidden = true;
+    });
   }
 
   function basicPreview(qrResult) {
@@ -548,6 +564,7 @@ ${parseTabularArray(mathBox.array)}
       language = lang.value;
     }
     const zh = {
+      'loading': '加载中......',
       'calc-title': '计算数据',
       'calc-expression': '表达式',
       'calc-function': '函数定义',
@@ -592,6 +609,7 @@ ${parseTabularArray(mathBox.array)}
       'qr-parse-result-title': 'QR解析数据',
     };
     const en = {
+      'loading': 'Loading......',
       'calc-title': 'Calculation',
       'calc-expression': 'Expression',
       'calc-function': 'Function',

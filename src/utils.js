@@ -8,9 +8,9 @@ export const loadResource = (language, resource) => {
 };
 
 export const getResource = (language) => {
-  if (language === 'en') return enI18n;
+  if (language === 'en' && !globalThis.i18nResource?.en) return enI18n;
   if (globalThis.i18nResource?.[language]) return globalThis.i18nResource[language];
-  else throw new Error(`${language} is not available, load it first`);
+  throw new Error(`${language} is not available, load it first`);
 };
 
 /**

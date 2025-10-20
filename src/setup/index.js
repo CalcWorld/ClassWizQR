@@ -9,172 +9,172 @@ export class ParseSetup {
     return this.S.length !== 5;
   }
 
-  getNumberFormatMainCode() {
+  getNumberFormatMain() {
     if (!this.numberFormatMain) {
       this.numberFormatMain = this.S.slice(0, 1);
     }
     return this.numberFormatMain;
   }
 
-  getNumberFormatSubCode() {
+  getNumberFormatSub() {
     if (!this.numberFormatSub) {
       this.numberFormatSub = this.S.slice(1, 2);
     }
     return this.numberFormatSub;
   }
 
-  getInputCode() {
-    if (!this.inputCode) {
-      this.inputCode = this.S.slice(4, 5);
+  getInput() {
+    if (!this.input) {
+      this.input = this.S.slice(4, 5);
     }
-    return this.inputCode;
+    return this.input;
   }
 
-  getOutputCode() {
-    if (!this.outputCode) {
-      this.outputCode = this.S.slice(10, 11);
+  getOutput() {
+    if (!this.output) {
+      this.output = this.S.slice(10, 11);
     }
-    return this.outputCode;
-  }
-
-
-  getDecimalMarkCode() {
-    if (!this.decimalMarkCode) {
-      this.decimalMarkCode = this.S.slice(2, 3);
-    }
-    return this.decimalMarkCode;
-  }
-
-  getAngleUnitCode() {
-    if (!this.angleUnitCode) {
-      this.angleUnitCode = this.S.slice(3, 4);
-    }
-    return this.angleUnitCode;
-  }
-
-  getFractionResultCode() {
-    if (!this.fractionResultCode) {
-      this.fractionResultCode = this.S.slice(5, 6);
-    }
-    return this.fractionResultCode;
-  }
-
-  getComplexResultCode() {
-    if (!this.complexResultCode) {
-      this.complexResultCode = this.S.slice(6, 7);
-    }
-    return this.complexResultCode;
-  }
-
-  getStatisticsFrequencyCode() {
-    if (!this.statisticsFrequencyCode) {
-      this.statisticsFrequencyCode = this.S.slice(7, 8);
-    }
-    return this.statisticsFrequencyCode;
-  }
-
-  getRecurringDecimalCode() {
-    if (!this.recurringDecimalCode) {
-      this.recurringDecimalCode = this.S.slice(8, 9);
-    }
-    return this.recurringDecimalCode;
-  }
-
-  getSimplifyCode() {
-    if (!this.simplifyCode) {
-      this.simplifyCode = this.S.slice(9, 10);
-    }
-    return this.simplifyCode;
-  }
-
-  getAutoPowerOffCode() {
-    if (!this.autoPowerOffCode) {
-      this.autoPowerOffCode = this.S.slice(11, 12);
-    }
-    return this.autoPowerOffCode;
-  }
-
-  getTableTypeCode() {
-    if (!this.tableTypeCode) {
-      this.tableTypeCode = this.S.slice(12, 13);
-    }
-    return this.tableTypeCode;
-  }
-
-  getEngineerSymbolCode() {
-    if (!this.engineerSymbolCode) {
-      this.engineerSymbolCode = this.S.slice(13, 14);
-    }
-    return this.engineerSymbolCode;
-  }
-
-  getDigitSeparatorCode() {
-    if (!this.digitSeparatorCode) {
-      this.digitSeparatorCode = this.S.slice(14, 15);
-    }
-    return this.digitSeparatorCode;
-  }
-
-  getMultiLineFontCode() {
-    if (!this.multiLineFontCode) {
-      this.multiLineFontCode = this.S.slice(15, 16);
-    }
-    return this.multiLineFontCode;
+    return this.output;
   }
 
 
-  getEquationComplexRootCode() {
-    if (!this.equationComplexRootCode) {
-      this.equationComplexRootCode = this.S.slice(16, 17);
+  getDecimalMark() {
+    if (!this.decimalMark) {
+      this.decimalMark = this.S.slice(2, 3);
     }
-    return this.equationComplexRootCode;
+    return this.decimalMark;
+  }
+
+  getAngleUnit() {
+    if (!this.angleUnit) {
+      this.angleUnit = this.S.slice(3, 4);
+    }
+    return this.angleUnit;
+  }
+
+  getFractionResult() {
+    if (!this.fractionResult) {
+      this.fractionResult = this.S.slice(5, 6);
+    }
+    return this.fractionResult;
+  }
+
+  getComplexResult() {
+    if (!this.complexResult) {
+      this.complexResult = this.S.slice(6, 7);
+    }
+    return this.complexResult;
+  }
+
+  getStatisticsFrequency() {
+    if (!this.statisticsFrequency) {
+      this.statisticsFrequency = this.S.slice(7, 8);
+    }
+    return this.statisticsFrequency;
+  }
+
+  getRecurringDecimal() {
+    if (!this.recurringDecimal) {
+      this.recurringDecimal = this.S.slice(8, 9);
+    }
+    return this.recurringDecimal;
+  }
+
+  getSimplify() {
+    if (!this.simplify) {
+      this.simplify = this.S.slice(9, 10);
+    }
+    return this.simplify;
+  }
+
+  getAutoPowerOff() {
+    if (!this.autoPowerOff) {
+      this.autoPowerOff = this.S.slice(11, 12);
+    }
+    return this.autoPowerOff;
+  }
+
+  getTableType() {
+    if (!this.tableType) {
+      this.tableType = this.S.slice(12, 13);
+    }
+    return this.tableType;
+  }
+
+  getEngineerSymbol() {
+    if (!this.engineerSymbol) {
+      this.engineerSymbol = this.S.slice(13, 14);
+    }
+    return this.engineerSymbol;
+  }
+
+  getDigitSeparator() {
+    if (!this.digitSeparator) {
+      this.digitSeparator = this.S.slice(14, 15);
+    }
+    return this.digitSeparator;
+  }
+
+  getMultiLineFont() {
+    if (!this.multiLineFont) {
+      this.multiLineFont = this.S.slice(15, 16);
+    }
+    return this.multiLineFont;
+  }
+
+
+  getEquationComplexRoot() {
+    if (!this.equationComplexRoot) {
+      this.equationComplexRoot = this.S.slice(16, 17);
+    }
+    return this.equationComplexRoot;
   }
 
   // this setup is based on model
-  getLanguageCode() {
-    if (!this.languageCode) {
+  getLanguage() {
+    if (!this.language) {
       if (this.isFullSetup()) {
-        this.languageCode = this.S.slice(17, 18);
+        this.language = this.S.slice(17, 18);
       } else {
-        this.languageCode = this.S.slice(0, 1);
+        this.language = this.S.slice(0, 1);
       }
     }
-    return this.languageCode;
+    return this.language;
   }
 
-  getSpreadsheetAutoCalcCode() {
-    if (!this.spreadsheetAutoCalcCode) {
-      this.spreadsheetAutoCalcCode = this.S.slice(18, 19);
+  getSpreadsheetAutoCalc() {
+    if (!this.spreadsheetAutoCalc) {
+      this.spreadsheetAutoCalc = this.S.slice(18, 19);
     }
-    return this.spreadsheetAutoCalcCode;
+    return this.spreadsheetAutoCalc;
   }
 
-  getSpreadsheetShowCellCode() {
-    if (!this.spreadsheetShowCellCode) {
-      this.spreadsheetShowCellCode = this.S.slice(19, 20);
+  getSpreadsheetShowCell() {
+    if (!this.spreadsheetShowCell) {
+      this.spreadsheetShowCell = this.S.slice(19, 20);
     }
-    return this.spreadsheetShowCellCode;
+    return this.spreadsheetShowCell;
   }
 
-  getQRCodeVersionCode() {
-    if (!this.qrCodeVersionCode) {
-      this.qrCodeVersionCode = this.S.slice(20, 21);
+  getQRCodeVersion() {
+    if (!this.qrCodeVersion) {
+      this.qrCodeVersion = this.S.slice(20, 21);
     }
-    return this.qrCodeVersionCode;
+    return this.qrCodeVersion;
   }
 
-  getAlgorithmBackgroundCode() {
-    if (!this.algorithmBackgroundCode) {
-      this.algorithmBackgroundCode = this.S.slice(21, 22);
+  getAlgorithmBackground() {
+    if (!this.algorithmBackground) {
+      this.algorithmBackground = this.S.slice(21, 22);
     }
-    return this.algorithmBackgroundCode;
+    return this.algorithmBackground;
   }
 
-  getAlgorithmUnitSettingCode() {
-    if (!this.algorithmUnitSettingCode) {
-      this.algorithmUnitSettingCode = this.S.slice(22, 23);
+  getAlgorithmUnitSetting() {
+    if (!this.algorithmUnitSetting) {
+      this.algorithmUnitSetting = this.S.slice(22, 23);
     }
-    return this.algorithmUnitSettingCode;
+    return this.algorithmUnitSetting;
   }
 
   /**
@@ -183,8 +183,8 @@ export class ParseSetup {
   parseAll(modelType) {
     const parseNumberFormat = () => {
       const type = 'NUMBER_FORMAT';
-      const main = this.getNumberFormatMainCode();
-      const sub = this.getNumberFormatSubCode();
+      const main = this.getNumberFormatMain();
+      const sub = this.getNumberFormatSub();
       const name = tt(`setup.${type}.name`);
       let value = tt(`setup.${type}.${main}`);
       if (['8', '9'].includes(main)) {
@@ -195,7 +195,7 @@ export class ParseSetup {
 
     const parseInputOutput = () => {
       const type = 'INPUT_OUTPUT';
-      const code = `${this.getInputCode()}${this.getOutputCode()}`;
+      const code = `${this.getInput()}${this.getOutput()}`;
       const name = tt(`setup.${type}.name`);
       const value = tt(`setup.${type}.${code}`);
       return { name, value, type, code };
@@ -208,25 +208,25 @@ export class ParseSetup {
     }
 
     const setupMap = {
-      "DECIMAL_MARK": this.getDecimalMarkCode(),
-      "ANGLE_UNIT": this.getAngleUnitCode(),
-      "FRACTION_RESULT": this.getFractionResultCode(),
-      "COMPLEX_RESULT": this.getComplexResultCode(),
-      "STATISTICS_FREQUENCY": this.getStatisticsFrequencyCode(),
-      "RECURRING_DECIMAL": this.getRecurringDecimalCode(),
-      "SIMPLIFY": this.getSimplifyCode(),
-      "AUTO_POWER_OFF": this.getAutoPowerOffCode(),
-      "TABLE_TYPE": this.getTableTypeCode(),
-      "ENGINEER_SYMBOL": this.getEngineerSymbolCode(),
-      "DIGIT_SEPARATOR": this.getDigitSeparatorCode(),
-      "MULTI_LINE_FONT": this.getMultiLineFontCode(),
-      "EQUATION_COMPLEX_ROOT": this.getEquationComplexRootCode(),
-      "LANGUAGE": this.getLanguageCode(),
-      "SPREADSHEET_AUTO_CALC": this.getSpreadsheetAutoCalcCode(),
-      "SPREADSHEET_SHOW_CELL": this.getSpreadsheetShowCellCode(),
-      "QR_CODE_VERSION": this.getQRCodeVersionCode(),
-      "ALGORITHM_BACKGROUND": this.getAlgorithmBackgroundCode(),
-      "ALGORITHM_UNIT_SETTING": this.getAlgorithmUnitSettingCode(),
+      "DECIMAL_MARK": this.getDecimalMark(),
+      "ANGLE_UNIT": this.getAngleUnit(),
+      "FRACTION_RESULT": this.getFractionResult(),
+      "COMPLEX_RESULT": this.getComplexResult(),
+      "STATISTICS_FREQUENCY": this.getStatisticsFrequency(),
+      "RECURRING_DECIMAL": this.getRecurringDecimal(),
+      "SIMPLIFY": this.getSimplify(),
+      "AUTO_POWER_OFF": this.getAutoPowerOff(),
+      "TABLE_TYPE": this.getTableType(),
+      "ENGINEER_SYMBOL": this.getEngineerSymbol(),
+      "DIGIT_SEPARATOR": this.getDigitSeparator(),
+      "MULTI_LINE_FONT": this.getMultiLineFont(),
+      "EQUATION_COMPLEX_ROOT": this.getEquationComplexRoot(),
+      "LANGUAGE": this.getLanguage(),
+      "SPREADSHEET_AUTO_CALC": this.getSpreadsheetAutoCalc(),
+      "SPREADSHEET_SHOW_CELL": this.getSpreadsheetShowCell(),
+      "QR_CODE_VERSION": this.getQRCodeVersion(),
+      "ALGORITHM_BACKGROUND": this.getAlgorithmBackground(),
+      "ALGORITHM_UNIT_SETTING": this.getAlgorithmUnitSetting(),
     }
 
     const result = [];
@@ -238,7 +238,7 @@ export class ParseSetup {
       }
     } else {
       // in menu/error, only language is exported
-      result.push(parseCommon('LANGUAGE', this.getLanguageCode()));
+      result.push(parseCommon('LANGUAGE', this.getLanguage()));
     }
     return result;
   }

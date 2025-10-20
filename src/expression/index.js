@@ -164,7 +164,7 @@ export class ParseExpression {
 
   autoParse(M, S) {
     const parseM = new ParseMode(M)
-    if (new ParseSetup(S).getInputCode() === '1' &&
+    if (new ParseSetup(S).getInput() === '1' &&
       (['88', '89', 'C1', 'C4'].includes(parseM.getMainMode())
         || ('45' === parseM.getMainMode() && '08' === parseM.getSubMode()))
     ) {

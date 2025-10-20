@@ -60,7 +60,7 @@ export const ParseStatistic = (T, M, S) => {
     // Statistic Mode
     head.push('x');
     subMode !== '01' && head.push('y');
-    const freqOn = new ParseSetup(S).getStatisticsFrequencyCode() === '1';
+    const freqOn = new ParseSetup(S).getStatisticsFrequency() === '1';
     freqOn && head.push('Freq');
     numList = ParseCompressStatistic(T);
   } else if (mainMode === '0C') {

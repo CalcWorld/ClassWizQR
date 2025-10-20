@@ -97,7 +97,7 @@ export const ParseEquationResult = (R, M, S, C) => {
     template = EQ0[subMode];
   } else {
     if (subMode === '05' && split.length === 6) {
-      const complexRoot = new ParseSetup(S).getEquationComplexRootCode();
+      const complexRoot = new ParseSetup(S).getEquationComplexRoot();
       const [, lastR] = new ParseVariable(split[split.length - 1]).get({ displayCode });
       let variants;
       if (complexRoot === '1' || lastR.isZero()) {

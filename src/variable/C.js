@@ -1,8 +1,15 @@
 import { ParseVariable } from "./index.js";
 import { INPUT_INFO } from './input.js';
 import { ParseMode } from "../mode/index.js";
+import { ParseSetup } from '../setup/index.js';
 
-const ParseMatrix = (matrix, m, n) => {
+/**
+ * @param {string} matrix
+ * @param {number} m
+ * @param {number} n
+ * @param {string} [fractionResult]
+ */
+const ParseMatrix = (matrix, m, n, fractionResult) => {
   const split = matrix.match(/.{20}/g);
   if (m * n !== split.length) {
     throw new Error('Matrix size not match');
@@ -14,7 +21,7 @@ const ParseMatrix = (matrix, m, n) => {
   for (let i = 0; i < m; i++) {
     const row = [];
     for (let j = 0; j < n; j++) {
-      const [latex, decimal] = new ParseVariable(split[i * n + j]).get();
+      const [latex, decimal] = new ParseVariable(split[i * n + j]).get({ fractionResult });
       row.push(latex);
       decimalResult.push(decimal);
       latexResult += `${latex} & `;
@@ -28,8 +35,14 @@ const ParseMatrix = (matrix, m, n) => {
   latexResult += '\\end{bmatrix}';
   return [latexResult, decimalResult, element];
 }
-
-export const ParseMatrixList = (C) => {
+/**
+ * @param {string} C
+ * @param {string} S
+ * @return {*[]}
+ */
+export const ParseMatrixList = (C, S) => {
+  const parseS = new ParseSetup(S);
+  const fractionResult = parseS.getFractionResult();
   const regx = /M([A-DT])(\d)(\d)([\dA]+)/g;
   let match;
   const result = [];
@@ -37,13 +50,18 @@ export const ParseMatrixList = (C) => {
     const name = match[1] === 'T' ? `MatAns` : `Mat${match[1]}`;
     let m = parseInt(match[2]);
     let n = parseInt(match[3]);
-    const [latex, decimal, element] = ParseMatrix(match[4], m, n);
+    const [latex, decimal, element] = ParseMatrix(match[4], m, n, fractionResult);
     result.push({ name, latex, decimal, element });
   }
   return result;
 }
 
-const ParseVector = (vector, n) => {
+/**
+ * @param {string} vector
+ * @param {number} n
+ * @param {string} [fractionResult]
+ */
+const ParseVector = (vector, n, fractionResult) => {
   const split = vector.match(/.{20}/g);
   if (n !== split.length) {
     throw new Error('Vector size not match');
@@ -53,7 +71,7 @@ const ParseVector = (vector, n) => {
   const element = [];
   let latexResult = '\\begin{bmatrix}';
   for (let i = 0; i < n; i++) {
-    const [latex, decimal] = new ParseVariable(split[i]).get();
+    const [latex, decimal] = new ParseVariable(split[i]).get({ fractionResult });
     decimalResult.push(decimal);
     element.push(latex);
     latexResult += `${latex}`;
@@ -65,14 +83,22 @@ const ParseVector = (vector, n) => {
   return [latexResult, decimalResult, [element]];
 }
 
-export const ParseVectorList = (C) => {
+/**
+ *
+ * @param {string} C
+ * @param {string} S
+ * @return {*[]}
+ */
+export const ParseVectorList = (C, S) => {
+  const parseS = new ParseSetup(S);
+  const fractionResult = parseS.getFractionResult();
   const regx = /V([A-CT])(\d)(\d)([\dA]+)/g;
   let match;
   const result = [];
   while ((match = regx.exec(C)) !== null) {
     const name = match[1] === 'T' ? `VctAns` : `Vct${match[1]}`;
     const n = parseInt(match[3]);
-    const [latex, decimal, element] = ParseVector(match[4], n);
+    const [latex, decimal, element] = ParseVector(match[4], n, fractionResult);
     result.push({ name, latex, decimal, element });
   }
   return result;

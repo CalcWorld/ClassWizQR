@@ -98,7 +98,7 @@ export const ParseEquationResult = (R, M, S, C) => {
   } else {
     if (subMode === '05' && split.length === 6) {
       const complexRoot = new ParseSetup(S).getEquationComplexRoot();
-      const [, lastR] = new ParseVariable(split[split.length - 1]).get({ displayCode });
+      const [, lastR] = new ParseVariable(split[split.length - 1]).get();
       let variants;
       if (complexRoot === '1' || lastR.isZero()) {
         variants = '1';

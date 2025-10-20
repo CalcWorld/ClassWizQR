@@ -40,7 +40,11 @@ export class ParseVariable {
     return [numLatex, numDec];
   }
 
-  #toFrac(displayCode) {
+  /**
+   * @param {string} [displayCode]
+   * @param {string} [fractionResult]
+   */
+  #toFrac(displayCode, fractionResult) {
     const numSign = this.valSign < 5 ? '' : '-';
     const signFix = this.valSign < 5 ? 1 : -1;
     const fracArr = this.valNum.slice(0, this.valExp % 100).split('A');
@@ -54,7 +58,7 @@ export class ParseVariable {
       fracLatex = getImpFrac(a, b);
     } else if (fracArr.length === 3) {
       fracDec = new Decimal(a).add(new Decimal(b).div(c)).mul(signFix);
-      if (displayCode === 'C') {
+      if (displayCode === 'C' || fractionResult === '1') {
         fracLatex = `${numSign} {\\displaystyle ${a}} \\dfrac {\\displaystyle ${b}} {\\displaystyle ${c}}`;
       } else {
         fracLatex = getImpFrac(a * c + +b, c);
@@ -158,15 +162,16 @@ export class ParseVariable {
   /**
    * @param {object} [options]
    * @param {string} [options.displayCode]
+   * @param {string} [options.fractionResult]
    * @return {[string,Decimal]}
    */
   get(options) {
-    const { displayCode } = options || {};
+    const { displayCode, fractionResult } = options || {};
     switch (this.valType) {
       case '0':
         return this.#toDecimal();
       case '2':
-        return this.#toFrac(displayCode);
+        return this.#toFrac(displayCode, fractionResult);
       case '4':
         return this.#toDMS();
       case '8':

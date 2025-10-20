@@ -172,10 +172,10 @@ export class ClassWizQR {
       const typeCode = R.slice(0, 2);
       switch (typeCode) {
         case 'MT':
-          result = ParseMatrixList(R);
+          result = ParseMatrixList(R, kv.S);
           break;
         case 'VT':
-          result = ParseVectorList(R);
+          result = ParseVectorList(R, kv.S);
           break;
         case 'EQ':
           result = ParseEquationResult(R, kv.M, kv.S, kv.C);
@@ -205,9 +205,9 @@ export class ClassWizQR {
     let vector, matrix, equation, distribution;
     if (kv.C) {
       if (kv.C.startsWith('M')) {
-        matrix = ParseMatrixList(kv.C);
+        matrix = ParseMatrixList(kv.C, kv.S);
       } else if (kv.C.startsWith('V')) {
-        vector = ParseVectorList(kv.C);
+        vector = ParseVectorList(kv.C, kv.S);
       } else if (kv.M) {
         if (['45', '4A', '4B'].includes(_mainMode)) {
           equation = ParseEquation(kv.M, kv.C);

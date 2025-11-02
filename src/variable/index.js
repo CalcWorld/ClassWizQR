@@ -7,14 +7,14 @@ import { tt } from "../utils.js";
  * @param {Decimal} b
  * @return {Decimal}
  */
-function gcd(a, b) {
+const gcd = (a, b) => {
   while (!b.isZero()) {
     const temp = b;
     b = a.mod(b);
     a = temp;
   }
   return a.abs();
-}
+};
 
 /**
  *
@@ -22,11 +22,10 @@ function gcd(a, b) {
  * @param {Decimal} b
  * @return {Decimal}
  */
-function lcm(a, b) {
+const lcm = (a, b) => {
   if (a.isZero() || b.isZero()) return new Decimal(0);
   return a.mul(b).abs().div(gcd(a, b));
-}
-
+};
 
 /**
  *
@@ -34,10 +33,7 @@ function lcm(a, b) {
  * @param {string|number|Decimal} d
  * @param {string|number|Decimal} c
  */
-function getImpFrac(numSign, d, c) {
-  return `${numSign} \\dfrac {\\displaystyle ${d}} {\\displaystyle ${c}}`;
-}
-
+const getImpFrac = (numSign, d, c) => `${numSign} \\dfrac {\\displaystyle ${d}} {\\displaystyle ${c}}`;
 
 /**
  *
@@ -46,9 +42,61 @@ function getImpFrac(numSign, d, c) {
  * @param {string|number|Decimal} b
  * @param {string|number|Decimal} c
  */
-function getMixedFrac(numSign, a, b, c) {
-  return `${numSign} {\\displaystyle ${a}} \\dfrac {\\displaystyle ${b}} {\\displaystyle ${c}}`;
+const getMixedFrac = (numSign, a, b, c) => `${numSign} {\\displaystyle ${a}} \\dfrac {\\displaystyle ${b}} {\\displaystyle ${c}}`;
+
+/**
+ * @param {string|Decimal} num
+ * @return {string}
+ */
+const numberToLatex = (num) => {
+  const decimalNum = new Decimal(num);
+  const expSplit = decimalNum.toString().split('e');
+  let latex;
+  if (expSplit.length === 1) {
+    latex = expSplit[0];
+  } else {
+    const int = expSplit[0];
+    const exp = expSplit[1].replace('+', '');
+    latex = `${int}\\times 10^{${exp}}`;
+  }
+  return latex;
 }
+
+/**
+ * https://stackoverflow.com/a/5128558
+ * @param {string|Decimal} num
+ * @param {string|Decimal} error
+ */
+export const numberToFrac = (num, error) => {
+  const x = new Decimal(num);
+  const e = new Decimal(error);
+
+  let lowerN = new Decimal(0);
+  let lowerD = new Decimal(1);
+
+  let upperN = new Decimal(1);
+  let upperD = new Decimal(1);
+
+  while (true) {
+    const middleN = lowerN.plus(upperN);
+    const middleD = lowerD.plus(upperD);
+
+    if (middleN.toString().length + middleD.toString().length + 1 > 10) {
+      return { converted: false };
+    }
+
+    if (middleD.times(x.plus(e)).lt(middleN)) {
+      upperN = middleN;
+      upperD = middleD;
+    } else if (middleN.lt(middleD.times(x.minus(e)))) {
+      lowerN = middleN;
+      lowerD = middleD;
+    } else {
+      return { converted: true, frac: [middleN, middleD] };
+    }
+  }
+}
+
 
 export class ParseVariable {
   constructor(variable) {
@@ -258,59 +306,6 @@ export class ParseVariable {
         return this.#toSqrt();
       case 'F':
         return this.#toError();
-    }
-  }
-}
-
-/**
- * @param {string|Decimal} num
- * @return {string}
- */
-const numberToLatex = (num) => {
-  const decimalNum = new Decimal(num);
-  const expSplit = decimalNum.toString().split('e');
-  let latex;
-  if (expSplit.length === 1) {
-    latex = expSplit[0];
-  } else {
-    const int = expSplit[0];
-    const exp = expSplit[1].replace('+', '');
-    latex = `${int}\\times 10^{${exp}}`;
-  }
-  return latex;
-}
-
-/**
- * https://stackoverflow.com/a/5128558
- * @param {string|Decimal} num
- * @param {string|Decimal} error
- */
-export const numberToFrac = (num, error) => {
-  const x = new Decimal(num);
-  const e = new Decimal(error);
-
-  let lowerN = new Decimal(0);
-  let lowerD = new Decimal(1);
-
-  let upperN = new Decimal(1);
-  let upperD = new Decimal(1);
-
-  while (true) {
-    const middleN = lowerN.plus(upperN);
-    const middleD = lowerD.plus(upperD);
-
-    if (middleN.toString().length + middleD.toString().length + 1 > 10) {
-      return { converted: false };
-    }
-
-    if (middleD.times(x.plus(e)).lt(middleN)) {
-      upperN = middleN;
-      upperD = middleD;
-    } else if (middleN.lt(middleD.times(x.minus(e)))) {
-      lowerN = middleN;
-      lowerD = middleD;
-    } else {
-      return { converted: true, frac: [middleN, middleD] };
     }
   }
 }

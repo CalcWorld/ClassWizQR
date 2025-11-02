@@ -1,6 +1,12 @@
 import Decimal from "decimal.js";
 import { tt } from "../utils.js";
 
+/**
+ *
+ * @param {Decimal} a
+ * @param {Decimal} b
+ * @return {Decimal}
+ */
 function gcd(a, b) {
   while (!b.isZero()) {
     const temp = b;
@@ -10,9 +16,38 @@ function gcd(a, b) {
   return a.abs();
 }
 
+/**
+ *
+ * @param {Decimal} a
+ * @param {Decimal} b
+ * @return {Decimal}
+ */
 function lcm(a, b) {
   if (a.isZero() || b.isZero()) return new Decimal(0);
   return a.mul(b).abs().div(gcd(a, b));
+}
+
+
+/**
+ *
+ * @param {string} numSign
+ * @param {string|number|Decimal} d
+ * @param {string|number|Decimal} c
+ */
+function getImpFrac(numSign, d, c) {
+  return `${numSign} \\dfrac {\\displaystyle ${d}} {\\displaystyle ${c}}`;
+}
+
+
+/**
+ *
+ * @param {string} numSign
+ * @param {string|number|Decimal} a
+ * @param {string|number|Decimal} b
+ * @param {string|number|Decimal} c
+ */
+function getMixedFrac(numSign, a, b, c) {
+  return `${numSign} {\\displaystyle ${a}} \\dfrac {\\displaystyle ${b}} {\\displaystyle ${c}}`;
 }
 
 export class ParseVariable {
@@ -44,6 +79,51 @@ export class ParseVariable {
    * @param {string} [displayCode]
    * @param {string} [fractionResult]
    */
+  #toFracByDecimal(displayCode, fractionResult) {
+    const exp = this.valExp < 500 ? this.valExp - 100 : this.valExp - 600;
+    let numSign, int, dec;
+    numSign = this.valSign < 5 ? '' : '-';
+    int = this.valNum.slice(0, 1);
+    dec = this.valNum.slice(1);
+    const result = `${numSign}${int}.${dec}E${exp}`;
+    const numDec = new Decimal(result);
+    let numLatex;
+    let error;
+    if (this.valNum.length === 16) {
+      error = '0.00000000000005';
+    } else if (this.valNum.length === 24) {
+      error = '0.000000000000000005';
+    }
+    if (error && !numDec.isInt()) {
+      const { converted, frac } = numberToFrac(`0.${this.valNum}`, error);
+      if (converted) {
+        let [d, c] = frac;
+        d = d.times(Decimal.pow(10, +exp + 1));
+        const g = gcd(d, c);
+        if (!g.eq(1)) {
+          d = d.div(g);
+          c = c.div(g);
+        }
+        if ((displayCode === 'C' || fractionResult === '1') && d.gt(c)) {
+          const quotient = d.divToInt(c);
+          const remainder = d.mod(c);
+          numLatex = getMixedFrac(numSign, quotient, remainder, c);
+        } else {
+          numLatex = getImpFrac(numSign, d, c);
+        }
+      }
+    }
+    // fallback
+    if (!numLatex) {
+      numLatex = numberToLatex(numDec);
+    }
+    return [numLatex, numDec];
+  }
+
+  /**
+   * @param {string} [displayCode]
+   * @param {string} [fractionResult]
+   */
   #toFrac(displayCode, fractionResult) {
     const numSign = this.valSign < 5 ? '' : '-';
     const signFix = this.valSign < 5 ? 1 : -1;
@@ -52,16 +132,15 @@ export class ParseVariable {
     const b = fracArr[1];
     const c = fracArr[2] || '';
     let fracLatex, fracDec;
-    const getImpFrac = (d, c) => `${numSign} \\dfrac {\\displaystyle ${d}} {\\displaystyle ${c}}`;
     if (fracArr.length === 2) {
       fracDec = new Decimal(a).div(b).mul(signFix);
-      fracLatex = getImpFrac(a, b);
+      fracLatex = getImpFrac(numSign, a, b);
     } else if (fracArr.length === 3) {
       fracDec = new Decimal(a).add(new Decimal(b).div(c)).mul(signFix);
       if (displayCode === 'C' || fractionResult === '1') {
-        fracLatex = `${numSign} {\\displaystyle ${a}} \\dfrac {\\displaystyle ${b}} {\\displaystyle ${c}}`;
+        fracLatex = getMixedFrac(numSign, a, b, c);
       } else {
-        fracLatex = getImpFrac(a * c + +b, c);
+        fracLatex = getImpFrac(numSign, a * c + +b, c);
       }
     }
     return [fracLatex, fracDec];
@@ -169,7 +248,8 @@ export class ParseVariable {
     const { displayCode, fractionResult } = options || {};
     switch (this.valType) {
       case '0':
-        return this.#toDecimal();
+        // return this.#toDecimal();
+        return this.#toFracByDecimal(displayCode, fractionResult);
       case '2':
         return this.#toFrac(displayCode, fractionResult);
       case '4':

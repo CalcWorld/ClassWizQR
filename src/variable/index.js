@@ -152,7 +152,7 @@ export class ParseVariable {
           d = d.div(g);
           c = c.div(g);
         }
-        if ((displayCode === 'C' || fractionResult === '1') && d.gt(c)) {
+        if (d.gt(c) && (displayCode === 'C' || fractionResult === '1')) {
           const quotient = d.divToInt(c);
           const remainder = d.mod(c);
           numLatex = getMixedFrac(numSign, quotient, remainder, c);

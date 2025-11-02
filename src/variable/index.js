@@ -138,8 +138,10 @@ export class ParseVariable {
     let numLatex;
     let error;
     if (this.valNum.length === 16) {
+      // EX
       error = '0.00000000000005';
     } else if (this.valNum.length === 24) {
+      // CW
       error = '0.000000000000000005';
     }
     if (error && !numDec.isInt()) {

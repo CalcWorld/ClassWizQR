@@ -182,6 +182,10 @@ export class ParseVariable {
   }
 }
 
+/**
+ * @param {string|Decimal} num
+ * @return {string}
+ */
 const numberToLatex = (num) => {
   const decimalNum = new Decimal(num);
   const expSplit = decimalNum.toString().split('e');
@@ -194,4 +198,39 @@ const numberToLatex = (num) => {
     latex = `${int}\\times 10^{${exp}}`;
   }
   return latex;
+}
+
+/**
+ * https://stackoverflow.com/a/5128558
+ * @param {string|Decimal} num
+ * @param {string|Decimal} error
+ */
+export const numberToFrac = (num, error) => {
+  const x = new Decimal(num);
+  const e = new Decimal(error);
+
+  let lowerN = new Decimal(0);
+  let lowerD = new Decimal(1);
+
+  let upperN = new Decimal(1);
+  let upperD = new Decimal(1);
+
+  while (true) {
+    const middleN = lowerN.plus(upperN);
+    const middleD = lowerD.plus(upperD);
+
+    if (middleN.toString().length + middleD.toString().length + 1 > 10) {
+      return { converted: false };
+    }
+
+    if (middleD.times(x.plus(e)).lt(middleN)) {
+      upperN = middleN;
+      upperD = middleD;
+    } else if (middleN.lt(middleD.times(x.minus(e)))) {
+      lowerN = middleN;
+      lowerD = middleD;
+    } else {
+      return { converted: true, frac: [middleN, middleD] };
+    }
+  }
 }

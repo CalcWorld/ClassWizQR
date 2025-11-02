@@ -81,7 +81,7 @@ export const numberToFrac = (num, error) => {
     const middleN = lowerN.plus(upperN);
     const middleD = lowerD.plus(upperD);
 
-    if (middleN.toString().length + middleD.toString().length + 1 > 10) {
+    if (middleN.toString().length + middleD.toString().length > 12) {
       return { converted: false };
     }
 
@@ -136,14 +136,11 @@ export class ParseVariable {
     const result = `${numSign}${int}.${dec}E${exp}`;
     const numDec = new Decimal(result);
     let numLatex;
-    let error;
-    if (this.valNum.length === 16) {
-      // EX
-      error = '0.00000000000005';
-    } else if (this.valNum.length === 24) {
-      // CW
-      error = '0.000000000000000005';
-    }
+    const error = {
+      '16': '0.00000000000005', // EX
+      '24': '0.000000000000000005', // CW
+    }[`${this.valNum.length}`];
+
     if (error && !numDec.isInt()) {
       const { converted, frac } = numberToFrac(`0.${this.valNum}`, error);
       if (converted) {
@@ -163,6 +160,7 @@ export class ParseVariable {
         }
       }
     }
+
     // fallback
     if (!numLatex) {
       numLatex = numberToLatex(numDec);

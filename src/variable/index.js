@@ -99,6 +99,23 @@ export const numberToFrac = (num, error) => {
 
 /**
  *
+ * @param {Decimal} d
+ * @param {Decimal} c
+ * @return {Decimal[]}
+ */
+export const simpFrac = (d, c) => {
+  const g = gcd(d, c);
+  if (!g.eq(1)) {
+    d = d.div(g);
+    c = c.div(g);
+  }
+  return [d, c];
+}
+
+const isMixedFrac = ({ displayCode, fractionResult }) => displayCode === 'C' || fractionResult === '1';
+
+/**
+ *
  * @param displayCode
  * @param fractionResult
  * @param numSign
@@ -113,18 +130,26 @@ const numberToFracLatex = ({ displayCode, fractionResult, numSign, exp, error, n
 
   let [d, c] = frac;
   d = d.times(Decimal.pow(10, +exp + 1));
-  const g = gcd(d, c);
-  if (!g.eq(1)) {
-    d = d.div(g);
-    c = c.div(g);
-  }
-  if (d.gt(c) && (displayCode === 'C' || fractionResult === '1')) {
+  [d, c] = simpFrac(d, c);
+  if (d.gt(c) && isMixedFrac({ displayCode, fractionResult })) {
     const quotient = d.divToInt(c);
     const remainder = d.mod(c);
     return getMixedFrac(numSign, quotient, remainder, c);
   } else {
     return getImpFrac(numSign, d, c);
   }
+}
+
+export const numberToPiFrac = (num, pi_25200, digits) => {
+  const r = new Decimal(num);
+  const p = new Decimal(pi_25200);
+  let d = r.div(p).toSignificantDigits(digits);
+  if (!d.isInt()) {
+    return { converted: false };
+  }
+  let c;
+  [d, c] = simpFrac(d, new Decimal(25200));
+  return { converted: true, frac: [d, c] };
 }
 
 
@@ -168,12 +193,17 @@ export class ParseVariable {
     let numLatex;
 
     if (!numDec.isInt()) {
-      const error = {
-        '16': '0.00000000000005', // EX
-        '24': '0.000000000000000005', // CW
-      }[`${this.valNum.length}`];
-      if (error) {
-        numLatex = numberToFracLatex({ error, num: `0.${this.valNum}`, exp, numSign, displayCode, fractionResult });
+      if (numDec.lt(1000000)) {
+
+      }
+      if (!numLatex) {
+        const error = {
+          '16': '0.00000000000005', // EX
+          '24': '0.000000000000000005', // CW
+        }[`${this.valNum.length}`];
+        if (error) {
+          numLatex = numberToFracLatex({ error, num: `0.${this.valNum}`, exp, numSign, displayCode, fractionResult });
+        }
       }
     }
 
@@ -201,7 +231,7 @@ export class ParseVariable {
       fracLatex = getImpFrac(numSign, a, b);
     } else if (fracArr.length === 3) {
       fracDec = new Decimal(a).add(new Decimal(b).div(c)).mul(signFix);
-      if (displayCode === 'C' || fractionResult === '1') {
+      if (isMixedFrac({ displayCode, fractionResult })) {
         fracLatex = getMixedFrac(numSign, a, b, c);
       } else {
         fracLatex = getImpFrac(numSign, a * c + +b, c);

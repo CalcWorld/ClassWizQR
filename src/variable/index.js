@@ -112,6 +112,12 @@ export const simpFrac = (d, c) => {
   return [d, c];
 }
 
+/**
+ *
+ * @param {string} displayCode
+ * @param {string} fractionResult
+ * @return {boolean}
+ */
 const isMixedFrac = ({ displayCode, fractionResult }) => displayCode === 'C' || fractionResult === '1';
 
 /**
@@ -120,12 +126,17 @@ const isMixedFrac = ({ displayCode, fractionResult }) => displayCode === 'C' || 
  * @param fractionResult
  * @param numSign
  * @param exp
- * @param error
- * @param num
+ * @param valNum
  * @return {*}
  */
-const numberToFracLatex = ({ displayCode, fractionResult, numSign, exp, error, num }) => {
-  const { converted, frac } = numberToFrac(num, error);
+const numberToFracLatex = ({ displayCode, fractionResult, numSign, exp, valNum }) => {
+  const error = {
+    '16': '0.00000000000005', // EX
+    '24': '0.000000000000000005', // CW
+  }[`${valNum.length}`];
+  if (!error) return;
+
+  const { converted, frac } = numberToFrac(`0.${valNum}`, error);
   if (!converted) return;
 
   let [d, c] = frac;
@@ -140,6 +151,11 @@ const numberToFracLatex = ({ displayCode, fractionResult, numSign, exp, error, n
   }
 }
 
+/**
+ * @param {string|Decimal|number} num
+ * @param {string|Decimal|number} pi_25200
+ * @param {string|Decimal|number} digits
+ */
 export const numberToPiFrac = (num, pi_25200, digits) => {
   const r = new Decimal(num);
   const p = new Decimal(pi_25200);
@@ -152,6 +168,40 @@ export const numberToPiFrac = (num, pi_25200, digits) => {
   return { converted: true, frac: [d, c] };
 }
 
+/**
+ *
+ * @param displayCode
+ * @param fractionResult
+ * @param numSign
+ * @param valNum
+ * @param num
+ * @return {*}
+ */
+const numberToPiFracLatex = ({ displayCode, fractionResult, numSign, valNum, num }) => {
+  const [pi_25200, digits] = {
+    '16': ['0.000124666375142452', 13], // EX
+    '24': ['0.0001246663751424521126374', 19], // CW
+  }[`${valNum.length}`] || [];
+  if (!pi_25200) return;
+
+  const { converted, frac } = numberToPiFrac(num, pi_25200, digits);
+  if (!converted) return;
+
+  const [d, c] = frac;
+  let template;
+  if (d.eq(1) && c.eq(1)) {
+    template = `${numSign}`;
+  } else if (c.eq(1)) {
+    template = `${numSign} ${d}`;
+  } else if (d.gt(c) && isMixedFrac({ displayCode, fractionResult })) {
+    const quotient = d.divToInt(c);
+    const remainder = d.mod(c);
+    template = getMixedFrac(numSign, quotient, remainder, c);
+  } else {
+    template = getImpFrac(numSign, d, c);
+  }
+  return `${template} \\pi `;
+}
 
 export class ParseVariable {
   constructor(variable) {
@@ -183,27 +233,34 @@ export class ParseVariable {
    * @param {string} [fractionResult]
    */
   #toStandardByDecimal(displayCode, fractionResult) {
-    const exp = this.valExp < 500 ? this.valExp - 100 : this.valExp - 600;
+    const { valSign, valExp, valNum } = this;
+    const exp = valExp < 500 ? valExp - 100 : valExp - 600;
     let numSign, int, dec;
-    numSign = this.valSign < 5 ? '' : '-';
-    int = this.valNum.slice(0, 1);
-    dec = this.valNum.slice(1);
+    numSign = valSign < 5 ? '' : '-';
+    int = valNum.slice(0, 1);
+    dec = valNum.slice(1);
     const result = `${numSign}${int}.${dec}E${exp}`;
     const numDec = new Decimal(result);
     let numLatex;
 
     if (!numDec.isInt()) {
       if (numDec.lt(1000000)) {
-
+        numLatex = numberToPiFracLatex({
+          numSign,
+          valNum,
+          num: numDec.abs(),
+          displayCode,
+          fractionResult,
+        });
       }
       if (!numLatex) {
-        const error = {
-          '16': '0.00000000000005', // EX
-          '24': '0.000000000000000005', // CW
-        }[`${this.valNum.length}`];
-        if (error) {
-          numLatex = numberToFracLatex({ error, num: `0.${this.valNum}`, exp, numSign, displayCode, fractionResult });
-        }
+        numLatex = numberToFracLatex({
+          numSign,
+          valNum,
+          exp,
+          displayCode,
+          fractionResult,
+        });
       }
     }
 

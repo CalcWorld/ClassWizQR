@@ -109,20 +109,32 @@ const numberToLatex = (num) => {
  * @param {string|Decimal} error
  */
 export const numberToFrac = (num, error) => {
-  const x = new Decimal(num);
+  const _0 = new Decimal(0);
+  const _1 = new Decimal(1);
+  const rt = frac => ({ converted: true, frac });
+
   const e = new Decimal(error);
+  let x = new Decimal(num);
+  const n = x.floor();
+  x = x.minus(n);
 
-  let lowerN = new Decimal(0);
-  let lowerD = new Decimal(1);
+  if (x.lt(e)) {
+    return rt([n, _1]);
+  } else if (_1.minus(e).lt(x)) {
+    return rt([n.plus(_1), _1]);
+  }
 
-  let upperN = new Decimal(1);
-  let upperD = new Decimal(1);
+  let lowerN = _0;
+  let lowerD = _1;
+
+  let upperN = _1;
+  let upperD = _1;
 
   while (true) {
     const middleN = lowerN.plus(upperN);
     const middleD = lowerD.plus(upperD);
 
-    if (middleN.toString().length + middleD.toString().length > 12) {
+    if (middleN.toString().length + middleD.toString().length > 10) {
       return { converted: false };
     }
 
@@ -133,7 +145,7 @@ export const numberToFrac = (num, error) => {
       lowerN = middleN;
       lowerD = middleD;
     } else {
-      return { converted: true, frac: [middleN, middleD] };
+      return rt([n.times(middleD).plus(middleN), middleD]);
     }
   }
 }
@@ -145,21 +157,20 @@ export const numberToFrac = (num, error) => {
  * @param numSign
  * @param exp
  * @param valNum
+ * @param num
  * @return {*}
  */
-const numberToFracLatex = ({ displayCode, fractionResult, numSign, exp, valNum }) => {
+const numberToFracLatex = ({ displayCode, fractionResult, numSign, exp, valNum, num }) => {
   const error = {
     '16': '0.00000000000005', // EX
     '24': '0.000000000000000005', // CW
   }[`${valNum.length}`];
   if (!error) return;
 
-  const { converted, frac } = numberToFrac(`0.${valNum}`, error);
+  const { converted, frac } = numberToFrac(num, new Decimal(error).times(Decimal.pow(10, exp + 1)));
   if (!converted) return;
 
-  let [d, c] = frac;
-  d = d.times(Decimal.pow(10, +exp + 1));
-  [d, c] = simpFrac(d, c);
+  const [d, c] = frac;
   return autoGetFrac({ numSign, d, c, displayCode, fractionResult });
 }
 
@@ -265,6 +276,7 @@ export class ParseVariable {
         numLatex = numberToFracLatex({
           numSign,
           valNum,
+          num: numDec.abs(),
           exp,
           displayCode,
           fractionResult,

@@ -135,8 +135,9 @@ export const numberToFrac = (num, error) => {
   while (true) {
     const middleN = lowerN.plus(upperN);
     const middleD = lowerD.plus(upperD);
+    const N = n.times(middleD).plus(middleN);
 
-    if (middleN.toString().length + middleD.toString().length > 10) {
+    if (N.toString().length + middleD.toString().length > 10) {
       return rt();
     }
 
@@ -147,7 +148,7 @@ export const numberToFrac = (num, error) => {
       lowerN = middleN;
       lowerD = middleD;
     } else {
-      return rt([n.times(middleD).plus(middleN), middleD]);
+      return rt([N, middleD]);
     }
   }
 }

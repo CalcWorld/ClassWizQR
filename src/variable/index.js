@@ -45,6 +45,47 @@ const getImpFrac = (numSign, d, c) => `${numSign} \\dfrac {\\displaystyle ${d}} 
 const getMixedFrac = (numSign, a, b, c) => `${numSign} {\\displaystyle ${a}} \\dfrac {\\displaystyle ${b}} {\\displaystyle ${c}}`;
 
 /**
+ *
+ * @param {Decimal} d
+ * @param {Decimal} c
+ * @return {Decimal[]}
+ */
+export const simpFrac = (d, c) => {
+  const g = gcd(d, c);
+  if (!g.eq(1)) {
+    d = d.div(g);
+    c = c.div(g);
+  }
+  return [d, c];
+}
+
+/**
+ *
+ * @param {string} displayCode
+ * @param {string} fractionResult
+ * @return {boolean}
+ */
+const isMixedFrac = ({ displayCode, fractionResult }) => displayCode === 'C' || fractionResult === '1';
+
+/**
+ * @param {string} numSign
+ * @param {Decimal} d
+ * @param {Decimal} c
+ * @param {string} displayCode
+ * @param {string} fractionResult
+ * @return {string}
+ */
+const autoGetFrac = ({ numSign, d, c, displayCode, fractionResult }) => {
+  if (d.gt(c) && isMixedFrac({ displayCode, fractionResult })) {
+    const quotient = d.divToInt(c);
+    const remainder = d.mod(c);
+    return getMixedFrac(numSign, quotient, remainder, c);
+  } else {
+    return getImpFrac(numSign, d, c);
+  }
+}
+
+/**
  * @param {string|Decimal} num
  * @return {string}
  */
@@ -99,29 +140,6 @@ export const numberToFrac = (num, error) => {
 
 /**
  *
- * @param {Decimal} d
- * @param {Decimal} c
- * @return {Decimal[]}
- */
-export const simpFrac = (d, c) => {
-  const g = gcd(d, c);
-  if (!g.eq(1)) {
-    d = d.div(g);
-    c = c.div(g);
-  }
-  return [d, c];
-}
-
-/**
- *
- * @param {string} displayCode
- * @param {string} fractionResult
- * @return {boolean}
- */
-const isMixedFrac = ({ displayCode, fractionResult }) => displayCode === 'C' || fractionResult === '1';
-
-/**
- *
  * @param displayCode
  * @param fractionResult
  * @param numSign
@@ -142,13 +160,7 @@ const numberToFracLatex = ({ displayCode, fractionResult, numSign, exp, valNum }
   let [d, c] = frac;
   d = d.times(Decimal.pow(10, +exp + 1));
   [d, c] = simpFrac(d, c);
-  if (d.gt(c) && isMixedFrac({ displayCode, fractionResult })) {
-    const quotient = d.divToInt(c);
-    const remainder = d.mod(c);
-    return getMixedFrac(numSign, quotient, remainder, c);
-  } else {
-    return getImpFrac(numSign, d, c);
-  }
+  return autoGetFrac({ numSign, d, c, displayCode, fractionResult });
 }
 
 /**
@@ -193,12 +205,8 @@ const numberToPiFracLatex = ({ displayCode, fractionResult, numSign, valNum, num
     template = `${numSign}`;
   } else if (c.eq(1)) {
     template = `${numSign} ${d}`;
-  } else if (d.gt(c) && isMixedFrac({ displayCode, fractionResult })) {
-    const quotient = d.divToInt(c);
-    const remainder = d.mod(c);
-    template = getMixedFrac(numSign, quotient, remainder, c);
   } else {
-    template = getImpFrac(numSign, d, c);
+    template = autoGetFrac({ numSign, d, c, displayCode, fractionResult });
   }
   return `${template} \\pi `;
 }

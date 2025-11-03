@@ -262,19 +262,20 @@ export class ParseVariable {
     dec = valNum.slice(1);
     const result = `${numSign}${int}.${dec}E${exp}`;
     const numDec = new Decimal(result);
+    const num = numDec.abs();
     let numLatex;
 
-    if (!numDec.isInt() && numDec.lt(1000000)) {
+    if (!numDec.isInt() && num.lt(1000000)) {
       numLatex = numberToPiFracLatex({
         numSign,
         valNum,
-        num: numDec.abs(),
+        num,
         displayCode,
         fractionResult,
       }) || numberToFracLatex({
         numSign,
         valNum,
-        num: numDec.abs(),
+        num,
         exp,
         displayCode,
         fractionResult,

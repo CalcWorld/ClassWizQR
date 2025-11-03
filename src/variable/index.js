@@ -111,7 +111,7 @@ const numberToLatex = (num) => {
 export const numberToFrac = (num, error) => {
   const _0 = new Decimal(0);
   const _1 = new Decimal(1);
-  const rt = frac => ({ converted: true, frac });
+  const rt = frac => ({ converted: !!frac, frac });
 
   const e = new Decimal(error);
   let x = new Decimal(num);
@@ -119,9 +119,11 @@ export const numberToFrac = (num, error) => {
   x = x.minus(n);
 
   if (x.lt(e)) {
-    return rt([n, _1]);
+    // return rt([n, _1]);
+    return rt();
   } else if (_1.minus(e).lt(x)) {
-    return rt([n.plus(_1), _1]);
+    // return rt([n.plus(_1), _1]);
+    return rt();
   }
 
   let lowerN = _0;
@@ -135,7 +137,7 @@ export const numberToFrac = (num, error) => {
     const middleD = lowerD.plus(upperD);
 
     if (middleN.toString().length + middleD.toString().length > 10) {
-      return { converted: false };
+      return rt();
     }
 
     if (middleD.times(x.plus(e)).lt(middleN)) {
@@ -262,26 +264,21 @@ export class ParseVariable {
     const numDec = new Decimal(result);
     let numLatex;
 
-    if (!numDec.isInt()) {
-      if (numDec.lt(1000000)) {
-        numLatex = numberToPiFracLatex({
-          numSign,
-          valNum,
-          num: numDec.abs(),
-          displayCode,
-          fractionResult,
-        });
-      }
-      if (!numLatex) {
-        numLatex = numberToFracLatex({
-          numSign,
-          valNum,
-          num: numDec.abs(),
-          exp,
-          displayCode,
-          fractionResult,
-        });
-      }
+    if (!numDec.isInt() && numDec.lt(1000000)) {
+      numLatex = numberToPiFracLatex({
+        numSign,
+        valNum,
+        num: numDec.abs(),
+        displayCode,
+        fractionResult,
+      }) || numberToFracLatex({
+        numSign,
+        valNum,
+        num: numDec.abs(),
+        exp,
+        displayCode,
+        fractionResult,
+      });
     }
 
     // fallback

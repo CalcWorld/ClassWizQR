@@ -111,7 +111,6 @@ const numberToLatex = (num) => {
 export const numberToFrac = (num, error) => {
   const _0 = new Decimal(0);
   const _1 = new Decimal(1);
-  const rt = frac => ({ converted: !!frac, frac });
 
   const e = new Decimal(error);
   let x = new Decimal(num);
@@ -119,11 +118,11 @@ export const numberToFrac = (num, error) => {
   x = x.minus(n);
 
   if (x.lt(e)) {
-    // return rt([n, _1]);
-    return rt();
+    // return [n, _1];
+    return;
   } else if (_1.minus(e).lt(x)) {
-    // return rt([n.plus(_1), _1]);
-    return rt();
+    // return [n.plus(_1), _1];
+    return;
   }
 
   let lowerN = _0;
@@ -138,7 +137,7 @@ export const numberToFrac = (num, error) => {
     const N = n.times(middleD).plus(middleN);
 
     if (N.toString().length + middleD.toString().length > 10) {
-      return rt();
+      return;
     }
 
     if (middleD.times(x.plus(e)).lt(middleN)) {
@@ -148,7 +147,7 @@ export const numberToFrac = (num, error) => {
       lowerN = middleN;
       lowerD = middleD;
     } else {
-      return rt([N, middleD]);
+      return [N, middleD];
     }
   }
 }
@@ -170,8 +169,8 @@ const numberToFracLatex = ({ displayCode, fractionResult, numSign, exp, valNum, 
   }[`${valNum.length}`];
   if (!error) return;
 
-  const { converted, frac } = numberToFrac(num, new Decimal(error).times(Decimal.pow(10, exp + 1)));
-  if (!converted) return;
+  const frac = numberToFrac(num, new Decimal(error).times(Decimal.pow(10, exp + 1)));
+  if (!frac) return;
 
   const [d, c] = frac;
   return autoGetFrac({ numSign, d, c, displayCode, fractionResult });
@@ -187,11 +186,11 @@ export const numberToPiFrac = (num, pi_25200, digits) => {
   const p = new Decimal(pi_25200);
   let d = r.div(p).toSignificantDigits(digits);
   if (!d.isInt()) {
-    return { converted: false };
+    return;
   }
   let c;
   [d, c] = simpFrac(d, new Decimal(25200));
-  return { converted: true, frac: [d, c] };
+  return [d, c];
 }
 
 /**
@@ -210,8 +209,8 @@ const numberToPiFracLatex = ({ displayCode, fractionResult, numSign, valNum, num
   }[`${valNum.length}`] || [];
   if (!pi_25200) return;
 
-  const { converted, frac } = numberToPiFrac(num, pi_25200, digits);
-  if (!converted) return;
+  const frac = numberToPiFrac(num, pi_25200, digits);
+  if (!frac) return;
 
   const [d, c] = frac;
   let template;
@@ -282,8 +281,6 @@ export class ParseVariable {
         fractionResult,
       });
     }
-
-    // fallback
     if (!numLatex) {
       numLatex = numberToLatex(numDec);
     }

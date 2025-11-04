@@ -3,10 +3,9 @@ import { numberToPiFrac } from '../src/variable/index.js';
 import assert from 'assert';
 
 function cmp({ num, a, b, digits, pi_25200 }) {
-  const parse = numberToPiFrac(num, pi_25200, digits);
-  console.log(parse, num);
-  const { converted, frac } = parse;
-  assert.strictEqual(true, converted);
+  const frac = numberToPiFrac(num, pi_25200, digits);
+  console.log(frac, num);
+  assert.strictEqual(true, !!frac);
   const [d, c] = frac;
   assert.strictEqual(true, new Decimal(a).eq(d));
   assert.strictEqual(true, new Decimal(b).eq(c));

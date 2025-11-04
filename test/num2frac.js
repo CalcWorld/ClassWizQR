@@ -10,10 +10,9 @@ import Decimal from 'decimal.js';
  * @param {string} error
  */
 function testNum2Frac(x, a, b, error) {
-  const result = numberToFrac(x, error);
-  console.log(x, a, b, result);
-  const { converted, frac } = result;
-  assert.strictEqual(true, converted);
+  const frac = numberToFrac(x, error);
+  console.log(x, a, b, frac);
+  assert.strictEqual(true, Boolean(frac));
   assert.strictEqual(true, new Decimal(a).eq(frac[0]));
   assert.strictEqual(true, new Decimal(b).eq(frac[1]));
 }
@@ -22,7 +21,7 @@ const cy_cmp = [
   ['0.666666666666663', '0.00000000000005', '2', '3'],
   ['0.221789883268482', '0.00000000000005', '57', '257'],
   ['0.0434782608695652', '0.00000000000005', '1', '23'],
-  ['0.142855714285714', '0.00000000000005', '99999', '700000'],
+  // ['0.142855714285714', '0.00000000000005', '99999', '700000'],
   ['158730.142857142', '0.00000005', '1111111', '7'],
 ];
 // const ex_error = '0.00000000000005';

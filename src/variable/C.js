@@ -172,10 +172,10 @@ export const ParseEquation = (C, M, S) => {
 export const ParseDistribution = (C, M) => {
   const subMode = new ParseMode(M).getSubMode();
   const split = C.match(/.{20}/g);
-  let template = INPUT_INFO['DISTRIBUTION'][subMode][split.length];
-  if (typeof template === 'function') {
-    template = template();
-  }
+  let template = INPUT_INFO['DISTRIBUTION'][subMode][split.length]
+    .map(i => typeof i === 'function' ? i() : i)
+    .join(' \\\\ ');
+
   const decimalResult = [];
   for (let i = 0; i < split.length; i++) {
     const [latex, decimal] = new ParseVariable(split[i]).get();

@@ -1,5 +1,5 @@
 import { ParseVariable } from "./index.js";
-import { INPUT_INFO } from './input.js';
+import { INPUT_INFO, INPUT_INFO_COEFFICIENT, INPUT_INFO_OMIT_PLUS } from './input.js';
 import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from '../setup/index.js';
 
@@ -122,6 +122,8 @@ export const ParseEquation = (C, M, S) => {
   switch (mainMode) {
     case '45':
       equType = 'EQUATION';
+      omitPlus = INPUT_INFO_OMIT_PLUS[equType][subMode] || [0];
+      [m, n] = INPUT_INFO_COEFFICIENT[equType][subMode];
       break;
     case '4A':
       equType = 'RATIO';
@@ -137,9 +139,8 @@ export const ParseEquation = (C, M, S) => {
       subMode += parseM.getInqType();
       break;
   }
-  omitPlus || (omitPlus = INPUT_INFO[equType][subMode]['omitPlus']);
-  (m || n) || ([m, n] = INPUT_INFO[equType][subMode]['coefficient']);
-  let template = INPUT_INFO[equType][subMode].template;
+
+  let template = INPUT_INFO[equType][subMode];
   const decimalResult = [];
   const element = [];
   let elementRow = [];
@@ -171,8 +172,7 @@ export const ParseEquation = (C, M, S) => {
 export const ParseDistribution = (C, M) => {
   const subMode = new ParseMode(M).getSubMode();
   const split = C.match(/.{20}/g);
-  const distInfo = INPUT_INFO['DISTRIBUTION'][subMode][split.length];
-  let template = distInfo.template;
+  let template = INPUT_INFO['DISTRIBUTION'][subMode][split.length];
   if (typeof template === 'function') {
     template = template();
   }

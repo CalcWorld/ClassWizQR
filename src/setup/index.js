@@ -10,171 +10,102 @@ export class ParseSetup {
   }
 
   getNumberFormatMain() {
-    if (!this.numberFormatMain) {
-      this.numberFormatMain = this.S.slice(0, 1);
-    }
-    return this.numberFormatMain;
+    return this.S.slice(0, 1);
   }
 
   getNumberFormatSub() {
-    if (!this.numberFormatSub) {
-      this.numberFormatSub = this.S.slice(1, 2);
-    }
-    return this.numberFormatSub;
+    return this.S.slice(1, 2);
   }
 
   getInput() {
-    if (!this.input) {
-      this.input = this.S.slice(4, 5);
-    }
-    return this.input;
+    return this.S.slice(4, 5);
   }
 
   getOutput() {
-    if (!this.output) {
-      this.output = this.S.slice(10, 11);
-    }
-    return this.output;
+    return this.S.slice(10, 11);
   }
 
 
   getDecimalMark() {
-    if (!this.decimalMark) {
-      this.decimalMark = this.S.slice(2, 3);
-    }
-    return this.decimalMark;
+    return this.S.slice(2, 3);
   }
 
   getAngleUnit() {
-    if (!this.angleUnit) {
-      this.angleUnit = this.S.slice(3, 4);
-    }
-    return this.angleUnit;
+    return this.S.slice(3, 4);
   }
 
   getFractionResult() {
-    if (!this.fractionResult) {
-      this.fractionResult = this.S.slice(5, 6);
-    }
-    return this.fractionResult;
+    return this.S.slice(5, 6);
   }
 
   getComplexResult() {
-    if (!this.complexResult) {
-      this.complexResult = this.S.slice(6, 7);
-    }
-    return this.complexResult;
+    return this.S.slice(6, 7);
   }
 
   getStatisticsFrequency() {
-    if (!this.statisticsFrequency) {
-      this.statisticsFrequency = this.S.slice(7, 8);
-    }
-    return this.statisticsFrequency;
+    return this.S.slice(7, 8);
   }
 
   getRecurringDecimal() {
-    if (!this.recurringDecimal) {
-      this.recurringDecimal = this.S.slice(8, 9);
-    }
-    return this.recurringDecimal;
+    return this.S.slice(8, 9);
   }
 
   getSimplify() {
-    if (!this.simplify) {
-      this.simplify = this.S.slice(9, 10);
-    }
-    return this.simplify;
+    return this.S.slice(9, 10);
   }
 
   getAutoPowerOff() {
-    if (!this.autoPowerOff) {
-      this.autoPowerOff = this.S.slice(11, 12);
-    }
-    return this.autoPowerOff;
+    return this.S.slice(11, 12);
   }
 
   getTableType() {
-    if (!this.tableType) {
-      this.tableType = this.S.slice(12, 13);
-    }
-    return this.tableType;
+    return this.S.slice(12, 13);
   }
 
   getEngineerSymbol() {
-    if (!this.engineerSymbol) {
-      this.engineerSymbol = this.S.slice(13, 14);
-    }
-    return this.engineerSymbol;
+    return this.S.slice(13, 14);
   }
 
   getDigitSeparator() {
-    if (!this.digitSeparator) {
-      this.digitSeparator = this.S.slice(14, 15);
-    }
-    return this.digitSeparator;
+    return this.S.slice(14, 15);
   }
 
   getMultiLineFont() {
-    if (!this.multiLineFont) {
-      this.multiLineFont = this.S.slice(15, 16);
-    }
-    return this.multiLineFont;
+    return this.S.slice(15, 16);
   }
 
 
   getEquationComplexRoot() {
-    if (!this.equationComplexRoot) {
-      this.equationComplexRoot = this.S.slice(16, 17);
-    }
-    return this.equationComplexRoot;
+    return this.S.slice(16, 17);
   }
 
   // this setup is based on model
   getLanguage() {
-    if (!this.language) {
-      if (this.isFullSetup()) {
-        this.language = this.S.slice(17, 18);
-      } else {
-        this.language = this.S.slice(0, 1);
-      }
+    if (this.isFullSetup()) {
+      return this.S.slice(17, 18);
+    } else {
+      return this.S.slice(0, 1);
     }
-    return this.language;
   }
 
   getSpreadsheetAutoCalc() {
-    if (!this.spreadsheetAutoCalc) {
-      this.spreadsheetAutoCalc = this.S.slice(18, 19);
-    }
-    return this.spreadsheetAutoCalc;
+    return this.S.slice(18, 19);
   }
 
   getSpreadsheetShowCell() {
-    if (!this.spreadsheetShowCell) {
-      this.spreadsheetShowCell = this.S.slice(19, 20);
-    }
-    return this.spreadsheetShowCell;
+    return this.S.slice(19, 20);
   }
 
   getQRCodeVersion() {
-    if (!this.qrCodeVersion) {
-      this.qrCodeVersion = this.S.slice(20, 21);
-    }
-    return this.qrCodeVersion;
+    return this.S.slice(20, 21);
   }
 
   getAlgorithmBackground() {
-    if (!this.algorithmBackground) {
-      this.algorithmBackground = this.S.slice(21, 22);
-    }
-    return this.algorithmBackground;
+    return this.S.slice(21, 22);
   }
 
   getAlgorithmUnitSetting() {
-    if (!this.algorithmUnitSetting) {
-      this.algorithmUnitSetting = this.S.slice(22, 23);
-    }
-    return this.algorithmUnitSetting;
+    return this.S.slice(22, 23);
   }
 
   /**
@@ -207,30 +138,30 @@ export class ParseSetup {
       return { name, value, type, code };
     }
 
-    const setupMap = {
-      "DECIMAL_MARK": this.getDecimalMark(),
-      "ANGLE_UNIT": this.getAngleUnit(),
-      "FRACTION_RESULT": this.getFractionResult(),
-      "COMPLEX_RESULT": this.getComplexResult(),
-      "STATISTICS_FREQUENCY": this.getStatisticsFrequency(),
-      "RECURRING_DECIMAL": this.getRecurringDecimal(),
-      "SIMPLIFY": this.getSimplify(),
-      "AUTO_POWER_OFF": this.getAutoPowerOff(),
-      "TABLE_TYPE": this.getTableType(),
-      "ENGINEER_SYMBOL": this.getEngineerSymbol(),
-      "DIGIT_SEPARATOR": this.getDigitSeparator(),
-      "MULTI_LINE_FONT": this.getMultiLineFont(),
-      "EQUATION_COMPLEX_ROOT": this.getEquationComplexRoot(),
-      "LANGUAGE": this.getLanguage(),
-      "SPREADSHEET_AUTO_CALC": this.getSpreadsheetAutoCalc(),
-      "SPREADSHEET_SHOW_CELL": this.getSpreadsheetShowCell(),
-      "QR_CODE_VERSION": this.getQRCodeVersion(),
-      "ALGORITHM_BACKGROUND": this.getAlgorithmBackground(),
-      "ALGORITHM_UNIT_SETTING": this.getAlgorithmUnitSetting(),
-    }
-
     const result = [];
     if (this.isFullSetup()) {
+      const setupMap = {
+        "DECIMAL_MARK": this.getDecimalMark(),
+        "ANGLE_UNIT": this.getAngleUnit(),
+        "FRACTION_RESULT": this.getFractionResult(),
+        "COMPLEX_RESULT": this.getComplexResult(),
+        "STATISTICS_FREQUENCY": this.getStatisticsFrequency(),
+        "RECURRING_DECIMAL": this.getRecurringDecimal(),
+        "SIMPLIFY": this.getSimplify(),
+        "AUTO_POWER_OFF": this.getAutoPowerOff(),
+        "TABLE_TYPE": this.getTableType(),
+        "ENGINEER_SYMBOL": this.getEngineerSymbol(),
+        "DIGIT_SEPARATOR": this.getDigitSeparator(),
+        "MULTI_LINE_FONT": this.getMultiLineFont(),
+        "EQUATION_COMPLEX_ROOT": this.getEquationComplexRoot(),
+        "LANGUAGE": this.getLanguage(),
+        "SPREADSHEET_AUTO_CALC": this.getSpreadsheetAutoCalc(),
+        "SPREADSHEET_SHOW_CELL": this.getSpreadsheetShowCell(),
+        "QR_CODE_VERSION": this.getQRCodeVersion(),
+        "ALGORITHM_BACKGROUND": this.getAlgorithmBackground(),
+        "ALGORITHM_UNIT_SETTING": this.getAlgorithmUnitSetting(),
+      }
+
       result.push(parseNumberFormat());
       result.push(parseInputOutput());
       for (const [code, setup] of Object.entries(setupMap)) {

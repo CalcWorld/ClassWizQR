@@ -34,54 +34,44 @@ export class ParseMode {
   }
 
   getMainMode() {
-    if (!this.mainMode) {
-      this.mainMode = this.M.slice(0, 2);
-    }
-    return this.mainMode;
+    return this.M.slice(0, 2);
   }
 
   getSubMode() {
-    if (!this.subMode) {
-      this.subMode = this.M.slice(2, 4);
-    }
-    return this.subMode;
+    return this.M.slice(2, 4);
   }
 
   getResultTemplate() {
-    if (!this.resultTemplate) {
-      this.resultTemplate = this.M.slice(4, 6);
-    }
-    return this.resultTemplate;
+    return this.M.slice(4, 6);
   }
 
   getResultFormat() {
-    if (!this.reultFormat) {
-      // won't fix:
-      // in a List screen (e.g. Stat variable list, Dist List, or Spreadsheet), result format is 4-6.
-      // but it's useless on these cases
-      const mainMode = this.getMainMode();
-      const subMode = this.getSubMode();
-      if ((mainMode === '45' && subMode !== '08') || ['4A', '4B'].includes(mainMode)) {
-        this.reultFormat = this.M.slice(4, 6);
-      } else {
-        this.reultFormat = this.M.slice(6, 8);
-      }
+    // won't fix:
+    // in a List screen (e.g. Stat variable list, Dist List, or Spreadsheet), result format is 4-6.
+    // but it's useless on these cases
+    const mainMode = this.getMainMode();
+    const subMode = this.getSubMode();
+    if ((mainMode === '45' && subMode !== '08') || ['4A', '4B'].includes(mainMode)) {
+      return this.M.slice(4, 6);
+    } else {
+      return this.M.slice(6, 8);
     }
-    return this.reultFormat;
+  }
+
+  getResultFormatDisplay() {
+    return this.getResultFormat().slice(0, 1);
+  }
+
+  getResultFormatStore() {
+    return this.getResultFormat().slice(1, 2);
   }
 
   getInqType() {
-    if (!this.inqType) {
-      this.inqType = this.M.slice(6, 8);
-    }
-    return this.inqType;
+    return this.M.slice(6, 8);
   }
 
   getSolveFor() {
-    if (!this.solveFor) {
-      this.solveFor = this.M.slice(8, 10);
-    }
-    return this.solveFor;
+    return this.M.slice(8, 10);
   }
 
   getStatSubName(modelType, modelId) {
@@ -104,16 +94,13 @@ export class ParseMode {
   getModeInfo(modelType, modelId) {
     const mainMode = this.getMainMode();
     if (mainMode.startsWith('X') || mainMode.startsWith('Y') || mainMode.startsWith('Z')) {
-      let mainName = tt(`menu.${mainMode}`);
-      if (!mainName) {
-        mainName = tt(`menu.${mainMode}-${modelType}`);
-      }
+      const mainName = tt(`menu.${mainMode}`) || tt(`menu.${mainMode}-${modelType}`);
       return { mainName, mainMode };
     }
     let subMode = this.getSubMode();
-    if (mainMode === '4B') {
+    if (mainMode === '4B') { // Inequality
       subMode += this.getInqType();
-    } else if (mainMode === '4F') {
+    } else if (mainMode === '4F') { // Math Box
       subMode = this.getResultTemplate();
     }
     const mainName = tt(`mode.${mainMode}`);

@@ -6,7 +6,7 @@ import { ParseSetup } from "../setup/index.js";
 
 export const ParseNumberResult = (R, M, modelType, modelId) => {
   const parseM = new ParseMode(M);
-  const { displayCode } = parseM.getFormatInfo();
+  const displayCode = parseM.getResultFormatDisplay();
   const ans1 = R.slice(0, R.length / 2);
   const ans2 = R.slice(R.length / 2);
   const [ans1Latex, ans1Decimal] = new ParseVariable(ans1).get({ displayCode });
@@ -55,7 +55,7 @@ export const ParseNumberResult = (R, M, modelType, modelId) => {
 
 export const ParseInequalityResult = (R, M) => {
   const parseM = new ParseMode(M);
-  const { displayCode } = parseM.getFormatInfo();
+  const displayCode = parseM.getResultFormatDisplay();
   const resultCode = R.slice(2, 4);
   const result = RESULT_INFO['INEQUALITY'][resultCode];
   if (typeof result === 'function') {
@@ -81,7 +81,7 @@ export const ParseEquationResult = (R, M, S, C) => {
   const split = R.slice(3).match(/.{20}/g);
   const parseM = new ParseMode(M)
   const subMode = parseM.getSubMode();
-  const { displayCode } = parseM.getFormatInfo();
+  const displayCode = parseM.getResultFormatDisplay();
 
   if (['1', '2', '4'].includes(resultCode)) {
     if (split.length === 0) {

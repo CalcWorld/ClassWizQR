@@ -158,7 +158,7 @@ export const ParseEquation = (C, M, S) => {
       elementRow.push(latex);
       decimalResult.push(decimal);
 
-      if (/[xyzt]$/i.test(temp)) {
+      if (/[xyzt]/.test(temp)) {
         if (decimal.eq(1)) {
           latex = '';
         } else if (decimal.eq(-1)) {
@@ -166,6 +166,9 @@ export const ParseEquation = (C, M, S) => {
         } else if (decimal.eq(0)) {
           temp = '';
         }
+      }
+      if (temp === placeholder && decimal.eq(0)) {
+        temp = '';
       }
       if (temp.indexOf(placeholder) !== 0) {
         needPlus = false;

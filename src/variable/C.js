@@ -149,14 +149,34 @@ export const ParseEquation = (C, M, S) => {
     let [latex, decimal] = new ParseVariable(split[i]).get({ fractionResult });
     elementRow.push(latex);
     decimalResult.push(decimal);
-    if (!omitPlus.includes(i) && decimal.gte(0)) {
-      latex = '+' + latex;
-    }
-    template = template.replace(`\$\{${i}\}`, latex);
     if ((i + 1) % n === 0) {
       element.push(elementRow);
       elementRow = [];
     }
+
+    const search = `\$\{${i}\}`;
+    const searchPos = template.indexOf(search);
+    const charPos = searchPos + search.length;
+    const char = template[charPos];
+    /*if (decimal.eq(0)) {
+      const next = template.slice(charPos).search(/[$=\\]/);
+      console.log(i, template.slice(charPos))
+      if (next !== -1) {
+        template = template.slice(0, searchPos) + template.slice(charPos + next);
+        continue;
+      }
+    }*/
+    if (/[xyzt]/.test(char)) {
+      if (decimal.eq(1)) {
+        latex = '';
+      } else if (decimal.eq(-1)) {
+        latex = '-';
+      }
+    }
+    if (!omitPlus.includes(i) && decimal.gte(0)) {
+      latex = '+' + latex;
+    }
+    template = template.replace(search, latex);
   }
   if (i !== m * n || template.includes('$')) {
     throw new Error('Equation template not match');

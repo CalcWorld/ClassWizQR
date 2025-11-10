@@ -84,7 +84,7 @@ export const ParseEquationResult = (R, M, S, C) => {
   const displayCode = parseM.getResultFormatDisplay();
 
   if (['1', '2', '4'].includes(resultCode)) {
-    if (split.length === 0) {
+    if (!split || split.length === 0) {
       return [{ name: 'templated', latex: RESULT_INFO['EQUATION'][resultCode]() }];
     }
   }

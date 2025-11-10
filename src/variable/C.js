@@ -132,8 +132,7 @@ export const ParseEquation = (C, M, S) => {
     case '4B':
       equType = 'INEQUALITY';
       m = 1;
-      n = subMode.slice(1, 2) - 1;
-      subMode += parseM.getInqType();
+      n = subMode - 1;
       break;
   }
 
@@ -191,6 +190,10 @@ export const ParseEquation = (C, M, S) => {
     }
     element.push(elementRow);
     elementRow = [];
+  }
+
+  if (equType === 'INEQUALITY') {
+    template[0].push(INPUT_INFO[equType][parseM.getInqType()]);
   }
   template = template.map(t => t.join(' ')).join(' \\\\ ');
 

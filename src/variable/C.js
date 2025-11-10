@@ -1,5 +1,5 @@
 import { ParseVariable } from "./index.js";
-import { INPUT_INFO, INPUT_INFO_COEFFICIENT, INPUT_INFO_OMIT_PLUS } from './input.js';
+import { INPUT_INFO, INPUT_INFO_COEFFICIENT } from './input.js';
 import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from '../setup/index.js';
 
@@ -118,67 +118,80 @@ export const ParseEquation = (C, M, S) => {
   const parseM = new ParseMode(M);
   const mainMode = parseM.getMainMode();
   let subMode = parseM.getSubMode();
-  let equType, omitPlus, m, n;
+  let equType, m, n;
   switch (mainMode) {
     case '45':
       equType = 'EQUATION';
-      omitPlus = INPUT_INFO_OMIT_PLUS[equType][subMode] || [0];
       [m, n] = INPUT_INFO_COEFFICIENT[equType][subMode];
       break;
     case '4A':
       equType = 'RATIO';
-      omitPlus = [0, 1, 2];
       m = 1;
       n = 3;
       break;
     case '4B':
       equType = 'INEQUALITY';
-      omitPlus = [0];
       m = 1;
       n = subMode.slice(1, 2) - 1;
       subMode += parseM.getInqType();
       break;
   }
 
-  let template = INPUT_INFO[equType][subMode];
+  if (split.length !== m * n) {
+    throw new Error('Equation template not match');
+  }
+
+  let template = structuredClone(INPUT_INFO[equType][subMode]);
   const decimalResult = [];
   const element = [];
   let elementRow = [];
-  let i;
-  for (i = 0; i < split.length; i++) {
-    let [latex, decimal] = new ParseVariable(split[i]).get({ fractionResult });
-    elementRow.push(latex);
-    decimalResult.push(decimal);
-    if ((i + 1) % n === 0) {
-      element.push(elementRow);
-      elementRow = [];
-    }
+  let k = 0;
+  for (const row of template) {
+    let needPlus = false;
+    let c = 0;
+    for (let i = 0; i < row.length; i++) {
+      let temp = row[i];
+      const placeholder = '${' + k + '}';
+      if (!temp.includes(placeholder)) continue;
 
-    const search = `\$\{${i}\}`;
-    const searchPos = template.indexOf(search);
-    const charPos = searchPos + search.length;
-    const char = template[charPos];
-    /*if (decimal.eq(0)) {
-      const next = template.slice(charPos).search(/[$=\\]/);
-      console.log(i, template.slice(charPos))
-      if (next !== -1) {
-        template = template.slice(0, searchPos) + template.slice(charPos + next);
-        continue;
+      let [latex, decimal] = new ParseVariable(split[k]).get({ fractionResult });
+      elementRow.push(latex);
+      decimalResult.push(decimal);
+
+      if (/[xyzt]$/i.test(temp)) {
+        if (decimal.eq(1)) {
+          latex = '';
+        } else if (decimal.eq(-1)) {
+          latex = '-';
+        } else if (decimal.eq(0)) {
+          temp = '';
+        }
       }
-    }*/
-    if (/[xyzt]/.test(char)) {
-      if (decimal.eq(1)) {
-        latex = '';
-      } else if (decimal.eq(-1)) {
-        latex = '-';
+      if (temp.indexOf(placeholder) !== 0) {
+        needPlus = false;
+      }
+      if (needPlus && decimal.gte(0)) {
+        latex = '+' + latex;
+      }
+
+      row[i] = temp.replace(placeholder, latex)
+
+      k++;
+      if (temp) {
+        c++;
+        needPlus = true;
+      } else if (c === 0) {
+        needPlus = false;
+      } else {
+        needPlus = true;
       }
     }
-    if (!omitPlus.includes(i) && decimal.gte(0)) {
-      latex = '+' + latex;
-    }
-    template = template.replace(search, latex);
+    element.push(elementRow);
+    elementRow = [];
   }
-  if (i !== m * n || template.includes('$')) {
+  template = template.map(t => t.join(' ')).join(' \\\\ ');
+
+  if (template.includes('$')) {
     throw new Error('Equation template not match');
   }
   return { latex: template, decimal: decimalResult, element };

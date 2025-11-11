@@ -140,20 +140,21 @@ export const ParseEquation = (C, M, S) => {
     throw new Error('Equation template not match');
   }
 
-  let template = structuredClone(INPUT_INFO[equType][subMode]);
+  let k = 0;
   const decimalResult = [];
   const element = [];
-  let elementRow = [];
-  let k = 0;
-  for (const row of template) {
+  let template;
+  template = INPUT_INFO[equType][subMode].map(row => {
     let needPlus = false;
+    let elementRow = [];
     let c = 0;
-    for (let i = 0; i < row.length; i++) {
-      let temp = row[i];
+    const newRow = row.map(cell => {
+      let temp = cell;
       const placeholder = '${' + k + '}';
-      if (!temp.includes(placeholder)) continue;
+      if (!temp.includes(placeholder)) return temp;
 
       let [latex, decimal] = new ParseVariable(split[k]).get({ fractionResult });
+      k++;
       elementRow.push(latex);
       decimalResult.push(decimal);
 
@@ -176,9 +177,8 @@ export const ParseEquation = (C, M, S) => {
         latex = '+' + latex;
       }
 
-      row[i] = temp.replace(placeholder, latex)
+      const replaced = temp.replace(placeholder, latex)
 
-      k++;
       if (temp) {
         c++;
         needPlus = true;
@@ -187,10 +187,11 @@ export const ParseEquation = (C, M, S) => {
       } else {
         needPlus = true;
       }
-    }
+      return replaced;
+    });
     element.push(elementRow);
-    elementRow = [];
-  }
+    return newRow;
+  });
 
   if (equType === 'INEQUALITY') {
     template[0].push(INPUT_INFO[equType][parseM.getInqType()]);

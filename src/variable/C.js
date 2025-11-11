@@ -198,13 +198,14 @@ export const ParseEquation = (C, M, S) => {
 
   switch (mainMode) {
     case '45':
-      // EQUATION
-      break;
-    case '4A':
-      // RATIO
+      if (sb <= 3) {
+        template[0].unshift("\\left\\{\\begin{array}{l}");
+        template[sb].push("\\end{array}\\right.");
+      } else {
+        template[0].push("=0");
+      }
       break;
     case '4B':
-      // INEQUALITY
       template[0].push(INPUT_INFO[equType][parseM.getInqType()]);
       break;
   }

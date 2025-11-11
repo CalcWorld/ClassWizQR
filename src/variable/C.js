@@ -1,5 +1,5 @@
 import { ParseVariable } from "./index.js";
-import { INPUT_INFO, INPUT_INFO_COEFFICIENT } from './input.js';
+import { INPUT_INFO } from './input.js';
 import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from '../setup/index.js';
 
@@ -117,12 +117,15 @@ export const ParseEquation = (C, M, S) => {
   const split = C.match(/.{20}/g);
   const parseM = new ParseMode(M);
   const mainMode = parseM.getMainMode();
-  let subMode = parseM.getSubMode();
+  const subMode = parseM.getSubMode();
+  const sb = +subMode;
   let equType, m, n;
   switch (mainMode) {
     case '45':
       equType = 'EQUATION';
-      [m, n] = INPUT_INFO_COEFFICIENT[equType][subMode];
+      [m, n] = sb <= 3
+        ? [sb + 1, sb + 2]
+        : [1, sb - 1];
       break;
     case '4A':
       equType = 'RATIO';
@@ -132,7 +135,7 @@ export const ParseEquation = (C, M, S) => {
     case '4B':
       equType = 'INEQUALITY';
       m = 1;
-      n = subMode - 1;
+      n = sb - 1;
       break;
   }
 
@@ -193,9 +196,19 @@ export const ParseEquation = (C, M, S) => {
     return newRow;
   });
 
-  if (equType === 'INEQUALITY') {
-    template[0].push(INPUT_INFO[equType][parseM.getInqType()]);
+  switch (mainMode) {
+    case '45':
+      // EQUATION
+      break;
+    case '4A':
+      // RATIO
+      break;
+    case '4B':
+      // INEQUALITY
+      template[0].push(INPUT_INFO[equType][parseM.getInqType()]);
+      break;
   }
+
   template = template.map(t => t.join(' ')).join(' \\\\ ');
 
   if (template.includes('$')) {

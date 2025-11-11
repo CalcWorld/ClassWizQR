@@ -1,16 +1,5 @@
 import { tt } from '../utils.js';
 
-export const INPUT_INFO_COEFFICIENT = {
-  "EQUATION": {
-    "01": [2, 3],
-    "02": [3, 4],
-    "03": [4, 5],
-    "04": [1, 3],
-    "05": [1, 4],
-    "06": [1, 5],
-  },
-};
-
 export const INPUT_INFO = {
   "EQUATION": {
     "01": [

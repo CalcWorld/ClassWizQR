@@ -226,15 +226,20 @@ export const ParseEquation = (C, M, S) => {
 export const ParseDistribution = (C, M) => {
   const subMode = new ParseMode(M).getSubMode();
   const split = C.match(/.{20}/g);
-  let template = INPUT_INFO['DISTRIBUTION'][subMode][split.length]
-    .map(i => typeof i === 'function' ? i() : i)
-    .join(' \\\\ ');
+  let template = INPUT_INFO['DISTRIBUTION'][subMode][split.length];
+  if (split.length !== template.length) {
+    throw new Error('Distribution template not match');
+  }
 
   const decimalResult = [];
-  for (let i = 0; i < split.length; i++) {
+  template = template.map((cell, i) => {
+    let temp = typeof cell === 'function' ? cell() : cell;
     const [latex, decimal] = new ParseVariable(split[i]).get();
-    template = template.replace(`\$\{${i}\}`, latex);
+    temp = temp.replace('${' + i + '}', latex);
     decimalResult.push(decimal);
-  }
+    return temp;
+  })
+    .join(' \\\\ ');
+
   return { latex: template, decimal: decimalResult };
 }

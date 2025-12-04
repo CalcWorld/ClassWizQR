@@ -265,7 +265,9 @@ export class ParseVariable {
     const num = numDec.abs();
     let numLatex;
 
-    if (!numDec.isInt() && num.lt(1000000)) {
+    if (!numDec.isInt() && num.lt(1000000)
+      // TODO to fix too many iterations
+      && num.gt(1e-4)) {
       numLatex = numberToPiFracLatex({
         numSign,
         valNum,

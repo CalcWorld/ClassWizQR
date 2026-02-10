@@ -35,5 +35,4 @@ export const modelEY = {
   "046": ["fx-570MY CW", 2],
   "047": ["fx-810DE CW", 2],
   "090": ["Graph Light", 2],
-  "505": ["fx-9910CW 2nd edition", 2],
-}
+};

@@ -64,7 +64,8 @@ export class ClassWizQR {
     }
 
     if (modelType === MODEL_TYPE.EY) {
-      if (kv.I?.slice(0, 3) > 500) modelType = MODEL_TYPE.FY;
+      const i = +kv.I?.slice(0, 3);
+      if (i > 500 || i === 91) modelType = MODEL_TYPE.FY;
     }
 
     this.setModelType(modelType).setKV(kv);

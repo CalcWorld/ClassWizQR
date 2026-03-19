@@ -10,4 +10,5 @@ export const modelFY = {
   "540": ["fx-83GT CW+ 2nd edition", 2],
   "541": ["fx-85GT CW+ 2nd edition", 2],
   "542": ["fx-991CW+ UK 2nd edition", 2],
+  "091": ["Graph Light+", 2],
 };

@@ -113,8 +113,8 @@ export const ascii00 = {
   "6F": "\\sinh^{-1}(",
   "70": "\\cosh^{-1}(",
   "71": "\\tanh^{-1}(",
-  "72": "e^(",
-  "73": "10^(",
+  "72": "e\\hat{}(",
+  "73": "10\\hat{}(",
   "74": "\\sqrt\\!(",
   "75": "\\ln(",
   "76": "\\sqrt[3]\\!(",
@@ -266,7 +266,8 @@ export const ascii00_unicode_EY = {
   "45": "E",
   "46": "F",
   "4A": "PreAns",
-  "4B": "θ"
+  "4B": "θ",
+  "4C": "s",
 }
 
 export const ascii00_unicode = {

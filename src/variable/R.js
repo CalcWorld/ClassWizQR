@@ -190,6 +190,9 @@ export const ParseStatisticResult = (R, M, modelType, modelId) => {
       } else {
         template += 'r=${2}';
       }
+      if (split.length === 4) {
+        template += ' \\\\ r²=${3}';
+      }
       break;
   }
   for (let i = 0; i < split.length; i++) {

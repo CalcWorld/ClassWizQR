@@ -42,14 +42,6 @@ Online Demo: <https://cwqr.pages.dev>
 | $$\square^{XX} $$                                            | $\square$ C9 1A XX 1B                  |
 | $$\sqrt[XX]{YY} $$                                           | CA 1D 1A XX 1B 1A YY 1B 1E             |
 
-## Todo
-
-- [x] ~~Algorithm mode~~
-- [x] ~~MathBox mode~~
-- [ ] `W` data in Graph mode
-- [x] ~~Refactor i18n~~
-- [ ] Optimized adaptations for FR, DE, CE, SP, and other models
-
 ## License
 
 - [AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.html)

@@ -10,6 +10,8 @@
     "4505": "Cubic Equation [ax³+bx²+cx+d=0]",
     "4506": "Quartic Equation [ax⁴+bx³+cx²+dx+e=0]",
     "4508": "Solver",
+    "4511": "Linear Equation [ax+b=0]",
+    "4512": "Linear Equation [ax+b=cx+d]",
     "C1": "Calculate",
     "02": "Base-N",
     "0201": "Binary",

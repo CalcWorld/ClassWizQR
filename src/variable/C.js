@@ -123,9 +123,13 @@ export const ParseEquation = (C, M, S) => {
   switch (mainMode) {
     case '45':
       equType = 'EQUATION';
-      [m, n] = sb <= 3
-        ? [sb + 1, sb + 2]
-        : [1, sb - 1];
+      if (sb <= 3) {
+        [m, n] = [sb + 1, sb + 2];
+      } else if (sb > 10) {
+        [m, n] = [1, (sb - 10) * 2];
+      } else {
+        [m, n] = [1, sb - 1];
+      }
       break;
     case '4A':
       equType = 'RATIO';
@@ -201,7 +205,7 @@ export const ParseEquation = (C, M, S) => {
       if (sb <= 3) {
         template[0].unshift("\\left\\{\\begin{array}{l}");
         template[sb].push("\\end{array}\\right.");
-      } else {
+      } else if (sb !== 12) {
         template[0].push("=0");
       }
       break;

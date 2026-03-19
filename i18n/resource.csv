@@ -9,6 +9,8 @@ mode.4504,Quadratic Equation [ax²+bx+c=0],二次方程 [ax²+bx+c=0],Phương t
 mode.4505,Cubic Equation [ax³+bx²+cx+d=0],三次方程 [ax³+bx²+cx+d=0],Phương trình bậc hai [ax³+bx²+cx+d=0],
 mode.4506,Quartic Equation [ax⁴+bx³+cx²+dx+e=0],四次方程 [ax⁴+bx³+cx²+dx+e=0],Phương trình bậc bốn [ax⁴+bx³+cx²+dx+e=0],
 mode.4508,Solver,求解方程,Bộ giải phương trình,
+mode.4511,Linear Equation [ax+b=0],一元一次方程 [ax+b=0],,Équation deg. 1 [ax+b=0]
+mode.4512,Linear Equation [ax+b=cx+d],一元一次方程 [ax+b=cx+d],,Équation deg. 1 [ax+b=cx+d]
 mode.C1,Calculate,计算,Phép tính thường,
 mode.02,Base-N,基数,Hệ đếm cơ số N,
 mode.0201,Binary,二进制,Nhị phân,

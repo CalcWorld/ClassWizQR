@@ -91,7 +91,7 @@ export const ParseEquationResult = (R, M, S, C) => {
   const noLocal = resultCode === '5';
 
   let template;
-  const SIMUL_SUB_MODE = ['01', '02', '03'];
+  const SIMUL_SUB_MODE = ['01', '02', '03', '11', '12'];
   const EQ0 = RESULT_INFO['EQUATION']['0'];
   if (SIMUL_SUB_MODE.includes(subMode)) {
     template = EQ0[subMode];

@@ -341,3 +341,9 @@ export const asciiFD_unicode = {
   "5D": "RK-90",
   "5E": "KJ-90"
 }
+
+export const asciiFD_EY = {
+  "40": "m_u",
+  "4B": "c",
+  "52": "g_n",
+};

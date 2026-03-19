@@ -1,8 +1,8 @@
 import { ascii00, ascii00_EY, ascii00_unicode, ascii00_unicode_EY } from './00.js';
 import { asciiFA } from './FA.js';
 import { asciiFB, asciiFB_EY } from './FB.js';
-import { asciiFD, asciiFD_unicode } from './FD.js';
-import { asciiFE, asciiFE_JP } from './FE.js';
+import { asciiFD, asciiFD_EY, asciiFD_unicode } from './FD.js';
+import { asciiFE, asciiFE_FY, asciiFE_JP } from './FE.js';
 import { MODEL_TYPE, MODEL_TYPE_EY_FY } from "../model/index.js";
 
 export const JP_MODEL = {
@@ -64,10 +64,16 @@ export class AsciiTable {
 
     combine('FD', asciiFD);
     type === 'unicode' && combine('FD', asciiFD_unicode);
+    if (MODEL_TYPE_EY_FY.includes(this.modelType)) {
+      combine('FD', asciiFD_EY);
+    }
 
     combine('FE', asciiFE, type === 'unicode');
     if (JP_MODEL[this.modelType]?.includes(this.modelId)) {
       combine('FE', asciiFE_JP, type === 'unicode');
+    }
+    if (MODEL_TYPE_EY_FY.includes(this.modelType)) {
+      combine('FE', asciiFE_FY, type === 'unicode');
     }
 
     return asciiCopy;

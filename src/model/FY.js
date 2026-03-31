@@ -7,8 +7,8 @@ export const modelFY = {
   "526": ["fx-350CN CW II", 0],
   "527": ["fx-991CN CW II", 0],
   "528": ["fx-999CN CW II", 0],
-  "540": ["fx-83GT CW+ 2nd edition", 2],
-  "541": ["fx-85GT CW+ 2nd edition", 2],
+  "540": ["fx-85GT CW+ 2nd edition", 2],
+  "541": ["fx-83GT CW+ 2nd edition", 2],
   "542": ["fx-991CW+ UK 2nd edition", 2],
   "091": ["Graph Light+", 2],
 };

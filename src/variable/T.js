@@ -68,6 +68,8 @@ export const ParseStatistic = (T, M, S) => {
     head.push('x');
     head.push('P');
     numList = ParseRawStatistic(T);
+  } else {
+    return void 0;
   }
   const array = [head];
   for (let i = 0; i < numList.length; i++) {

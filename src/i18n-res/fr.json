@@ -1,7 +1,11 @@
 {
   "mode": {
     "4511": "Équation deg. 1 [ax+b=0]",
-    "4512": "Équation deg. 1 [ax+b=cx+d]"
+    "4512": "Équation deg. 1 [ax+b=cx+d]",
+    "0G": "Suites"
+  },
+  "menu": {
+    "XG": "Manuel des Suites"
   },
   "algo": {
     "F903": " ",

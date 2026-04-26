@@ -70,7 +70,8 @@
     "0E": "Algorithm",
     "4F": "Math Box",
     "4FS1": "Dice Roll",
-    "4FS2": "Coin Toss"
+    "4FS2": "Coin Toss",
+    "0G": "Sequences"
   },
   "format": {
     "0": "Not Specified",
@@ -108,6 +109,7 @@
     "XD": "Spreadsheet Manual",
     "XE": "Algorithm Manual",
     "XF": "Math Box Manual",
+    "XG": "Sequences Manual",
     "Y1": "AC Break",
     "Y2": "Syntax ERROR",
     "Y3": "Math ERROR",

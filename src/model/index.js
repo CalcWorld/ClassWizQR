@@ -28,3 +28,7 @@ export const MODEL_TYPE_NAME = {
   [MODEL_TYPE.EY]: 'ClassWiz CW',
   [MODEL_TYPE.FY]: 'ClassWiz CW 2nd edition',
 };
+
+export const FORCE_MODEL_PREFIX = {
+  '091': MODEL_TYPE.EY,
+};

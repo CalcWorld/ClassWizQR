@@ -232,7 +232,8 @@ export class ClassWizQR {
     return {
       model: {
         type: MODEL_TYPE_NAME[modelType],
-        prefix: modelType,
+        // fuck casio
+        prefix: modelId === '091' ? MODEL_TYPE.EY : modelType,
         id: modelId,
         name: modelName,
         version: modelVersion,

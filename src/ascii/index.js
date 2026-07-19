@@ -18,6 +18,12 @@ export const JP_MODEL = {
     '031',
     '032',
   ],
+  [MODEL_TYPE.FY]: [
+    '529',
+    '530',
+    '531',
+    '532',
+  ],
 };
 
 export class AsciiTable {

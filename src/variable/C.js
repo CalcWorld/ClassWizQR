@@ -247,3 +247,38 @@ export const ParseDistribution = (C, M) => {
 
   return { latex: template, decimal: decimalResult };
 }
+
+export const ParseSequenceSetting = ({ C, E, G }) => {
+  const split = C.match(/.{20}/g);
+  const parameter = split.map(i => {
+    const [latex, decimal] = new ParseVariable(i).get();
+    return { latex, decimal };
+  });
+  const setting = {
+    parameter,
+  };
+
+  if (parameter[0].decimal.eq(2)) {
+    setting.seq1 = { type: 'uₙ₊₁', firstTerm: 'u₀' };
+  } else {
+    setting.seq1 = { type: 'uₙ', firstTerm: null };
+  }
+
+  if (parameter[1].decimal.eq(4)) {
+    setting.seq2 = { type: 'vₙ₊₁', firstTerm: 'v₀' };
+  } else {
+    setting.seq2 = { type: 'vₙ', firstTerm: null };
+  }
+
+  setting.displaySum = parameter[3].decimal.eq(1);
+
+  setting.resultHeader = [
+    'n',
+    E?.length > 0 ? 'uₙ' : void 0,
+    E?.length > 0 && setting.displaySum ? 'Σuₙ' : void 0,
+    G?.length > 0 ? 'vₙ' : void 0,
+    G?.length > 0 && setting.displaySum ? 'Σvₙ' : void 0,
+  ].filter(Boolean);
+
+  return setting;
+};

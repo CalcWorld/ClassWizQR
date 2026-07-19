@@ -1,8 +1,14 @@
 import { ParseExpression } from "./expression/index.js";
-import { getModelInfo, MODEL_TYPE, MODEL_TYPE_NAME } from "./model/index.js";
+import { FORCE_MODEL_PREFIX, getModelInfo, MODEL_TYPE, MODEL_TYPE_NAME } from "./model/index.js";
 import { ParseMode } from "./mode/index.js";
-import { ParseDistribution, ParseEquation, ParseMatrixList, ParseVectorList } from "./variable/C.js";
-import { ParseMathBox, ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
+import {
+  ParseDistribution,
+  ParseEquation,
+  ParseMatrixList,
+  ParseSequenceSetting,
+  ParseVectorList
+} from "./variable/C.js";
+import { ParseMathBox, ParseSequencesResult, ParseSpreadsheet, ParseStatistic } from "./variable/T.js";
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
 import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseStatisticResult } from "./variable/R.js";
@@ -132,6 +138,7 @@ export class ClassWizQR {
     }
 
     let expression, expressionE, expressionG, _function, algorithm;
+    let sequence, _sequenceDef;
     if (kv.E) {
       if (_mainMode === '0E') {
         const parseE = new ParseAlgorithm(kv.S, kv.E, modelType, modelId);
@@ -157,6 +164,11 @@ export class ClassWizQR {
       _function = [
         { name: 'f(x)', expression: expressionE || '' },
         { name: 'g(x)', expression: expressionG || '' },
+      ];
+    } else if ('0G' === _mainMode) {
+      _sequenceDef = [
+        expressionE || '',
+        expressionG || '',
       ];
     } else {
       expression = expressionE;
@@ -214,6 +226,16 @@ export class ClassWizQR {
           equation = ParseEquation(kv.C, kv.M, kv.S);
         } else if (_mainMode === '0C') {
           distribution = ParseDistribution(kv.C, kv.M);
+        } else if (_mainMode === '0G') {
+          const seq = ParseSequenceSetting(kv);
+          sequence = {};
+          sequence['setting'] = seq;
+          sequence['definition'] = [
+            { name: seq.seq1.type, expression: _sequenceDef[0] },
+            { name: seq.seq1.firstTerm, expression: seq.parameter[4].latex },
+            { name: seq.seq2.type, expression: _sequenceDef[1] },
+            { name: seq.seq2.firstTerm, expression: seq.parameter[5].latex },
+          ].filter(({ name }) => Boolean(name));
         }
       }
     }
@@ -224,6 +246,8 @@ export class ClassWizQR {
         spreadsheet = ParseSpreadsheet(kv.T);
       } else if (_mainMode === '4F') {
         mathBox = ParseMathBox(kv.T, kv.M, kv.C);
+      } else if (_mainMode === '0G') {
+        sequence['result'] = ParseSequencesResult(kv, { sequence, tableRange });
       } else {
         statistic = ParseStatistic(kv.T, kv.M, kv.S);
       }
@@ -255,6 +279,7 @@ export class ClassWizQR {
       distribution,
       mathBox,
       algorithm,
+      sequence,
       setup,
       kv,
     };

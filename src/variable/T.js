@@ -3,6 +3,9 @@ import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from "../setup/index.js";
 import Decimal from 'decimal.js';
 
+const generateArray = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => new Decimal(a).plus(i));
+
+
 /**
  * @param {*[][]} array
  * @return {string}
@@ -37,8 +40,14 @@ const ParseCompressStatistic = (T) => {
   return T.match(/.{6}/g).map(t => {
     const data = t.match(/.{2}/g).map(tt => {
       return parseInt(tt, 32).toString(10).padStart(3, '0')
-    }).join('')
-    const [, decimal] = new ParseVariable(`0${data}`).get();
+    });
+    if (data.find(isNaN)) {
+      // sequences mode will generate `ZF0000` as a null value if the `Premier terme` (First term) is set to 
+      // `u1,v1` and the range includes 0.
+      // but ZF cannot be parsed from base32, it'll generate NaN and here just return ''
+      return '';
+    }
+    const [, decimal] = new ParseVariable(`0${data.join('')}`).get();
     return decimal;
   });
 }
@@ -83,8 +92,6 @@ export const ParseStatistic = (T, M, S) => {
 }
 
 export const ParseMathBox = (T, M, C) => {
-  const generateArray = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => new Decimal(a).plus(i));
-
   const split = C.match(/.{20}/g);
   const parseM = new ParseMode(M);
   const subMode = parseM.getResultTemplate();
@@ -140,4 +147,25 @@ export const ParseMathBox = (T, M, C) => {
 
   const csv = array2Csv(array);
   return { quantity, attempts, array, csv };
+}
+
+export const ParseSequencesResult = ({ T, C }, { sequence, tableRange }) => {
+  let head;
+  let numList;
+  let colList;
+  head = sequence.setting.resultHeader;
+  numList = ParseCompressStatistic(T);
+  const a = tableRange[0].decimal.toNumber();
+  const b = tableRange[1].decimal.toNumber();
+  colList = generateArray(a, b);
+
+  const array = [head];
+  for (let i = 0; i < numList.length; i++) {
+    if (i % (head.length - 1) === 0) {
+      array.push([colList[i / (head.length - 1)]])
+    }
+    array[array.length - 1].push(numList[i]);
+  }
+  const csv = array2Csv(array);
+  return { array, csv };
 }

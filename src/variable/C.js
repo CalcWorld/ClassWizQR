@@ -258,14 +258,16 @@ export const ParseSequenceSetting = ({ C, E, G }) => {
     parameter,
   };
 
+  setting.firstTermIsA0 = parameter[2].decimal.eq(8);
+
   if (parameter[0].decimal.eq(2)) {
-    setting.seq1 = { type: 'uₙ₊₁', firstTerm: 'u₀' };
+    setting.seq1 = { type: 'uₙ₊₁', firstTerm: setting.firstTermIsA0 ? 'u₀' : 'u₁' };
   } else {
     setting.seq1 = { type: 'uₙ', firstTerm: null };
   }
 
   if (parameter[1].decimal.eq(4)) {
-    setting.seq2 = { type: 'vₙ₊₁', firstTerm: 'v₀' };
+    setting.seq2 = { type: 'vₙ₊₁', firstTerm: setting.firstTermIsA0 ? 'v₀' : 'u₁' };
   } else {
     setting.seq2 = { type: 'vₙ', firstTerm: null };
   }

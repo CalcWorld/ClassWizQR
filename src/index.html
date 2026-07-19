@@ -73,9 +73,7 @@
 
     .preview-table td, .preview-table th {
         border: thin solid #3883fa;
-        border-collapse: collapse;
-        border-spacing: 0;
-        padding: 5px 5px;
+        padding: 5px;
     }
 
     .transpose tr td:nth-child(1) {
@@ -140,13 +138,13 @@
 <link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script>
 <div id="app">
-    <label for="lang"></label>
-    <select id="lang" name="lang">
-        <option value="zh">zh</option>
-        <option value="en" selected>en</option>
-    </select>
-    <label for="qrUrl"></label>
-    <input id="qrUrl" type="search" placeholder="http://......"/>
+    <form id="qr-form">
+        <select id="lang" name="lang" aria-label="Language">
+            <option value="zh">zh</option>
+            <option value="en" selected>en</option>
+        </select>
+        <input id="qrUrl" type="search" aria-label="QR URL" placeholder="http://......"/>
+    </form>
     <details open>
         <summary data-i18n-tag="calc-title">Calculation</summary>
         <div id="calc"></div>
@@ -173,19 +171,53 @@
   const lang = document.getElementById('lang');
   const cwqrI18nRes = {};
   const qrUrl = document.getElementById("qrUrl");
+  const qrForm = document.getElementById('qr-form');
+  const calc = document.getElementById('calc');
+  const loading = document.getElementById('loading');
+  const basic = document.getElementById('basic');
+  const settings = document.getElementById('settings');
+  const qrResult = document.getElementById('qrResult');
+  let downloads = {};
   let editor;
 
   lang.onchange = async function () {
     localStorage.setItem('lang', lang.value);
     await loadI18nRes();
+    document.documentElement.lang = lang.value;
     parseQr();
     i18n();
   }
 
-  qrUrl.onchange = qrUrl.onsubmit = function () {
-    location.hash = `#${qrUrl.value}`;
-    parseQr();
+  function updateQrHash() {
+    const nextHash = `#${qrUrl.value}`;
+    if (location.hash === nextHash) {
+      parseQr();
+    } else {
+      location.hash = nextHash;
+    }
   }
+
+  qrUrl.onchange = updateQrHash;
+  qrUrl.onkeydown = event => {
+    if (event.key !== 'Enter') return;
+    event.preventDefault();
+    updateQrHash();
+  };
+  qrForm.onsubmit = event => {
+    event.preventDefault();
+    updateQrHash();
+  };
+
+  calc.onclick = event => {
+    const button = event.target.closest('button[data-download]');
+    if (!button || !calc.contains(button)) return;
+
+    const payload = downloads[button.dataset.download];
+    if (!payload) return;
+
+    const content = payload.bom ? `\ufeff${payload.content}` : payload.content;
+    download(`${payload.prefix}-${Date.now()}.csv`, content, 'text/csv;charset=utf-8');
+  };
 
   function parseOnHashChange() {
     qrUrl.value = location.hash.substring(1);
@@ -194,7 +226,8 @@
 
   async function loadI18nRes() {
     if (lang.value === 'en' || cwqrI18nRes[lang.value]) return;
-    cwqrI18nRes[lang.value] = await (await fetch(`/i18n-res/${lang.value}.json`)).json();
+    const resourceUrl = new URL(`i18n-res/${lang.value}.json`, document.baseURI);
+    cwqrI18nRes[lang.value] = await (await fetch(resourceUrl)).json();
   }
 
   window.onhashchange = parseOnHashChange;
@@ -219,7 +252,7 @@
         if (event.type === 'click') {
           // console.log(node, event);
           let value
-          if (node.value) {
+          if (node.value !== undefined) {
             value = node.value;
           } else {
             value = editor.get();
@@ -228,13 +261,12 @@
             }
             value = JSON.stringify(value, null, 2);
           }
-          await copyToClipboard(value);
-          elementSelection(event.srcElement);
+          await copyToClipboard(String(value));
+          elementSelection(event.target);
         }
       },
       mainMenuBar: false,
     };
-    const qrResult = document.getElementById("qrResult");
     editor = new JSONEditor(qrResult, options);
 
     const userLang = searchLang || localStorage.getItem('lang') || navigator.language.substring(0, 2);
@@ -244,7 +276,7 @@
     } else {
       lang.value = 'en';
     }
-    document.querySelector('html').setAttribute('lang', lang.value);
+    document.documentElement.lang = lang.value;
     i18n();
     parseOnHashChange();
   }
@@ -262,26 +294,61 @@
     editor.expandAll();
   }
 
+  const escapeElement = document.createElement('div');
+
+  function escapeHtml(value) {
+    escapeElement.textContent = String(value ?? '');
+    return escapeElement.innerHTML;
+  }
+
+  function renderTable({
+    headers = [],
+    rows = [],
+    classes = 'content preview-table',
+    rowNumbers = false,
+    transpose = false,
+    renderCell = escapeHtml,
+  }) {
+    const head = headers.length
+      ? `<thead><tr>${headers.map(header => `<th>${escapeHtml(header)}</th>`).join('')}</tr></thead>`
+      : '';
+    const body = rows.map((row, rowIndex) => `<tr>${
+      rowNumbers ? `<td>${rowIndex + 1}</td>` : ''
+    }${row.map(value => `<td>${renderCell(value)}</td>`).join('')}</tr>`).join('');
+
+    return `<table class="${classes}">${head}<tbody${transpose ? ' class="transpose"' : ''}>${body}</tbody></table>`;
+  }
+
+  function renderCalcSection(id, title, content) {
+    return `<div class="calc-result" id="${id}"><div class="title">${escapeHtml(title)}</div>${content}</div>`;
+  }
+
+  function renderDownloadButton(key, label) {
+    return `<button class="download" data-download="${key}">${escapeHtml(label)}</button>`;
+  }
+
   function calculationPreview(qrResult) {
-    const parseTabularArray = (array) => `
-<table class="content preview-table fix-width"><thead>
-  <tr>
-    <th>${['', ...array[0]].join('</th><th>')}</th>
-  </tr></thead><tbody class="transpose">
-${array.slice(1).map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col || ''}</td>`).join('')}</tr>`).join('')}
-</tbody></table>
-`;
-    const parseVectorMatrix = (vectorMatrix, id, title) => `
-<div class="calc-result" id="${id}">
-    <div class="title">${title}</div>
-    ${vectorMatrix.map(vm => `
-<div class="content">\\( \\mathrm\{${vm.name}\} = ${vm.latex} \\)</div>
-<table class="content preview-table"><tbody>
-${vm.element.map(row => `<tr>${row.map(col => `<td>\\( ${col || ''} \\)</td>`).join('')}</tr>`).join('')}
-</tbody></table>
-`).join('')}
-</div>
-`;
+    const parseTabularArray = (array = []) => {
+      const [headers = [], ...rows] = array;
+      return renderTable({
+        headers: ['', ...headers],
+        rows,
+        classes: 'content preview-table fix-width',
+        rowNumbers: true,
+        transpose: true,
+      });
+    };
+    const parseVectorMatrix = (vectorMatrix, id, title) => renderCalcSection(
+      id,
+      title,
+      vectorMatrix.map(vm => `
+<div class="content">\\( \\mathrm\{${escapeHtml(vm.name)}\} = ${escapeHtml(vm.latex)} \\)</div>
+${renderTable({
+        rows: vm.element,
+        renderCell: value => `\\( ${escapeHtml(value)} \\)`,
+      })}
+`).join(''),
+    );
 
     const {
       expression,
@@ -300,36 +367,33 @@ ${vm.element.map(row => `<tr>${row.map(col => `<td>\\( ${col || ''} \\)</td>`).j
       sequence,
     } = qrResult;
 
-    const calc = document.getElementById('calc');
     calc.hidden = true;
     calc.innerHTML = '';
+    downloads = {};
     let calcHtml = '';
 
-    calcHtml += expression ? `
-<div class="calc-result" id="expression">
-    <div class="title">${t('calc-expression')}</div>
-    <div class="content">\\( \\displaystyle ${expression} \\)</div>
-</div>
-` : '';
+    calcHtml += expression ? renderCalcSection(
+      'expression',
+      t('calc-expression'),
+      `<div class="content">\\( \\displaystyle ${escapeHtml(expression)} \\)</div>`,
+    ) : '';
 
-    calcHtml += _function ? `
-<div class="calc-result" id="function">
-    <div class="title">${t('calc-function')}</div>
-    ${_function.map(f => `<div class="content">\\( \\displaystyle ${f.name}=${f.expression} \\)</div>`).join('')}
-</div>
-` : '';
+    calcHtml += _function ? renderCalcSection(
+      'function',
+      t('calc-function'),
+      _function.map(f => `<div class="content">\\( \\displaystyle ${escapeHtml(f.name)}=${escapeHtml(f.expression)} \\)</div>`).join(''),
+    ) : '';
 
-    calcHtml += (sequence && sequence.definition) ? `
-<div class="calc-result" id="sequence-definition">
-    <div class="title">${t('calc-sequence-definition')}</div>
-    ${sequence.definition.map(f => `<div class="content">\\( \\displaystyle ${f.name}=${f.expression} \\)</div>`).join('')}
-</div>
-` : '';
-    calcHtml += (sequence && sequence.result) ? `
+    calcHtml += sequence?.definition ? renderCalcSection(
+      'sequence-definition',
+      t('calc-sequence-definition'),
+      sequence.definition.map(f => `<div class="content">\\( \\displaystyle ${escapeHtml(f.name)}=${escapeHtml(f.expression)} \\)</div>`).join(''),
+    ) : '';
+    calcHtml += sequence?.result ? `
 <div class="calc-result" id="sequence-result">
     <div class="title">${t('calc-sequence-result')}</div>
-    <button id="sequence-result-csv-down" class="download">${t('calc-sequence-result-csv-down')}</button>
-    <button id="sequence-result-utf8bom-down" class="download">${t('calc-sequence-result-utf8bom-down')}</button>
+    ${renderDownloadButton('sequence-result', t('calc-sequence-result-csv-down'))}
+    ${renderDownloadButton('sequence-result-bom', t('calc-sequence-result-utf8bom-down'))}
 ${parseTabularArray(sequence.result.array)}
 </div>
 ` : '';
@@ -338,11 +402,12 @@ ${parseTabularArray(sequence.result.array)}
     calcHtml += equation ? `
 <div class="calc-result" id="equation">
     <div class="title">${t('calc-equation')}</div>
-    <div class="content">\\( ${equation.latex} \\)</div>
+    <div class="content">\\( ${escapeHtml(equation.latex)} \\)</div>
     <div class="title">${t('calc-equation-coefficient')}</div>
-    <table class="content preview-table"><tbody>
-    ${equation.element.map(row => `<tr>${row.map(col => `<td>\\( ${col || ''} \\)</td>`).join('')}</tr>`).join('')}
-    </tbody></table>
+    ${renderTable({
+      rows: equation.element,
+      renderCell: value => `\\( ${escapeHtml(value)} \\)`,
+    })}
 </div>
 ` : '';
 
@@ -352,28 +417,29 @@ ${parseTabularArray(sequence.result.array)}
     calcHtml += spreadsheet ? `
 <div class="calc-result" id="spreadsheet">
     <div class="title">${t('calc-spreadsheet')}</div>
-    <button id="spreadsheet-csv-down" class="download">${t('calc-spreadsheet-csv-down')}</button>
-    <button id="spreadsheet-csv-utf8bom-down" class="download">${t('calc-spreadsheet-csv-utf8bom-down')}</button>
-<table class="content preview-table fix-width"><thead>
-  <tr>
-    ${['', 'A', 'B', 'C', 'D', 'E'].map(h => `<th>${h}</th>`).join('')}
-  </tr></thead><tbody class="transpose">
-${spreadsheet.array.map((row, i) => `<tr><td>${i + 1}</td>${row.map(col => `<td>${col || ''}</td>`).join('')}</tr>`).join('')}
-</tbody></table>
+    ${renderDownloadButton('spreadsheet', t('calc-spreadsheet-csv-down'))}
+    ${renderDownloadButton('spreadsheet-bom', t('calc-spreadsheet-csv-utf8bom-down'))}
+${renderTable({
+      headers: ['', 'A', 'B', 'C', 'D', 'E'],
+      rows: spreadsheet.array,
+      classes: 'content preview-table fix-width',
+      rowNumbers: true,
+      transpose: true,
+    })}
 </div>
 ` : '';
 
     calcHtml += distribution ? `
 <div class="calc-result" id="distribution">
     <div class="title">${t('calc-distribution')}</div>
-    <div class="content">\\( ${distribution.latex} \\)</div>
+    <div class="content">\\( ${escapeHtml(distribution.latex)} \\)</div>
 </div>
 ` : '';
 
     calcHtml += statistic ? `
 <div class="calc-result" id="statistic">
     <div class="title">${t('calc-statistic')}</div>
-    <button id="statistic-csv-down" class="download">${t('calc-statistic-csv-down')}</button>
+    ${renderDownloadButton('statistic', t('calc-statistic-csv-down'))}
 ${parseTabularArray(statistic.array)}
 </div>
 ` : '';
@@ -384,7 +450,7 @@ ${parseTabularArray(statistic.array)}
   <th>${t('calc-variable-latex')}</th>
   <th>${t('calc-variable-decimal')}</th>
 </tr></thead><tbody class="transpose">
-${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${r.decimal}</td></tr>`).join('')}
+${variableList.map(r => `<tr><td>${escapeHtml(r.name)}</td><td>\\( ${escapeHtml(r.latex)} \\)</td><td>${escapeHtml(r.decimal)}</td></tr>`).join('')}
 </tbody></table>
 `;
 
@@ -413,9 +479,9 @@ ${variableList.map(r => `<tr><td>${r.name}</td><td>\\( ${r.latex} \\)</td><td>${
     calcHtml += mathBox ? `
 <div class="calc-result" id="math-box">
     <div class="title">${t('calc-math-box')}</div>
-    <div class="content">${qrResult?.mode?.subMode === 'S1' ? `${t('calc-math-box-dice')}` : `${t('calc-math-box-coin')}`}: ${mathBox.quantity}</div>
-    <div class="content">${t('calc-math-box-attempts')}: ${mathBox.attempts}</div>
-    <button id="math-box-csv-down" class="download">${t('calc-math-box-csv-down')}</button>
+    <div class="content">${qrResult?.mode?.subMode === 'S1' ? t('calc-math-box-dice') : t('calc-math-box-coin')}: ${escapeHtml(mathBox.quantity)}</div>
+    <div class="content">${t('calc-math-box-attempts')}: ${escapeHtml(mathBox.attempts)}</div>
+    ${renderDownloadButton('math-box', t('calc-math-box-csv-down'))}
 ${parseTabularArray(mathBox.array)}
 </div>
 ` : '';
@@ -423,7 +489,7 @@ ${parseTabularArray(mathBox.array)}
     calcHtml += algorithm ? `
 <div class="calc-result" id="algorithm">
     <div class="title">${t('calc-algorithm-latex-command')}</div>
-    <div class="content"><ol>${algorithm.latexCommand.map(i => `<li> \\( \\mathtt{ ${i}} \\)</li>`).join('')}</ol></div>
+    <div class="content"><ol>${algorithm.latexCommand.map(i => `<li> \\( \\mathtt{ ${escapeHtml(i)}} \\)</li>`).join('')}</ol></div>
 
     <div class="title">${t('calc-algorithm-text-command')}</div>
     <div class="content"><pre id="algorithm-text-command-pre"></pre></div>
@@ -431,9 +497,9 @@ ${parseTabularArray(mathBox.array)}
     <div class="title">${t('calc-algorithm-scratch-blocks')}</div>
     <div class="content">
     <a href="https://scratchblocks.github.io/#?style=scratch3&script=${encodeURIComponent(algorithm.scratchBlocks.join('\n'))}"
-     target="_blank">${t('calc-algorithm-scratch-blocks-render')}</a>&nbsp;&nbsp;&nbsp;&nbsp;
+     target="_blank" rel="noopener noreferrer">${t('calc-algorithm-scratch-blocks-render')}</a>&nbsp;&nbsp;&nbsp;&nbsp;
     <a href="https://scratchblocks.github.io/translator/#?lang=${{ zh: 'zh_cn' }[lang.value] ?? lang.value}&script=${encodeURIComponent(algorithm.scratchBlocks.join('\n'))}"
-     target="_blank">${t('calc-algorithm-scratch-blocks-translator')}</a>
+     target="_blank" rel="noopener noreferrer">${t('calc-algorithm-scratch-blocks-translator')}</a>
     </div>
     <div class="content"><pre id="algorithm-scratch-blocks-pre"></pre></div>
 </div>
@@ -445,18 +511,27 @@ ${parseTabularArray(mathBox.array)}
     algorithm && (document.getElementById('algorithm-scratch-blocks-pre').innerText = algorithm.scratchBlocks.join('\n'));
     algorithm && (document.getElementById('algorithm-text-command-pre').innerText = algorithm.textCommand.join('\n'));
 
-    const csvFilename = `${new Date().getTime()}.csv`;
-    spreadsheet && (document.getElementById('spreadsheet-csv-down').onclick = () => download(`spreadsheet-${csvFilename}`, spreadsheet.csv, 'text/plain'));
-    spreadsheet && (document.getElementById('spreadsheet-csv-utf8bom-down').onclick = () => download(`spreadsheet-${csvFilename}`, `\ufeff${spreadsheet.csv}`, 'text/plain'));
-    statistic && (document.getElementById('statistic-csv-down').onclick = () => download(`statistic-${csvFilename}`, statistic.csv, 'text/plain'));
-    mathBox && (document.getElementById('math-box-csv-down').onclick = () => download(`math-box-${csvFilename}`, mathBox.csv, 'text/plain'));
-    (sequence && sequence.result) && (document.getElementById('sequence-result-csv-down').onclick = () => download(`sequence-result-${csvFilename}`, sequence.result.csv, 'text/plain'));
-    (sequence && sequence.result) && (document.getElementById('sequence-result-utf8bom-down').onclick = () => download(`sequence-result-${csvFilename}`, `\ufeff${sequence.result.csv}`, 'text/plain'));
+    const addDownload = (key, prefix, content, bom = false) => {
+      downloads[key] = { prefix, content, bom };
+    };
+    if (spreadsheet) {
+      addDownload('spreadsheet', 'spreadsheet', spreadsheet.csv);
+      addDownload('spreadsheet-bom', 'spreadsheet', spreadsheet.csv, true);
+    }
+    statistic && addDownload('statistic', 'statistic', statistic.csv);
+    mathBox && addDownload('math-box', 'math-box', mathBox.csv);
+    if (sequence?.result) {
+      addDownload('sequence-result', 'sequence-result', sequence.result.csv);
+      addDownload('sequence-result-bom', 'sequence-result', sequence.result.csv, true);
+    }
 
-    const loading = document.getElementById('loading');
     if (calcHtml) {
-      loading.innerHTML = t('loading');
+      loading.textContent = t('loading');
       loading.hidden = false;
+    } else {
+      calc.hidden = false;
+      loading.hidden = true;
+      return;
     }
 
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, calc]);
@@ -469,60 +544,34 @@ ${parseTabularArray(mathBox.array)}
   function basicPreview(qrResult) {
     const { model, mode, format } = qrResult;
 
-    const basic = document.getElementById('basic');
-    basic.innerHTML = (model && mode) ? `
-<table class="preview-table"><tbody class="transpose">
-  <tr>
-    <td>${t('mode-main')}</td>
-    <td>${mode.mainName}</td>
-  </tr>
-  <tr>
-    <td>${t('mode-sub')}</td>
-    <td>${mode.subName || t('mode-na')}</td>
-  </tr>
-  ${format ? `
-  <tr>
-    <td>${t('format-display')}</td>
-    <td>${format.displayName}</td>
-  </tr>
-  <tr>
-    <td>${t('format-store')}</td>
-    <td>${format.storeName}</td>
-  </tr>
-` : ''}
-  <tr>
-    <td>${t('model-series')}</td>
-    <td>${model.type}</td>
-  </tr>
-  <tr>
-    <td>${t('model-key')}</td>
-    <td>${model.name}</td>
-  </tr>
-  <tr>
-    <td>${t('model-diag')}</td>
-    <td>${model.prefix}-${model.id} Ver${model.version}</td>
-  </tr>
-  <tr>
-    <td>${t('model-sn')}</td>
-    <td>${model.serialNumber}</td>
-  </tr>
-</tbody></table>
-` : '';
+    if (!model || !mode) {
+      basic.innerHTML = '';
+      return;
+    }
+
+    const rows = [
+      [t('mode-main'), mode.mainName],
+      [t('mode-sub'), mode.subName || t('mode-na')],
+      ...(format ? [
+        [t('format-display'), format.displayName],
+        [t('format-store'), format.storeName],
+      ] : []),
+      [t('model-series'), model.type],
+      [t('model-key'), model.name],
+      [t('model-diag'), `${model.prefix}-${model.id} Ver${model.version}`],
+      [t('model-sn'), model.serialNumber],
+    ];
+    basic.innerHTML = renderTable({ rows, classes: 'preview-table', transpose: true });
   }
 
   function settingsPreview(qrResult) {
     const { setup } = qrResult;
 
-    const settings = document.getElementById('settings');
-    settings.innerHTML = setup ? `
-<table class="preview-table"><thead>
-  <tr>
-    <th>${t('settings-key')}</th>
-    <th>${t('settings-value')}</th>
-  </tr></thead><tbody>
-  ${setup.map(s => `<tr><td>${s.name}</td><td>${s.value}</td></tr>`).join('')}
-</tbody></table>
-` : '';
+    settings.innerHTML = setup ? renderTable({
+      headers: [t('settings-key'), t('settings-value')],
+      rows: setup.map(item => [item.name, item.value]),
+      classes: 'preview-table',
+    }) : '';
   }
 
   async function copyToClipboard(text) {
@@ -561,11 +610,13 @@ ${parseTabularArray(mathBox.array)}
   function download(filename, content, type) {
     const a = document.createElement('a');
     const file = new Blob([content], { type });
-    a.href = URL.createObjectURL(file);
+    const objectUrl = URL.createObjectURL(file);
+    a.href = objectUrl;
     a.download = filename;
     document.body.appendChild(a);
     a.click();
     a.remove();
+    setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
   }
 
   function i18n() {

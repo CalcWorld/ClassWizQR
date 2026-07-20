@@ -6,6 +6,10 @@ GitHub: <https://github.com/CalcWorld/ClassWizQR>
 
 Online Demo: <https://cwqr.pages.dev>
 
+[A detailed explanation of how QR works on ClassWiz (Chinese Only)](https://blog.ca510.com/classwiz-qr-feature-and-data-structure)
+
+[ClassWiz QR 功能原理详解](https://blog.ca510.com/classwiz-qr-feature-and-data-structure)
+
 ## Installation
 
 ```bash
@@ -15,10 +19,6 @@ npm install classwiz-qr
 ```js
 import { ClassWizQR, parseUrl } from 'classwiz-qr';
 ```
-
-[A detailed explanation of how QR works on ClassWiz (Chinese Only)](https://blog.ca510.com/classwiz-qr-feature-and-data-structure)
-
-[ClassWiz QR 功能原理详解](https://blog.ca510.com/classwiz-qr-feature-and-data-structure)
 
 ## Implemented Features
 
@@ -32,6 +32,10 @@ import { ClassWizQR, parseUrl } from 'classwiz-qr';
 - Data entered in Spreadsheet, Table, Distribution, and Statistics modes, with CSV export support
 - Defined functions, table range and variables in Table mode
 - Supports showing Algorithm mode commands in LaTeX, plain text, and Scratch block formats
+
+## Wiki
+
+See <https://github.com/CalcWorld/ClassWizQR/wiki>
 
 ## Reference
 

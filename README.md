@@ -6,6 +6,16 @@ GitHub: <https://github.com/CalcWorld/ClassWizQR>
 
 Online Demo: <https://cwqr.pages.dev>
 
+## Installation
+
+```bash
+npm install @ca510/cwqr
+```
+
+```js
+import { ClassWizQR, parseUrl } from '@ca510/cwqr';
+```
+
 [A detailed explanation of how QR works on ClassWiz (Chinese Only)](https://blog.ca510.com/classwiz-qr-feature-and-data-structure)
 
 [ClassWiz QR 功能原理详解](https://blog.ca510.com/classwiz-qr-feature-and-data-structure)

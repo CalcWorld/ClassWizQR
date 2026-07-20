@@ -1,6 +1,6 @@
 {
-  "name": "cwqr",
-  "version": "1.0.0",
+  "name": "@ca510/cwqr",
+  "version": "0.0.1",
   "description": "ClassWiz QR Parser",
   "main": "./dist/cwqr.cjs",
   "module": "./dist/cwqr.mjs",

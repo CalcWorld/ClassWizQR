@@ -44,4 +44,4 @@ Online Demo: <https://cwqr.pages.dev>
 
 ## License
 
-- [AGPL-3.0](https://www.gnu.org/licenses/agpl-3.0.html)
+- [AGPL-3.0-or-later](https://www.gnu.org/licenses/agpl-3.0.html)

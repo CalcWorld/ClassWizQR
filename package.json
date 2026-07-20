@@ -2,7 +2,22 @@
   "name": "cwqr",
   "version": "1.0.0",
   "description": "ClassWiz QR Parser",
-  "main": "src/index.js",
+  "main": "./dist/cwqr.cjs",
+  "module": "./dist/cwqr.mjs",
+  "browser": "./dist/cwqr.js",
+  "exports": {
+    ".": {
+      "import": "./dist/cwqr.mjs",
+      "require": "./dist/cwqr.cjs"
+    },
+    "./i18n/*.json": "./src/i18n-res/*.json"
+  },
+  "files": [
+    "dist/cwqr.js",
+    "dist/cwqr.cjs",
+    "dist/cwqr.mjs",
+    "src/i18n-res/*.json"
+  ],
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,7 +29,8 @@
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
-    "serve": "webpack serve"
+    "serve": "webpack serve",
+    "prepack": "npm run build:prod"
   },
   "repository": {
     "type": "git",
@@ -27,11 +43,15 @@
     "qr"
   ],
   "author": "CalcWorld",
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "bugs": {
     "url": "https://github.com/CalcWorld/ClassWizQR/issues"
   },
   "homepage": "https://github.com/CalcWorld/ClassWizQR#readme",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "dependencies": {
     "decimal.js": "^10.4.3"
   },

@@ -6,75 +6,228 @@
 <title>ClassWiz QR</title>
 <link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
 <style>
+    :root {
+        color-scheme: light dark;
+        --page-bg: #f4f6f8;
+        --surface: rgba(253, 253, 252, .94);
+        --surface-subtle: #f1f3f4;
+        --text: #29313a;
+        --text-muted: #68727d;
+        --border: #d8dde1;
+        --accent: #567a9d;
+        --accent-hover: #3f6488;
+        --accent-contrast: #fff;
+        --accent-soft: #e8eef4;
+        --table-stripe: #f7f8f8;
+        --radius: 6px;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html {
+        min-width: 0;
+        background: var(--page-bg);
+    }
+
     body {
-        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        min-width: 0;
+        min-height: 100vh;
+        margin: 0;
+        color: var(--text);
+        background: var(--page-bg);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
     }
 
     #app {
+        min-width: 0;
+        max-width: 1080px;
         margin: 0 auto;
+        padding: 20px 16px 12px;
         width: 100%;
-    }
-
-    @media (min-width: 768px) {
-        #app {
-            width: 91.666667%
-        }
-    }
-
-    @media (min-width: 1024px) {
-        #app {
-            width: 83.333333%
-        }
-    }
-
-    @media (min-width: 1280px) {
-        #app {
-            width: 66.666667%
-        }
-    }
-
-    @media (min-width: 1536px) {
-        #app {
-            width: 58.333333%
-        }
     }
 
     #MathJax_Message {
         display: none !important;
     }
 
+    #qr-form {
+        display: flex;
+        gap: 10px;
+        min-width: 0;
+        margin-bottom: 8px;
+    }
+
     #lang {
-        width: 10%;
-        height: 1.3rem;
+        flex: 0 0 88px;
     }
 
     #qrUrl {
-        width: 88%;
-        height: 1.3rem;
+        min-width: 0;
+        flex: 1 1 auto;
+    }
+
+    #qr-form input,
+    #qr-form select,
+    button.download {
+        min-height: 42px;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        color: var(--text);
+        background: var(--surface-subtle);
+        font: inherit;
+    }
+
+    #qr-form input,
+    #qr-form select {
+        padding: 9px 12px;
+        outline: none;
+        transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+    }
+
+    #qr-form input:focus,
+    #qr-form select:focus {
+        border-color: var(--accent);
+        background: var(--surface);
+        box-shadow: 0 0 0 3px rgba(86, 122, 157, .18);
+    }
+
+    button.download {
+        padding: 8px 14px;
+        border-color: var(--accent);
+        color: var(--accent-contrast);
+        background: var(--accent);
+        cursor: pointer;
+        font-weight: 600;
+        transition: background-color .18s ease, border-color .18s ease, transform .18s ease;
+    }
+
+    button.download:hover {
+        border-color: var(--accent-hover);
+        background: var(--accent-hover);
+    }
+
+    button.download:active {
+        transform: translateY(1px);
     }
 
     details {
-        margin: 10px auto;
+        min-width: 0;
+        max-width: 100%;
+        margin: 0;
+        overflow: hidden;
+        border-top: 1px solid var(--border);
+        border-radius: 0;
+        background: transparent;
     }
 
-    details > :nth-child(2) {
-        margin: 10px 15px;
+    details:last-of-type {
+        border-bottom: 1px solid var(--border);
+    }
+
+    details > div {
+        min-width: 0;
+        max-width: 100%;
+        padding: 2px 4px 14px;
     }
 
     summary {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 4px;
+        color: var(--text);
         cursor: pointer;
+        font-weight: 700;
+        list-style: none;
+        user-select: none;
+        transition: color .18s ease, background-color .18s ease;
+    }
+
+    summary::-webkit-details-marker {
+        display: none;
+    }
+
+    summary::before {
+        width: 8px;
+        height: 8px;
+        border-right: 2px solid currentColor;
+        border-bottom: 2px solid currentColor;
+        content: "";
+        transform: rotate(-45deg);
+        transition: transform .18s ease;
+    }
+
+    details[open] > summary::before {
+        transform: rotate(45deg) translate(-2px, -2px);
+    }
+
+    details[open] > summary {
+        color: var(--text);
+    }
+
+    summary:hover,
+    details[open] > summary:hover {
+        color: var(--accent-hover);
+        background: var(--accent-soft);
+    }
+
+    .table-scroll {
+        max-width: 100%;
+        margin: 8px 0;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .preview-table {
-        border: thin solid #3883fa;
-        border-collapse: collapse;
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        border-collapse: separate;
         border-spacing: 0;
-        width: 100%;
+        width: max-content;
+        min-width: 100%;
+        background: var(--surface);
     }
 
-    .preview-table td, .preview-table th {
-        border: thin solid #3883fa;
-        padding: 5px;
+    .preview-table td,
+    .preview-table th {
+        min-width: 0;
+        padding: 10px 12px;
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    .preview-table th {
+        color: var(--text-muted);
+        background: var(--surface-subtle);
+        font-size: .82rem;
+        font-weight: 700;
+        letter-spacing: .025em;
+        white-space: nowrap;
+    }
+
+    .preview-table tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .preview-table td:last-child,
+    .preview-table th:last-child {
+        border-right: 0;
+    }
+
+    .preview-table tbody tr:nth-child(even) {
+        background: var(--table-stripe);
+    }
+
+    .preview-table .MathJax,
+    .preview-table .MathJax_Display,
+    .preview-table .MathJax_CHTML {
+        max-width: none;
     }
 
     .transpose tr td:nth-child(1) {
@@ -87,16 +240,24 @@
     }
 
     .calc-result {
-        margin: 10px auto;
+        min-width: 0;
+        max-width: 100%;
+        margin: 12px 0;
     }
 
     #calc .title {
+        margin: 12px 0 6px;
         font-weight: bold;
     }
 
-    #calc .content {
-        margin: 10px 15px;
+    #calc .content:not(.preview-table) {
+        min-width: 0;
+        max-width: 100%;
+        margin: 6px 0;
+        overflow-x: auto;
         overflow-y: hidden;
+        padding: 2px 0 6px;
+        scrollbar-width: thin;
     }
 
     #calc .right {
@@ -104,40 +265,119 @@
     }
 
     #loading {
+        padding: 20px 4px;
+        color: var(--text-muted);
         text-align: center;
     }
 
     .fix-width td {
-        width: 4rem;
+        min-width: 4rem;
         height: 1rem;
     }
 
     button.download {
-        margin: 10px 15px 0 15px;
+        min-height: 36px;
+        margin: 0 8px 10px 0;
+        padding: 6px 12px;
         text-align: right;
+        font-size: .875rem;
     }
 
     .footer {
         text-align: center;
-        padding: 10px;
+        padding: 14px 10px 2px;
         font-size: 14px;
-        color: gray;
+        color: var(--text-muted);
     }
 
     .footer a {
-        color: gray;
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .footer a:hover {
+        color: var(--accent);
         text-decoration: underline;
     }
 
+    .footer svg {
+        vertical-align: -2px;
+        fill: currentColor;
+    }
+
+    pre {
+        max-width: 100%;
+        margin: 0;
+        overflow-x: auto;
+        padding: 14px;
+        border-radius: 4px;
+        background: var(--surface-subtle);
+        font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+        font-size: .875rem;
+    }
+
+    div.jsoneditor {
+        max-width: 100%;
+        overflow: hidden;
+        border-color: var(--border);
+        border-radius: 4px;
+    }
+
+    div.jsoneditor-tree {
+        overflow: auto;
+    }
+
+    @media (max-width: 600px) {
+        #app {
+            padding: 10px 8px 8px;
+        }
+
+        #qr-form {
+            flex-wrap: wrap;
+        }
+
+        #lang {
+            flex-basis: 76px;
+        }
+
+        #qrUrl {
+            flex-basis: calc(100% - 86px);
+        }
+
+        details > div {
+            padding-right: 2px;
+            padding-left: 2px;
+        }
+
+        summary {
+            padding: 10px 2px;
+        }
+
+        .preview-table td,
+        .preview-table th {
+            padding: 8px 10px;
+        }
+    }
+
     @media (prefers-color-scheme: dark) {
-        svg {
-            filter: invert(1);
+        :root {
+            --page-bg: #121416;
+            --surface: rgba(26, 29, 32, .94);
+            --surface-subtle: #23272b;
+            --text: #e5e7eb;
+            --text-muted: #9ca3ab;
+            --border: #3a4148;
+            --accent: #91abc7;
+            --accent-hover: #b5c9dd;
+            --accent-contrast: #181b1e;
+            --accent-soft: rgba(100, 132, 166, .18);
+            --table-stripe: rgba(39, 45, 50, .65);
         }
 
         div.jsoneditor,
         div.jsoneditor-tree {
-            background-color: #1e1e1e;
-            border-color: #4b6f9c;
+            background-color: #1a1d20;
+            border-color: var(--border);
         }
 
         div.jsoneditor-field,
@@ -170,7 +410,7 @@
 
         div.jsoneditor tr.jsoneditor-highlight,
         div.jsoneditor tr.jsoneditor-selected {
-            background-color: #333;
+            background-color: #30363c;
         }
 
         div.jsoneditor-tree button.jsoneditor-button {
@@ -382,7 +622,7 @@
       rowNumbers ? `<td>${rowIndex + 1}</td>` : ''
     }${row.map(value => `<td>${renderCell(value)}</td>`).join('')}</tr>`).join('');
 
-    return `<table class="${classes}">${head}<tbody${transpose ? ' class="transpose"' : ''}>${body}</tbody></table>`;
+    return `<div class="table-scroll"><table class="${classes}">${head}<tbody${transpose ? ' class="transpose"' : ''}>${body}</tbody></table></div>`;
   }
 
   function renderCalcSection(id, title, content) {
@@ -416,13 +656,13 @@ ${renderTable({
 `).join(''),
     );
     const parseVariableList = variableList => `
-<table class="content preview-table fix-width"><thead><tr>
+<div class="table-scroll"><table class="content preview-table fix-width"><thead><tr>
   <th></th>
   <th>${t('calc-variable-latex')}</th>
   <th>${t('calc-variable-decimal')}</th>
 </tr></thead><tbody class="transpose">
 ${variableList.map(r => `<tr><td>${escapeHtml(r.name)}</td><td>\\( ${escapeHtml(r.latex)} \\)</td><td>${escapeHtml(r.decimal)}</td></tr>`).join('')}
-</tbody></table>
+</tbody></table></div>
 `;
 
     const {

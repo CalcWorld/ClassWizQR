@@ -9,11 +9,11 @@ Online Demo: <https://cwqr.pages.dev>
 ## Installation
 
 ```bash
-npm install @ca510/cwqr
+npm install classwiz-qr
 ```
 
 ```js
-import { ClassWizQR, parseUrl } from '@ca510/cwqr';
+import { ClassWizQR, parseUrl } from 'classwiz-qr';
 ```
 
 [A detailed explanation of how QR works on ClassWiz (Chinese Only)](https://blog.ca510.com/classwiz-qr-feature-and-data-structure)

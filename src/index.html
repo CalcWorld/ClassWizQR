@@ -301,14 +301,16 @@
     return escapeElement.innerHTML;
   }
 
-  function renderTable({
-    headers = [],
-    rows = [],
-    classes = 'content preview-table',
-    rowNumbers = false,
-    transpose = false,
-    renderCell = escapeHtml,
-  }) {
+  function renderTable(
+    {
+      headers = [],
+      rows = [],
+      classes = 'content preview-table',
+      rowNumbers = false,
+      transpose = false,
+      renderCell = escapeHtml,
+    }
+  ) {
     const head = headers.length
       ? `<thead><tr>${headers.map(header => `<th>${escapeHtml(header)}</th>`).join('')}</tr></thead>`
       : '';
@@ -349,6 +351,15 @@ ${renderTable({
       })}
 `).join(''),
     );
+    const parseVariableList = variableList => `
+<table class="content preview-table fix-width"><thead><tr>
+  <th></th>
+  <th>${t('calc-variable-latex')}</th>
+  <th>${t('calc-variable-decimal')}</th>
+</tr></thead><tbody class="transpose">
+${variableList.map(r => `<tr><td>${escapeHtml(r.name)}</td><td>\\( ${escapeHtml(r.latex)} \\)</td><td>${escapeHtml(r.decimal)}</td></tr>`).join('')}
+</tbody></table>
+`;
 
     const {
       expression,
@@ -398,7 +409,6 @@ ${parseTabularArray(sequence.result.array)}
 </div>
 ` : '';
 
-
     calcHtml += equation ? `
 <div class="calc-result" id="equation">
     <div class="title">${t('calc-equation')}</div>
@@ -408,6 +418,21 @@ ${parseTabularArray(sequence.result.array)}
       rows: equation.element,
       renderCell: value => `\\( ${escapeHtml(value)} \\)`,
     })}
+</div>
+` : '';
+
+    calcHtml += distribution ? `
+<div class="calc-result" id="distribution">
+    <div class="title">${t('calc-distribution')}</div>
+    <div class="content">\\( ${escapeHtml(distribution.latex)} \\)</div>
+</div>
+` : '';
+
+    calcHtml += (result && result[0]) ? `
+<div class="calc-result" id="result">
+    <div class="title">${t('calc-result')}</div>
+    <div class="content right" id="result-content"></div>
+    ${result.length > 1 ? parseVariableList(result.slice(1)) : ''}
 </div>
 ` : '';
 
@@ -429,36 +454,11 @@ ${renderTable({
 </div>
 ` : '';
 
-    calcHtml += distribution ? `
-<div class="calc-result" id="distribution">
-    <div class="title">${t('calc-distribution')}</div>
-    <div class="content">\\( ${escapeHtml(distribution.latex)} \\)</div>
-</div>
-` : '';
-
     calcHtml += statistic ? `
 <div class="calc-result" id="statistic">
     <div class="title">${t('calc-statistic')}</div>
     ${renderDownloadButton('statistic', t('calc-statistic-csv-down'))}
 ${parseTabularArray(statistic.array)}
-</div>
-` : '';
-
-    const parseVariableList = variableList => `
-<table class="content preview-table fix-width"><thead><tr>
-  <th></th>
-  <th>${t('calc-variable-latex')}</th>
-  <th>${t('calc-variable-decimal')}</th>
-</tr></thead><tbody class="transpose">
-${variableList.map(r => `<tr><td>${escapeHtml(r.name)}</td><td>\\( ${escapeHtml(r.latex)} \\)</td><td>${escapeHtml(r.decimal)}</td></tr>`).join('')}
-</tbody></table>
-`;
-
-    calcHtml += (result && result[0]) ? `
-<div class="calc-result" id="result">
-    <div class="title">${t('calc-result')}</div>
-    <div class="content right" id="result-content"></div>
-    ${result.length > 1 ? parseVariableList(result.slice(1)) : ''}
 </div>
 ` : '';
 

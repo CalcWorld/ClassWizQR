@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
 <title>ClassWiz QR</title>
+<link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
 <style>
     body {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -132,10 +133,52 @@
         svg {
             filter: invert(1);
         }
+
+        div.jsoneditor,
+        div.jsoneditor-tree {
+            background-color: #1e1e1e;
+            border-color: #4b6f9c;
+        }
+
+        div.jsoneditor-field,
+        div.jsoneditor-readonly,
+        div.jsoneditor-value.jsoneditor-object,
+        div.jsoneditor-value.jsoneditor-array {
+            color: #d4d4d4;
+        }
+
+        div.jsoneditor td.jsoneditor-separator {
+            color: #9ca3af;
+        }
+
+        div.jsoneditor-value.jsoneditor-string {
+            color: #7ec699;
+        }
+
+        div.jsoneditor-value.jsoneditor-number {
+            color: #f08d49;
+        }
+
+        div.jsoneditor-value.jsoneditor-boolean {
+            color: #cc99cd;
+        }
+
+        div.jsoneditor-value.jsoneditor-null,
+        div.jsoneditor-value.jsoneditor-url {
+            color: #61afef;
+        }
+
+        div.jsoneditor tr.jsoneditor-highlight,
+        div.jsoneditor tr.jsoneditor-selected {
+            background-color: #333;
+        }
+
+        div.jsoneditor-tree button.jsoneditor-button {
+            filter: invert(.85);
+        }
     }
 </style>
 <script async src="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor-minimalist.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/jsoneditor@10.1.2/dist/jsoneditor.min.css" rel="stylesheet" type="text/css">
 <script async src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_CHTML"></script>
 <div id="app">
     <form id="qr-form">
@@ -252,18 +295,11 @@
       name: 'cwqr',
       onEvent: async (node, event) => {
         if (event.type === 'click') {
-          // console.log(node, event);
-          let value
-          if (node.value !== undefined) {
-            value = node.value;
-          } else {
-            value = editor.get();
-            for (const key of node.path) {
-              value = value[key];
-            }
-            value = JSON.stringify(value, null, 2);
-          }
-          await copyToClipboard(String(value));
+          const isValueClick = event.target.closest('.jsoneditor-value');
+          const text = isValueClick
+            ? formatClipboardValue(getJsonValue(node))
+            : formatJsonPath(node.path);
+          await copyToClipboard(text);
           elementSelection(event.target);
         }
       },
@@ -281,6 +317,32 @@
     document.documentElement.lang = lang.value;
     i18n();
     parseOnHashChange();
+  }
+
+  function getJsonValue(node) {
+    if (Object.hasOwn(node, 'value')) return node.value;
+
+    return node.path.reduce(
+      (value, segment) => value[segment],
+      editor.get(),
+    );
+  }
+
+  function formatClipboardValue(value) {
+    return value !== null && typeof value === 'object'
+      ? JSON.stringify(value, null, 2)
+      : String(value);
+  }
+
+  function formatJsonPath(path) {
+    return path.reduce((result, segment) => {
+      if (typeof segment === 'number') {
+        return `${result}[${segment}]`;
+      }
+      return /^[A-Za-z_$][\w$]*$/.test(segment)
+        ? `${result}.${segment}`
+        : `${result}[${JSON.stringify(segment)}]`;
+    }, 'cwqr');
   }
 
   function parseQr() {

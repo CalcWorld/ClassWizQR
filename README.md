@@ -6,6 +6,8 @@ GitHub: <https://github.com/CalcWorld/ClassWizQR>
 
 Online Demo: <https://cwqr.pages.dev>
 
+API Documentation: <https://cwqr.pages.dev/api>
+
 [A detailed explanation of how QR works on ClassWiz (Chinese Only)](https://blog.ca510.com/classwiz-qr-feature-and-data-structure)
 
 [ClassWiz QR 功能原理详解](https://blog.ca510.com/classwiz-qr-feature-and-data-structure)
@@ -36,6 +38,33 @@ import { ClassWizQR, parseUrl } from 'classwiz-qr';
 ## Wiki
 
 See <https://github.com/CalcWorld/ClassWizQR/wiki>
+
+## API
+
+Send the decoded ClassWiz QR URL to the hosted API as JSON:
+
+```bash
+curl --request POST 'https://cwqr.pages.dev/api' \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "url": "http://wes.casio.com/math/index.php?q=I-234F+U-000000000000+M-X100000000+S-05099",
+    "lang": "en"
+  }'
+```
+
+The response uses a consistent envelope: `{"code":"success","data":{...}}` on success, or `{"code":"error","msg":"..."}` when parsing fails. The fields inside `data` depend on the calculator mode. Supported language codes include `en`, `zh`, `fr`, and `vi`.
+
+You can also replace `http://wes.casio.com` in a QR URL with `https://cwqr.pages.dev` and request JSON directly:
+
+```bash
+curl 'https://cwqr.pages.dev/math/index.php?q=I-234F+U-000000000000+M-X100000000+S-05099' \
+  --header 'Accept: application/json' \
+  --header 'Accept-Language: en'
+```
+
+The `/math/`, `/ncal/`, and `/calc/` paths accept `GET` requests. Browsers normally send an `Accept` header beginning with `text/html`, so opening one directly redirects to the visual parser. Set `Accept: application/json` explicitly to receive JSON.
+
+See the [API documentation](https://cwqr.pages.dev/api) for request parameters and response details.
 
 ## Reference
 

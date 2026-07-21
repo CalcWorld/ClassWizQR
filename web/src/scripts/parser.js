@@ -16,7 +16,7 @@ export function initializeParser() {
   const qrResult = document.getElementById('qrResult');
   let downloads = {};
   let editor;
-  
+
   lang.onchange = async function () {
     localStorage.setItem('lang', lang.value);
     await loadI18nRes();
@@ -24,7 +24,7 @@ export function initializeParser() {
     parseQr();
     i18n();
   }
-  
+
   function updateQrHash() {
     const nextHash = `#${qrUrl.value}`;
     if (location.hash === nextHash) {
@@ -33,7 +33,7 @@ export function initializeParser() {
       location.hash = nextHash;
     }
   }
-  
+
   qrUrl.onchange = updateQrHash;
   qrUrl.onkeydown = event => {
     if (event.key !== 'Enter') return;
@@ -44,34 +44,34 @@ export function initializeParser() {
     event.preventDefault();
     updateQrHash();
   };
-  
+
   calc.onclick = event => {
     const button = event.target.closest('button[data-download]');
     if (!button || !calc.contains(button)) return;
-  
+
     const payload = downloads[button.dataset.download];
     if (!payload) return;
-  
+
     const content = payload.bom ? `\ufeff${payload.content}` : payload.content;
     download(`${payload.prefix}-${Date.now()}.csv`, content, 'text/csv;charset=utf-8');
   };
-  
+
   function parseOnHashChange() {
     qrUrl.value = location.hash.substring(1);
     parseQr();
   }
-  
+
   async function loadI18nRes() {
     if (lang.value === 'en' || cwqrI18nRes[lang.value]) return;
     const resourceUrl = new URL(`i18n-res/${lang.value}.json`, document.baseURI);
     cwqrI18nRes[lang.value] = await (await fetch(resourceUrl)).json();
   }
-  
+
   window.onhashchange = parseOnHashChange;
-  
+
   window.onload = async function () {
     lang.innerHTML = cwqr.availableLanguages.map(i => `<option value="${i}">${i}</option>`).join('');
-  
+
     const urlParams = new URLSearchParams(window.location.search);
     const searchLang = urlParams.get('lang');
     if (searchLang) {
@@ -81,7 +81,7 @@ export function initializeParser() {
     if (isEmbed) {
       qrUrl.style.display = 'none';
     }
-  
+
     const options = {
       mode: 'view',
       name: 'cwqr',
@@ -98,7 +98,7 @@ export function initializeParser() {
       mainMenuBar: false,
     };
     editor = new JSONEditor(qrResult, options);
-  
+
     const userLang = searchLang || localStorage.getItem('lang') || navigator.language.substring(0, 2);
     if (cwqr.availableLanguages.includes(userLang)) {
       lang.value = userLang;
@@ -110,22 +110,22 @@ export function initializeParser() {
     i18n();
     parseOnHashChange();
   }
-  
+
   function getJsonValue(node) {
     if (Object.hasOwn(node, 'value')) return node.value;
-  
+
     return node.path.reduce(
       (value, segment) => value[segment],
       editor.get(),
     );
   }
-  
+
   function formatClipboardValue(value) {
     return value !== null && typeof value === 'object'
       ? JSON.stringify(value, null, 2)
       : String(value);
   }
-  
+
   function formatJsonPath(path) {
     return path.reduce((result, segment) => {
       if (typeof segment === 'number') {
@@ -136,7 +136,7 @@ export function initializeParser() {
         : `${result}[${JSON.stringify(segment)}]`;
     }, 'cwqr');
   }
-  
+
   function parseQr() {
     let parseResult = {}, qrResult = {};
     if (qrUrl.value) {
@@ -149,7 +149,7 @@ export function initializeParser() {
     editor.set(parseResult);
     editor.expandAll();
   }
-  
+
   function calculationPreview(qrResult) {
     const parseTabularArray = (array = []) => {
       const [headers = [], ...rows] = array;
@@ -181,7 +181,7 @@ export function initializeParser() {
   ${variableList.map(r => `<tr><td>${escapeHtml(r.name)}</td><td>\\( ${escapeHtml(r.latex)} \\)</td><td>${escapeHtml(r.decimal)}</td></tr>`).join('')}
   </tbody></table></div>
   `;
-  
+
     const {
       expression,
       function: _function,
@@ -198,24 +198,24 @@ export function initializeParser() {
       algorithm,
       sequence,
     } = qrResult;
-  
+
     calc.hidden = true;
     calc.innerHTML = '';
     downloads = {};
     let calcHtml = '';
-  
+
     calcHtml += expression ? renderCalcSection(
       'expression',
       t('calc-expression'),
       `<div class="content">\\( \\displaystyle ${escapeHtml(expression)} \\)</div>`,
     ) : '';
-  
+
     calcHtml += _function ? renderCalcSection(
       'function',
       t('calc-function'),
       _function.map(f => `<div class="content">\\( \\displaystyle ${escapeHtml(f.name)}=${escapeHtml(f.expression)} \\)</div>`).join(''),
     ) : '';
-  
+
     calcHtml += sequence?.definition ? renderCalcSection(
       'sequence-definition',
       t('calc-sequence-definition'),
@@ -229,7 +229,7 @@ export function initializeParser() {
   ${parseTabularArray(sequence.result.array)}
   </div>
   ` : '';
-  
+
     calcHtml += equation ? `
   <div class="calc-result" id="equation">
     <div class="title">${t('calc-equation')}</div>
@@ -241,14 +241,14 @@ export function initializeParser() {
     })}
   </div>
   ` : '';
-  
+
     calcHtml += distribution ? `
   <div class="calc-result" id="distribution">
     <div class="title">${t('calc-distribution')}</div>
     <div class="content">\\( ${escapeHtml(distribution.latex)} \\)</div>
   </div>
   ` : '';
-  
+
     calcHtml += (result && result[0]) ? `
   <div class="calc-result" id="result">
     <div class="title">${t('calc-result')}</div>
@@ -256,10 +256,10 @@ export function initializeParser() {
     ${result.length > 1 ? parseVariableList(result.slice(1)) : ''}
   </div>
   ` : '';
-  
+
     calcHtml += matrix ? parseVectorMatrix(matrix, 'matrix', t('calc-matrix')) : '';
     calcHtml += vector ? parseVectorMatrix(vector, 'vector', t('calc-vector')) : '';
-  
+
     calcHtml += spreadsheet ? `
   <div class="calc-result" id="spreadsheet">
     <div class="title">${t('calc-spreadsheet')}</div>
@@ -274,7 +274,7 @@ export function initializeParser() {
     })}
   </div>
   ` : '';
-  
+
     calcHtml += statistic ? `
   <div class="calc-result" id="statistic">
     <div class="title">${t('calc-statistic')}</div>
@@ -282,21 +282,21 @@ export function initializeParser() {
   ${parseTabularArray(statistic.array)}
   </div>
   ` : '';
-  
+
     calcHtml += variable ? `
   <div class="calc-result" id="variable">
     <div class="title">${t('calc-variable')}</div>
     ${parseVariableList(variable)}
   </div>
   ` : '';
-  
+
     calcHtml += tableRange ? `
   <div class="calc-result" id="table-range">
     <div class="title">${t('calc-table-range')}</div>
     ${parseVariableList(tableRange)}
   </div>
   ` : '';
-  
+
     calcHtml += mathBox ? `
   <div class="calc-result" id="math-box">
     <div class="title">${t('calc-math-box')}</div>
@@ -306,7 +306,7 @@ export function initializeParser() {
   ${parseTabularArray(mathBox.array)}
   </div>
   ` : '';
-  
+
     calcHtml += algorithm ? `
   <div class="calc-result" id="algorithm">
     <div class="title">${t('calc-algorithm-latex-command')}</div>
@@ -325,13 +325,13 @@ export function initializeParser() {
     <div class="content"><pre id="algorithm-scratch-blocks-pre"></pre></div>
   </div>
   ` : '';
-  
+
     calc.innerHTML = calcHtml;
-  
+
     result && result[0] && (document.getElementById('result-content').innerText = `\\( ${result[0].latex} \\)`);
     algorithm && (document.getElementById('algorithm-scratch-blocks-pre').innerText = algorithm.scratchBlocks.join('\n'));
     algorithm && (document.getElementById('algorithm-text-command-pre').innerText = algorithm.textCommand.join('\n'));
-  
+
     const addDownload = (key, prefix, content, bom = false) => {
       downloads[key] = { prefix, content, bom };
     };
@@ -345,7 +345,7 @@ export function initializeParser() {
       addDownload('sequence-result', 'sequence-result', sequence.result.csv);
       addDownload('sequence-result-bom', 'sequence-result', sequence.result.csv, true);
     }
-  
+
     if (calcHtml) {
       loading.textContent = t('loading');
       loading.hidden = false;
@@ -354,22 +354,22 @@ export function initializeParser() {
       loading.hidden = true;
       return;
     }
-  
+
     MathJax.Hub.Queue(["Typeset", MathJax.Hub, calc]);
     MathJax.Hub.Queue(function () {
       calc.hidden = false;
       loading.hidden = true;
     });
   }
-  
+
   function basicPreview(qrResult) {
     const { model, mode, format } = qrResult;
-  
+
     if (!model || !mode) {
       basic.innerHTML = '';
       return;
     }
-  
+
     const rows = [
       [t('mode-main'), mode.mainName],
       [t('mode-sub'), mode.subName || t('mode-na')],
@@ -384,21 +384,21 @@ export function initializeParser() {
     ];
     basic.innerHTML = renderTable({ rows, classes: 'preview-table', transpose: true });
   }
-  
+
   function settingsPreview(qrResult) {
     const { setup } = qrResult;
-  
+
     settings.innerHTML = setup ? renderTable({
       headers: [t('settings-key'), t('settings-value')],
       rows: setup.map(item => [item.name, item.value]),
       classes: 'preview-table',
     }) : '';
   }
-  
+
   function t(tag, language = lang.value) {
     return translate(tag, language);
   }
-  
+
   function i18n() {
     document.querySelectorAll('[data-i18n-tag]').forEach(el => {
       const tag = el.getAttribute('data-i18n-tag');
@@ -408,5 +408,5 @@ export function initializeParser() {
       }
     });
   }
-  
+
 }

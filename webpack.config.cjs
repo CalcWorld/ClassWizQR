@@ -1,16 +1,7 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production' || false;
-
-const minify = isProduction ? {
-  removeComments: true,
-  collapseWhitespace: true,
-  removeRedundantAttributes: true,
-  minifyCSS: true,
-  minifyJS: true,
-} : false;
 
 const configs = [];
 
@@ -23,28 +14,7 @@ configs.push({
     libraryTarget: 'umd',
     globalObject: 'this',
   },
-  devServer: {
-    open: true,
-    host: '0.0.0.0',
-  },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: './src/index.html',
-      favicon: "./src/favicon.ico",
-      minify,
-    }),
-    new HtmlWebpackPlugin({
-      template: './src/404.html',
-      filename: '404.html',
-      inject: false,
-      minify,
-    }),
-    new HtmlWebpackPlugin({
-      template: './src/api.html',
-      filename: 'api.html',
-      inject: false,
-      minify,
-    }),
     new CopyWebpackPlugin({
       patterns: [
         {

@@ -1,0 +1,35 @@
+---
+import 'jsoneditor/dist/jsoneditor.min.css';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ParserForm from '../components/ParserForm.astro';
+import ResultPanel from '../components/ResultPanel.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import '../styles/parser.css';
+
+const mathJaxSrc = '/vendor/mathjax/MathJax.js?config=TeX-AMS_CHTML';
+---
+<BaseLayout title="ClassWiz QR">
+    <script defer is:inline src={mathJaxSrc}></script>
+    <div id="app">
+        <ParserForm/>
+        <ResultPanel title="Calculation" i18nTag="calc-title">
+            <div id="calc"></div>
+            <div id="loading" hidden></div>
+        </ResultPanel>
+        <ResultPanel title="Basic Info" i18nTag="basic-title">
+            <div id="basic"></div>
+        </ResultPanel>
+        <ResultPanel title="Settings" i18nTag="settings-title">
+            <div id="settings"></div>
+        </ResultPanel>
+        <ResultPanel title="QR Parse Result" i18nTag="qr-parse-result-title">
+            <div id="qrResult"></div>
+        </ResultPanel>
+        <SiteFooter/>
+    </div>
+    <script>
+        import { initializeParser } from '../scripts/parser.js';
+
+        initializeParser();
+    </script>
+</BaseLayout>

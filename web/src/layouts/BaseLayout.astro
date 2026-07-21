@@ -1,0 +1,21 @@
+---
+interface Props {
+    title: string;
+    lang?: string;
+}
+
+const {title, lang = 'en'} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang={lang}>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="color-scheme" content="light dark"/>
+    <title>{title}</title>
+    <slot name="head"/>
+</head>
+<body>
+<slot/>
+</body>
+</html>

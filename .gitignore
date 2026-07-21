@@ -119,6 +119,10 @@ out
 .nuxt
 dist
 
+# Astro generated types and cache
+
+.astro/
+
 # Gatsby files
 
 .cache/

@@ -1,6 +1,39 @@
 import { defineConfig } from 'astro/config';
 import preact from '@astrojs/preact';
+import { readdirSync, readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
+
+const scratchblocksLocalesId = 'virtual:scratchblocks-locales';
+const resolvedScratchblocksLocalesId = `\0${scratchblocksLocalesId}`;
+
+function scratchblocksLocaleManifest() {
+  const localeDirectory = fileURLToPath(
+    new URL('./node_modules/scratchblocks/locales/', import.meta.url),
+  );
+  const languages = [
+    { code: 'en', name: 'English' },
+    ...readdirSync(localeDirectory)
+      .filter(filename => filename.endsWith('.json'))
+      .map(filename => {
+        const code = filename.slice(0, -'.json'.length);
+        const locale = JSON.parse(readFileSync(`${localeDirectory}/${filename}`, 'utf8'));
+        return { code, name: locale.name || code };
+      }),
+  ].sort((left, right) => left.name.localeCompare(right.name));
+
+  return {
+    name: 'scratchblocks-locale-manifest',
+    resolveId(id) {
+      return id === scratchblocksLocalesId ? resolvedScratchblocksLocalesId : null;
+    },
+    load(id) {
+      return id === resolvedScratchblocksLocalesId
+        ? `export default ${JSON.stringify(languages)};`
+        : null;
+    },
+  };
+}
 
 export default defineConfig({
   srcDir: './web/src',
@@ -25,6 +58,7 @@ export default defineConfig({
       },
     },
     plugins: [
+      scratchblocksLocaleManifest(),
       viteStaticCopy({
         targets: [
           {

@@ -72,6 +72,7 @@
     "jsoneditor": "^10.1.2",
     "mathjax": "2.7.9",
     "preact": "^10.29.7",
+    "scratchblocks": "3.7.1",
     "typescript": "^6.0.3",
     "vite-plugin-static-copy": "^3.4.0",
     "webpack": "^5.105.0",

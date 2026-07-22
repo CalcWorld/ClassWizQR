@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import PreviewTable from './PreviewTable.jsx';
+import ScratchBlocksView from './ScratchBlocksView.jsx';
 
 function Latex({ children, display = false }) {
   return <>{`\\( ${display ? '\\displaystyle ' : ''}${children} \\)`}</>;
@@ -229,21 +230,12 @@ export default function CalculationView({ result, language, renderVersion, t, on
               <pre>{algorithm.textCommand.join('\n')}</pre>
             </div>
             <div class="title">{t('calc-algorithm-scratch-blocks')}</div>
-            <div class="content">
-              <a
-                href={`https://scratchblocks.github.io/#?style=scratch3&script=${encodeURIComponent(algorithm.scratchBlocks.join('\n'))}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >{t('calc-algorithm-scratch-blocks-render')}</a>
-              {'    '}
-              <a
-                href={`https://scratchblocks.github.io/translator/#?lang=${language === 'zh' ? 'zh_cn' : language}&script=${encodeURIComponent(algorithm.scratchBlocks.join('\n'))}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >{t('calc-algorithm-scratch-blocks-translator')}</a>
-            </div>
-            <div class="content">
-              <pre>{algorithm.scratchBlocks.join('\n')}</pre>
+            <div class="content scratchblocks-content">
+              <ScratchBlocksView
+                source={algorithm.scratchBlocks.join('\n')}
+                siteLanguage={language}
+                t={t}
+              />
             </div>
           </CalcSection>
         )}

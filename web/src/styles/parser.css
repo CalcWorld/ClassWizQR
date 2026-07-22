@@ -34,12 +34,20 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-#app {
+#app,
+#app-footer {
     min-width: 0;
     max-width: 1080px;
     margin: 0 auto;
-    padding: 20px 16px 12px;
     width: 100%;
+}
+
+#app {
+    padding: 20px 16px 0;
+}
+
+#app-footer {
+    padding: 0 16px 12px;
 }
 
 #MathJax_Message {
@@ -249,7 +257,6 @@ details[open] > summary:hover {
     overflow-x: auto;
     overflow-y: hidden;
     padding: 2px 0 6px;
-    scrollbar-width: thin;
 }
 
 #calc .right {
@@ -321,7 +328,11 @@ div.jsoneditor-tree {
 
 @media (max-width: 600px) {
     #app {
-        padding: 10px 8px 8px;
+        padding: 10px 8px 0;
+    }
+
+    #app-footer {
+        padding: 0 8px 8px;
     }
 
     #qr-form {

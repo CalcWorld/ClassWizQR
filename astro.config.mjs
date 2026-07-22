@@ -1,4 +1,5 @@
 import { defineConfig } from 'astro/config';
+import preact from '@astrojs/preact';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default defineConfig({
@@ -7,6 +8,7 @@ export default defineConfig({
   outDir: './dist',
   output: 'static',
   trailingSlash: 'never',
+  integrations: [preact()],
   build: {
     format: 'file',
   },

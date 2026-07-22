@@ -17,8 +17,18 @@ await Promise.all(requiredFiles.map(file => access(file)));
 const indexHtml = await readFile('dist/index.html', 'utf8');
 assert.match(
   indexHtml,
-  /<script[^>]+type="module"[^>]+src="\/_astro\/parser\.[^"?]+\.js"/,
-  'The generated index.html does not load the bundled parser module.',
+  /component-url="\/_astro\/parser\.[^"?]+\.js"/,
+  'The generated index.html does not load the Preact parser component.',
+);
+assert.match(
+  indexHtml,
+  /renderer-url="\/_astro\/parser\.[^"?]+\.js"/,
+  'The generated index.html does not load the Preact renderer.',
+);
+assert.match(
+  indexHtml,
+  /<astro-island[^>]+client="load"/,
+  'The generated index.html does not hydrate the parser on page load.',
 );
 assert.match(
   indexHtml,

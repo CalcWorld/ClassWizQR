@@ -1,0 +1,55 @@
+div.jsoneditor {
+    max-width: 100%;
+    overflow: hidden;
+    border-color: var(--border);
+    border-radius: 4px;
+}
+
+div.jsoneditor-tree {
+    overflow: auto;
+}
+
+@media (prefers-color-scheme: dark) {
+    div.jsoneditor,
+    div.jsoneditor-tree {
+        background-color: #1a1d20;
+        border-color: var(--border);
+    }
+
+    div.jsoneditor-field,
+    div.jsoneditor-readonly,
+    div.jsoneditor-value.jsoneditor-object,
+    div.jsoneditor-value.jsoneditor-array {
+        color: #d4d4d4;
+    }
+
+    div.jsoneditor td.jsoneditor-separator {
+        color: #9ca3af;
+    }
+
+    div.jsoneditor-value.jsoneditor-string {
+        color: #7ec699;
+    }
+
+    div.jsoneditor-value.jsoneditor-number {
+        color: #f08d49;
+    }
+
+    div.jsoneditor-value.jsoneditor-boolean {
+        color: #cc99cd;
+    }
+
+    div.jsoneditor-value.jsoneditor-null,
+    div.jsoneditor-value.jsoneditor-url {
+        color: #61afef;
+    }
+
+    div.jsoneditor tr.jsoneditor-highlight,
+    div.jsoneditor tr.jsoneditor-selected {
+        background-color: #30363c;
+    }
+
+    div.jsoneditor-tree button.jsoneditor-button {
+        filter: invert(.85);
+    }
+}

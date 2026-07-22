@@ -1,0 +1,168 @@
+:root {
+    color-scheme: light dark;
+    --page-bg: #f4f6f8;
+    --surface: rgba(253, 253, 252, .94);
+    --surface-subtle: #f1f3f4;
+    --text: #29313a;
+    --text-muted: #68727d;
+    --border: #d8dde1;
+    --accent: #567a9d;
+    --accent-hover: #3f6488;
+    --accent-contrast: #fff;
+    --accent-soft: #e8eef4;
+    --table-stripe: #f7f8f8;
+    --radius: 6px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-width: 0;
+    background: var(--page-bg);
+}
+
+body {
+    min-width: 0;
+    min-height: 100vh;
+    margin: 0;
+    color: var(--text);
+    background: var(--page-bg);
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+#app,
+#app-footer {
+    min-width: 0;
+    max-width: 1080px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+#app {
+    padding: 20px 16px 0;
+}
+
+#app-footer {
+    padding: 0 16px 12px;
+}
+
+#MathJax_Message {
+    display: none !important;
+}
+
+#qr-form input,
+#qr-form select,
+button.download,
+.scratchblocks-toolbar input,
+button.secondary {
+    min-height: 42px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    background: var(--surface-subtle);
+    font: inherit;
+}
+
+#qr-form input,
+#qr-form select,
+.scratchblocks-toolbar input {
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+
+#qr-form input:focus,
+#qr-form select:focus,
+.scratchblocks-toolbar input:focus {
+    border-color: var(--accent);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px rgba(86, 122, 157, .18);
+}
+
+button.download {
+    padding: 8px 14px;
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+    background: var(--accent);
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color .18s ease, border-color .18s ease, transform .18s ease;
+}
+
+button.download:hover {
+    border-color: var(--accent-hover);
+    background: var(--accent-hover);
+}
+
+button.download:active {
+    transform: translateY(1px);
+}
+
+button.secondary {
+    min-height: 34px;
+    padding: 5px 12px;
+    border-color: var(--border);
+    cursor: pointer;
+}
+
+button.secondary:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+button.secondary:disabled {
+    cursor: default;
+    opacity: .55;
+}
+
+.footer {
+    padding: 14px 10px 2px;
+    color: var(--text-muted);
+    font-size: 14px;
+    text-align: center;
+}
+
+.footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+}
+
+.footer svg {
+    vertical-align: -2px;
+    fill: currentColor;
+}
+
+@media (max-width: 600px) {
+    #app {
+        padding: 10px 8px 0;
+    }
+
+    #app-footer {
+        padding: 0 8px 8px;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --page-bg: #121416;
+        --surface: rgba(26, 29, 32, .94);
+        --surface-subtle: #23272b;
+        --text: #e5e7eb;
+        --text-muted: #9ca3ab;
+        --border: #3a4148;
+        --accent: #91abc7;
+        --accent-hover: #b5c9dd;
+        --accent-contrast: #181b1e;
+        --accent-soft: rgba(100, 132, 166, .18);
+        --table-stripe: rgba(39, 45, 50, .65);
+    }
+}

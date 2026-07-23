@@ -46,6 +46,10 @@ body {
     padding: 20px 16px 0;
 }
 
+.app-initializing {
+    visibility: hidden;
+}
+
 #app-footer {
     padding: 0 16px 12px;
 }

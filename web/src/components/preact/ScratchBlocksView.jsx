@@ -5,36 +5,7 @@ import {
   scratchLanguageCodes,
   scratchLanguages,
 } from '../../scripts/scratchblocks.js';
-
-function getDefaultScratchLanguage(siteLanguage) {
-  const normalizedLanguage = siteLanguage.toLocaleLowerCase().replaceAll('_', '-');
-  const exactLanguage = scratchLanguageCodes.find(
-    code => code.toLocaleLowerCase() === normalizedLanguage,
-  );
-  if (exactLanguage) return exactLanguage;
-
-  const baseLanguage = normalizedLanguage.split('-')[0];
-  const baseMatch = scratchLanguageCodes.find(
-    code => code.toLocaleLowerCase() === baseLanguage,
-  );
-  if (baseMatch) return baseMatch;
-
-  try {
-    const preferredLocale = new Intl.Locale(normalizedLanguage).maximize();
-    const regionalMatch = scratchLanguageCodes.find(code => {
-      const candidateLocale = new Intl.Locale(code).maximize();
-      return candidateLocale.language === preferredLocale.language
-        && candidateLocale.region === preferredLocale.region;
-    });
-    if (regionalMatch) return regionalMatch;
-  } catch {
-    // Fall through to the language-only match for non-standard locale codes.
-  }
-
-  return scratchLanguageCodes.find(
-    code => code.toLocaleLowerCase().startsWith(`${baseLanguage}-`),
-  ) || 'en';
-}
+import { matchSupportedLocale } from '../../scripts/locales.js';
 
 function getLanguageLabel({ code, name }) {
   return `${name} (${code})`;
@@ -70,7 +41,7 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
   }, [languageInput]);
 
   useEffect(() => {
-    const defaultLanguage = getDefaultScratchLanguage(siteLanguage);
+    const defaultLanguage = matchSupportedLocale(siteLanguage, scratchLanguageCodes);
     const language = scratchLanguages.find(({ code }) => code === defaultLanguage);
     setTargetLanguage(defaultLanguage);
     setLanguageInput(getLanguageLabel(language));

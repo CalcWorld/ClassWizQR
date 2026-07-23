@@ -135,7 +135,11 @@ export default function ParserApp() {
   }
 
   return (
-    <div id="app">
+    <div
+      id="app"
+      class={initialized ? undefined : 'app-initializing'}
+      aria-busy={!initialized}
+    >
       <form id="qr-form" onSubmit={commitUrl}>
         {!hideLanguage && (
           <select
@@ -182,7 +186,7 @@ export default function ParserApp() {
         <SettingsView result={result} t={t}/>
       </ResultPanel>
       <ResultPanel title={t('qr-parse-result-title')}>
-        <JsonResult value={editorValue}/>
+        <JsonResult value={editorValue} language={language}/>
       </ResultPanel>
     </div>
   );

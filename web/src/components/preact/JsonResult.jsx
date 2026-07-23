@@ -1,5 +1,19 @@
 import { useEffect, useRef } from 'preact/hooks';
 import { copyToClipboard, elementSelection } from '../../scripts/downloads.js';
+import { matchSupportedLocale } from '../../scripts/locales.js';
+
+const JSONEDITOR_LANGUAGES = [
+  'en',
+  'es',
+  'zh-CN',
+  'pt-BR',
+  'tr',
+  'ja',
+  'fr-FR',
+  'de',
+  'ru',
+  'ko',
+];
 
 function formatJsonPath(path) {
   return path.reduce((result, segment) => {
@@ -16,10 +30,11 @@ function formatClipboardValue(value) {
     : String(value);
 }
 
-export default function JsonResult({ value }) {
+export default function JsonResult({ value, language }) {
   const containerRef = useRef(null);
   const editorRef = useRef(null);
   const valueRef = useRef(value);
+  const editorLanguage = matchSupportedLocale(language, JSONEDITOR_LANGUAGES);
 
   valueRef.current = value;
 
@@ -33,6 +48,7 @@ export default function JsonResult({ value }) {
       const editor = new JSONEditor(containerRef.current, {
         mode: 'view',
         name: 'cwqr',
+        language: editorLanguage,
         onEvent: async (node, event) => {
           if (event.type !== 'click') return;
 
@@ -62,7 +78,7 @@ export default function JsonResult({ value }) {
       editorRef.current?.destroy();
       editorRef.current = null;
     };
-  }, []);
+  }, [editorLanguage]);
 
   useEffect(() => {
     if (!editorRef.current) return;

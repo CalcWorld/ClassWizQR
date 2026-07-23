@@ -5,8 +5,14 @@ import {
   scratchLanguageCodes,
   scratchLanguages,
 } from '../../scripts/scratchblocks.js';
-import { copyToClipboard } from '../../scripts/downloads.js';
+import { copyToClipboard, download, downloadUrl } from '../../scripts/downloads.js';
 import { matchSupportedLocale } from '../../scripts/locales.js';
+
+const SCRATCH_STYLES = [
+  { value: 'scratch2', label: 'Scratch 2.0' },
+  { value: 'scratch3', label: 'Scratch 3.0' },
+  { value: 'scratch3-high-contrast', label: 'Scratch 3.0 (high-contrast)' },
+];
 
 function getLanguageLabel({ code, name }) {
   return `${name} (${code})`;
@@ -23,10 +29,12 @@ function findLanguage(value) {
 
 export default function ScratchBlocksView({ source, siteLanguage, t }) {
   const renderRef = useRef(null);
+  const renderedViewRef = useRef(null);
   const languageControlRef = useRef(null);
   const [targetLanguage, setTargetLanguage] = useState('');
   const [languageInput, setLanguageInput] = useState('');
   const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
+  const [scratchStyle, setScratchStyle] = useState('scratch3');
   const [translatedSource, setTranslatedSource] = useState(source);
   const [status, setStatus] = useState('loading');
   const [copied, setCopied] = useState(false);
@@ -67,6 +75,7 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
     let cancelled = false;
     setStatus('loading');
     setCopied(false);
+    renderedViewRef.current = null;
 
     async function renderBlocks() {
       try {
@@ -86,16 +95,21 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
         }
 
         const nextSource = scratchblocks.stringify(document);
-        const svg = scratchblocks.render(document, { style: 'scratch3', scale: 0.8 });
+        const scale = scratchStyle.startsWith('scratch3') ? 0.675 : 1;
+        const view = scratchblocks.newView(document, { style: scratchStyle, scale });
+        const svg = view.render();
+        svg.classList.add(`scratchblocks-style-${scratchStyle}`);
         if (cancelled || !renderRef.current) return;
 
         renderRef.current.replaceChildren(svg);
+        renderedViewRef.current = view;
         setTranslatedSource(nextSource);
         setStatus('ready');
       } catch (error) {
         console.error(error);
         if (!cancelled) {
           renderRef.current?.replaceChildren();
+          renderedViewRef.current = null;
           setTranslatedSource(source);
           setStatus('error');
         }
@@ -106,7 +120,7 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
     return () => {
       cancelled = true;
     };
-  }, [source, targetLanguage]);
+  }, [source, targetLanguage, scratchStyle]);
 
   function updateLanguageInput(event) {
     setLanguageInput(event.currentTarget.value);
@@ -154,9 +168,46 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
     if (copiedSuccessfully) setCopied(true);
   }
 
+  function exportSvg() {
+    const view = renderedViewRef.current;
+    if (!view) return;
+
+    download(
+      `scratch-blocks-${Date.now()}.svg`,
+      view.exportSVGString(),
+      'image/svg+xml;charset=utf-8',
+    );
+  }
+
+  function exportPng() {
+    const view = renderedViewRef.current;
+    if (!view) return;
+
+    view.exportPNG(url => {
+      downloadUrl(`scratch-blocks-${Date.now()}.png`, url);
+      if (url.startsWith('blob:')) {
+        setTimeout(() => URL.revokeObjectURL(url), 0);
+      }
+    }, 2);
+  }
+
   return (
     <div class="scratchblocks-view">
       <div class="scratchblocks-toolbar">
+        <div class="scratchblocks-field scratchblocks-style-field">
+          <label for="scratchblocks-style">
+            {t('calc-algorithm-scratch-blocks-style')}
+          </label>
+          <select
+            id="scratchblocks-style"
+            value={scratchStyle}
+            onChange={event => setScratchStyle(event.currentTarget.value)}
+          >
+            {SCRATCH_STYLES.map(style => (
+              <option value={style.value} key={style.value}>{style.label}</option>
+            ))}
+          </select>
+        </div>
         <div class="scratchblocks-field">
           <label for="scratchblocks-language-input">
             {t('calc-algorithm-scratch-blocks-language')}
@@ -206,6 +257,15 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
         </div>
       </div>
 
+      <div class="scratchblocks-export-actions">
+        <button type="button" class="download" onClick={exportSvg} disabled={status !== 'ready'}>
+          {t('calc-algorithm-scratch-blocks-export-svg')}
+        </button>
+        <button type="button" class="download" onClick={exportPng} disabled={status !== 'ready'}>
+          {t('calc-algorithm-scratch-blocks-export-png')}
+        </button>
+      </div>
+
       <div
         class="scratchblocks-render"
         ref={renderRef}
@@ -217,9 +277,11 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
         <div class="scratchblocks-status error">{t('calc-algorithm-scratch-blocks-error')}</div>
       )}
 
-      <button type="button" class="download" onClick={copyTranslation} disabled={status !== 'ready'}>
-        {copied ? t('calc-algorithm-scratch-blocks-copied') : t('calc-algorithm-scratch-blocks-copy')}
-      </button>
+      <div class="scratchblocks-copy-action">
+        <button type="button" class="download" onClick={copyTranslation} disabled={status !== 'ready'}>
+          {copied ? t('calc-algorithm-scratch-blocks-copied') : t('calc-algorithm-scratch-blocks-copy')}
+        </button>
+      </div>
       <pre>{translatedSource}</pre>
     </div>
   );

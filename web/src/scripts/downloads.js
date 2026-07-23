@@ -34,14 +34,18 @@ export function elementSelection(dom) {
   selection.addRange(range);
 }
 
-export function download(filename, content, type) {
+export function downloadUrl(filename, url) {
   const a = document.createElement('a');
-  const file = new Blob([content], { type });
-  const objectUrl = URL.createObjectURL(file);
-  a.href = objectUrl;
+  a.href = url;
   a.download = filename;
   document.body.appendChild(a);
   a.click();
   a.remove();
+}
+
+export function download(filename, content, type) {
+  const file = new Blob([content], { type });
+  const objectUrl = URL.createObjectURL(file);
+  downloadUrl(filename, objectUrl);
   setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
 }

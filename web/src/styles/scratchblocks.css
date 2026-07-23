@@ -28,11 +28,16 @@
     font-weight: 700;
 }
 
-.scratchblocks-toolbar input {
+.scratchblocks-toolbar input,
+.scratchblocks-toolbar select {
     width: 100%;
     min-height: 38px;
     padding: 7px 10px;
     color: var(--text);
+}
+
+.scratchblocks-style-field {
+    flex: 0 1 250px;
 }
 
 .scratchblocks-combobox {
@@ -128,7 +133,18 @@
     color: #b42318;
 }
 
-.scratchblocks-view > button.download {
+.scratchblocks-export-actions,
+.scratchblocks-copy-action {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.scratchblocks-export-actions {
+    margin-bottom: 12px;
+}
+
+.scratchblocks-copy-action {
     margin-top: 12px;
 }
 

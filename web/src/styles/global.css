@@ -61,7 +61,8 @@ body {
 #qr-form input,
 #qr-form select,
 button.download,
-.scratchblocks-toolbar input {
+.scratchblocks-toolbar input,
+.scratchblocks-toolbar select {
     min-height: 42px;
     border: 1px solid var(--border);
     border-radius: 4px;
@@ -72,7 +73,8 @@ button.download,
 
 #qr-form input,
 #qr-form select,
-.scratchblocks-toolbar input {
+.scratchblocks-toolbar input,
+.scratchblocks-toolbar select {
     padding: 9px 12px;
     outline: none;
     transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
@@ -80,7 +82,8 @@ button.download,
 
 #qr-form input:focus,
 #qr-form select:focus,
-.scratchblocks-toolbar input:focus {
+.scratchblocks-toolbar input:focus,
+.scratchblocks-toolbar select:focus {
     border-color: var(--accent);
     background: var(--surface);
     box-shadow: 0 0 0 3px rgba(86, 122, 157, .18);

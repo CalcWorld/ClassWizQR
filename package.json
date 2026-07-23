@@ -16,6 +16,8 @@
     "dist/cwqr.js",
     "dist/cwqr.cjs",
     "dist/cwqr.mjs",
+    "dist/*.LICENSE.txt",
+    "third-party-licenses.txt",
     "src/i18n-res/*.json"
   ],
   "type": "module",
@@ -27,14 +29,15 @@
     "dev": "astro dev",
     "start": "npm run build && wrangler pages dev ./dist --ip=0.0.0.0 --port=8792",
     "build": "npm run validate:i18n && npm run build:site && npm run build:lib && npm run verify:build",
-    "build:site": "astro build",
+    "build:site": "npm run licenses && astro build",
     "build:lib": "webpack --mode=production --node-env=production",
     "verify:build": "node scripts/verify-build.mjs",
-    "build:dev": "astro build --mode development && webpack --mode=development",
+    "build:dev": "npm run licenses && astro build --mode development && webpack --mode=development",
     "build:prod": "npm run build",
+    "licenses": "node scripts/generate-third-party-licenses.mjs",
     "watch": "webpack --watch --mode=development",
     "serve": "astro dev",
-    "prepack": "npm run validate:i18n && npm run build:lib"
+    "prepack": "npm run validate:i18n && npm run licenses && npm run build:lib"
   },
   "repository": {
     "type": "git",

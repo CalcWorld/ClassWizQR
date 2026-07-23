@@ -62,6 +62,10 @@ export default defineConfig({
       viteStaticCopy({
         targets: [
           {
+            src: 'third-party-licenses.txt',
+            dest: '.',
+          },
+          {
             src: 'src/i18n-res/*.json',
             dest: 'i18n-res',
           },

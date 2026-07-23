@@ -9,12 +9,14 @@ const requiredFiles = [
   'dist/cwqr.cjs',
   'dist/cwqr.mjs',
   'dist/favicon.ico',
+  'dist/third-party-licenses.txt',
   'dist/vendor/mathjax/MathJax.js',
 ];
 
 await Promise.all(requiredFiles.map(file => access(file)));
 
 const indexHtml = await readFile('dist/index.html', 'utf8');
+const thirdPartyLicenses = await readFile('dist/third-party-licenses.txt', 'utf8');
 assert.match(
   indexHtml,
   /component-url="\/_astro\/parser\.[^"?]+\.js"/,
@@ -39,6 +41,18 @@ assert.doesNotMatch(
   indexHtml,
   /(?:cdn\.jsdelivr\.net|cdnjs\.cloudflare\.com|unpkg\.com)/,
   'The generated index.html still references a CDN.',
+);
+for (const packageName of ['decimal.js', 'preact', 'scratchblocks', 'jsoneditor', 'mathjax']) {
+  assert.match(
+    thirdPartyLicenses,
+    new RegExp(`^${packageName} `, 'm'),
+    `The third-party license bundle is missing ${packageName}.`,
+  );
+}
+assert.match(
+  thirdPartyLicenses,
+  /^NOTICE$/m,
+  'The third-party license bundle is missing the JSONEditor NOTICE.',
 );
 
 console.log('Build output verification passed.');

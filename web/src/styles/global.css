@@ -52,6 +52,11 @@ body {
 
 #app-footer {
     padding: 0 16px 12px;
+    visibility: hidden;
+}
+
+.app-ready #app-footer {
+    visibility: visible;
 }
 
 #MathJax_Message {

@@ -73,6 +73,13 @@ export default function ParserApp() {
   }, []);
 
   useEffect(() => {
+    if (!initialized) return undefined;
+
+    document.documentElement.classList.add('app-ready');
+    return () => document.documentElement.classList.remove('app-ready');
+  }, [initialized]);
+
+  useEffect(() => {
     if (!initialized) return;
 
     storeLanguage(language);

@@ -102,10 +102,13 @@ button.download:active {
 }
 
 .footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     padding: 14px 10px 2px;
     color: var(--text-muted);
     font-size: 14px;
-    text-align: center;
 }
 
 .footer a {
@@ -118,8 +121,19 @@ button.download:active {
     text-decoration: underline;
 }
 
+.footer-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.footer-separator {
+    line-height: 1;
+}
+
 .footer svg {
-    vertical-align: -2px;
+    display: block;
+    flex: 0 0 auto;
     fill: currentColor;
 }
 

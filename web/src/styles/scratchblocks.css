@@ -128,20 +128,8 @@
     color: #b42318;
 }
 
-.scratchblocks-source-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin: 12px 0 6px;
-}
-
-.scratchblocks-source-heading strong {
-    min-width: 0;
-}
-
-.scratchblocks-source-heading button {
-    flex: 0 0 auto;
+.scratchblocks-view > button.download {
+    margin-top: 12px;
 }
 
 .scratchblocks-view pre {

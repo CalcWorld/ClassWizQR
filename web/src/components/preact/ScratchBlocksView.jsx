@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import {
   loadScratchblocks,
   loadScratchLanguage,
-  scratchLanguages,
   scratchLanguageCodes,
+  scratchLanguages,
 } from '../../scripts/scratchblocks.js';
 
 function getDefaultScratchLanguage(siteLanguage) {
@@ -247,12 +247,9 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
         <div class="scratchblocks-status error">{t('calc-algorithm-scratch-blocks-error')}</div>
       )}
 
-      <div class="scratchblocks-source-heading">
-        <strong>{t('calc-algorithm-scratch-blocks-translated-source')}</strong>
-        <button type="button" class="secondary" onClick={copyTranslation} disabled={status !== 'ready'}>
-          {copied ? t('calc-algorithm-scratch-blocks-copied') : t('calc-algorithm-scratch-blocks-copy')}
-        </button>
-      </div>
+      <button type="button" class="download" onClick={copyTranslation} disabled={status !== 'ready'}>
+        {copied ? t('calc-algorithm-scratch-blocks-copied') : t('calc-algorithm-scratch-blocks-copy')}
+      </button>
       <pre>{translatedSource}</pre>
     </div>
   );

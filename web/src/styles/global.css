@@ -57,8 +57,7 @@ body {
 #qr-form input,
 #qr-form select,
 button.download,
-.scratchblocks-toolbar input,
-button.secondary {
+.scratchblocks-toolbar input {
     min-height: 42px;
     border: 1px solid var(--border);
     border-radius: 4px;
@@ -100,23 +99,6 @@ button.download:hover {
 
 button.download:active {
     transform: translateY(1px);
-}
-
-button.secondary {
-    min-height: 34px;
-    padding: 5px 12px;
-    border-color: var(--border);
-    cursor: pointer;
-}
-
-button.secondary:hover:not(:disabled) {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-}
-
-button.secondary:disabled {
-    cursor: default;
-    opacity: .55;
 }
 
 .footer {

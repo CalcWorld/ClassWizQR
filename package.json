@@ -17,7 +17,6 @@
     "dist/cwqr.cjs",
     "dist/cwqr.mjs",
     "dist/*.LICENSE.txt",
-    "third-party-licenses.txt",
     "src/i18n-res/*.json"
   ],
   "type": "module",

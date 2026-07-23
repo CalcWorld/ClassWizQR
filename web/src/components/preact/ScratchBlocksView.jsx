@@ -5,6 +5,7 @@ import {
   scratchLanguageCodes,
   scratchLanguages,
 } from '../../scripts/scratchblocks.js';
+import { copyToClipboard } from '../../scripts/downloads.js';
 import { matchSupportedLocale } from '../../scripts/locales.js';
 
 function getLanguageLabel({ code, name }) {
@@ -48,6 +49,8 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
   }, [siteLanguage]);
 
   useEffect(() => {
+    if (!languageMenuOpen) return undefined;
+
     function closeMenuOnOutsidePointer(event) {
       if (languageControlRef.current?.contains(event.target)) return;
       setLanguageMenuOpen(false);
@@ -56,7 +59,7 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
 
     document.addEventListener('pointerdown', closeMenuOnOutsidePointer);
     return () => document.removeEventListener('pointerdown', closeMenuOnOutsidePointer);
-  }, [targetLanguage]);
+  }, [languageMenuOpen, targetLanguage]);
 
   useEffect(() => {
     if (!targetLanguage || !renderRef.current) return undefined;
@@ -147,12 +150,8 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
   }
 
   async function copyTranslation() {
-    try {
-      await navigator.clipboard.writeText(translatedSource);
-      setCopied(true);
-    } catch (error) {
-      console.error(error);
-    }
+    const copiedSuccessfully = await copyToClipboard(translatedSource);
+    if (copiedSuccessfully) setCopied(true);
   }
 
   return (

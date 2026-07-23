@@ -1,8 +1,8 @@
 export async function copyToClipboard(text) {
   try {
     await navigator.clipboard.writeText(text);
-  } catch (e) {
-    console.log(e)
+    return true;
+  } catch {
     const textarea = document.createElement('textarea');
     textarea.value = text;
     textarea.style.position = 'fixed';
@@ -10,12 +10,15 @@ export async function copyToClipboard(text) {
     document.body.appendChild(textarea);
     textarea.select();
     try {
-      document.execCommand('copy');
-    } catch (err) {
-      console.error('failed to copy');
-      prompt('', text);
+      if (!document.execCommand('copy')) throw new Error('Copy command was rejected.');
+      return true;
+    } catch (error) {
+      console.error('Failed to copy to the clipboard.', error);
+      window.prompt('', text);
+      return false;
+    } finally {
+      textarea.remove();
     }
-    document.body.removeChild(textarea);
   }
 }
 
@@ -42,4 +45,3 @@ export function download(filename, content, type) {
   a.remove();
   setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
 }
-

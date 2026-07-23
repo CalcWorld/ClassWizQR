@@ -14,6 +14,22 @@ function cloneResult(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
+function readStoredLanguage() {
+  try {
+    return localStorage.getItem('lang');
+  } catch {
+    return null;
+  }
+}
+
+function storeLanguage(language) {
+  try {
+    localStorage.setItem('lang', language);
+  } catch {
+    // Storage is optional, especially when the parser is embedded cross-origin.
+  }
+}
+
 export default function ParserApp() {
   const [language, setLanguage] = useState('en');
   const [inputUrl, setInputUrl] = useState('');
@@ -32,7 +48,7 @@ export default function ParserApp() {
   useEffect(() => {
     const query = new URLSearchParams(window.location.search);
     const requestedLanguage = query.get('lang')
-      || localStorage.getItem('lang')
+      || readStoredLanguage()
       || navigator.language.substring(0, 2);
     const initialLanguage = cwqr.availableLanguages.includes(requestedLanguage)
       ? requestedLanguage
@@ -59,7 +75,7 @@ export default function ParserApp() {
   useEffect(() => {
     if (!initialized) return;
 
-    localStorage.setItem('lang', language);
+    storeLanguage(language);
     document.documentElement.lang = language;
     if (language === 'en' || Object.hasOwn(resources, language)) return;
 

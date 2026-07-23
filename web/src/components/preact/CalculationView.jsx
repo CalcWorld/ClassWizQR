@@ -94,27 +94,28 @@ export default function CalculationView({ result, language, renderVersion, t, on
     }
 
     const queueVersion = ++queueVersionRef.current;
+    const mathJax = window.MathJax;
+    if (!mathJax?.Hub) {
+      setTypesetting(false);
+      return undefined;
+    }
+
     let cancelled = false;
-    let retryTimer;
     setTypesetting(true);
 
-    function typesetWhenReady() {
-      const mathJax = window.MathJax;
-      if (!mathJax?.Hub) {
-        retryTimer = window.setTimeout(typesetWhenReady, 25);
-        return;
-      }
-
+    try {
       mathJax.Hub.Queue(['Typeset', mathJax.Hub, containerRef.current]);
       mathJax.Hub.Queue(() => {
         if (!cancelled && queueVersionRef.current === queueVersion) setTypesetting(false);
       });
+    } catch (error) {
+      console.error(error);
+      setTypesetting(false);
+      return undefined;
     }
 
-    typesetWhenReady();
     return () => {
       cancelled = true;
-      window.clearTimeout(retryTimer);
     };
   }, [hasContent, language, renderVersion]);
 

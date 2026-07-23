@@ -257,32 +257,37 @@ export default function ScratchBlocksView({ source, siteLanguage, t }) {
         </div>
       </div>
 
-      <div class="scratchblocks-export-actions">
-        <button type="button" class="download" onClick={exportSvg} disabled={status !== 'ready'}>
-          {t('calc-algorithm-scratch-blocks-export-svg')}
-        </button>
-        <button type="button" class="download" onClick={exportPng} disabled={status !== 'ready'}>
-          {t('calc-algorithm-scratch-blocks-export-png')}
-        </button>
-      </div>
+      <div class="scratchblocks-results">
+        <div class="scratchblocks-source-column">
+          <div class="scratchblocks-copy-action">
+            <button type="button" class="download" onClick={copyTranslation} disabled={status !== 'ready'}>
+              {copied ? t('calc-algorithm-scratch-blocks-copied') : t('calc-algorithm-scratch-blocks-copy')}
+            </button>
+          </div>
+          <pre>{translatedSource}</pre>
+        </div>
 
-      <div
-        class="scratchblocks-render"
-        ref={renderRef}
-        aria-busy={status === 'loading'}
-        aria-label={t('calc-algorithm-scratch-blocks-preview')}
-      />
-      {status === 'loading' && <div class="scratchblocks-status">{t('loading')}</div>}
-      {status === 'error' && (
-        <div class="scratchblocks-status error">{t('calc-algorithm-scratch-blocks-error')}</div>
-      )}
-
-      <div class="scratchblocks-copy-action">
-        <button type="button" class="download" onClick={copyTranslation} disabled={status !== 'ready'}>
-          {copied ? t('calc-algorithm-scratch-blocks-copied') : t('calc-algorithm-scratch-blocks-copy')}
-        </button>
+        <div class="scratchblocks-preview-column">
+          <div class="scratchblocks-export-actions">
+            <button type="button" class="download" onClick={exportSvg} disabled={status !== 'ready'}>
+              {t('calc-algorithm-scratch-blocks-export-svg')}
+            </button>
+            <button type="button" class="download" onClick={exportPng} disabled={status !== 'ready'}>
+              {t('calc-algorithm-scratch-blocks-export-png')}
+            </button>
+          </div>
+          <div
+            class="scratchblocks-render"
+            ref={renderRef}
+            aria-busy={status === 'loading'}
+            aria-label={t('calc-algorithm-scratch-blocks-preview')}
+          />
+          {status === 'loading' && <div class="scratchblocks-status">{t('loading')}</div>}
+          {status === 'error' && (
+            <div class="scratchblocks-status error">{t('calc-algorithm-scratch-blocks-error')}</div>
+          )}
+        </div>
       </div>
-      <pre>{translatedSource}</pre>
     </div>
   );
 }

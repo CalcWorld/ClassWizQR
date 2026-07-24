@@ -9,8 +9,8 @@ mode.4504,Quadratic Equation [ax²+bx+c=0],二次方程 [ax²+bx+c=0],Phương t
 mode.4505,Cubic Equation [ax³+bx²+cx+d=0],三次方程 [ax³+bx²+cx+d=0],Phương trình bậc ba [ax³+bx²+cx+d=0],Équation cubique [ax³+bx²+cx+d=0]
 mode.4506,Quartic Equation [ax⁴+bx³+cx²+dx+e=0],四次方程 [ax⁴+bx³+cx²+dx+e=0],Phương trình bậc bốn [ax⁴+bx³+cx²+dx+e=0],Équation quartique [ax⁴+bx³+cx²+dx+e=0]
 mode.4508,Solver,求解方程,Bộ giải phương trình,Solveur
-mode.4511,Linear Equation [ax+b=0],一元一次方程 [ax+b=0],,Équation deg. 1 [ax+b=0]
-mode.4512,Linear Equation [ax+b=cx+d],一元一次方程 [ax+b=cx+d],,Équation deg. 1 [ax+b=cx+d]
+mode.4511,Linear Equation [ax+b=0],一元一次方程 [ax+b=0],Phương trình bậc nhất [ax+b=0],Équation deg. 1 [ax+b=0]
+mode.4512,Linear Equation [ax+b=cx+d],一元一次方程 [ax+b=cx+d],Phương trình bậc nhất [ax+b=cx+d],Équation deg. 1 [ax+b=cx+d]
 mode.C1,Calculate,计算,Phép tính thường,Calcul
 mode.02,Base-N,基数,Hệ đếm cơ số N,Base-N
 mode.0201,Binary,二进制,Nhị phân,Binaire
@@ -38,7 +38,7 @@ mode.03T.08,y=a+b/x,,,
 mode.C4,Complex,复数,Số phức,Complexes
 mode.06,Matrix,矩阵,Ma trận,Matrice
 mode.07,Vector,向量,Véc-tơ,Vecteurs
-mode.09,Graph,绘图,,Graphe
+mode.09,Graph,绘图,Đồ thị,Graphe
 mode.4A,Ratio,比例,Tỉ lệ thức,Prod. croix
 mode.4A01,A:B=X:D,,,
 mode.4A02,A:B=C:X,,,
@@ -68,17 +68,17 @@ mode.0E,Algorithm,算法,Thuật toán,Algo
 mode.4F,Math Box,数学盒,Hộp Toán học,Math Box
 mode.4FS1,Dice Roll,掷骰子,Tung xúc xắc,Lancer de dés
 mode.4FS2,Coin Toss,抛硬币,Tung đồng xu,Pile ou face
-mode.0G,Sequences,数列,,Suites
-format.0,Not Specified,未指定,,Non spécifié
+mode.0G,Sequences,数列,Dãy số,Suites
+format.0,Not Specified,未指定,Không chỉ định,Non spécifié
 format.1,Sexagesimal,度分秒,Hệ lục thập phân,Sexagésimal
-format.2,ENG Notation 4 times,工程记数法(右移4次),,Notation technique 4 fois
-format.3,ENG Notation 3 times,工程记数法(右移3次),,Notation technique 3 fois
-format.4,ENG Notation 2 times,工程记数法(右移2次),,Notation technique 2 fois
-format.5,ENG Notation 1 times,工程记数法(右移1次),,Notation technique 1 fois
-format.6,Reverse ENG Notation 1 times,工程记数法(左移1次),,Notation technique inversée 1 fois
-format.7,Reverse ENG Notation 2 times,工程记数法(左移2次),,Notation technique inversée 2 fois
-format.8,Reverse ENG Notation 3 times,工程记数法(左移3次),,Notation technique inversée 3 fois
-format.9,Reverse ENG Notation 4 times,工程记数法(左移4次),,Notation technique inversée 4 fois
+format.2,ENG Notation 4 times,工程记数法(右移4次),Ký pháp kỹ thuật 4 lần,Notation technique 4 fois
+format.3,ENG Notation 3 times,工程记数法(右移3次),Ký pháp kỹ thuật 3 lần,Notation technique 3 fois
+format.4,ENG Notation 2 times,工程记数法(右移2次),Ký pháp kỹ thuật 2 lần,Notation technique 2 fois
+format.5,ENG Notation 1 times,工程记数法(右移1次),Ký pháp kỹ thuật 1 lần,Notation technique 1 fois
+format.6,Reverse ENG Notation 1 times,工程记数法(左移1次),Ký pháp kỹ thuật ngược 1 lần,Notation technique inversée 1 fois
+format.7,Reverse ENG Notation 2 times,工程记数法(左移2次),Ký pháp kỹ thuật ngược 2 lần,Notation technique inversée 2 fois
+format.8,Reverse ENG Notation 3 times,工程记数法(左移3次),Ký pháp kỹ thuật ngược 3 lần,Notation technique inversée 3 fois
+format.9,Reverse ENG Notation 4 times,工程记数法(左移4次),Ký pháp kỹ thuật ngược 4 lần,Notation technique inversée 4 fois
 format.A,Decimal,小数,Thập phân,Décimal
 format.B,Improper Fraction,假分数,Phân số có thể viết thành hỗn số,Fraction impropre
 format.C,Mixed Number,带分数,Hỗn số,Fraction mixte
@@ -94,15 +94,15 @@ menu.X6,Matrix Manual,矩阵模式说明,Mô tả Ma trận,Manuel de Matrice
 menu.X7,Vector Manual,向量模式说明,Mô tả Véc-tơ,Manuel de Vecteurs
 menu.X8,Table Manual,函数表格模式说明,Mô tả Bảng giá trị,Manuel de Tabl fonct
 menu.X9-CY,Verify Manual,验证模式说明,Mô tả Kiểm chứng,Manuel de Vérification
-menu.X9-EY,Graph Manual,绘图模式说明,Mô tả Kiểm chứng,Manuel de Graphe
-menu.X9-FY,Graph Manual,绘图模式说明,Mô tả Kiểm chứng,Manuel de Graphe
+menu.X9-EY,Graph Manual,绘图模式说明,Mô tả Đồ thị,Manuel de Graphe
+menu.X9-FY,Graph Manual,绘图模式说明,Mô tả Đồ thị,Manuel de Graphe
 menu.XA,Ratio Manual,比例模式说明,Mô tả Tỉ lệ thức,Manuel de Prod. croix
 menu.XB,Inequality Manual,不等式模式说明,Mô tả Bất phương trình,Manuel d’Inégalité
 menu.XC,Distribution Manual,分布模式说明,Mô tả Phân phối,Manuel de Probabilités
 menu.XD,Spreadsheet Manual,数据表格模式说明,Mô tả Bảng tính,Manuel de Tableur
 menu.XE,Algorithm Manual,算法模式说明,Mô tả Thuật toán,Manuel d’Algo
 menu.XF,Math Box Manual,数学盒说明,Mô tả Hộp toán học,Manuel de Math Box
-menu.XG,Sequences Manual,数列说明,,Manuel des Suites
+menu.XG,Sequences Manual,数列说明,Mô tả Dãy số,Manuel des Suites
 menu.Y1,AC Break,AC键中断,Ngắt AC,AC Annulation
 menu.Y2,Syntax ERROR,语法错误,Lỗi cú pháp,ERREUR de syntaxe
 menu.Y3,Math ERROR,数学错误,Lỗi phép tính,ERREUR maths

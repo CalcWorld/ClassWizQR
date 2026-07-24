@@ -1,31 +1,31 @@
 key,en,zh,vi,fr
-mode.45,Equation,方程,Phương trình,
-mode.88,Table,函数表格,Bảng giá trị,
-mode.89,Verify,验证,Kiểm chứng,
-mode.4501,Simultaneous Equation with 2 Unknowns,二元一次方程组,Phương trình tuyến tính đồng thời với 2 ẩn,
-mode.4502,Simultaneous Equation with 3 Unknowns,三元一次方程组,Phương trình tuyến tính đồng thời với 3 ẩn,
-mode.4503,Simultaneous Equation with 4 Unknowns,四元一次方程组,Phương trình tuyến tính đồng thời với 4 ẩn,
-mode.4504,Quadratic Equation [ax²+bx+c=0],二次方程 [ax²+bx+c=0],Phương trình bậc hai [ax²+bx+c=0],
-mode.4505,Cubic Equation [ax³+bx²+cx+d=0],三次方程 [ax³+bx²+cx+d=0],Phương trình bậc hai [ax³+bx²+cx+d=0],
-mode.4506,Quartic Equation [ax⁴+bx³+cx²+dx+e=0],四次方程 [ax⁴+bx³+cx²+dx+e=0],Phương trình bậc bốn [ax⁴+bx³+cx²+dx+e=0],
-mode.4508,Solver,求解方程,Bộ giải phương trình,
+mode.45,Equation,方程,Phương trình,Équation
+mode.88,Table,函数表格,Bảng giá trị,Tabl fonct
+mode.89,Verify,验证,Kiểm chứng,Vérification
+mode.4501,Simultaneous Equation with 2 Unknowns,二元一次方程组,Phương trình tuyến tính đồng thời với 2 ẩn,Équations simultanées à 2 inconnues
+mode.4502,Simultaneous Equation with 3 Unknowns,三元一次方程组,Phương trình tuyến tính đồng thời với 3 ẩn,Équations simultanées à 3 inconnues
+mode.4503,Simultaneous Equation with 4 Unknowns,四元一次方程组,Phương trình tuyến tính đồng thời với 4 ẩn,Équations simultanées à 4 inconnues
+mode.4504,Quadratic Equation [ax²+bx+c=0],二次方程 [ax²+bx+c=0],Phương trình bậc hai [ax²+bx+c=0],Équation quadratique [ax²+bx+c=0]
+mode.4505,Cubic Equation [ax³+bx²+cx+d=0],三次方程 [ax³+bx²+cx+d=0],Phương trình bậc ba [ax³+bx²+cx+d=0],Équation cubique [ax³+bx²+cx+d=0]
+mode.4506,Quartic Equation [ax⁴+bx³+cx²+dx+e=0],四次方程 [ax⁴+bx³+cx²+dx+e=0],Phương trình bậc bốn [ax⁴+bx³+cx²+dx+e=0],Équation quartique [ax⁴+bx³+cx²+dx+e=0]
+mode.4508,Solver,求解方程,Bộ giải phương trình,Solveur
 mode.4511,Linear Equation [ax+b=0],一元一次方程 [ax+b=0],,Équation deg. 1 [ax+b=0]
 mode.4512,Linear Equation [ax+b=cx+d],一元一次方程 [ax+b=cx+d],,Équation deg. 1 [ax+b=cx+d]
-mode.C1,Calculate,计算,Phép tính thường,
-mode.02,Base-N,基数,Hệ đếm cơ số N,
-mode.0201,Binary,二进制,Nhị phân,
-mode.0207,Octal,八进制,Bát phân,
-mode.0209,Decimal,十进制,Thập phân,
-mode.020F,Hexadecimal,十六进制,Thập lục phân,
-mode.03,Statistics,统计,Thống kê,
-mode.0301,Single-Variable Statistic,单变量统计,Thống kê 1 biến,
-mode.0302,Linear Regression,线性回归,Hồi quy tuyến tính,
-mode.0303,Quadratic Regression,二次回归,Hồi quy bậc hai,
-mode.0304,Logarithmic Regression,对数回归,Hồi quy lôgarit,
-mode.0305,e exponential Regression,e 指数回归,e hồi quy hàm số mũ,
-mode.0306,ab exponential Regression,ab 指数回归,ab hồi quy hàm số mũ,
-mode.0307,Power Regression,乘方回归,Hồi quy lũy thừa,
-mode.0308,Inverse Regression,逆回归,Hồi quy nghịch đảo,
+mode.C1,Calculate,计算,Phép tính thường,Calcul
+mode.02,Base-N,基数,Hệ đếm cơ số N,Base-N
+mode.0201,Binary,二进制,Nhị phân,Binaire
+mode.0207,Octal,八进制,Bát phân,Octal
+mode.0209,Decimal,十进制,Thập phân,Décimal
+mode.020F,Hexadecimal,十六进制,Thập lục phân,Hexadécimal
+mode.03,Statistics,统计,Thống kê,Stats
+mode.0301,Single-Variable Statistic,单变量统计,Thống kê 1 biến,Stats à 1 var
+mode.0302,Linear Regression,线性回归,Hồi quy tuyến tính,Régression linéaire
+mode.0303,Quadratic Regression,二次回归,Hồi quy bậc hai,Régression quadratique
+mode.0304,Logarithmic Regression,对数回归,Hồi quy lôgarit,Régression logarithmique
+mode.0305,e exponential Regression,e 指数回归,e hồi quy hàm số mũ,Régression exponentielle e
+mode.0306,ab exponential Regression,ab 指数回归,ab hồi quy hàm số mũ,Régression exponentielle ab
+mode.0307,Power Regression,乘方回归,Hồi quy lũy thừa,Régression de puissance
+mode.0308,Inverse Regression,逆回归,Hồi quy nghịch đảo,Régression inverse
 mode.03T.02ASC,y=a+bx,,,
 mode.03T.02DESC,y=ax+b,,,
 mode.03T.03ASC,y=a+bx+cx²,,,
@@ -35,14 +35,14 @@ mode.03T.05,y=a･e^(bx),,,
 mode.03T.06,y=a･b^x,,,
 mode.03T.07,y=a･x^b,,,
 mode.03T.08,y=a+b/x,,,
-mode.C4,Complex,复数,Số phức,
-mode.06,Matrix,矩阵,Ma trận,
-mode.07,Vector,向量,Véc-tơ,
-mode.09,Graph,绘图,,
-mode.4A,Ratio,比例,Tỉ lệ thức,
+mode.C4,Complex,复数,Số phức,Complexes
+mode.06,Matrix,矩阵,Ma trận,Matrice
+mode.07,Vector,向量,Véc-tơ,Vecteurs
+mode.09,Graph,绘图,,Graphe
+mode.4A,Ratio,比例,Tỉ lệ thức,Prod. croix
 mode.4A01,A:B=X:D,,,
 mode.4A02,A:B=C:X,,,
-mode.4B,Inequality,不等式,Bất phương trình,
+mode.4B,Inequality,不等式,Bất phương trình,Inégalité
 mode.4B0400,ax²+bx+c>0,,,
 mode.4B0401,ax²+bx+c<0,,,
 mode.4B0402,ax²+bx+c≥0,,,
@@ -55,110 +55,110 @@ mode.4B0600,ax⁴+bx³+cx²+dx+e>0,,,
 mode.4B0601,ax⁴+bx³+cx²+dx+e<0,,,
 mode.4B0602,ax⁴+bx³+cx²+dx+e≥0,,,
 mode.4B0603,ax⁴+bx³+cx²+dx+e≤0,,,
-mode.0C,Distribution,分布,Phân phối,
-mode.0C01,Normal Probability Density,正态概率密度,Mật độ xác suất chuẩn,
-mode.0C02,Normal Cumulative Distribution,正态累积分布,Phân phối tích lũy chuẩn,
-mode.0C03,Inverse Normal Cumulative Distribution,反正态累积分布,Phân phối tích lũy chuẩn nghịch đảo,
-mode.0C04,Binomial Probability,二项概率密度,Xác suất nhị thức,
-mode.0C05,Binomial Cumulative Distribution,二项累积分布,Phân phối tích lũy nhị thức,
-mode.0C06,Poisson Probability,泊松概率密度,Xác suất Poisson,
-mode.0C07,Poisson Cumulative Distribution,泊松累积分布,Phân phối tích lũy Poisson,
-mode.0D,Spreadsheet,数据表格,Bảng tính,
-mode.0E,Algorithm,算法,Thuật toán,
-mode.4F,Math Box,数学盒,Hộp Toán học,
-mode.4FS1,Dice Roll,掷骰子,,
-mode.4FS2,Coin Toss,抛硬币,,
+mode.0C,Distribution,分布,Phân phối,Probabilités
+mode.0C01,Normal Probability Density,正态概率密度,Mật độ xác suất chuẩn,Densité Normale
+mode.0C02,Normal Cumulative Distribution,正态累积分布,Phân phối tích lũy chuẩn,Normale P(≤X≤)
+mode.0C03,Inverse Normal Cumulative Distribution,反正态累积分布,Phân phối tích lũy chuẩn nghịch đảo,Inverse normale
+mode.0C04,Binomial Probability,二项概率密度,Xác suất nhị thức,Binomiale P(X=)
+mode.0C05,Binomial Cumulative Distribution,二项累积分布,Phân phối tích lũy nhị thức,Binom. P(≤X≤)
+mode.0C06,Poisson Probability,泊松概率密度,Xác suất Poisson,Poisson P(X=)
+mode.0C07,Poisson Cumulative Distribution,泊松累积分布,Phân phối tích lũy Poisson,Poisson P(X≤)
+mode.0D,Spreadsheet,数据表格,Bảng tính,Tableur
+mode.0E,Algorithm,算法,Thuật toán,Algo
+mode.4F,Math Box,数学盒,Hộp Toán học,Math Box
+mode.4FS1,Dice Roll,掷骰子,Tung xúc xắc,Lancer de dés
+mode.4FS2,Coin Toss,抛硬币,Tung đồng xu,Pile ou face
 mode.0G,Sequences,数列,,Suites
-format.0,Not Specified,未指定,,
-format.1,Sexagesimal,度分秒,,
-format.2,ENG Notation 4 times,工程记数法(右移4次),,
-format.3,ENG Notation 3 times,工程记数法(右移3次),,
-format.4,ENG Notation 2 times,工程记数法(右移2次),,
-format.5,ENG Notation 1 times,工程记数法(右移1次),,
-format.6,Reverse ENG Notation 1 times,工程记数法(左移1次),,
-format.7,Reverse ENG Notation 2 times,工程记数法(左移2次),,
-format.8,Reverse ENG Notation 3 times,工程记数法(左移3次),,
-format.9,Reverse ENG Notation 4 times,工程记数法(左移4次),,
-format.A,Decimal,小数,,
-format.B,Improper Fraction,假分数,,
-format.C,Mixed Number,带分数,,
-format.D,Standard,标准,,
-format.E,Recurring Decimal,循环小数,,
-format.F,Prime Factor,质因数分解,,
-menu.X1,Calculate Manual,计算模式说明,Mô tả Phép tính thường,
-menu.X2,Base-N Manual,基数模式说明,Mô tả Hệ đếm cơ số N,
-menu.X3,Statistics Manual,统计模式说明,Mô tả Thống kê,
-menu.X4,Complex Manual,复数模式说明,Mô tả Số phức,
-menu.X5,Equation Manual,方程模式说明,Mô tả Phương trình,
-menu.X6,Matrix Manual,矩阵模式说明,Mô tả Ma trận,
-menu.X7,Vector Manual,向量模式说明,Mô tả Véc-tơ,
-menu.X8,Table Manual,函数表格模式说明,Mô tả Bảng giá trị,
-menu.X9-CY,Verify Manual,验证模式说明,Mô tả Kiểm chứng,
-menu.X9-EY,Graph Manual,绘图模式说明,Mô tả Kiểm chứng,
-menu.X9-FY,Graph Manual,绘图模式说明,Mô tả Kiểm chứng,
-menu.XA,Ratio Manual,比例模式说明,Mô tả Tỉ lệ thức,
-menu.XB,Inequality Manual,不等式模式说明,Mô tả Bất phương trình,
-menu.XC,Distribution Manual,分布模式说明,Mô tả Phân phối,
-menu.XD,Spreadsheet Manual,数据表格模式说明,Mô tả Bảng tính,
-menu.XE,Algorithm Manual,算法模式说明,Mô tả Thuật toán,
-menu.XF,Math Box Manual,数学盒说明,Mô tả Hộp toán học,
+format.0,Not Specified,未指定,,Non spécifié
+format.1,Sexagesimal,度分秒,Hệ lục thập phân,Sexagésimal
+format.2,ENG Notation 4 times,工程记数法(右移4次),,Notation technique 4 fois
+format.3,ENG Notation 3 times,工程记数法(右移3次),,Notation technique 3 fois
+format.4,ENG Notation 2 times,工程记数法(右移2次),,Notation technique 2 fois
+format.5,ENG Notation 1 times,工程记数法(右移1次),,Notation technique 1 fois
+format.6,Reverse ENG Notation 1 times,工程记数法(左移1次),,Notation technique inversée 1 fois
+format.7,Reverse ENG Notation 2 times,工程记数法(左移2次),,Notation technique inversée 2 fois
+format.8,Reverse ENG Notation 3 times,工程记数法(左移3次),,Notation technique inversée 3 fois
+format.9,Reverse ENG Notation 4 times,工程记数法(左移4次),,Notation technique inversée 4 fois
+format.A,Decimal,小数,Thập phân,Décimal
+format.B,Improper Fraction,假分数,Phân số có thể viết thành hỗn số,Fraction impropre
+format.C,Mixed Number,带分数,Hỗn số,Fraction mixte
+format.D,Standard,标准,Standard,Standard
+format.E,Recurring Decimal,循环小数,Số thập phân tuần hoàn,Décimale périodique
+format.F,Prime Factor,质因数分解,Phân tích thành thừa số nguyên tố,Facteur premier
+menu.X1,Calculate Manual,计算模式说明,Mô tả Phép tính thường,Manuel de Calcul
+menu.X2,Base-N Manual,基数模式说明,Mô tả Hệ đếm cơ số N,Manuel de Base-N
+menu.X3,Statistics Manual,统计模式说明,Mô tả Thống kê,Manuel de Stats
+menu.X4,Complex Manual,复数模式说明,Mô tả Số phức,Manuel de Complexes
+menu.X5,Equation Manual,方程模式说明,Mô tả Phương trình,Manuel d’Équation
+menu.X6,Matrix Manual,矩阵模式说明,Mô tả Ma trận,Manuel de Matrice
+menu.X7,Vector Manual,向量模式说明,Mô tả Véc-tơ,Manuel de Vecteurs
+menu.X8,Table Manual,函数表格模式说明,Mô tả Bảng giá trị,Manuel de Tabl fonct
+menu.X9-CY,Verify Manual,验证模式说明,Mô tả Kiểm chứng,Manuel de Vérification
+menu.X9-EY,Graph Manual,绘图模式说明,Mô tả Kiểm chứng,Manuel de Graphe
+menu.X9-FY,Graph Manual,绘图模式说明,Mô tả Kiểm chứng,Manuel de Graphe
+menu.XA,Ratio Manual,比例模式说明,Mô tả Tỉ lệ thức,Manuel de Prod. croix
+menu.XB,Inequality Manual,不等式模式说明,Mô tả Bất phương trình,Manuel d’Inégalité
+menu.XC,Distribution Manual,分布模式说明,Mô tả Phân phối,Manuel de Probabilités
+menu.XD,Spreadsheet Manual,数据表格模式说明,Mô tả Bảng tính,Manuel de Tableur
+menu.XE,Algorithm Manual,算法模式说明,Mô tả Thuật toán,Manuel d’Algo
+menu.XF,Math Box Manual,数学盒说明,Mô tả Hộp toán học,Manuel de Math Box
 menu.XG,Sequences Manual,数列说明,,Manuel des Suites
-menu.Y1,AC Break,AC键中断,Ngắt AC,
-menu.Y2,Syntax ERROR,语法错误,Lỗi cú pháp,
-menu.Y3,Math ERROR,数学错误,Lỗi phép tính,
-menu.Y4,Range ERROR,范围错误,Lỗi phạm vi,
-menu.Y5,Cannot Simplify,无法化简,Không thể rút gọn,
-menu.Y6,Circular ERROR,循环引用错误,Lỗi vòng lặp,
-menu.Y7,Stack ERROR,堆栈错误,Lỗi nhóm phép tính,
-menu.Y8,Argument ERROR,自变量错,Lỗi đối số,
-menu.Y9,Dimension ERROR,维数错误,Lỗi kích thước,
-menu.YA,Cannot Solve,无解,Không giải được,
-menu.YB,Time Out,超时,Hết thời gian,
-menu.YC,Variable ERROR,变量错误,Lỗi biến số,
-menu.YD,NULL ERROR,空值错误,Lỗi NULL,
-menu.YE,Memory ERROR,内存错误,Lỗi bộ nhớ,
-menu.YG,No Operator,无运算符,Không có Toán tử,
-menu.YH,Not Defined,未定义,Không xác định,
-menu.YZ,Nesting ERROR,嵌套错误,Lỗi lồng hàm,
-menu.Z0,Setup Menu Manual,设置菜单说明,Mô tả Trình cài đặt,
-menu.Z1,Setup Sub Menu Manual,设置(二级)菜单说明,Mô tả Trình cài đặt (phụ),
-menu.GS,Get Started Screen,开始屏幕,,
-setup.NUMBER_FORMAT.0,Norm1,常规1,Viết số bình thường 1,
-setup.NUMBER_FORMAT.4,Norm2,常规2,Viết số bình thường 2,
-setup.NUMBER_FORMAT.8,Fix,位数,Chọn số thập phân,
-setup.NUMBER_FORMAT.9,Sci,科学,Dạng a×10ⁿ,
-setup.NUMBER_FORMAT.name,Number Format,显示格式,Định dạng số,
-setup.DECIMAL_MARK.0,Comma,逗点,Phẩy,
-setup.DECIMAL_MARK.1,Dot,句点,Chấm,
-setup.DECIMAL_MARK.name,Decimal Mark,小数点显示,Dấu thập phân,
-setup.ANGLE_UNIT.4,Degree,度(D),Độ,
-setup.ANGLE_UNIT.5,Radian,弧度(R),Radian,
-setup.ANGLE_UNIT.6,Gradian,百分度(G),Grad,
-setup.ANGLE_UNIT.name,Angle Unit,角度单位,Đơn vị góc,
-setup.INPUT_OUTPUT.10,MathI/MathO,数学输入/数学输出,Số tự nhiên vào/ra,
-setup.INPUT_OUTPUT.11,MathI/DecimalO,数学输入/小数输出,Số tự nhiên vào/Số thập phân ra,
-setup.INPUT_OUTPUT.00,LineI/LineO,线性输入/线性输出,Dòng vào/ra,
-setup.INPUT_OUTPUT.01,LineI/DecimalO,线性输入/小数输出,Dòng vào/Số thập phân ra,
-setup.INPUT_OUTPUT.name,Input/Output,输入/输出,Nhập/Xuất,
-setup.FRACTION_RESULT.0,d/c,假分数,,
-setup.FRACTION_RESULT.1,ab/c,带分数,,
-setup.FRACTION_RESULT.name,Fraction Result,分数结果,Kết quả phân số,
+menu.Y1,AC Break,AC键中断,Ngắt AC,AC Annulation
+menu.Y2,Syntax ERROR,语法错误,Lỗi cú pháp,ERREUR de syntaxe
+menu.Y3,Math ERROR,数学错误,Lỗi phép tính,ERREUR maths
+menu.Y4,Range ERROR,范围错误,Lỗi phạm vi,ERREUR de plage
+menu.Y5,Cannot Simplify,无法化简,Không thể rút gọn,Non simplifiable
+menu.Y6,Circular ERROR,循环引用错误,Lỗi vòng lặp,ERREUR circulaire
+menu.Y7,Stack ERROR,堆栈错误,Lỗi nhóm phép tính,ERREUR de pile
+menu.Y8,Argument ERROR,自变量错,Lỗi đối số,ERREUR d’argument
+menu.Y9,Dimension ERROR,维数错误,Lỗi kích thước,ERREUR dimension
+menu.YA,Cannot Solve,无解,Không giải được,Résol impossible
+menu.YB,Time Out,超时,Hết thời gian,Expiration
+menu.YC,Variable ERROR,变量错误,Lỗi biến số,ERREUR variable
+menu.YD,NULL ERROR,空值错误,Lỗi NULL,ERREUR NULL
+menu.YE,Memory ERROR,内存错误,Lỗi bộ nhớ,ERREUR mémoire
+menu.YG,No Operator,无运算符,Không có Toán tử,Pas d’opérateur
+menu.YH,Not Defined,未定义,Không xác định,Non défini
+menu.YZ,Nesting ERROR,嵌套错误,Lỗi lồng hàm,ERREUR branch
+menu.Z0,Setup Menu Manual,设置菜单说明,Mô tả Trình cài đặt,Manuel du menu CONFIG
+menu.Z1,Setup Sub Menu Manual,设置(二级)菜单说明,Mô tả Trình cài đặt (phụ),Manuel du sous-menu CONFIG
+menu.GS,Get Started Screen,开始屏幕,"Màn hình ""Get Started"" của máy tính",Écran « Mode d’emploi »
+setup.NUMBER_FORMAT.0,Norm1,常规1,Viết số bình thường 1,Norm1
+setup.NUMBER_FORMAT.4,Norm2,常规2,Viết số bình thường 2,Norm2
+setup.NUMBER_FORMAT.8,Fix,位数,Chọn số thập phân,Fix
+setup.NUMBER_FORMAT.9,Sci,科学,Dạng a×10ⁿ,Sci
+setup.NUMBER_FORMAT.name,Number Format,显示格式,Định dạng số,Arrondi
+setup.DECIMAL_MARK.0,Comma,逗点,Phẩy,Virgule
+setup.DECIMAL_MARK.1,Dot,句点,Chấm,Point
+setup.DECIMAL_MARK.name,Decimal Mark,小数点显示,Dấu thập phân,Signe décimal
+setup.ANGLE_UNIT.4,Degree,度(D),Độ,Degré
+setup.ANGLE_UNIT.5,Radian,弧度(R),Radian,Radian
+setup.ANGLE_UNIT.6,Gradian,百分度(G),Grad,Grade
+setup.ANGLE_UNIT.name,Angle Unit,角度单位,Đơn vị góc,Unité d’angle
+setup.INPUT_OUTPUT.10,MathI/MathO,数学输入/数学输出,Số tự nhiên vào/ra,Smaths/Rmaths
+setup.INPUT_OUTPUT.11,MathI/DecimalO,数学输入/小数输出,Số tự nhiên vào/Số thập phân ra,Smaths/Rdéc
+setup.INPUT_OUTPUT.00,LineI/LineO,线性输入/线性输出,Dòng vào/ra,Sligne/Rligne
+setup.INPUT_OUTPUT.01,LineI/DecimalO,线性输入/小数输出,Dòng vào/Số thập phân ra,Sligne/Rdéc
+setup.INPUT_OUTPUT.name,Input/Output,输入/输出,Nhập/Xuất,Saisie/Résultat
+setup.FRACTION_RESULT.0,d/c,假分数,Phân số có thể viết thành hỗn số,Fraction impropre
+setup.FRACTION_RESULT.1,ab/c,带分数,Hỗn số,Fraction mixte
+setup.FRACTION_RESULT.name,Fraction Result,分数结果,Kết quả phân số,Résultat de fraction
 setup.COMPLEX_RESULT.0,r∠θ,,,
 setup.COMPLEX_RESULT.1,a+bi,,,
-setup.COMPLEX_RESULT.name,Complex Result,复数结果,Kết quả số phức,
-setup.STATISTICS_FREQUENCY.0,Off,关,Tắt,
-setup.STATISTICS_FREQUENCY.1,On,开,Bật,
-setup.STATISTICS_FREQUENCY.name,Statistics Frequency,统计频数,Tần số thống kê,
-setup.RECURRING_DECIMAL.0,Off,关,Tắt,
-setup.RECURRING_DECIMAL.1,On,开,Bật,
-setup.RECURRING_DECIMAL.name,Recurring Decimal,循环小数,Số thập phân tuần hoàn,
-setup.SIMPLIFY.0,Auto,自动,Tự động,
-setup.SIMPLIFY.1,Manual,手动,Bằng tay,
-setup.SIMPLIFY.name,Simplify,化简,Rút gọn,
-setup.AUTO_POWER_OFF.0,10 Min.,10分钟,10 phút,
-setup.AUTO_POWER_OFF.1,60 Min.,60分钟,60 phút,
-setup.AUTO_POWER_OFF.name,Auto Power Off,自动关机,Tự động tắt,
-setup.TABLE_TYPE.name,Table Type,函数表格类型,Loại bảng,
+setup.COMPLEX_RESULT.name,Complex Result,复数结果,Kết quả số phức,Forme complexe
+setup.STATISTICS_FREQUENCY.0,Off,关,Tắt,Désactivé
+setup.STATISTICS_FREQUENCY.1,On,开,Bật,Activé
+setup.STATISTICS_FREQUENCY.name,Statistics Frequency,统计频数,Tần số thống kê,Effectif
+setup.RECURRING_DECIMAL.0,Off,关,Tắt,Désactivé
+setup.RECURRING_DECIMAL.1,On,开,Bật,Activé
+setup.RECURRING_DECIMAL.name,Recurring Decimal,循环小数,Số thập phân tuần hoàn,Décimale périodique
+setup.SIMPLIFY.0,Auto,自动,Tự động,Automatique
+setup.SIMPLIFY.1,Manual,手动,Bằng tay,Manuel
+setup.SIMPLIFY.name,Simplify,化简,Rút gọn,Simplifier
+setup.AUTO_POWER_OFF.0,10 Min.,10分钟,10 phút,10 min
+setup.AUTO_POWER_OFF.1,60 Min.,60分钟,60 phút,60 min
+setup.AUTO_POWER_OFF.name,Auto Power Off,自动关机,Tự động tắt,Extinct auto
+setup.TABLE_TYPE.name,Table Type,函数表格类型,Loại bảng,Type de tableau
 setup.TABLE_TYPE.0-CY,f(x),,,
 setup.TABLE_TYPE.1-CY,"f(x),g(x)",,,
 setup.TABLE_TYPE.0-EY,"f(x),g(x)",,,
@@ -167,48 +167,48 @@ setup.TABLE_TYPE.2-EY,g(x),,,
 setup.TABLE_TYPE.0-FY,"f(x),g(x)",,,
 setup.TABLE_TYPE.1-FY,f(x),,,
 setup.TABLE_TYPE.2-FY,g(x),,,
-setup.ENGINEER_SYMBOL.0,Off,关,Tắt,
-setup.ENGINEER_SYMBOL.1,On,开,Bật,
-setup.ENGINEER_SYMBOL.name,Engineer Symbol,工程符号,Kí hiệu kĩ thuật,
-setup.DIGIT_SEPARATOR.0,Off,关,Tắt,
-setup.DIGIT_SEPARATOR.1,On,开,Bật,
-setup.DIGIT_SEPARATOR.name,Digit Separator,数字分隔符,Dấu cách 3 chữ số,
-setup.MULTI_LINE_FONT.A,Small Font,小字体,Phông chữ nhỏ,
-setup.MULTI_LINE_FONT.E,Normal Font,普通字体,Phông chữ thường,
-setup.MULTI_LINE_FONT.name,Multi-Line Font,多行字体,Phông Multi-Line,
-setup.EQUATION_COMPLEX_ROOT.0,Off,关,Tắt,
-setup.EQUATION_COMPLEX_ROOT.1,On,开,Bật,
-setup.EQUATION_COMPLEX_ROOT.name,Equation Complex Root,方程复数根,Nghiệm Phức Phương trình,
-setup.SPREADSHEET_AUTO_CALC.0,Off,关,Tắt,
-setup.SPREADSHEET_AUTO_CALC.1,On,开,Bật,
-setup.SPREADSHEET_AUTO_CALC.name,Spreadsheet: Auto Calc,数据表格：自动计算,Bảng tính: Tự động tính,
-setup.SPREADSHEET_SHOW_CELL.0,Formula,公式,Công thức,
-setup.SPREADSHEET_SHOW_CELL.1,Value,数值,Giá trị,
-setup.SPREADSHEET_SHOW_CELL.name,Spreadsheet: Show Cell,数据表格：显示单元格,Bảng tính: Hiện ô,
-setup.QR_CODE_VERSION.3,Version 3,版本3,Phiên bản 3,
-setup.QR_CODE_VERSION.B,Version 11,版本11,Phiên bản 11,
-setup.QR_CODE_VERSION.name,QR Code Version,QR码版本,Phiên bản mã QR,
-setup.ALGORITHM_BACKGROUND.0,Axes,坐标轴,Trục,
-setup.ALGORITHM_BACKGROUND.1,Axes/Grid,坐标轴/网格,Trục/Lưới,
-setup.ALGORITHM_BACKGROUND.2,Axes/xy,坐标轴/xy标签,Trục/xy,
-setup.ALGORITHM_BACKGROUND.3,None,无,Không có,
-setup.ALGORITHM_BACKGROUND.name,Algorithm: Background,算法：运行时背景,Thuật toán: Nền,
-setup.ALGORITHM_UNIT_SETTING.0,pixels,像素,pixel,
-setup.ALGORITHM_UNIT_SETTING.1,units,×10像素,đơn vị,
-setup.ALGORITHM_UNIT_SETTING.name,Algorithm: Unit Setting,算法：移动单位设置,Thuật toán: Cài đặt đơn vị,
-setup.LANGUAGE.name,Language,语言,,
-input.DISTRIBUTION.0241,Lower=${0},下限=${0},Ldưới=${0},
-input.DISTRIBUTION.0242,Upper=${1},上限=${1},Ltrên=${1},
-input.DISTRIBUTION.0331,Area=${0},区域=${0},Vùng=${0},
-input.TABLE.0,Start,开始值,,
-input.TABLE.1,End,终止值,,
-input.TABLE.2,Step,步长,,
-result.INEQUALITY.01,All Real Numbers,所有实数,Tất cả số thực,
-result.INEQUALITY.02,No Solution,无解,Vô nghiệm,
-result.EQUATION.1,Infinite Solution,无数解,Vô số nghiệm,
-result.EQUATION.2,No Solution,无解,Vô nghiệm,
-result.EQUATION.4,No Real Roots,无实根,Vô nghiệm,
-result.EQUATION.5,No Local Max/Min,无极值,Không có CĐ/CT,
+setup.ENGINEER_SYMBOL.0,Off,关,Tắt,Désactivé
+setup.ENGINEER_SYMBOL.1,On,开,Bật,Activé
+setup.ENGINEER_SYMBOL.name,Engineer Symbol,工程符号,Kí hiệu kĩ thuật,Symbole d’ingénierie
+setup.DIGIT_SEPARATOR.0,Off,关,Tắt,Désactivé
+setup.DIGIT_SEPARATOR.1,On,开,Bật,Activé
+setup.DIGIT_SEPARATOR.name,Digit Separator,数字分隔符,Dấu cách 3 chữ số,Sépart chiffres
+setup.MULTI_LINE_FONT.A,Small Font,小字体,Phông chữ nhỏ,Petite police
+setup.MULTI_LINE_FONT.E,Normal Font,普通字体,Phông chữ thường,Police normale
+setup.MULTI_LINE_FONT.name,Multi-Line Font,多行字体,Phông Multi-Line,Pol multiligne
+setup.EQUATION_COMPLEX_ROOT.0,Off,关,Tắt,Désactivé
+setup.EQUATION_COMPLEX_ROOT.1,On,开,Bật,Activé
+setup.EQUATION_COMPLEX_ROOT.name,Equation Complex Root,方程复数根,Nghiệm Phức Phương trình,Racine complexe
+setup.SPREADSHEET_AUTO_CALC.0,Off,关,Tắt,Désactivé
+setup.SPREADSHEET_AUTO_CALC.1,On,开,Bật,Activé
+setup.SPREADSHEET_AUTO_CALC.name,Spreadsheet: Auto Calc,数据表格：自动计算,Bảng tính: Tự động tính,Tableur : Calcul auto
+setup.SPREADSHEET_SHOW_CELL.0,Formula,公式,Công thức,Formule
+setup.SPREADSHEET_SHOW_CELL.1,Value,数值,Giá trị,Valeur
+setup.SPREADSHEET_SHOW_CELL.name,Spreadsheet: Show Cell,数据表格：显示单元格,Bảng tính: Hiện ô,Tableur : Afficher cell
+setup.QR_CODE_VERSION.3,Version 3,版本3,Phiên bản 3,Version 3
+setup.QR_CODE_VERSION.B,Version 11,版本11,Phiên bản 11,Version 11
+setup.QR_CODE_VERSION.name,QR Code Version,QR码版本,Phiên bản mã QR,Version du QR Code
+setup.ALGORITHM_BACKGROUND.0,Axes,坐标轴,Trục,Axes
+setup.ALGORITHM_BACKGROUND.1,Axes/Grid,坐标轴/网格,Trục/Lưới,Axes/Grille
+setup.ALGORITHM_BACKGROUND.2,Axes/xy,坐标轴/xy标签,Trục/xy,Axes/xy
+setup.ALGORITHM_BACKGROUND.3,None,无,Không có,Aucun
+setup.ALGORITHM_BACKGROUND.name,Algorithm: Background,算法：运行时背景,Thuật toán: Nền,Algo : Arrière-plan
+setup.ALGORITHM_UNIT_SETTING.0,pixels,像素,pixel,pixels
+setup.ALGORITHM_UNIT_SETTING.1,units,×10像素,đơn vị,unités
+setup.ALGORITHM_UNIT_SETTING.name,Algorithm: Unit Setting,算法：移动单位设置,Thuật toán: Cài đặt đơn vị,Algo : Réglage unité
+setup.LANGUAGE.name,Language,语言,Ngôn ngữ,Langue
+input.DISTRIBUTION.0241,Lower=${0},下限=${0},Ldưới=${0},Limite inférieure=${0}
+input.DISTRIBUTION.0242,Upper=${1},上限=${1},Ltrên=${1},Limite supérieure=${1}
+input.DISTRIBUTION.0331,Area=${0},区域=${0},Vùng=${0},Aire=${0}
+input.TABLE.0,Start,开始值,Bắt đầu,Début
+input.TABLE.1,End,终止值,Kết thúc,Fin
+input.TABLE.2,Step,步长,Bước,Pas
+result.INEQUALITY.01,All Real Numbers,所有实数,Tất cả số thực,Tous les nombres réels
+result.INEQUALITY.02,No Solution,无解,Vô nghiệm,Aucune solution
+result.EQUATION.1,Infinite Solution,无数解,Vô số nghiệm,Infinité de sol
+result.EQUATION.2,No Solution,无解,Vô nghiệm,Pas de solution
+result.EQUATION.4,No Real Roots,无实根,Vô nghiệm,Pas de rac réelle
+result.EQUATION.5,No Local Max/Min,无极值,Không có CĐ/CT,Pas d’extrm local
 algo.F903, , ,, 
 algo.F905,Move ${0} ${1},前进 ${0} ${1},,Avancer de ${0} ${1}
 algo.F906,Turn ⟲ ${0} degrees,旋转⟲ ${0} 度,,Tourner de ⟲ ${0} degrés

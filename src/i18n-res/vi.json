@@ -7,7 +7,7 @@
     "4502": "Phương trình tuyến tính đồng thời với 3 ẩn",
     "4503": "Phương trình tuyến tính đồng thời với 4 ẩn",
     "4504": "Phương trình bậc hai [ax²+bx+c=0]",
-    "4505": "Phương trình bậc hai [ax³+bx²+cx+d=0]",
+    "4505": "Phương trình bậc ba [ax³+bx²+cx+d=0]",
     "4506": "Phương trình bậc bốn [ax⁴+bx³+cx²+dx+e=0]",
     "4508": "Bộ giải phương trình",
     "C1": "Phép tính thường",
@@ -40,7 +40,18 @@
     "0C07": "Phân phối tích lũy Poisson",
     "0D": "Bảng tính",
     "0E": "Thuật toán",
-    "4F": "Hộp Toán học"
+    "4F": "Hộp Toán học",
+    "4FS1": "Tung xúc xắc",
+    "4FS2": "Tung đồng xu"
+  },
+  "format": {
+    "1": "Hệ lục thập phân",
+    "A": "Thập phân",
+    "B": "Phân số có thể viết thành hỗn số",
+    "C": "Hỗn số",
+    "D": "Standard",
+    "E": "Số thập phân tuần hoàn",
+    "F": "Phân tích thành thừa số nguyên tố"
   },
   "menu": {
     "X1": "Mô tả Phép tính thường",
@@ -78,7 +89,8 @@
     "YH": "Không xác định",
     "YZ": "Lỗi lồng hàm",
     "Z0": "Mô tả Trình cài đặt",
-    "Z1": "Mô tả Trình cài đặt (phụ)"
+    "Z1": "Mô tả Trình cài đặt (phụ)",
+    "GS": "Màn hình \"Get Started\" của máy tính"
   },
   "setup": {
     "NUMBER_FORMAT": {
@@ -107,6 +119,8 @@
       "name": "Nhập/Xuất"
     },
     "FRACTION_RESULT": {
+      "0": "Phân số có thể viết thành hỗn số",
+      "1": "Hỗn số",
       "name": "Kết quả phân số"
     },
     "COMPLEX_RESULT": {
@@ -181,6 +195,9 @@
       "0": "pixel",
       "1": "đơn vị",
       "name": "Thuật toán: Cài đặt đơn vị"
+    },
+    "LANGUAGE": {
+      "name": "Ngôn ngữ"
     }
   },
   "input": {
@@ -188,6 +205,11 @@
       "0241": "Ldưới=${0}",
       "0242": "Ltrên=${1}",
       "0331": "Vùng=${0}"
+    },
+    "TABLE": {
+      "0": "Bắt đầu",
+      "1": "Kết thúc",
+      "2": "Bước"
     }
   },
   "result": {

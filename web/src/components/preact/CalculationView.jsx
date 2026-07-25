@@ -212,9 +212,9 @@ export default function CalculationView({ result, language, renderVersion, t, on
         {mathBox && (
           <CalcSection id="math-box" title={t('calc-math-box')}>
             <div class="content">
-              {result?.mode?.subMode === 'S1' ? t('calc-math-box-dice') : t('calc-math-box-coin')}: {mathBox.quantity}
+              {result?.mode?.subMode === 'S1' ? t('calc-math-box-dice') : t('calc-math-box-coin')}: {String(mathBox.quantity)}
             </div>
-            <div class="content">{t('calc-math-box-attempts')}: {mathBox.attempts}</div>
+            <div class="content">{t('calc-math-box-attempts')}: {String(mathBox.attempts)}</div>
             <DownloadButton downloadKey="math-box" label={t('calc-math-box-csv-down')} onDownload={onDownload}/>
             <TabularArray array={mathBox.array}/>
           </CalcSection>

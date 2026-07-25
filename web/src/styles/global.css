@@ -63,7 +63,7 @@ body {
     display: none !important;
 }
 
-#qr-form input,
+#qr-form textarea,
 #qr-form select,
 button.download,
 .scratchblocks-toolbar input,
@@ -76,7 +76,7 @@ button.download,
     font: inherit;
 }
 
-#qr-form input,
+#qr-form textarea,
 #qr-form select,
 .scratchblocks-toolbar input,
 .scratchblocks-toolbar select {
@@ -85,7 +85,7 @@ button.download,
     transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
 }
 
-#qr-form input:focus,
+#qr-form textarea:focus,
 #qr-form select:focus,
 .scratchblocks-toolbar input:focus,
 .scratchblocks-toolbar select:focus {

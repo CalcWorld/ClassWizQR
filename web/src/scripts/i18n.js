@@ -1,6 +1,13 @@
 export function translate(tag, language = 'en') {
   const zh = {
     'loading': '加载中......',
+    'language-label': '语言',
+    'qr-url-label': 'URL',
+    'clear-button': '清空 URL',
+    'parse-button': '解析',
+    'scan-camera': '相机扫描',
+    'scan-screen': '屏幕扫描',
+    'scan-file': '图片扫描',
     'calc-title': '计算数据',
     'calc-expression': '表达式',
     'calc-function': '函数定义',
@@ -59,6 +66,13 @@ export function translate(tag, language = 'en') {
   };
   const en = {
     'loading': 'Loading......',
+    'language-label': 'Language',
+    'qr-url-label': 'URL',
+    'clear-button': 'Clear URL',
+    'parse-button': 'Parse',
+    'scan-camera': 'Scan with camera',
+    'scan-screen': 'Scan shared screen',
+    'scan-file': 'Scan an image file',
     'calc-title': 'Calculation',
     'calc-expression': 'Expression',
     'calc-function': 'Function',
@@ -117,6 +131,13 @@ export function translate(tag, language = 'en') {
   };
   const fr = {
     'loading': 'Chargement......',
+    'language-label': 'Langue',
+    'qr-url-label': 'URL',
+    'clear-button': 'Effacer l’URL',
+    'parse-button': 'Analyser',
+    'scan-camera': 'Scanner avec la caméra',
+    'scan-screen': 'Scanner l’écran partagé',
+    'scan-file': 'Scanner un fichier image',
     'calc-title': 'Calcul',
     'calc-expression': 'Expression',
     'calc-function': 'Fonction',
@@ -175,6 +196,13 @@ export function translate(tag, language = 'en') {
   };
   const vi = {
     'loading': 'Đang tải......',
+    'language-label': 'Ngôn ngữ',
+    'qr-url-label': 'URL',
+    'clear-button': 'Xóa URL',
+    'parse-button': 'Phân tích',
+    'scan-camera': 'Quét bằng camera',
+    'scan-screen': 'Quét màn hình được chia sẻ',
+    'scan-file': 'Quét tệp hình ảnh',
     'calc-title': 'Phép tính',
     'calc-expression': 'Biểu thức',
     'calc-function': 'Hàm',

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'preact/hooks';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import * as cwqr from '../../../../src/index.js';
 import { download } from '../../scripts/downloads.js';
 import { translate } from '../../scripts/i18n.js';
@@ -9,9 +9,69 @@ import ResultPanel from './ResultPanel.jsx';
 import SettingsView from './SettingsView.jsx';
 
 const EMPTY_RESULT = {};
+const LANGUAGE_OPTIONS = cwqr.availableLanguages.map(value => {
+  let name = value;
+  try {
+    name = new Intl.DisplayNames([value], { type: 'language' }).of(value) || value;
+  } catch {
+    // Fall back to the language code when Intl.DisplayNames is unavailable.
+  }
+  return { value, label: `${name} (${value})` };
+});
+
+function CameraIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M8 6 9.5 4h5L16 6"/>
+      <rect x="3" y="6" width="18" height="14" rx="2"/>
+      <circle cx="12" cy="13" r="3"/>
+    </svg>
+  );
+}
+
+function ScreenIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="2.5" y="3.5" width="19" height="14" rx="2"/>
+      <path d="M8 21h8M12 17.5V21"/>
+      <path d="M6.5 8.5v-2h2M15.5 6.5h2v2M17.5 12.5v2h-2M8.5 14.5h-2v-2"/>
+    </svg>
+  );
+}
+
+function FileImageIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="16" rx="2"/>
+      <circle cx="8.5" cy="9" r="1.5"/>
+      <path d="m4.5 17 4.5-4 3.5 3 2.5-2 4.5 3.5"/>
+    </svg>
+  );
+}
+
+function ParseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 12h13M14 7l5 5-5 5"/>
+    </svg>
+  );
+}
+
+function ClearIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m7 7 10 10M17 7 7 17"/>
+    </svg>
+  );
+}
 
 function cloneResult(value) {
   return JSON.parse(JSON.stringify(value));
+}
+
+function fitUrlInput(input) {
+  input.style.height = 'auto';
+  input.style.height = `${input.scrollHeight + 2}px`;
 }
 
 function readStoredLanguage() {
@@ -41,6 +101,8 @@ export default function ParserApp() {
   const [result, setResult] = useState(EMPTY_RESULT);
   const [editorValue, setEditorValue] = useState(EMPTY_RESULT);
   const [renderVersion, setRenderVersion] = useState(0);
+  const [urlExpanded, setUrlExpanded] = useState(false);
+  const urlInputRef = useRef(null);
 
   const t = useCallback(tag => translate(tag, language), [language]);
   const languageReady = language === 'en' || Object.hasOwn(resources, language);
@@ -124,6 +186,29 @@ export default function ParserApp() {
     setRenderVersion(version => version + 1);
   }, [activeUrl, initialized, language, languageReady, resources]);
 
+  useLayoutEffect(() => {
+    const input = urlInputRef.current;
+    if (!input) return;
+
+    input.style.height = '';
+    if (!urlExpanded) return;
+    fitUrlInput(input);
+  }, [inputUrl, urlExpanded]);
+
+  useEffect(() => {
+    const input = urlInputRef.current;
+    if (!input || !urlExpanded || typeof ResizeObserver === 'undefined') return undefined;
+
+    let previousWidth = input.clientWidth;
+    const observer = new ResizeObserver(([entry]) => {
+      if (entry.contentRect.width === previousWidth) return;
+      previousWidth = entry.contentRect.width;
+      fitUrlInput(input);
+    });
+    observer.observe(input);
+    return () => observer.disconnect();
+  }, [urlExpanded]);
+
   const downloads = useMemo(() => {
     const values = {};
     const add = (key, prefix, content, bom = false) => {
@@ -145,9 +230,24 @@ export default function ParserApp() {
 
   function commitUrl(event) {
     event?.preventDefault();
+    setUrlExpanded(false);
     const currentHash = window.location.hash.substring(1);
     if (currentHash === inputUrl) return;
     window.location.hash = inputUrl;
+  }
+
+  function handleUrlControlFocusOut(event) {
+    if (event.currentTarget.contains(event.relatedTarget)) return;
+    commitUrl();
+  }
+
+  function clearUrl() {
+    setInputUrl('');
+    setActiveUrl('');
+    if (window.location.hash) {
+      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
+    }
+    urlInputRef.current?.focus();
   }
 
   function handleDownload(key) {
@@ -164,32 +264,89 @@ export default function ParserApp() {
       aria-busy={!initialized}
     >
       <form id="qr-form" onSubmit={commitUrl}>
-        {!hideLanguage && (
-          <select
-            id="lang"
-            name="lang"
-            aria-label="Language"
-            value={language}
-            onChange={event => setLanguage(event.currentTarget.value)}
-          >
-            {cwqr.availableLanguages.map(value => <option value={value} key={value}>{value}</option>)}
-          </select>
+        {(!hideLanguage || !hideUrl) && (
+          <div class="controls-row">
+            {!hideLanguage && (
+              <div class="form-field language-field">
+                <label for="lang">{t('language-label')}</label>
+                <select
+                  id="lang"
+                  name="lang"
+                  value={language}
+                  onChange={event => setLanguage(event.currentTarget.value)}
+                >
+                  {LANGUAGE_OPTIONS.map(({ value, label }) => (
+                    <option value={value} key={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
+            {!hideUrl && (
+              <div class="scan-actions">
+                <button class="form-button scan-option-button" type="button">
+                  <CameraIcon/>
+                  {t('scan-camera')}
+                </button>
+                <button class="form-button scan-option-button" type="button">
+                  <ScreenIcon/>
+                  {t('scan-screen')}
+                </button>
+                <button class="form-button scan-option-button" type="button">
+                  <FileImageIcon/>
+                  {t('scan-file')}
+                </button>
+              </div>
+            )}
+          </div>
         )}
         {!hideUrl && (
-          <input
-            id="qrUrl"
-            type="search"
-            aria-label="QR URL"
-            placeholder="http://......"
-            value={inputUrl}
-            onInput={event => setInputUrl(event.currentTarget.value)}
-            onChange={commitUrl}
-            onKeyDown={event => {
-              if (event.key !== 'Enter') return;
-              event.preventDefault();
-              commitUrl();
-            }}
-          />
+          <div class={`form-field url-field${urlExpanded ? ' is-expanded' : ''}`}>
+            <label for="qrUrl">{t('qr-url-label')}</label>
+            <div class="url-input-shell" onFocusOut={handleUrlControlFocusOut}>
+              <textarea
+                ref={urlInputRef}
+                id="qrUrl"
+                rows="1"
+                placeholder="http://..."
+                value={inputUrl}
+                onFocus={() => setUrlExpanded(true)}
+                onInput={event => setInputUrl(event.currentTarget.value.replace(/[\r\n]+/g, ''))}
+                onKeyDown={event => {
+                  if (event.key === 'Escape') {
+                    event.currentTarget.blur();
+                    return;
+                  }
+                  if (event.key !== 'Enter') return;
+                  event.preventDefault();
+                  event.currentTarget.blur();
+                }}
+              />
+              <div class="url-button-rail">
+                <button
+                  class="form-button url-input-button clear-button"
+                  type="button"
+                  aria-label={t('clear-button')}
+                  title={t('clear-button')}
+                  disabled={!inputUrl}
+                  onClick={clearUrl}
+                >
+                  <ClearIcon/>
+                </button>
+                {urlExpanded && (
+                  <button
+                    class="form-button url-input-button submit-button"
+                    type="submit"
+                    aria-label={t('parse-button')}
+                    title={t('parse-button')}
+                  >
+                    <ParseIcon/>
+                  </button>
+                )}
+              </div>
+            </div>
+          </div>
         )}
       </form>
 

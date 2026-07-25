@@ -1,17 +1,213 @@
 #qr-form {
     display: flex;
-    gap: 10px;
+    flex-direction: column;
+    gap: 12px;
     min-width: 0;
-    margin-bottom: 8px;
+    margin-bottom: 16px;
 }
 
-#lang {
-    flex: 0 0 88px;
+.controls-row {
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 0;
+}
+
+.form-field {
+    min-width: 0;
+}
+
+.form-field > label {
+    display: block;
+    margin: 0 0 5px;
+    color: var(--text-muted);
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .02em;
+}
+
+.language-field {
+    flex: 0 1 240px;
+}
+
+.language-field select {
+    width: 100%;
+}
+
+.url-field {
+    position: relative;
+    z-index: 2;
+    min-height: 68px;
 }
 
 #qrUrl {
+    display: block;
+    width: 100%;
+    height: var(--url-collapsed-height);
     min-width: 0;
-    flex: 1 1 auto;
+    padding-right: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    resize: none;
+    overflow: hidden;
+    line-height: 1.45;
+    white-space: nowrap;
+}
+
+.url-input-shell {
+    --url-collapsed-height: 43px;
+    position: absolute;
+    top: 25px;
+    left: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: var(--surface-subtle);
+    transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+
+.url-field.is-expanded #qrUrl {
+    min-height: 132px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+}
+
+.url-input-shell:focus-within {
+    border-color: var(--accent);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px rgba(86, 122, 157, .18);
+}
+
+.url-field.is-expanded .url-input-shell {
+    box-shadow: 0 0 0 3px rgba(86, 122, 157, .18), 0 14px 32px rgba(20, 28, 36, .2);
+}
+
+.scan-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.scan-option-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 12px;
+}
+
+.scan-option-button svg {
+    width: 19px;
+    height: 19px;
+    stroke-width: 1.7;
+}
+
+.url-button-rail {
+    display: grid;
+    width: 38px;
+    padding: 0 4px;
+    grid-template-rows: 1fr;
+    place-items: center;
+}
+
+.url-field.is-expanded .url-button-rail {
+    grid-template-rows: var(--url-collapsed-height) minmax(0, 1fr) var(--url-collapsed-height);
+}
+
+.url-button-rail .clear-button {
+    grid-row: 1;
+}
+
+.url-button-rail .submit-button {
+    grid-row: 3;
+}
+
+.form-button {
+    min-height: 42px;
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    background: var(--surface-subtle);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    white-space: nowrap;
+    transition: border-color .18s ease, background-color .18s ease, transform .18s ease;
+}
+
+.form-button svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.form-button:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.form-button:focus-visible {
+    outline: 3px solid rgba(86, 122, 157, .24);
+    outline-offset: 1px;
+}
+
+.form-button:active {
+    transform: translateY(1px);
+}
+
+.url-input-button {
+    display: inline-grid;
+    width: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    place-items: center;
+}
+
+.url-input-button svg {
+    width: 15px;
+    height: 15px;
+    stroke-width: 1.8;
+}
+
+.clear-button {
+    color: var(--text-muted);
+    background: transparent;
+}
+
+.clear-button:hover {
+    color: var(--text);
+    background: var(--accent-soft);
+}
+
+.clear-button:disabled {
+    cursor: default;
+    opacity: .45;
+}
+
+.clear-button svg {
+    stroke-width: 2;
+}
+
+.submit-button {
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+    background: var(--accent);
+}
+
+.submit-button:hover {
+    border-color: var(--accent-hover);
+    color: var(--accent-contrast);
+    background: var(--accent-hover);
 }
 
 details {
@@ -194,16 +390,12 @@ pre {
 }
 
 @media (max-width: 600px) {
-    #qr-form {
-        flex-wrap: wrap;
+    .url-field.is-expanded #qrUrl {
+        min-height: 180px;
     }
 
-    #lang {
-        flex-basis: 76px;
-    }
-
-    #qrUrl {
-        flex-basis: calc(100% - 86px);
+    .language-field {
+        flex-shrink: 1;
     }
 
     details > div {

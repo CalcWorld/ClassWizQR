@@ -8,7 +8,7 @@ export function translate(tag, language = 'en') {
     'scan-title': '读取二维码',
     'scan-camera': '相机扫描',
     'scan-screen': '读屏扫描',
-    'scan-file': '图片扫描',
+    'scan-file': '文件扫描',
     'scan-clipboard': '读剪贴板',
     'camera-title': '相机扫描',
     'camera-close': '关闭相机扫描',

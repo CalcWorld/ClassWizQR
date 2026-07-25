@@ -109,8 +109,7 @@
 
 .scratchblocks-render,
 .scratchblocks-view pre {
-    max-height: min(82vh, 900px);
-    max-height: min(82dvh, 900px);
+    max-height: 92vh;
     min-height: 0;
     flex: 1 1 auto;
     overflow: auto;

@@ -328,7 +328,7 @@ export default function ParserApp() {
                 ref={urlInputRef}
                 id="qrUrl"
                 rows="1"
-                placeholder="http://..."
+                placeholder="http://......"
                 value={inputUrl}
                 onFocus={event => fitUrlInput(event.currentTarget)}
                 onInput={event => setInputUrl(event.currentTarget.value.replace(/[\r\n]+/g, ''))}

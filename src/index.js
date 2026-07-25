@@ -16,6 +16,31 @@ import { ParseSetup } from "./setup/index.js";
 import { availableLanguages, loadResource } from "./utils.js";
 import { ParseAlgorithm } from './algo/index.js';
 
+const getRawQueryParameter = (query, name) => {
+  const queryStart = query.indexOf('?');
+  if (queryStart === -1) return;
+
+  for (const parameter of query.slice(queryStart + 1).split('&')) {
+    const separator = parameter.indexOf('=');
+    const key = separator === -1 ? parameter : parameter.slice(0, separator);
+    if (decodeURIComponent(key) === name) {
+      return separator === -1 ? '' : parameter.slice(separator + 1);
+    }
+  }
+};
+
+const parseQrPayload = (rawPayload) => {
+  const payload = decodeURIComponent(rawPayload);
+
+  return payload.split(/[+\s]+/).reduce((acc, field) => {
+    const separator = field.indexOf('-');
+    if (separator > 0) {
+      acc[field.slice(0, separator)] = field.slice(separator + 1);
+    }
+    return acc;
+  }, {});
+};
+
 export class ClassWizQR {
   constructor() {
     this.url = void 0;
@@ -46,32 +71,37 @@ export class ClassWizQR {
    */
   setUrl(url) {
     this.url = new URL(url.trim());
-    const { search, pathname } = this.url;
+    const { hash, search, pathname } = this.url;
     const route = pathname.slice(0, 5);
     let modelType;
     let kv = {}
-    if (route === '/calc') {
-      modelType = MODEL_TYPE.EY;
+
+    const isGetStartedRoute = route === '/calc';
+    if (isGetStartedRoute) {
       const calcId = pathname.slice(9);
       this.setCalcId(calcId);
       kv.I = calcId.slice(0, 4);
       kv.U = calcId.slice(4, 16);
     } else {
-      if (route === '/math') {
-        modelType = MODEL_TYPE.CY;
-      } else if (route === '/ncal') {
-        modelType = MODEL_TYPE.EY;
+      let payload = getRawQueryParameter(search, 'q');
+      if (payload === undefined) {
+        payload = getRawQueryParameter(hash, 'qr');
       }
-      kv = search.slice(3).split('+').reduce((acc, cur) => {
-        const [k, v] = cur.split('-');
-        acc[k] = v;
-        return acc;
-      }, {});
+      kv = parseQrPayload(payload);
     }
 
-    if (modelType === MODEL_TYPE.EY) {
-      const i = +kv.I?.slice(0, 3);
-      if (i > 500 || i === 91) modelType = MODEL_TYPE.FY;
+    const modelId = +kv.I?.slice(0, 3);
+    const isExRoute = route === '/math';
+    const isCwRoute = isGetStartedRoute || route === '/ncal';
+    const isEyModel = modelId <= 90;
+    const isFyModel = modelId === 91 || modelId >= 500;
+
+    if (isExRoute) {
+      modelType = MODEL_TYPE.CY;
+    } else if (isCwRoute) {
+      modelType = isFyModel ? MODEL_TYPE.FY : MODEL_TYPE.EY;
+    } else {
+      modelType = isFyModel ? MODEL_TYPE.FY : isEyModel ? MODEL_TYPE.EY : MODEL_TYPE.CY;
     }
 
     this.setModelType(modelType).setKV(kv);

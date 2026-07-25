@@ -256,7 +256,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             </table>
 
             <h3>curl 示例</h3>
-            <pre><code>curl --request POST '&#123;API_ENDPOINT&#125;/api' \
+            <pre><code>curl --request POST 'https://cwqr.pages.dev/api' \
   --header 'Content-Type: application/json' \
   --data '&#123;
     "url": "http://wes.casio.com/math/index.php?q=I-234F+U-000000000000+M-X100000000+S-05099",
@@ -285,7 +285,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
             <p>也可以把二维码 URL 中的 <code>http://wes.casio.com</code> 替换为任一可用的
                 <code>&#123;API_ENDPOINT&#125;</code>，并显式请求
                 JSON。接口会根据 <code>Accept-Language</code> 的前两个字符选择语言。</p>
-            <pre><code>curl '&#123;API_ENDPOINT&#125;/math/index.php?q=I-234F+U-000000000000+M-X100000000+S-05099' \
+            <h3>curl 示例</h3>
+            <pre><code>curl 'https://cwqr.pages.dev/math/index.php?q=I-234F+U-000000000000+M-X100000000+S-05099' \
   --header 'Accept: application/json' \
   --header 'Accept-Language: zh-CN'</code></pre>
             <p class="muted">支持 <code>/math/</code>、<code>/ncal/</code> 和 <code>/calc/</code> 路径。浏览器直接打开时，请求的

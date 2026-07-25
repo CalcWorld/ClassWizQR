@@ -76,6 +76,17 @@ function ClearIcon() {
   );
 }
 
+function ScanOptionButton({ icon: Icon, label, onClick }) {
+  return (
+    <button class="form-button scan-option-button" type="button" onClick={onClick}>
+      <span class="scan-option-content">
+        <Icon/>
+        {label}
+      </span>
+    </button>
+  );
+}
+
 function cloneResult(value) {
   return JSON.parse(JSON.stringify(value));
 }
@@ -101,6 +112,16 @@ function storeLanguage(language) {
   }
 }
 
+function getIntrinsicButtonWidths(container) {
+  const style = getComputedStyle(container.firstElementChild);
+  const inlineInsets = ['paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth']
+    .reduce((total, property) => total + Number.parseFloat(style[property]), 0);
+  return Array.from(
+    container.children,
+    button => button.firstElementChild.getBoundingClientRect().width + inlineInsets,
+  );
+}
+
 export default function ParserApp() {
   const [language, setLanguage] = useState('en');
   const [inputUrl, setInputUrl] = useState('');
@@ -113,6 +134,7 @@ export default function ParserApp() {
   const [editorValue, setEditorValue] = useState(EMPTY_RESULT);
   const [renderVersion, setRenderVersion] = useState(0);
   const [cameraScannerOpen, setCameraScannerOpen] = useState(false);
+  const scanFieldRef = useRef(null);
   const urlInputRef = useRef(null);
 
   const t = useCallback(tag => translate(tag, language), [language]);
@@ -219,6 +241,55 @@ export default function ParserApp() {
     return () => observer.disconnect();
   }, [hideUrl]);
 
+  useLayoutEffect(() => {
+    const scanField = scanFieldRef.current;
+    const container = scanField?.querySelector('.scan-actions');
+    if (!scanField || !container) return undefined;
+
+    const scanLabel = scanField.querySelector(':scope > label');
+    const scanContents = container.querySelectorAll('.scan-option-content');
+    let pendingFrame = 0;
+
+    const updateScanLayout = () => {
+      const widths = getIntrinsicButtonWidths(container);
+      const gap = Number.parseFloat(getComputedStyle(container).columnGap) || 0;
+      const fourColumnWidth = widths.reduce((total, width) => total + width, 0)
+        + gap * (widths.length - 1);
+      const twoColumnWidth = Math.max(...widths) * 2 + gap;
+      const scanLabelWidth = scanLabel?.scrollWidth || 0;
+      const fourColumnThreshold = `${Math.max(fourColumnWidth, scanLabelWidth)}px`;
+
+      // Flexbox uses this intrinsic threshold to decide whether the scan field
+      // belongs beside the language field or on its own row.
+      scanField.style.setProperty('--scan-four-column-width', fourColumnThreshold);
+
+      const availableWidth = container.clientWidth;
+      const nextColumns = availableWidth >= fourColumnWidth
+        ? 4
+        : availableWidth >= twoColumnWidth ? 2 : 1;
+
+      scanField.dataset.columns = String(nextColumns);
+    };
+
+    updateScanLayout();
+    if (typeof ResizeObserver === 'undefined') return undefined;
+
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(pendingFrame);
+      pendingFrame = requestAnimationFrame(updateScanLayout);
+    });
+    observer.observe(scanField);
+    if (scanLabel) observer.observe(scanLabel);
+    for (const content of scanContents) {
+      observer.observe(content);
+    }
+
+    return () => {
+      cancelAnimationFrame(pendingFrame);
+      observer.disconnect();
+    };
+  }, [hideUrl]);
+
   const downloads = useMemo(() => {
     const values = {};
     const add = (key, prefix, content, bom = false) => {
@@ -303,29 +374,21 @@ export default function ParserApp() {
               </div>
             )}
             {!hideUrl && (
-              <div class="form-field">
+              <div
+                class="form-field scan-field"
+                data-columns="4"
+                ref={scanFieldRef}
+              >
                 <label>{t('scan-title')}</label>
                 <div class="scan-actions">
-                  <button
-                    class="form-button scan-option-button"
-                    type="button"
+                  <ScanOptionButton
+                    icon={CameraIcon}
+                    label={t('scan-camera')}
                     onClick={() => setCameraScannerOpen(true)}
-                  >
-                    <CameraIcon/>
-                    {t('scan-camera')}
-                  </button>
-                  <button class="form-button scan-option-button" type="button">
-                    <ScreenIcon/>
-                    {t('scan-screen')}
-                  </button>
-                  <button class="form-button scan-option-button" type="button">
-                    <FileImageIcon/>
-                    {t('scan-file')}
-                  </button>
-                  <button class="form-button scan-option-button" type="button">
-                    <ClipboardIcon/>
-                    {t('scan-clipboard')}
-                  </button>
+                  />
+                  <ScanOptionButton icon={ScreenIcon} label={t('scan-screen')}/>
+                  <ScanOptionButton icon={FileImageIcon} label={t('scan-file')}/>
+                  <ScanOptionButton icon={ClipboardIcon} label={t('scan-clipboard')}/>
                 </div>
               </div>
             )}

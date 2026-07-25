@@ -256,9 +256,7 @@ export default function ParserApp() {
   function clearUrl() {
     setInputUrl('');
     setActiveUrl('');
-    if (window.location.hash) {
-      window.history.replaceState(null, '', `${window.location.pathname}${window.location.search}`);
-    }
+    window.location.hash = '';
     urlInputRef.current?.focus();
   }
 

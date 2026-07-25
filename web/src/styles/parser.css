@@ -187,8 +187,7 @@
 }
 
 .clear-button:disabled {
-    cursor: default;
-    opacity: .45;
+    visibility: hidden;
 }
 
 .clear-button svg {

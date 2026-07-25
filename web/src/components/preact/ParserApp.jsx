@@ -49,6 +49,16 @@ function FileImageIcon() {
   );
 }
 
+function ClipboardIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="5" y="4" width="14" height="17" rx="2"/>
+      <rect x="8" y="2" width="8" height="4" rx="1"/>
+      <path d="M8 10h8M8 14h8M8 18h5"/>
+    </svg>
+  );
+}
+
 function ParseIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -300,6 +310,10 @@ export default function ParserApp() {
                   <button class="form-button scan-option-button" type="button">
                     <FileImageIcon/>
                     {t('scan-file')}
+                  </button>
+                  <button class="form-button scan-option-button" type="button">
+                    <ClipboardIcon/>
+                    {t('scan-clipboard')}
                   </button>
                 </div>
               </div>

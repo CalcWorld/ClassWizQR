@@ -286,19 +286,22 @@ export default function ParserApp() {
               </div>
             )}
             {!hideUrl && (
-              <div class="scan-actions">
-                <button class="form-button scan-option-button" type="button">
-                  <CameraIcon/>
-                  {t('scan-camera')}
-                </button>
-                <button class="form-button scan-option-button" type="button">
-                  <ScreenIcon/>
-                  {t('scan-screen')}
-                </button>
-                <button class="form-button scan-option-button" type="button">
-                  <FileImageIcon/>
-                  {t('scan-file')}
-                </button>
+              <div class="form-field">
+                <label>{t('scan-title')}</label>
+                <div class="scan-actions">
+                  <button class="form-button scan-option-button" type="button">
+                    <CameraIcon/>
+                    {t('scan-camera')}
+                  </button>
+                  <button class="form-button scan-option-button" type="button">
+                    <ScreenIcon/>
+                    {t('scan-screen')}
+                  </button>
+                  <button class="form-button scan-option-button" type="button">
+                    <FileImageIcon/>
+                    {t('scan-file')}
+                  </button>
+                </div>
               </div>
             )}
           </div>

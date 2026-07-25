@@ -20,6 +20,7 @@
 
 .form-field > label {
     display: block;
+    width: fit-content;
     margin: 0 0 5px;
     color: var(--text-muted);
     font-size: .8rem;

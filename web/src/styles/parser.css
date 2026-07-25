@@ -71,7 +71,7 @@
     transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
 }
 
-.url-field.is-expanded #qrUrl {
+.url-input-shell:focus-within #qrUrl {
     min-height: 132px;
     white-space: pre-wrap;
     overflow-wrap: anywhere;
@@ -81,10 +81,6 @@
 .url-input-shell:focus-within {
     border-color: var(--accent);
     background: var(--surface);
-    box-shadow: 0 0 0 3px rgba(86, 122, 157, .18);
-}
-
-.url-field.is-expanded .url-input-shell {
     box-shadow: 0 0 0 3px rgba(86, 122, 157, .18), 0 14px 32px rgba(20, 28, 36, .2);
 }
 
@@ -115,7 +111,7 @@
     place-items: center;
 }
 
-.url-field.is-expanded .url-button-rail {
+.url-input-shell:focus-within .url-button-rail {
     grid-template-rows: var(--url-collapsed-height) minmax(0, 1fr) var(--url-collapsed-height);
 }
 
@@ -199,9 +195,14 @@
 }
 
 .submit-button {
+    display: none;
     border-color: var(--accent);
     color: var(--accent-contrast);
     background: var(--accent);
+}
+
+.url-input-shell:focus-within .submit-button {
+    display: inline-grid;
 }
 
 .submit-button:hover {
@@ -390,7 +391,7 @@ pre {
 }
 
 @media (max-width: 600px) {
-    .url-field.is-expanded #qrUrl {
+    .url-input-shell:focus-within #qrUrl {
         min-height: 180px;
     }
 

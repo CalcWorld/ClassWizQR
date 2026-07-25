@@ -101,7 +101,6 @@ export default function ParserApp() {
   const [result, setResult] = useState(EMPTY_RESULT);
   const [editorValue, setEditorValue] = useState(EMPTY_RESULT);
   const [renderVersion, setRenderVersion] = useState(0);
-  const [urlExpanded, setUrlExpanded] = useState(false);
   const urlInputRef = useRef(null);
 
   const t = useCallback(tag => translate(tag, language), [language]);
@@ -191,23 +190,22 @@ export default function ParserApp() {
     if (!input) return;
 
     input.style.height = '';
-    if (!urlExpanded) return;
-    fitUrlInput(input);
-  }, [inputUrl, urlExpanded]);
+    if (input.closest('.url-input-shell')?.matches(':focus-within')) fitUrlInput(input);
+  }, [inputUrl]);
 
   useEffect(() => {
     const input = urlInputRef.current;
-    if (!input || !urlExpanded || typeof ResizeObserver === 'undefined') return undefined;
+    if (!input || typeof ResizeObserver === 'undefined') return undefined;
 
     let previousWidth = input.clientWidth;
     const observer = new ResizeObserver(([entry]) => {
       if (entry.contentRect.width === previousWidth) return;
       previousWidth = entry.contentRect.width;
-      fitUrlInput(input);
+      if (input.closest('.url-input-shell')?.matches(':focus-within')) fitUrlInput(input);
     });
     observer.observe(input);
     return () => observer.disconnect();
-  }, [urlExpanded]);
+  }, [hideUrl]);
 
   const downloads = useMemo(() => {
     const values = {};
@@ -228,9 +226,7 @@ export default function ParserApp() {
     return values;
   }, [result]);
 
-  function commitUrl(event) {
-    event?.preventDefault();
-    setUrlExpanded(false);
+  function commitUrl() {
     const currentHash = window.location.hash.substring(1);
     if (currentHash === inputUrl) return;
     window.location.hash = inputUrl;
@@ -238,7 +234,13 @@ export default function ParserApp() {
 
   function handleUrlControlFocusOut(event) {
     if (event.currentTarget.contains(event.relatedTarget)) return;
+    urlInputRef.current.style.height = '';
     commitUrl();
+  }
+
+  function submitUrl(event) {
+    event.preventDefault();
+    document.activeElement?.blur();
   }
 
   function clearUrl() {
@@ -263,7 +265,7 @@ export default function ParserApp() {
       class={initialized ? undefined : 'app-initializing'}
       aria-busy={!initialized}
     >
-      <form id="qr-form" onSubmit={commitUrl}>
+      <form id="qr-form" onSubmit={submitUrl}>
         {(!hideLanguage || !hideUrl) && (
           <div class="controls-row">
             {!hideLanguage && (
@@ -302,7 +304,7 @@ export default function ParserApp() {
           </div>
         )}
         {!hideUrl && (
-          <div class={`form-field url-field${urlExpanded ? ' is-expanded' : ''}`}>
+          <div class="form-field url-field">
             <label for="qrUrl">{t('qr-url-label')}</label>
             <div class="url-input-shell" onFocusOut={handleUrlControlFocusOut}>
               <textarea
@@ -311,7 +313,7 @@ export default function ParserApp() {
                 rows="1"
                 placeholder="http://..."
                 value={inputUrl}
-                onFocus={() => setUrlExpanded(true)}
+                onFocus={event => fitUrlInput(event.currentTarget)}
                 onInput={event => setInputUrl(event.currentTarget.value.replace(/[\r\n]+/g, ''))}
                 onKeyDown={event => {
                   if (event.key === 'Escape') {
@@ -334,16 +336,14 @@ export default function ParserApp() {
                 >
                   <ClearIcon/>
                 </button>
-                {urlExpanded && (
-                  <button
-                    class="form-button url-input-button submit-button"
-                    type="submit"
-                    aria-label={t('parse-button')}
-                    title={t('parse-button')}
-                  >
-                    <ParseIcon/>
-                  </button>
-                )}
+                <button
+                  class="form-button url-input-button submit-button"
+                  type="submit"
+                  aria-label={t('parse-button')}
+                  title={t('parse-button')}
+                >
+                  <ParseIcon/>
+                </button>
               </div>
             </div>
           </div>

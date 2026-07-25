@@ -25,6 +25,13 @@ const components = [
     packageName: 'mathjax',
     files: ['LICENSE'],
   },
+  {
+    packageName: 'zxing-wasm',
+    files: ['LICENSE'],
+    note:
+      'zxing-wasm includes ZXing-C++ components licensed under the Apache License 2.0. ' +
+      'See the package documentation for its complete component license list.',
+  },
 ];
 
 const separator = `${'='.repeat(80)}\n`;

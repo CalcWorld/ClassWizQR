@@ -93,6 +93,10 @@ export default defineConfig({
             src: 'node_modules/mathjax/fonts/HTML-CSS/TeX/{eot,otf,woff}',
             dest: 'vendor/mathjax/fonts/HTML-CSS/TeX',
           },
+          {
+            src: 'node_modules/zxing-wasm/dist/reader/zxing_reader.wasm',
+            dest: 'vendor/zxing-wasm',
+          },
         ],
       }),
     ],

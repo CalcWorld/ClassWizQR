@@ -3,6 +3,7 @@ import * as cwqr from '../../../../src/index.js';
 import { download } from '../../scripts/downloads.js';
 import { translate } from '../../scripts/i18n.js';
 import BasicInfo from './BasicInfo.jsx';
+import CameraScannerDialog from './CameraScannerDialog.jsx';
 import CalculationView from './CalculationView.jsx';
 import JsonResult from './JsonResult.jsx';
 import ResultPanel from './ResultPanel.jsx';
@@ -111,6 +112,7 @@ export default function ParserApp() {
   const [result, setResult] = useState(EMPTY_RESULT);
   const [editorValue, setEditorValue] = useState(EMPTY_RESULT);
   const [renderVersion, setRenderVersion] = useState(0);
+  const [cameraScannerOpen, setCameraScannerOpen] = useState(false);
   const urlInputRef = useRef(null);
 
   const t = useCallback(tag => translate(tag, language), [language]);
@@ -236,10 +238,12 @@ export default function ParserApp() {
     return values;
   }, [result]);
 
-  function commitUrl() {
+  function commitUrl(nextUrl = inputUrl) {
+    setInputUrl(nextUrl);
+    setActiveUrl(nextUrl);
     const currentHash = window.location.hash.substring(1);
-    if (currentHash === inputUrl) return;
-    window.location.hash = inputUrl;
+    if (currentHash === nextUrl) return;
+    window.location.hash = nextUrl;
   }
 
   function handleUrlControlFocusOut(event) {
@@ -258,6 +262,11 @@ export default function ParserApp() {
     setActiveUrl('');
     window.location.hash = '';
     urlInputRef.current?.focus();
+  }
+
+  function acceptScannedUrl(url) {
+    setCameraScannerOpen(false);
+    commitUrl(url.replace(/[\r\n]+/g, ''));
   }
 
   function handleDownload(key) {
@@ -297,7 +306,11 @@ export default function ParserApp() {
               <div class="form-field">
                 <label>{t('scan-title')}</label>
                 <div class="scan-actions">
-                  <button class="form-button scan-option-button" type="button">
+                  <button
+                    class="form-button scan-option-button"
+                    type="button"
+                    onClick={() => setCameraScannerOpen(true)}
+                  >
                     <CameraIcon/>
                     {t('scan-camera')}
                   </button>
@@ -383,6 +396,12 @@ export default function ParserApp() {
       <ResultPanel title={t('qr-parse-result-title')}>
         <JsonResult value={editorValue} language={language}/>
       </ResultPanel>
+      <CameraScannerDialog
+        open={cameraScannerOpen}
+        t={t}
+        onClose={() => setCameraScannerOpen(false)}
+        onScan={acceptScannedUrl}
+      />
     </div>
   );
 }

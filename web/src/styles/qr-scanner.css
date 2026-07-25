@@ -1,0 +1,298 @@
+html:has(.camera-scanner-dialog[open]),
+html:has(.message-dialog[open]) {
+    overflow: hidden;
+    overscroll-behavior: none;
+    scrollbar-gutter: auto;
+}
+
+html:has(.camera-scanner-dialog[open]) body,
+html:has(.message-dialog[open]) body {
+    overflow: hidden;
+}
+
+.camera-scanner-dialog,
+.message-dialog {
+    margin: auto;
+    border: 0;
+    color: var(--text);
+    background: var(--surface);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, .38);
+}
+
+.camera-scanner-dialog::backdrop {
+    background: rgba(20, 25, 30, .5);
+    backdrop-filter: blur(7px);
+}
+
+.message-dialog::backdrop {
+    background: rgba(20, 25, 30, .5);
+}
+
+.camera-scanner-dialog {
+    width: min(720px, calc(100vw - 32px));
+    height: min(860px, calc(100dvh - 32px));
+    max-width: none;
+    max-height: none;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.camera-scanner-shell {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    flex-direction: column;
+}
+
+.camera-scanner-header {
+    display: grid;
+    min-height: 58px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+}
+
+.camera-scanner-header > strong {
+    overflow: hidden;
+    font-size: 1rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.camera-back-button {
+    display: inline-grid;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: var(--text);
+    background: transparent;
+    cursor: pointer;
+    place-items: center;
+}
+
+.camera-back-button:hover,
+.camera-back-button:focus-visible {
+    background: var(--accent-soft);
+}
+
+.camera-back-button:focus-visible {
+    outline: 3px solid rgba(86, 122, 157, .24);
+}
+
+.camera-back-button svg {
+    width: 25px;
+    height: 25px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.camera-device-control {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 8px;
+}
+
+.camera-device-control label {
+    color: var(--text-muted);
+    font-size: .78rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.camera-device-control select {
+    width: min(250px, 32vw);
+    min-width: 120px;
+    height: 38px;
+    padding: 6px 28px 6px 9px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+    background: var(--surface-subtle);
+    font: inherit;
+    font-size: .85rem;
+    text-overflow: ellipsis;
+}
+
+.camera-device-control select:disabled {
+    opacity: .6;
+}
+
+.camera-sequence-progress {
+    position: absolute;
+    z-index: 2;
+    top: 12px;
+    left: 50%;
+    display: flex;
+    width: max-content;
+    max-width: calc(100% - 24px);
+    padding: 0;
+    overflow-x: auto;
+    background: transparent;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    transform: translateX(-50%);
+}
+
+.sequence-step {
+    display: inline-grid;
+    width: 38px;
+    height: 38px;
+    flex: 0 0 auto;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    color: var(--text-muted);
+    background: var(--surface-subtle);
+    font-weight: 800;
+    place-items: center;
+    transition: border-color .18s ease, color .18s ease, background-color .18s ease;
+}
+
+.sequence-step.is-scanned {
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+    background: var(--accent);
+}
+
+.camera-preview {
+    position: relative;
+    display: grid;
+    min-height: 0;
+    flex: 1;
+    overflow: hidden;
+    background: #080a0c;
+    place-items: center;
+}
+
+.camera-preview video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.camera-scan-guide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(70%, 420px);
+    aspect-ratio: 1;
+    border: 2px solid rgba(255, 255, 255, .82);
+    border-radius: 12px;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, .13);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+}
+
+.camera-status {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    color: #fff;
+    background: rgba(8, 10, 12, .76);
+    font-weight: 700;
+    place-items: center;
+}
+
+.camera-hint {
+    position: absolute;
+    right: 16px;
+    bottom: max(16px, env(safe-area-inset-bottom));
+    left: 16px;
+    width: fit-content;
+    max-width: calc(100% - 32px);
+    margin: auto;
+    padding: 7px 12px;
+    border-radius: 999px;
+    color: #fff;
+    background: rgba(0, 0, 0, .62);
+    font-size: .85rem;
+    text-align: center;
+    pointer-events: none;
+}
+
+.message-dialog {
+    width: min(430px, calc(100vw - 32px));
+    max-width: none;
+    padding: 0;
+    border-radius: 8px;
+}
+
+.message-dialog-content {
+    padding: 22px;
+}
+
+.message-dialog h2 {
+    margin: 0 0 10px;
+    font-size: 1.15rem;
+}
+
+.message-dialog-body {
+    color: var(--text-muted);
+    white-space: pre-wrap;
+}
+
+.message-dialog-actions {
+    display: flex;
+    margin-top: 22px;
+    justify-content: flex-end;
+}
+
+.message-dialog-confirm {
+    min-width: 88px;
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+    background: var(--accent);
+}
+
+.message-dialog-confirm:hover {
+    border-color: var(--accent-hover);
+    color: var(--accent-contrast);
+    background: var(--accent-hover);
+}
+
+@media (max-width: 600px) {
+    .camera-scanner-dialog {
+        width: 100vw;
+        height: 100dvh;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .camera-scanner-header {
+        padding-top: max(8px, env(safe-area-inset-top));
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .camera-scanner-header > strong {
+        display: none;
+    }
+
+    .camera-device-control {
+        justify-self: stretch;
+    }
+
+    .camera-device-control label {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    .camera-device-control select {
+        width: 100%;
+    }
+
+}

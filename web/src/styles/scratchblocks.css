@@ -109,9 +109,10 @@
 
 .scratchblocks-render,
 .scratchblocks-view pre {
-    height: min(82vh, 900px);
-    height: min(82dvh, 900px);
-    min-height: 280px;
+    max-height: min(82vh, 900px);
+    max-height: min(82dvh, 900px);
+    min-height: 0;
+    flex: 1 1 auto;
     overflow: auto;
 }
 
@@ -147,6 +148,8 @@
 
 .scratchblocks-source-column,
 .scratchblocks-preview-column {
+    display: flex;
+    flex-direction: column;
     min-width: 0;
 }
 
@@ -155,7 +158,6 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-bottom: 12px;
 }
 
 .scratchblocks-export-actions {
@@ -181,8 +183,10 @@
 
     .scratchblocks-render,
     .scratchblocks-view pre {
+        max-height: none;
         height: auto;
         min-height: 0;
+        flex: none;
         overflow-x: auto;
         overflow-y: visible;
     }

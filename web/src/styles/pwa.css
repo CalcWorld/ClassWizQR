@@ -1,16 +1,16 @@
 .pwa-notice {
+    --pwa-edge: 16px;
     position: fixed;
-    right: max(16px, env(safe-area-inset-right));
-    bottom: max(16px, env(safe-area-inset-bottom));
+    right: calc(var(--pwa-edge) + env(safe-area-inset-right));
+    bottom: calc(var(--pwa-edge) + env(safe-area-inset-bottom));
     z-index: 1000;
-    width: min(380px, calc(100vw - 32px));
+    width: min(380px, calc(100vw - var(--pwa-edge) - var(--pwa-edge)));
     padding: 14px;
     border: 1px solid var(--border, #d8dde1);
     border-radius: 8px;
     color: var(--text, #29313a);
     background: var(--surface, #fdfdfc);
     box-shadow: 0 14px 36px rgba(20, 28, 36, .22);
-    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 .pwa-notice p {
@@ -29,6 +29,8 @@
     padding: 7px 13px;
     border: 1px solid var(--border, #d8dde1);
     border-radius: 5px;
+    color: var(--text, #29313a);
+    background: var(--surface-subtle, #f1f3f4);
     cursor: pointer;
     font: inherit;
     font-weight: 700;
@@ -44,22 +46,15 @@
     opacity: .7;
 }
 
-.pwa-primary-button {
-    border-color: var(--accent, #567a9d) !important;
+.pwa-notice .pwa-primary-button {
+    border-color: var(--accent, #567a9d);
     color: var(--accent-contrast, #fff);
     background: var(--accent, #567a9d);
 }
 
-.pwa-secondary-button {
-    color: var(--text, #29313a);
-    background: var(--surface-subtle, #f1f3f4);
-}
-
 @media (max-width: 600px) {
     .pwa-notice {
-        right: max(8px, env(safe-area-inset-right));
-        bottom: max(8px, env(safe-area-inset-bottom));
-        width: calc(100vw - 16px);
+        --pwa-edge: 8px;
     }
 }
 

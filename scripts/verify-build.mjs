@@ -76,6 +76,11 @@ assert.match(
   /vendor\/zxing-wasm\/zxing_reader\.wasm/,
   'The service worker does not precache the QR reader WASM.',
 );
+assert.doesNotMatch(
+  serviceWorker,
+  /Development-only service worker/,
+  'The production build still contains the development passthrough service worker.',
+);
 for (const packageName of [
   'decimal.js',
   'preact',

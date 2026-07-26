@@ -32,6 +32,12 @@ const components = [
       'zxing-wasm includes ZXing-C++ components licensed under the Apache License 2.0. ' +
       'See the package documentation for its complete component license list.',
   },
+  {
+    packageName: 'workbox-build',
+    files: ['LICENSE'],
+    note:
+      'Workbox generates the service worker runtime distributed with the web application.',
+  },
 ];
 
 const separator = `${'='.repeat(80)}\n`;

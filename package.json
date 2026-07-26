@@ -27,11 +27,12 @@
     "validate:i18n": "node i18n/test.js",
     "dev": "astro dev",
     "start": "npm run build && wrangler pages dev ./dist --ip=0.0.0.0 --port=8792",
-    "build": "npm run validate:i18n && npm run build:site && npm run build:lib && npm run verify:build",
+    "build": "npm run validate:i18n && npm run build:site && npm run build:lib && npm run build:pwa && npm run verify:build",
     "build:site": "npm run licenses && astro build",
     "build:lib": "webpack --mode=production --node-env=production",
+    "build:pwa": "node scripts/generate-pwa.mjs",
     "verify:build": "node scripts/verify-build.mjs",
-    "build:dev": "npm run licenses && astro build --mode development && webpack --mode=development",
+    "build:dev": "npm run licenses && astro build --mode development && webpack --mode=development && npm run build:pwa",
     "build:prod": "npm run build",
     "licenses": "node scripts/generate-third-party-licenses.mjs",
     "watch": "webpack --watch --mode=development",
@@ -80,6 +81,7 @@
     "vite-plugin-static-copy": "^3.4.0",
     "webpack": "^5.105.0",
     "webpack-cli": "^5.1.4",
+    "workbox-build": "^7.4.1",
     "wrangler": "4.114.0",
     "zxing-wasm": "^3.1.2"
   }

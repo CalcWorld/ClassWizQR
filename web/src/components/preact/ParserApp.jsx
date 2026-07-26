@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
 import * as cwqr from '../../../../src/index.js';
-import { download } from '../../scripts/downloads.js';
+import { copyToClipboard, download } from '../../scripts/downloads.js';
 import { translate } from '../../scripts/i18n.js';
 import BasicInfo from './BasicInfo.jsx';
 import CameraScannerDialog from './CameraScannerDialog.jsx';
@@ -9,7 +9,7 @@ import ImageSequenceDialog from './ImageSequenceDialog.jsx';
 import JsonResult from './JsonResult.jsx';
 import MessageDialog from './MessageDialog.jsx';
 import ResultPanel from './ResultPanel.jsx';
-import { CameraIcon, ClipboardIcon, FileImageIcon, ScreenIcon, } from './ScanIcons.jsx';
+import { CameraIcon, ClearIcon, ClipboardIcon, CopyIcon, FileImageIcon, ParseIcon, ScreenIcon, } from './Icons.jsx';
 import SettingsView from './SettingsView.jsx';
 import { addQrImageResults, createEmptyImageSequenceSession, } from '../../scripts/qrImageSequence.js';
 import { createQrPreviewUrl, prepareQrImage, } from '../../scripts/qrPreview.js';
@@ -25,22 +25,6 @@ const LANGUAGE_OPTIONS = cwqr.availableLanguages.map(value => {
   }
   return { value, label: `${name} (${value})` };
 });
-
-function ParseIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M5 12h13M14 7l5 5-5 5"/>
-    </svg>
-  );
-}
-
-function ClearIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="m7 7 10 10M17 7 7 17"/>
-    </svg>
-  );
-}
 
 function ScanOptionButton({ icon: Icon, label, onClick }) {
   return (
@@ -645,6 +629,16 @@ export default function ParserApp() {
                   onClick={clearUrl}
                 >
                   <ClearIcon/>
+                </button>
+                <button
+                  class="form-button url-input-button copy-button"
+                  type="button"
+                  aria-label={t('copy-button')}
+                  title={t('copy-button')}
+                  disabled={!inputUrl}
+                  onClick={() => copyToClipboard(inputUrl, urlInputRef.current)}
+                >
+                  <CopyIcon/>
                 </button>
                 <button
                   class="form-button url-input-button submit-button"

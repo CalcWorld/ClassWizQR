@@ -144,15 +144,19 @@
 }
 
 .url-input-shell:focus-within .url-button-rail {
-    grid-template-rows: var(--url-collapsed-height) minmax(0, 1fr) var(--url-collapsed-height);
+    grid-template-rows: var(--url-collapsed-height) 28px minmax(0, 1fr) var(--url-collapsed-height);
 }
 
 .url-button-rail .clear-button {
     grid-row: 1;
 }
 
+.url-button-rail .copy-button {
+    grid-row: 2;
+}
+
 .url-button-rail .submit-button {
-    grid-row: 3;
+    grid-row: 4;
 }
 
 .form-button {
@@ -207,22 +211,34 @@
     stroke-width: 1.8;
 }
 
-.clear-button {
+.clear-button,
+.copy-button {
     color: var(--text-muted);
     background: transparent;
 }
 
-.clear-button:hover {
+.clear-button:hover,
+.copy-button:hover {
     color: var(--text);
     background: var(--accent-soft);
 }
 
-.clear-button:disabled {
+.clear-button:disabled,
+.copy-button:disabled {
     visibility: hidden;
 }
 
-.clear-button svg {
+.clear-button svg,
+.copy-button svg {
     stroke-width: 2;
+}
+
+.copy-button {
+    display: none;
+}
+
+.url-input-shell:focus-within .copy-button {
+    display: inline-grid;
 }
 
 .submit-button {

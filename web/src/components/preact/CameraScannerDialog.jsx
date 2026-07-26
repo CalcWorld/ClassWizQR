@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { consumeQrResult, createEmptySequence } from '../../scripts/qrSequence.js';
 import { readQrCodes } from '../../scripts/qrReader.js';
 import MessageDialog from './MessageDialog.jsx';
-import { ScreenIcon } from './ScanIcons.jsx';
+import { ScreenIcon } from './Icons.jsx';
 
 const CAMERA_STORAGE_KEY = 'qr-camera-device-id';
 const CAMERA_SEQUENCE_HINT_KEY = 'qr-camera-sequence-hint-shown';

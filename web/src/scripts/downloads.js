@@ -1,14 +1,19 @@
-export async function copyToClipboard(text) {
+export async function copyToClipboard(text, input) {
+  input?.focus();
+  input?.select();
+
   try {
     await navigator.clipboard.writeText(text);
     return true;
   } catch {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    textarea.style.position = 'fixed';
-    textarea.style.opacity = '0';
-    document.body.appendChild(textarea);
-    textarea.select();
+    const textarea = input || document.createElement('textarea');
+    if (!input) {
+      textarea.value = text;
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+    }
     try {
       if (!document.execCommand('copy')) throw new Error('Copy command was rejected.');
       return true;
@@ -17,7 +22,7 @@ export async function copyToClipboard(text) {
       window.prompt('', text);
       return false;
     } finally {
-      textarea.remove();
+      if (!input) textarea.remove();
     }
   }
 }

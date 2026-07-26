@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'preact/hooks';
-import { ClipboardIcon, FileImageIcon } from './ScanIcons.jsx';
+import { ClipboardIcon, FileImageIcon } from './Icons.jsx';
 
 function BackIcon() {
   return (

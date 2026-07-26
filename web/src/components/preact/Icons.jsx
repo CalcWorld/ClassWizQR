@@ -37,3 +37,28 @@ export function ClipboardIcon() {
     </svg>
   );
 }
+
+export function ParseIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M5 12h13M14 7l5 5-5 5"/>
+    </svg>
+  );
+}
+
+export function ClearIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m7 7 10 10M17 7 7 17"/>
+    </svg>
+  );
+}
+
+export function CopyIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="8" y="8" width="11" height="11" rx="2"/>
+      <path d="M16 8V7a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h1"/>
+    </svg>
+  );
+}

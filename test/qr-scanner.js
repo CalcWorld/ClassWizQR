@@ -3,14 +3,8 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader';
 import { parseUrl } from '../src/index.js';
-import {
-  consumeQrResult,
-  createEmptySequence,
-} from '../web/src/scripts/qrSequence.js';
-import {
-  addQrImageResults,
-  createEmptyImageSequenceSession,
-} from '../web/src/scripts/qrImageSequence.js';
+import { consumeQrResult, createEmptySequence, } from '../web/src/scripts/qrSequence.js';
+import { addQrImageResults, createEmptyImageSequenceSession, } from '../web/src/scripts/qrImageSequence.js';
 import { calculateQrSquareCrop } from '../web/src/scripts/qrPreview.js';
 
 const wasmBinary = readFileSync(
@@ -18,12 +12,26 @@ const wasmBinary = readFileSync(
 );
 prepareZXingModule({ overrides: { wasmBinary } });
 
-const qrResult = ({
-  text,
-  sequenceId = '',
-  sequenceIndex = -1,
-  sequenceSize = -1,
-}) => ({
+const decodeFixture = async filename => {
+  const [result] = await readBarcodes(
+    readFileSync(new URL(`img/${filename}`, import.meta.url)),
+    {
+      formats: ['QRCode'],
+      maxNumberOfSymbols: 1,
+      textMode: 'Plain',
+    },
+  );
+  return result;
+};
+
+const qrResult = (
+  {
+    text,
+    sequenceId = '',
+    sequenceIndex = -1,
+    sequenceSize = -1,
+  }
+) => ({
   isValid: true,
   format: 'QRCode',
   symbology: 'QRCode',
@@ -219,21 +227,9 @@ test('QR preview crop rejects missing or degenerate positions', () => {
 });
 
 test('provided QR fixtures expose expected sequence metadata and assemble', async () => {
-  const decode = async filename => {
-    const [result] = await readBarcodes(
-      readFileSync(new URL(`img/${filename}`, import.meta.url)),
-      {
-        formats: ['QRCode'],
-        maxNumberOfSymbols: 1,
-        textMode: 'Plain',
-      },
-    );
-    return result;
-  };
-
-  const ordinary = await decode('qr-1-1.png');
-  const firstPart = await decode('qr-1-2.png');
-  const secondPart = await decode('qr-2-2.png');
+  const ordinary = await decodeFixture('qr-1-1.png');
+  const firstPart = await decodeFixture('qr-1-2.png');
+  const secondPart = await decodeFixture('qr-2-2.png');
 
   assert.equal(ordinary.sequenceSize, -1);
   assert.equal(firstPart.sequenceId, '90');
@@ -261,4 +257,115 @@ test('provided QR fixtures expose expected sequence metadata and assemble', asyn
   const reverseStarted = consumeQrResult(createEmptySequence(), secondPart);
   const reverseCompleted = consumeQrResult(reverseStarted.sequence, firstPart);
   assert.equal(reverseCompleted.completedText, completed.completedText);
+});
+
+test('six-part QR fixtures assemble by index in arbitrary scan order', async () => {
+  const parts = await Promise.all(
+    Array.from({ length: 6 }, (_, index) => decodeFixture(`qr-${index + 1}-6.png`)),
+  );
+
+  for (const [index, part] of parts.entries()) {
+    assert.equal(part.isValid, true);
+    assert.equal(part.symbology, 'QRCode');
+    assert.equal(part.sequenceId, '19');
+    assert.equal(part.sequenceIndex, index);
+    assert.equal(part.sequenceSize, 6);
+  }
+
+  const expectedUrl = parts.map(part => part.text).join('');
+  const scanOrder = [5, 1, 3, 0, 4, 2];
+  let sequence = createEmptySequence();
+  let completedText = null;
+
+  for (const index of scanOrder) {
+    const consumed = consumeQrResult(sequence, parts[index]);
+    sequence = consumed.sequence;
+    completedText = consumed.completedText;
+  }
+
+  assert.equal(completedText, expectedUrl);
+  assert.match(completedText, /^http:\/\/wes\.casio\.com\/ncal\//);
+
+  const parsed = parseUrl(completedText, 'en');
+  assert.equal(parsed.model.name, 'fx-991CW');
+  assert.equal(parsed.spreadsheet.array.length, 45);
+});
+
+test('six-part image sessions sort previews and complete across batches', async () => {
+  const parts = await Promise.all(
+    Array.from({ length: 6 }, (_, index) => decodeFixture(`qr-${index + 1}-6.png`)),
+  );
+  const item = index => ({
+    result: parts[index],
+    preview: `qr-${index + 1}-6.png`,
+  });
+
+  const firstBatch = addQrImageResults(
+    createEmptyImageSequenceSession('file'),
+    [item(4), item(0), item(2)],
+  );
+
+  assert.equal(firstBatch.status, 'pending');
+  assert.deepEqual(firstBatch.session.previews, [
+    'qr-1-6.png',
+    null,
+    'qr-3-6.png',
+    null,
+    'qr-5-6.png',
+    null,
+  ]);
+
+  const completed = addQrImageResults(
+    firstBatch.session,
+    [item(5), item(1), item(3)],
+  );
+
+  assert.equal(completed.status, 'complete');
+  assert.equal(completed.completedText, parts.map(part => part.text).join(''));
+});
+
+test('real image fixtures from two-part and six-part sequences cannot be mixed', async () => {
+  const sixPart = await decodeFixture('qr-1-6.png');
+  const twoPart = await decodeFixture('qr-1-2.png');
+  const mixedBatch = addQrImageResults(
+    createEmptyImageSequenceSession('file'),
+    [
+      { result: sixPart, preview: 'qr-1-6.png' },
+      { result: twoPart, preview: 'qr-1-2.png' },
+    ],
+  );
+
+  assert.equal(sixPart.sequenceId, '19');
+  assert.equal(twoPart.sequenceId, '90');
+  assert.equal(mixedBatch.status, 'mixed');
+  assert.deepEqual(mixedBatch.rejectedPreviews, [
+    'qr-1-6.png',
+    'qr-1-2.png',
+  ]);
+  assert.deepEqual(
+    mixedBatch.session,
+    createEmptyImageSequenceSession('file'),
+  );
+
+  const activeSixPartSession = addQrImageResults(
+    createEmptyImageSequenceSession('clipboard'),
+    [{ result: sixPart, preview: 'qr-1-6.png' }],
+  );
+  const mixedContinuation = addQrImageResults(
+    activeSixPartSession.session,
+    [{ result: twoPart, preview: 'qr-1-2.png' }],
+  );
+
+  assert.equal(activeSixPartSession.status, 'pending');
+  assert.equal(mixedContinuation.status, 'mixed');
+  assert.strictEqual(mixedContinuation.session, activeSixPartSession.session);
+  assert.deepEqual(mixedContinuation.session.previews, [
+    'qr-1-6.png',
+    null,
+    null,
+    null,
+    null,
+    null,
+  ]);
+  assert.deepEqual(mixedContinuation.rejectedPreviews, ['qr-1-2.png']);
 });

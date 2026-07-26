@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { consumeQrResult, createEmptySequence } from '../../scripts/qrSequence.js';
-import { readQrCodes } from '../../scripts/qrReader.js';
+import { resolveInitialQrResults } from '../../scripts/qrMultiResult.js';
+import { MULTI_QR_LIMIT, readQrCodes } from '../../scripts/qrReader.js';
 import MessageDialog from './MessageDialog.jsx';
 import { ScreenIcon } from './Icons.jsx';
 
@@ -117,6 +118,7 @@ export default function CameraScannerDialog(
   const generationRef = useRef(0);
   const decodingRef = useRef(false);
   const pausedRef = useRef(false);
+  const multiScanPendingRef = useRef(false);
   const sequenceRef = useRef(createEmptySequence());
   const [status, setStatus] = useState('idle');
   const [devices, setDevices] = useState([]);
@@ -192,6 +194,7 @@ export default function CameraScannerDialog(
         video: true,
       });
       resetSequence();
+      multiScanPendingRef.current = true;
       onProgress?.({ pending: [], total: 0, complete: false });
       await attachScreenStream(stream);
     } catch (error) {
@@ -315,6 +318,7 @@ export default function CameraScannerDialog(
 
     if (mode === 'screen') {
       pausedRef.current = false;
+      multiScanPendingRef.current = true;
       setMessage(null);
       resetSequence();
       onProgress?.({ pending: [], total: 0, complete: false });
@@ -334,6 +338,7 @@ export default function CameraScannerDialog(
     }
 
     pausedRef.current = false;
+    multiScanPendingRef.current = false;
     setMessage(null);
     resetSequence();
     requestCamera(getRememberedCamera(), true);
@@ -361,10 +366,46 @@ export default function CameraScannerDialog(
       try {
         const results = await readQrCodes(
           context.getImageData(0, 0, canvas.width, canvas.height),
+          mode === 'screen' && multiScanPendingRef.current ? MULTI_QR_LIMIT : 1,
         );
-        const result = results.find(item => item.isValid && item.symbology === 'QRCode');
-        if (!result || pausedRef.current) return;
+        const validResults = results.filter(
+          item => item.isValid && item.symbology === 'QRCode',
+        );
+        if (!validResults.length || pausedRef.current) return;
 
+        if (mode === 'screen' && multiScanPendingRef.current) {
+          multiScanPendingRef.current = false;
+          const resolution = resolveInitialQrResults(validResults);
+
+          if (resolution.status === 'complete') {
+            const total = resolution.kind === 'sequence'
+              ? resolution.results[0].sequenceSize
+              : 1;
+            onProgress?.({ pending: [], total, complete: true });
+            stopStream();
+            onScan(resolution.text);
+            return;
+          }
+
+          let nextSequence = sequenceRef.current;
+          for (const initialResult of resolution.results) {
+            const consumed = consumeQrResult(nextSequence, initialResult);
+            nextSequence = consumed.sequence;
+          }
+          sequenceRef.current = nextSequence;
+          setSequence(nextSequence);
+          const pending = nextSequence.parts.flatMap((part, index) => (
+            part === null ? [index + 1] : []
+          ));
+          onProgress?.({
+            pending,
+            total: nextSequence.sequenceSize,
+            complete: false,
+          });
+          return;
+        }
+
+        const [result] = validResults;
         const consumed = consumeQrResult(sequenceRef.current, result);
         sequenceRef.current = consumed.sequence;
         setSequence(consumed.sequence);

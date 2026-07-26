@@ -5,6 +5,8 @@ import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader';
 import { parseUrl } from '../src/index.js';
 import { consumeQrResult, createEmptySequence, } from '../web/src/scripts/qrSequence.js';
 import { addQrImageResults, createEmptyImageSequenceSession, } from '../web/src/scripts/qrImageSequence.js';
+import { resolveInitialQrResults } from '../web/src/scripts/qrMultiResult.js';
+import { MULTI_QR_LIMIT } from '../web/src/scripts/qrReader.js';
 import {
   calculatePreparedImageSize,
   calculateQrSquareCrop,
@@ -14,6 +16,10 @@ const wasmBinary = readFileSync(
   new URL('../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm', import.meta.url),
 );
 prepareZXingModule({ overrides: { wasmBinary } });
+
+test('multi-QR scanning is capped at sixteen symbols', () => {
+  assert.equal(MULTI_QR_LIMIT, 16);
+});
 
 const decodeFixture = async filename => {
   const [result] = await readBarcodes(
@@ -191,6 +197,165 @@ test('ordinary image QR results complete without opening a sequence session', ()
 
   assert.equal(consumed.status, 'complete');
   assert.equal(consumed.completedText, 'https://example.test/');
+});
+
+test('initial multi-QR reads prioritize the first ordinary QR', () => {
+  const sequence = qrResult({
+    text: 'sequence',
+    sequenceId: '10',
+    sequenceIndex: 0,
+    sequenceSize: 2,
+  });
+  const firstOrdinary = qrResult({ text: 'ordinary-first' });
+  const secondOrdinary = qrResult({ text: 'ordinary-second' });
+  const resolved = resolveInitialQrResults([
+    sequence,
+    firstOrdinary,
+    secondOrdinary,
+  ]);
+
+  assert.equal(resolved.status, 'complete');
+  assert.equal(resolved.kind, 'ordinary');
+  assert.equal(resolved.text, 'ordinary-first');
+});
+
+test('initial multi-QR reads assemble a complete sequence by index', () => {
+  const second = qrResult({
+    text: 'right',
+    sequenceId: '10',
+    sequenceIndex: 1,
+    sequenceSize: 2,
+  });
+  const first = qrResult({
+    text: 'left-',
+    sequenceId: '10',
+    sequenceIndex: 0,
+    sequenceSize: 2,
+  });
+  const resolved = resolveInitialQrResults([second, first]);
+
+  assert.equal(resolved.status, 'complete');
+  assert.equal(resolved.kind, 'sequence');
+  assert.equal(resolved.text, 'left-right');
+});
+
+test('a complete sequence wins over an earlier incomplete sequence', () => {
+  const partial = qrResult({
+    text: 'partial',
+    sequenceId: '10',
+    sequenceIndex: 0,
+    sequenceSize: 2,
+  });
+  const completeFirst = qrResult({
+    text: 'complete-left-',
+    sequenceId: '20',
+    sequenceIndex: 0,
+    sequenceSize: 2,
+  });
+  const completeSecond = qrResult({
+    text: 'complete-right',
+    sequenceId: '20',
+    sequenceIndex: 1,
+    sequenceSize: 2,
+  });
+  const resolved = resolveInitialQrResults([
+    partial,
+    completeFirst,
+    completeSecond,
+  ]);
+
+  assert.equal(resolved.status, 'complete');
+  assert.equal(resolved.text, 'complete-left-complete-right');
+});
+
+test('the earliest detected complete sequence wins when several are complete', () => {
+  const bFirst = qrResult({
+    text: 'B1-',
+    sequenceId: '20',
+    sequenceIndex: 0,
+    sequenceSize: 2,
+  });
+  const aFirst = qrResult({
+    text: 'A1-',
+    sequenceId: '10',
+    sequenceIndex: 0,
+    sequenceSize: 2,
+  });
+  const aSecond = qrResult({
+    text: 'A2',
+    sequenceId: '10',
+    sequenceIndex: 1,
+    sequenceSize: 2,
+  });
+  const bSecond = qrResult({
+    text: 'B2',
+    sequenceId: '20',
+    sequenceIndex: 1,
+    sequenceSize: 2,
+  });
+  const resolved = resolveInitialQrResults([
+    bFirst,
+    aFirst,
+    aSecond,
+    bSecond,
+  ]);
+
+  assert.equal(resolved.status, 'complete');
+  assert.equal(resolved.text, 'B1-B2');
+});
+
+test('all detected parts of the earliest incomplete sequence are retained', () => {
+  const first = qrResult({
+    text: 'A1',
+    sequenceId: '10',
+    sequenceIndex: 0,
+    sequenceSize: 4,
+  });
+  const third = qrResult({
+    text: 'A3',
+    sequenceId: '10',
+    sequenceIndex: 2,
+    sequenceSize: 4,
+  });
+  const other = qrResult({
+    text: 'B1',
+    sequenceId: '20',
+    sequenceIndex: 0,
+    sequenceSize: 3,
+  });
+  const resolved = resolveInitialQrResults([first, other, third]);
+
+  assert.equal(resolved.status, 'partial');
+  assert.deepEqual(resolved.results, [first, third]);
+});
+
+test('conflicting duplicate sequence indexes cannot produce a complete result', () => {
+  const first = qrResult({
+    text: 'first',
+    sequenceId: '10',
+    sequenceIndex: 0,
+    sequenceSize: 2,
+  });
+  const conflictingFirst = qrResult({
+    text: 'different',
+    sequenceId: '10',
+    sequenceIndex: 0,
+    sequenceSize: 2,
+  });
+  const second = qrResult({
+    text: 'second',
+    sequenceId: '10',
+    sequenceIndex: 1,
+    sequenceSize: 2,
+  });
+  const resolved = resolveInitialQrResults([
+    first,
+    conflictingFirst,
+    second,
+  ]);
+
+  assert.equal(resolved.status, 'partial');
+  assert.deepEqual(resolved.results, [first]);
 });
 
 test('QR preview crop is square, padded, and clamped to the image', () => {

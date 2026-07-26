@@ -1,5 +1,7 @@
 let readerPromise;
 
+export const MULTI_QR_LIMIT = 16;
+
 async function loadReader() {
   if (!readerPromise) {
     readerPromise = import('zxing-wasm/reader').then(module => {
@@ -20,11 +22,11 @@ async function loadReader() {
   return readerPromise;
 }
 
-export async function readQrCodes(imageSource) {
+export async function readQrCodes(imageSource, maxNumberOfSymbols = 1) {
   const { readBarcodes } = await loadReader();
   return readBarcodes(imageSource, {
     formats: ['QRCode'],
-    maxNumberOfSymbols: 1,
+    maxNumberOfSymbols,
     textMode: 'Plain',
   });
 }

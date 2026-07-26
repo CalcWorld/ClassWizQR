@@ -13,8 +13,9 @@ import ResultPanel from './ResultPanel.jsx';
 import { CameraIcon, ClearIcon, ClipboardIcon, CopyIcon, FileImageIcon, ParseIcon, ScreenIcon, } from './Icons.jsx';
 import SettingsView from './SettingsView.jsx';
 import { addQrImageResults, createEmptyImageSequenceSession, } from '../../scripts/qrImageSequence.js';
+import { resolveInitialQrResults } from '../../scripts/qrMultiResult.js';
 import { createQrPreviewUrl, prepareQrImage, } from '../../scripts/qrPreview.js';
-import { readQrCodes } from '../../scripts/qrReader.js';
+import { MULTI_QR_LIMIT, readQrCodes } from '../../scripts/qrReader.js';
 
 const EMPTY_RESULT = {};
 const LANGUAGE_OPTIONS = cwqr.availableLanguages.map(value => {
@@ -398,7 +399,7 @@ export default function ParserApp() {
     });
   }
 
-  async function decodeImageBlobs(blobs) {
+  async function decodeImageBlobs(blobs, maxNumberOfSymbols) {
     const imageBlobs = blobs.filter(blob => blob?.type?.startsWith('image/'));
     const decoded = [];
 
@@ -413,23 +414,29 @@ export default function ParserApp() {
 
       try {
         let prepared = await prepareQrImage(blob);
-        let results = await readQrCodes(prepared.imageData);
-        let result = results.find(item => item.isValid && item.symbology === 'QRCode');
+        let results = await readQrCodes(prepared.imageData, maxNumberOfSymbols);
+        let validResults = results.filter(
+          item => item.isValid && item.symbology === 'QRCode',
+        );
 
-        if (!result && prepared.scaled) {
+        if (!validResults.length && prepared.scaled) {
           await new Promise(resolve => {
             requestAnimationFrame(() => setTimeout(resolve, 0));
           });
           prepared = await prepareQrImage(blob, Number.POSITIVE_INFINITY);
-          results = await readQrCodes(prepared.imageData);
-          result = results.find(item => item.isValid && item.symbology === 'QRCode');
+          results = await readQrCodes(prepared.imageData, maxNumberOfSymbols);
+          validResults = results.filter(
+            item => item.isValid && item.symbology === 'QRCode',
+          );
         }
-        if (!result) continue;
+        if (!validResults.length) continue;
 
-        decoded.push({
-          result,
-          preview: await createQrPreviewUrl(prepared.canvas, result.position),
-        });
+        for (const result of validResults) {
+          decoded.push({
+            result,
+            preview: await createQrPreviewUrl(prepared.canvas, result.position),
+          });
+        }
       } catch (error) {
         console.error(error);
       }
@@ -437,19 +444,66 @@ export default function ParserApp() {
     return decoded;
   }
 
-  async function processImageBlobs(blobs, source, lockHeld = false) {
+  async function processImageBlobs(
+    blobs,
+    source,
+    {
+      lockHeld = false,
+      initialMulti = false,
+    } = {},
+  ) {
     if (!lockHeld) {
       if (imageBusyRef.current) return;
       imageBusyRef.current = true;
       setImageBusy(true);
     }
     try {
-      const items = await decodeImageBlobs(blobs);
+      const items = await decodeImageBlobs(
+        blobs,
+        initialMulti ? MULTI_QR_LIMIT : 1,
+      );
       if (!items.length) {
         setAppMessage({
           title: t('image-read-error-title'),
           body: t('image-read-error-body'),
         });
+        return;
+      }
+
+      if (initialMulti) {
+        const resolution = resolveInitialQrResults(items.map(item => item.result));
+        if (resolution.status === 'empty') {
+          revokePreviews(items.map(item => item.preview));
+          setAppMessage({
+            title: t('image-read-error-title'),
+            body: t('image-read-error-body'),
+          });
+          return;
+        }
+        if (resolution.status === 'complete') {
+          revokePreviews(items.map(item => item.preview));
+          acceptScannedUrl(resolution.text);
+          return;
+        }
+
+        const selectedResults = new Set(resolution.results);
+        const selectedItems = items.filter(item => selectedResults.has(item.result));
+        revokePreviews(
+          items
+            .filter(item => !selectedResults.has(item.result))
+            .map(item => item.preview),
+        );
+        const consumed = addQrImageResults(
+          createEmptyImageSequenceSession(source),
+          selectedItems,
+        );
+        revokePreviews(consumed.rejectedPreviews);
+        if (consumed.status === 'complete') {
+          revokePreviews(selectedItems.map(item => item.preview));
+          acceptScannedUrl(consumed.completedText);
+          return;
+        }
+        setImageSession(consumed.session);
         return;
       }
 
@@ -491,7 +545,11 @@ export default function ParserApp() {
   async function handleFileSelection(event) {
     const files = Array.from(event.currentTarget.files || []);
     event.currentTarget.value = '';
-    if (files.length) await processImageBlobs(files, 'file');
+    if (files.length) {
+      await processImageBlobs(files, 'file', {
+        initialMulti: files.length === 1 && !imageSession,
+      });
+    }
   }
 
   async function readClipboard() {
@@ -540,7 +598,10 @@ export default function ParserApp() {
         });
         return;
       }
-      await processImageBlobs(images, 'clipboard', true);
+      await processImageBlobs(images, 'clipboard', {
+        lockHeld: true,
+        initialMulti: imageSession?.source !== 'clipboard',
+      });
     } catch (error) {
       console.error(error);
       setAppMessage({

@@ -1,4 +1,4 @@
-export function translate(tag, language = 'en') {
+export function translate(tag, language = 'en', params = {}) {
   const zh = {
     'loading': '加载中......',
     'language-label': '语言',
@@ -447,5 +447,10 @@ export function translate(tag, language = 'en') {
     'settings-value': 'Giá trị cài đặt',
     'qr-parse-result-title': 'Kết quả phân tích mã QR',
   };
-  return (({ zh, en, fr, vi }[language] || en)[tag]) || en[tag] || tag;
+  const text = (({ zh, en, fr, vi }[language] || en)[tag]) || en[tag] || tag;
+  return text.replace(/\{([A-Za-z_][A-Za-z0-9_]*)}/g, (placeholder, name) => (
+    Object.prototype.hasOwnProperty.call(params ?? {}, name)
+      ? String(params[name])
+      : placeholder
+  ));
 }

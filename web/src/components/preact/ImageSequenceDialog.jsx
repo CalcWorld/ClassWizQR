@@ -125,10 +125,9 @@ export default function ImageSequenceDialog(
 
       <MessageDialog
         open={instructionOpen}
-        title={t('camera-sequence-title').replace(
-          '{count}',
-          session?.sequence.sequenceSize || 0,
-        )}
+        title={t('camera-sequence-title', {
+          count: session?.sequence.sequenceSize || 0,
+        })}
         confirmLabel={t('dialog-confirm')}
         onConfirm={() => setInstructionOpen(false)}
       >

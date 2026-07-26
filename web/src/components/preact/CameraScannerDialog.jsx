@@ -360,10 +360,9 @@ export default function CameraScannerDialog(
         if (mode === 'camera' && consumed.sequenceStarted) {
           pausedRef.current = true;
           setMessage({
-            title: t('camera-sequence-title').replace(
-              '{count}',
-              consumed.sequence.sequenceSize,
-            ),
+            title: t('camera-sequence-title', {
+              count: consumed.sequence.sequenceSize,
+            }),
             body: t('camera-sequence-instruction'),
             closesScanner: false,
           });

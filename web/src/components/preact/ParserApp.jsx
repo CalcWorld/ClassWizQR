@@ -91,10 +91,9 @@ function getIntrinsicButtonWidths(container) {
 function getScreenTitlePrefix(status, t) {
   if (status.complete) return t('screen-title-complete');
   if (status.pending?.length) {
-    return t('screen-title-sequence').replace(
-      '{pending}',
-      status.pending.join('|'),
-    );
+    return t('screen-title-sequence', {
+      pending: status.pending.join('|'),
+    });
   }
   return t('screen-title-scanning');
 }
@@ -122,7 +121,10 @@ export default function ParserApp() {
   const screenTitleStatusRef = useRef(null);
   const imageBusyRef = useRef(false);
 
-  const t = useCallback(tag => translate(tag, language), [language]);
+  const t = useCallback(
+    (tag, params) => translate(tag, language, params),
+    [language],
+  );
   const languageReady = language === 'en' || Object.hasOwn(resources, language);
 
   useEffect(() => {

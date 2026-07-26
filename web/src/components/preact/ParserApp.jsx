@@ -399,15 +399,21 @@ export default function ParserApp() {
     });
   }
 
-  async function decodeImageBlobs(blobs, maxNumberOfSymbols) {
+  async function decodeImageBlobs(
+    blobs,
+    maxNumberOfSymbols,
+    showProcessingDialog,
+  ) {
     const imageBlobs = blobs.filter(blob => blob?.type?.startsWith('image/'));
     const decoded = [];
 
     for (const [index, blob] of imageBlobs.entries()) {
-      setImageProgress({
-        current: index + 1,
-        total: imageBlobs.length,
-      });
+      if (showProcessingDialog) {
+        setImageProgress({
+          current: index + 1,
+          total: imageBlobs.length,
+        });
+      }
       await new Promise(resolve => {
         requestAnimationFrame(() => setTimeout(resolve, 0));
       });
@@ -450,6 +456,7 @@ export default function ParserApp() {
     {
       lockHeld = false,
       initialMulti = false,
+      showProcessingDialog = false,
     } = {},
   ) {
     if (!lockHeld) {
@@ -461,6 +468,7 @@ export default function ParserApp() {
       const items = await decodeImageBlobs(
         blobs,
         initialMulti ? MULTI_QR_LIMIT : 1,
+        showProcessingDialog,
       );
       if (!items.length) {
         setAppMessage({
@@ -546,8 +554,10 @@ export default function ParserApp() {
     const files = Array.from(event.currentTarget.files || []);
     event.currentTarget.value = '';
     if (files.length) {
+      const fromPage = !imageSession;
       await processImageBlobs(files, 'file', {
-        initialMulti: files.length === 1 && !imageSession,
+        initialMulti: files.length === 1 && fromPage,
+        showProcessingDialog: fromPage,
       });
     }
   }
@@ -601,6 +611,7 @@ export default function ParserApp() {
       await processImageBlobs(images, 'clipboard', {
         lockHeld: true,
         initialMulti: imageSession?.source !== 'clipboard',
+        showProcessingDialog: imageSession?.source !== 'clipboard',
       });
     } catch (error) {
       console.error(error);

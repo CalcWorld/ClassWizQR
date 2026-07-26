@@ -88,6 +88,17 @@ function getIntrinsicButtonWidths(container) {
   );
 }
 
+function getScreenTitlePrefix(status, t) {
+  if (status.complete) return t('screen-title-complete');
+  if (status.pending?.length) {
+    return t('screen-title-sequence').replace(
+      '{pending}',
+      status.pending.join('|'),
+    );
+  }
+  return t('screen-title-scanning');
+}
+
 export default function ParserApp() {
   const [language, setLanguage] = useState('en');
   const [inputUrl, setInputUrl] = useState('');
@@ -154,14 +165,7 @@ export default function ParserApp() {
         return;
       }
 
-      let prefix = t('screen-title-scanning');
-      if (status.complete) {
-        prefix = t('screen-title-complete');
-      } else if (status.total > 1) {
-        prefix = t('screen-title-sequence')
-          .replace('{scanned}', status.scanned)
-          .replace('{total}', status.total);
-      }
+      const prefix = getScreenTitlePrefix(status, t);
       document.title = `${prefix}${baseTitleRef.current}`;
     }
 
@@ -356,14 +360,7 @@ export default function ParserApp() {
       return;
     }
     if (!document.hasFocus()) {
-      let prefix = t('screen-title-scanning');
-      if (progress.complete) {
-        prefix = t('screen-title-complete');
-      } else if (progress.total > 1) {
-        prefix = t('screen-title-sequence')
-          .replace('{scanned}', progress.scanned)
-          .replace('{total}', progress.total);
-      }
+      const prefix = getScreenTitlePrefix(progress, t);
       document.title = `${prefix}${baseTitleRef.current}`;
     }
   }
@@ -390,7 +387,7 @@ export default function ParserApp() {
         video: true,
       });
       setScreenStream(stream);
-      setScreenScanProgress({ scanned: 0, total: 0, complete: false });
+      setScreenScanProgress({ pending: [], total: 0, complete: false });
       setStreamScannerMode('screen');
     } catch (error) {
       if (error?.name !== 'NotAllowedError') {

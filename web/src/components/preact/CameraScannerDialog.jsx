@@ -163,7 +163,7 @@ export default function CameraScannerDialog(
         video: true,
       });
       resetSequence();
-      onProgress?.({ scanned: 0, total: 0, complete: false });
+      onProgress?.({ pending: [], total: 0, complete: false });
       await attachScreenStream(stream);
     } catch (error) {
       setStatus(hadStream ? 'scanning' : 'idle');
@@ -288,7 +288,7 @@ export default function CameraScannerDialog(
       pausedRef.current = false;
       setMessage(null);
       resetSequence();
-      onProgress?.({ scanned: 0, total: 0, complete: false });
+      onProgress?.({ pending: [], total: 0, complete: false });
       attachScreenStream(initialStream);
       return () => stopStream();
     }
@@ -342,15 +342,17 @@ export default function CameraScannerDialog(
 
         if (consumed.completedText !== null) {
           const total = result.sequenceSize >= 1 ? result.sequenceSize : 1;
-          onProgress?.({ scanned: total, total, complete: true });
+          onProgress?.({ pending: [], total, complete: true });
           stopStream();
           onScan(consumed.completedText);
           return;
         }
 
-        const scanned = consumed.sequence.parts.filter(part => part !== null).length;
+        const pending = consumed.sequence.parts.flatMap((part, index) => (
+          part === null ? [index + 1] : []
+        ));
         onProgress?.({
-          scanned,
+          pending,
           total: consumed.sequence.sequenceSize,
           complete: false,
         });

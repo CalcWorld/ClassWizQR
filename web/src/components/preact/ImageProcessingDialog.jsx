@@ -1,4 +1,5 @@
-import { useEffect, useLayoutEffect, useRef, useState, } from 'preact/hooks';
+import { useEffect, useRef, useState, } from 'preact/hooks';
+import useModalDialog from '../../hooks/useModalDialog.js';
 
 const SHOW_DELAY_MS = 300;
 
@@ -21,12 +22,7 @@ export default function ImageProcessingDialog({
     return () => window.clearTimeout(timer);
   }, [requested]);
 
-  useLayoutEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
-    if (!open && dialog.open) dialog.close();
-  }, [open]);
+  useModalDialog(dialogRef, open);
 
   return (
     <dialog

@@ -1,4 +1,5 @@
-import { useEffect, useId, useRef } from 'preact/hooks';
+import { useId, useRef } from 'preact/hooks';
+import useModalDialog from '../../hooks/useModalDialog.js';
 
 export default function MessageDialog(
   {
@@ -12,13 +13,7 @@ export default function MessageDialog(
   const titleId = useId();
   const descriptionId = useId();
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-
-    if (open && !dialog.open) dialog.showModal();
-    if (!open && dialog.open) dialog.close();
-  }, [open]);
+  useModalDialog(dialogRef, open);
 
   return (
     <dialog

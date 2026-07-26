@@ -1,12 +1,16 @@
 import { getQrSequenceIdentity, isStructuredQrResult, } from './qrSequence.js';
 
-function isValidQrResult(result) {
+export function isValidQrResult(result) {
   return (
     result
-    && result.isValid !== false
+    && result.isValid === true
     && result.symbology === 'QRCode'
     && typeof result.text === 'string'
   );
+}
+
+export function filterValidQrResults(results) {
+  return results.filter(isValidQrResult);
 }
 
 /**
@@ -17,7 +21,7 @@ function isValidQrResult(result) {
  * result ZXing returned for each group.
  */
 export function resolveInitialQrResults(results) {
-  const valid = results.filter(isValidQrResult);
+  const valid = filterValidQrResults(results);
   if (!valid.length) return { status: 'empty', results: [] };
 
   const ordinary = valid.find(result => !isStructuredQrResult(result));
@@ -43,7 +47,6 @@ export function resolveInitialQrResults(results) {
     const identity = getQrSequenceIdentity(result);
     if (!groups.has(identity)) {
       groups.set(identity, {
-        sequenceSize: result.sequenceSize,
         parts: Array(result.sequenceSize).fill(null),
         results: [],
         conflicted: false,

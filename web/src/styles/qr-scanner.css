@@ -2,7 +2,6 @@ html:has(.camera-scanner-dialog[open]),
 html:has(.message-dialog[open]) {
     overflow: hidden;
     overscroll-behavior: none;
-    scrollbar-gutter: stable;
 }
 
 html:has(.camera-scanner-dialog[open]) body,
@@ -19,13 +18,13 @@ html:has(.message-dialog[open]) body {
     box-shadow: 0 24px 80px rgba(0, 0, 0, .38);
 }
 
-.camera-scanner-dialog::backdrop {
-    background: rgba(20, 25, 30, .5);
-    backdrop-filter: blur(7px);
-}
-
+.camera-scanner-dialog::backdrop,
 .message-dialog::backdrop {
     background: rgba(20, 25, 30, .5);
+}
+
+.camera-scanner-dialog::backdrop {
+    backdrop-filter: blur(7px);
 }
 
 .camera-scanner-dialog {
@@ -250,7 +249,6 @@ html:has(.message-dialog[open]) body {
     overflow: auto;
     background: var(--surface);
     grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
-    grid-auto-flow: row;
     align-content: start;
     gap: 14px;
 }
@@ -265,9 +263,11 @@ html:has(.message-dialog[open]) body {
     border: 2px solid var(--border);
     border-radius: 5px;
     aspect-ratio: 1;
-    background: linear-gradient(135deg, transparent 49.5%, var(--border) 50%, transparent 50.5%),
-    linear-gradient(45deg, transparent 49.5%, var(--border) 50%, transparent 50.5%),
-    var(--surface-subtle);
+    --sequence-cell-cross: var(--border);
+    --sequence-cell-surface: var(--surface-subtle);
+    background: linear-gradient(135deg, transparent 49.5%, var(--sequence-cell-cross) 50%, transparent 50.5%),
+    linear-gradient(45deg, transparent 49.5%, var(--sequence-cell-cross) 50%, transparent 50.5%),
+    var(--sequence-cell-surface);
 }
 
 .image-sequence-cell.is-scanned {
@@ -283,35 +283,7 @@ html:has(.message-dialog[open]) body {
     object-fit: cover;
 }
 
-.image-sequence-cell figcaption {
-    position: absolute;
-    top: 8px;
-    right: 8px;
-    display: inline-grid;
-    min-width: 34px;
-    height: 34px;
-    padding: 0 7px;
-    border: 2px solid var(--accent);
-    border-radius: 4px;
-    color: var(--accent);
-    background: var(--surface);
-    font-size: 1rem;
-    font-weight: 800;
-    place-items: center;
-}
-
-.image-sequence-cell.is-scanned figcaption {
-    color: var(--accent-contrast);
-    background: var(--accent);
-}
-
-.image-sequence-placeholder {
-    padding: 0;
-    color: var(--accent);
-    font: inherit;
-    cursor: pointer;
-}
-
+.image-sequence-cell figcaption,
 .image-sequence-placeholder > span {
     position: absolute;
     top: 8px;
@@ -328,12 +300,27 @@ html:has(.message-dialog[open]) body {
     place-items: center;
 }
 
+.image-sequence-cell figcaption {
+    color: var(--accent);
+}
+
+.image-sequence-cell.is-scanned figcaption {
+    color: var(--accent-contrast);
+    background: var(--accent);
+}
+
+.image-sequence-placeholder {
+    padding: 0;
+    color: var(--accent);
+    font: inherit;
+    cursor: pointer;
+}
+
 .image-sequence-placeholder:hover,
 .image-sequence-placeholder:focus-visible {
     border-color: var(--accent);
-    background: linear-gradient(135deg, transparent 49.5%, var(--accent) 50%, transparent 50.5%),
-    linear-gradient(45deg, transparent 49.5%, var(--accent) 50%, transparent 50.5%),
-    var(--accent-soft);
+    --sequence-cell-cross: var(--accent);
+    --sequence-cell-surface: var(--accent-soft);
 }
 
 .image-sequence-placeholder:focus-visible {
@@ -390,7 +377,6 @@ html:has(.message-dialog[open]) body {
 
 .message-dialog-confirm:hover {
     border-color: var(--accent-hover);
-    color: var(--accent-contrast);
     background: var(--accent-hover);
 }
 
@@ -431,7 +417,7 @@ html:has(.message-dialog[open]) body {
 
 @media (prefers-reduced-motion: reduce) {
     .image-processing-spinner {
-        animation-duration: 1.8s;
+        animation: none;
     }
 }
 

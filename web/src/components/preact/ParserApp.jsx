@@ -13,7 +13,7 @@ import ResultPanel from './ResultPanel.jsx';
 import { CameraIcon, ClearIcon, ClipboardIcon, CopyIcon, FileImageIcon, ParseIcon, ScreenIcon, } from './Icons.jsx';
 import SettingsView from './SettingsView.jsx';
 import { addQrImageResults, createEmptyImageSequenceSession, } from '../../scripts/qrImageSequence.js';
-import { resolveInitialQrResults } from '../../scripts/qrMultiResult.js';
+import { filterValidQrResults, resolveInitialQrResults, } from '../../scripts/qrMultiResult.js';
 import { createQrPreviewUrl, prepareQrImage, } from '../../scripts/qrPreview.js';
 import { MULTI_QR_LIMIT, readQrCodes } from '../../scripts/qrReader.js';
 
@@ -46,6 +46,17 @@ function cloneResult(value) {
 function fitUrlInput(input) {
   input.style.height = 'auto';
   input.style.height = `${input.scrollHeight + 2}px`;
+}
+
+function yieldForPaint() {
+  return new Promise(resolve => {
+    requestAnimationFrame(() => setTimeout(resolve, 0));
+  });
+}
+
+async function readValidQrCodes(imageData, maxNumberOfSymbols) {
+  const results = await readQrCodes(imageData, maxNumberOfSymbols);
+  return filterValidQrResults(results);
 }
 
 function readStoredLanguage() {
@@ -399,6 +410,19 @@ export default function ParserApp() {
     });
   }
 
+  async function runImageTask(task) {
+    if (imageBusyRef.current) return;
+    imageBusyRef.current = true;
+    setImageBusy(true);
+    try {
+      return await task();
+    } finally {
+      setImageProgress(null);
+      imageBusyRef.current = false;
+      setImageBusy(false);
+    }
+  }
+
   async function decodeImageBlobs(
     blobs,
     maxNumberOfSymbols,
@@ -414,25 +438,21 @@ export default function ParserApp() {
           total: imageBlobs.length,
         });
       }
-      await new Promise(resolve => {
-        requestAnimationFrame(() => setTimeout(resolve, 0));
-      });
+      await yieldForPaint();
 
       try {
         let prepared = await prepareQrImage(blob);
-        let results = await readQrCodes(prepared.imageData, maxNumberOfSymbols);
-        let validResults = results.filter(
-          item => item.isValid && item.symbology === 'QRCode',
+        let validResults = await readValidQrCodes(
+          prepared.imageData,
+          maxNumberOfSymbols,
         );
 
         if (!validResults.length && prepared.scaled) {
-          await new Promise(resolve => {
-            requestAnimationFrame(() => setTimeout(resolve, 0));
-          });
+          await yieldForPaint();
           prepared = await prepareQrImage(blob, Number.POSITIVE_INFINITY);
-          results = await readQrCodes(prepared.imageData, maxNumberOfSymbols);
-          validResults = results.filter(
-            item => item.isValid && item.symbology === 'QRCode',
+          validResults = await readValidQrCodes(
+            prepared.imageData,
+            maxNumberOfSymbols,
           );
         }
         if (!validResults.length) continue;
@@ -454,96 +474,81 @@ export default function ParserApp() {
     blobs,
     source,
     {
-      lockHeld = false,
       initialMulti = false,
       showProcessingDialog = false,
     } = {},
   ) {
-    if (!lockHeld) {
-      if (imageBusyRef.current) return;
-      imageBusyRef.current = true;
-      setImageBusy(true);
+    const items = await decodeImageBlobs(
+      blobs,
+      initialMulti ? MULTI_QR_LIMIT : 1,
+      showProcessingDialog,
+    );
+    if (!items.length) {
+      setAppMessage({
+        title: t('image-read-error-title'),
+        body: t('image-read-error-body'),
+      });
+      return;
     }
-    try {
-      const items = await decodeImageBlobs(
-        blobs,
-        initialMulti ? MULTI_QR_LIMIT : 1,
-        showProcessingDialog,
-      );
-      if (!items.length) {
+
+    if (initialMulti) {
+      const resolution = resolveInitialQrResults(items.map(item => item.result));
+      if (resolution.status === 'empty') {
+        revokePreviews(items.map(item => item.preview));
         setAppMessage({
           title: t('image-read-error-title'),
           body: t('image-read-error-body'),
         });
         return;
       }
-
-      if (initialMulti) {
-        const resolution = resolveInitialQrResults(items.map(item => item.result));
-        if (resolution.status === 'empty') {
-          revokePreviews(items.map(item => item.preview));
-          setAppMessage({
-            title: t('image-read-error-title'),
-            body: t('image-read-error-body'),
-          });
-          return;
-        }
-        if (resolution.status === 'complete') {
-          revokePreviews(items.map(item => item.preview));
-          acceptScannedUrl(resolution.text);
-          return;
-        }
-
-        const selectedResults = new Set(resolution.results);
-        const selectedItems = items.filter(item => selectedResults.has(item.result));
-        revokePreviews(
-          items
-            .filter(item => !selectedResults.has(item.result))
-            .map(item => item.preview),
-        );
-        const consumed = addQrImageResults(
-          createEmptyImageSequenceSession(source),
-          selectedItems,
-        );
-        revokePreviews(consumed.rejectedPreviews);
-        if (consumed.status === 'complete') {
-          revokePreviews(selectedItems.map(item => item.preview));
-          acceptScannedUrl(consumed.completedText);
-          return;
-        }
-        setImageSession(consumed.session);
-        return;
-      }
-
-      const current = imageSession?.source === source
-        ? imageSession
-        : createEmptyImageSequenceSession(source);
-      const consumed = addQrImageResults(current, items);
-      revokePreviews(consumed.rejectedPreviews);
-
-      if (consumed.status === 'mixed') {
-        setAppMessage({
-          title: t('image-sequence-mixed-title'),
-          body: t('image-sequence-mixed-body'),
-        });
-        return;
-      }
-
-      if (consumed.status === 'complete') {
-        revokePreviews(current.previews);
+      if (resolution.status === 'complete') {
         revokePreviews(items.map(item => item.preview));
+        acceptScannedUrl(resolution.text);
+        return;
+      }
+
+      const selectedResults = new Set(resolution.results);
+      const selectedItems = items.filter(item => selectedResults.has(item.result));
+      revokePreviews(
+        items
+          .filter(item => !selectedResults.has(item.result))
+          .map(item => item.preview),
+      );
+      const consumed = addQrImageResults(
+        createEmptyImageSequenceSession(source),
+        selectedItems,
+      );
+      revokePreviews(consumed.rejectedPreviews);
+      if (consumed.status === 'complete') {
+        revokePreviews(selectedItems.map(item => item.preview));
         acceptScannedUrl(consumed.completedText);
         return;
       }
-
       setImageSession(consumed.session);
-    } finally {
-      setImageProgress(null);
-      if (!lockHeld) {
-        imageBusyRef.current = false;
-        setImageBusy(false);
-      }
+      return;
     }
+
+    const current = imageSession?.source === source
+      ? imageSession
+      : createEmptyImageSequenceSession(source);
+    const consumed = addQrImageResults(current, items);
+    revokePreviews(consumed.rejectedPreviews);
+
+    if (consumed.status === 'mixed') {
+      setAppMessage({
+        title: t('image-sequence-mixed-title'),
+        body: t('image-sequence-mixed-body'),
+      });
+      return;
+    }
+
+    if (consumed.status === 'complete') {
+      revokePreviews(items.map(item => item.preview));
+      acceptScannedUrl(consumed.completedText);
+      return;
+    }
+
+    setImageSession(consumed.session);
   }
 
   function openFilePicker() {
@@ -555,26 +560,32 @@ export default function ParserApp() {
     event.currentTarget.value = '';
     if (files.length) {
       const fromPage = !imageSession;
-      await processImageBlobs(files, 'file', {
+      await runImageTask(() => processImageBlobs(files, 'file', {
         initialMulti: files.length === 1 && fromPage,
         showProcessingDialog: fromPage,
-      });
+      }));
     }
   }
 
   async function readClipboard() {
-    if (imageBusyRef.current) return;
     if (!navigator.clipboard?.read) {
       if (navigator.clipboard?.readText) {
-        try {
-          const text = (await navigator.clipboard.readText()).trim();
-          if (text) {
-            acceptScannedUrl(text);
-            return;
+        await runImageTask(async () => {
+          try {
+            const text = (await navigator.clipboard.readText()).trim();
+            if (text) {
+              acceptScannedUrl(text);
+              return;
+            }
+          } catch {
+            // Fall through to the common clipboard error.
           }
-        } catch {
-          // Fall through to the common clipboard error.
-        }
+          setAppMessage({
+            title: t('clipboard-error-title'),
+            body: t('clipboard-error-body'),
+          });
+        });
+        return;
       }
       setAppMessage({
         title: t('clipboard-error-title'),
@@ -583,47 +594,42 @@ export default function ParserApp() {
       return;
     }
 
-    imageBusyRef.current = true;
-    setImageBusy(true);
-    try {
-      const clipboardItems = await navigator.clipboard.read();
-      for (const item of clipboardItems) {
-        if (!item.types.includes('text/plain')) continue;
-        const value = (await (await item.getType('text/plain')).text()).trim();
-        if (value) {
-          acceptScannedUrl(value);
+    await runImageTask(async () => {
+      try {
+        const clipboardItems = await navigator.clipboard.read();
+        for (const item of clipboardItems) {
+          if (!item.types.includes('text/plain')) continue;
+          const value = (await (await item.getType('text/plain')).text()).trim();
+          if (value) {
+            acceptScannedUrl(value);
+            return;
+          }
+        }
+
+        const images = [];
+        for (const item of clipboardItems) {
+          const imageType = item.types.find(type => type.startsWith('image/'));
+          if (imageType) images.push(await item.getType(imageType));
+        }
+        if (!images.length) {
+          setAppMessage({
+            title: t('clipboard-error-title'),
+            body: t('clipboard-error-body'),
+          });
           return;
         }
-      }
-
-      const images = [];
-      for (const item of clipboardItems) {
-        const imageType = item.types.find(type => type.startsWith('image/'));
-        if (imageType) images.push(await item.getType(imageType));
-      }
-      if (!images.length) {
+        await processImageBlobs(images, 'clipboard', {
+          initialMulti: imageSession?.source !== 'clipboard',
+          showProcessingDialog: imageSession?.source !== 'clipboard',
+        });
+      } catch (error) {
+        console.error(error);
         setAppMessage({
           title: t('clipboard-error-title'),
           body: t('clipboard-error-body'),
         });
-        return;
       }
-      await processImageBlobs(images, 'clipboard', {
-        lockHeld: true,
-        initialMulti: imageSession?.source !== 'clipboard',
-        showProcessingDialog: imageSession?.source !== 'clipboard',
-      });
-    } catch (error) {
-      console.error(error);
-      setAppMessage({
-        title: t('clipboard-error-title'),
-        body: t('clipboard-error-body'),
-      });
-    } finally {
-      setImageProgress(null);
-      imageBusyRef.current = false;
-      setImageBusy(false);
-    }
+    });
   }
 
   function handleDownload(key) {

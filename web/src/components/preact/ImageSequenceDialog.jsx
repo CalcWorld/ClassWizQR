@@ -1,13 +1,6 @@
-import { useEffect, useRef } from 'preact/hooks';
-import { ClipboardIcon, FileImageIcon } from './Icons.jsx';
-
-function BackIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M19 12H5M11 6l-6 6 6 6"/>
-    </svg>
-  );
-}
+import { useRef } from 'preact/hooks';
+import { BackIcon, ClipboardIcon, FileImageIcon } from './Icons.jsx';
+import useModalDialog from '../../hooks/useModalDialog.js';
 
 export default function ImageSequenceDialog(
   {
@@ -28,12 +21,7 @@ export default function ImageSequenceDialog(
     ? t('clipboard-continue')
     : t('file-continue');
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
-    if (!open && dialog.open) dialog.close();
-  }, [open]);
+  useModalDialog(dialogRef, open);
 
   return (
     <dialog

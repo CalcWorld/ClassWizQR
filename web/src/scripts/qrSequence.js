@@ -16,6 +16,12 @@ export function getQrSequenceIdentity(result) {
   return `${result.format || 'QRCode'}\u0000${result.sequenceId}\u0000${result.sequenceSize}`;
 }
 
+export function getPendingSequenceIndexes(sequence) {
+  return sequence.parts.flatMap((part, index) => (
+    part === null ? [index + 1] : []
+  ));
+}
+
 /**
  * Consume one valid ZXing QR result.
  *

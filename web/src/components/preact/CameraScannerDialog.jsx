@@ -1,23 +1,16 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
-import { consumeQrResult, createEmptySequence } from '../../scripts/qrSequence.js';
-import { resolveInitialQrResults } from '../../scripts/qrMultiResult.js';
+import { consumeQrResult, createEmptySequence, getPendingSequenceIndexes, } from '../../scripts/qrSequence.js';
+import { filterValidQrResults, resolveInitialQrResults, } from '../../scripts/qrMultiResult.js';
 import { MULTI_QR_LIMIT, readQrCodes } from '../../scripts/qrReader.js';
 import MessageDialog from './MessageDialog.jsx';
-import { ScreenIcon } from './Icons.jsx';
+import { BackIcon, ScreenIcon } from './Icons.jsx';
+import useModalDialog from '../../hooks/useModalDialog.js';
 
 const CAMERA_STORAGE_KEY = 'qr-camera-device-id';
 const CAMERA_SEQUENCE_HINT_KEY = 'qr-camera-sequence-hint-shown';
 const SCAN_INTERVAL_MS = 200;
 const MAX_SCAN_EDGE = 1280;
 let cameraSequenceHintShown = false;
-
-function BackIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M19 12H5M11 6l-6 6 6 6"/>
-    </svg>
-  );
-}
 
 function getRememberedCamera() {
   try {
@@ -126,6 +119,8 @@ export default function CameraScannerDialog(
   const [sequence, setSequence] = useState(createEmptySequence());
   const [message, setMessage] = useState(null);
 
+  useModalDialog(dialogRef, open);
+
   function resetSequence() {
     const empty = createEmptySequence();
     sequenceRef.current = empty;
@@ -154,6 +149,15 @@ export default function CameraScannerDialog(
       previousStream.getTracks().forEach(track => track.stop());
     }
 
+    const [track] = stream.getVideoTracks();
+    track?.addEventListener('ended', () => {
+      if (generation !== generationRef.current) return;
+      streamRef.current = null;
+      if (videoRef.current) videoRef.current.srcObject = null;
+      setStatus('idle');
+      onProgress?.(null);
+    }, { once: true });
+
     const video = videoRef.current;
     if (video) {
       video.srcObject = stream;
@@ -163,15 +167,6 @@ export default function CameraScannerDialog(
         // The autoplay attribute can still start playback once metadata is ready.
       }
     }
-
-    const [track] = stream.getVideoTracks();
-    track?.addEventListener('ended', () => {
-      if (generation !== generationRef.current) return;
-      streamRef.current = null;
-      if (videoRef.current) videoRef.current.srcObject = null;
-      setStatus('idle');
-      onProgress?.(null);
-    }, { once: true });
     setDevices([]);
     setStatus('scanning');
   }
@@ -303,13 +298,6 @@ export default function CameraScannerDialog(
   }
 
   useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    if (open && !dialog.open) dialog.showModal();
-    if (!open && dialog.open) dialog.close();
-  }, [open]);
-
-  useEffect(() => {
     if (!open) {
       stopStream();
       setStatus('idle');
@@ -368,9 +356,7 @@ export default function CameraScannerDialog(
           context.getImageData(0, 0, canvas.width, canvas.height),
           mode === 'screen' && multiScanPendingRef.current ? MULTI_QR_LIMIT : 1,
         );
-        const validResults = results.filter(
-          item => item.isValid && item.symbology === 'QRCode',
-        );
+        const validResults = filterValidQrResults(results);
         if (!validResults.length || pausedRef.current) return;
 
         if (mode === 'screen' && multiScanPendingRef.current) {
@@ -394,11 +380,8 @@ export default function CameraScannerDialog(
           }
           sequenceRef.current = nextSequence;
           setSequence(nextSequence);
-          const pending = nextSequence.parts.flatMap((part, index) => (
-            part === null ? [index + 1] : []
-          ));
           onProgress?.({
-            pending,
+            pending: getPendingSequenceIndexes(nextSequence),
             total: nextSequence.sequenceSize,
             complete: false,
           });
@@ -424,11 +407,8 @@ export default function CameraScannerDialog(
           return;
         }
 
-        const pending = consumed.sequence.parts.flatMap((part, index) => (
-          part === null ? [index + 1] : []
-        ));
         onProgress?.({
-          pending,
+          pending: getPendingSequenceIndexes(consumed.sequence),
           total: consumed.sequence.sequenceSize,
           complete: false,
         });

@@ -3,9 +3,16 @@ import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader';
 import { parseUrl } from '../src/index.js';
-import { consumeQrResult, createEmptySequence, } from '../web/src/scripts/qrSequence.js';
+import {
+  consumeQrResult,
+  createEmptySequence,
+  getPendingSequenceIndexes,
+} from '../web/src/scripts/qrSequence.js';
 import { addQrImageResults, createEmptyImageSequenceSession, } from '../web/src/scripts/qrImageSequence.js';
-import { resolveInitialQrResults } from '../web/src/scripts/qrMultiResult.js';
+import {
+  filterValidQrResults,
+  resolveInitialQrResults,
+} from '../web/src/scripts/qrMultiResult.js';
 import { MULTI_QR_LIMIT } from '../web/src/scripts/qrReader.js';
 import {
   calculatePreparedImageSize,
@@ -19,6 +26,19 @@ prepareZXingModule({ overrides: { wasmBinary } });
 
 test('multi-QR scanning is capped at sixteen symbols', () => {
   assert.equal(MULTI_QR_LIMIT, 16);
+});
+
+test('scanner helpers retain only valid QR codes and report pending indexes', () => {
+  const valid = qrResult({ text: 'valid' });
+  assert.deepEqual(filterValidQrResults([
+    valid,
+    { ...valid, isValid: false },
+    { ...valid, isValid: undefined },
+    { ...valid, symbology: 'DataMatrix' },
+  ]), [valid]);
+  assert.deepEqual(getPendingSequenceIndexes({
+    parts: ['first', null, 'third', null],
+  }), [2, 4]);
 });
 
 const decodeFixture = async filename => {

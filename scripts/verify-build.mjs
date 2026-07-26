@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { access, readFile } from 'node:fs/promises';
+import { access, readFile, readdir } from 'node:fs/promises';
 
 const requiredFiles = [
   'dist/index.html',
@@ -26,6 +26,7 @@ const indexHtml = await readFile('dist/index.html', 'utf8');
 const thirdPartyLicenses = await readFile('dist/third-party-licenses.txt', 'utf8');
 const serviceWorker = await readFile('dist/sw.js', 'utf8');
 const manifest = JSON.parse(await readFile('dist/manifest.webmanifest', 'utf8'));
+const distFiles = await readdir('dist');
 assert.match(
   indexHtml,
   /component-url="\/_astro\/parser\.[^"?]+\.js"/,
@@ -79,6 +80,31 @@ assert.doesNotMatch(
   serviceWorker,
   /Development-only service worker/,
   'The production build still contains the development passthrough service worker.',
+);
+assert.match(
+  serviceWorker,
+  /const PRECACHE_CONCURRENCY = 8;/,
+  'The production service worker does not use the expected eight-worker pool.',
+);
+assert.match(
+  serviceWorker,
+  /classwiz-qr-precache-/,
+  'The production service worker does not use versioned application caches.',
+);
+assert.match(
+  serviceWorker,
+  /await copyUnchanged\(/,
+  'The production service worker does not reuse unchanged cached resources.',
+);
+assert.match(
+  serviceWorker,
+  /await caches\.delete\(CACHE_NAME\)/,
+  'The production service worker does not roll back incomplete installations.',
+);
+assert.equal(
+  distFiles.some(file => /^workbox-[\w.-]+\.js(?:\.map)?$/.test(file)),
+  false,
+  'The build contains an obsolete Workbox runtime.',
 );
 for (const packageName of [
   'decimal.js',

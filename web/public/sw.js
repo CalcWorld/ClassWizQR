@@ -1,5 +1,5 @@
 // Development-only service worker.
-// The production build replaces dist/sw.js with the Workbox-generated worker.
+// The production build replaces dist/sw.js with the generated precache worker.
 
 self.addEventListener('install', event => {
   event.waitUntil(self.skipWaiting());

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { translate } from '../../scripts/i18n.js';
+import '../../styles/buttons.css';
 import '../../styles/pwa.css';
 
 const UPDATE_INTERVAL = 60 * 60 * 1000;
@@ -124,7 +125,7 @@ export default function PwaUpdatePrompt() {
         {updateAvailable && (
           <button
             type="button"
-            class="pwa-primary-button"
+            class="form-button primary-button"
             disabled={updating}
             onClick={activateUpdate}
           >
@@ -133,6 +134,7 @@ export default function PwaUpdatePrompt() {
         )}
         <button
           type="button"
+          class="form-button"
           disabled={updating}
           onClick={() => setNotice(null)}
         >

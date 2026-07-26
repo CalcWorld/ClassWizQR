@@ -24,32 +24,9 @@
     gap: 8px;
 }
 
-.pwa-notice button {
-    min-height: 38px;
-    padding: 7px 13px;
-    border: 1px solid var(--border, #d8dde1);
-    border-radius: 5px;
-    color: var(--text, #29313a);
-    background: var(--surface-subtle, #f1f3f4);
-    cursor: pointer;
-    font: inherit;
-    font-weight: 700;
-}
-
-.pwa-notice button:focus-visible {
-    outline: 3px solid rgba(86, 122, 157, .25);
-    outline-offset: 1px;
-}
-
-.pwa-notice button:disabled {
+.pwa-notice .form-button:disabled {
     cursor: wait;
     opacity: .7;
-}
-
-.pwa-notice .pwa-primary-button {
-    border-color: var(--accent, #567a9d);
-    color: var(--accent-contrast, #fff);
-    background: var(--accent, #567a9d);
 }
 
 @media (max-width: 600px) {
@@ -65,6 +42,8 @@
         --text: #e5e7eb;
         --border: #3a4148;
         --accent: #91abc7;
+        --accent-hover: #b5c9dd;
         --accent-contrast: #181b1e;
+        --accent-soft: rgba(100, 132, 166, .18);
     }
 }

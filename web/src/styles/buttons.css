@@ -1,0 +1,48 @@
+@layer shared-controls {
+    .form-button {
+        min-height: 42px;
+        padding: 8px;
+        border: 1px solid var(--border, #d8dde1);
+        border-radius: 4px;
+        color: var(--text, #29313a);
+        background: var(--surface-subtle, #f1f3f4);
+        cursor: pointer;
+        font: inherit;
+        font-weight: 700;
+        white-space: nowrap;
+        transition: border-color .18s ease, background-color .18s ease, transform .18s ease;
+    }
+
+    .form-button svg {
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+    }
+
+    .form-button:hover {
+        border-color: var(--accent, #567a9d);
+        background: var(--accent-soft, #e8eef4);
+    }
+
+    .form-button:focus-visible {
+        outline: 3px solid rgba(86, 122, 157, .24);
+        outline-offset: 1px;
+    }
+
+    .form-button:active {
+        transform: translateY(1px);
+    }
+
+    .primary-button {
+        border-color: var(--accent, #567a9d);
+        color: var(--accent-contrast, #fff);
+        background: var(--accent, #567a9d);
+    }
+
+    .primary-button:hover {
+        border-color: var(--accent-hover, #3f6488);
+        color: var(--accent-contrast, #fff);
+        background: var(--accent-hover, #3f6488);
+    }
+}

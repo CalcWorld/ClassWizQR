@@ -159,41 +159,6 @@
     grid-row: 4;
 }
 
-.form-button {
-    min-height: 42px;
-    padding: 8px;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    color: var(--text);
-    background: var(--surface-subtle);
-    cursor: pointer;
-    font: inherit;
-    font-weight: 700;
-    white-space: nowrap;
-    transition: border-color .18s ease, background-color .18s ease, transform .18s ease;
-}
-
-.form-button svg {
-    fill: none;
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.form-button:hover {
-    border-color: var(--accent);
-    background: var(--accent-soft);
-}
-
-.form-button:focus-visible {
-    outline: 3px solid rgba(86, 122, 157, .24);
-    outline-offset: 1px;
-}
-
-.form-button:active {
-    transform: translateY(1px);
-}
-
 .url-input-button {
     display: inline-grid;
     width: 28px;

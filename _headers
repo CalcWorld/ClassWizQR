@@ -1,0 +1,12 @@
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
+/manifest.webmanifest
+  Cache-Control: no-cache
+
+/icons/*
+  Cache-Control: no-cache
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable

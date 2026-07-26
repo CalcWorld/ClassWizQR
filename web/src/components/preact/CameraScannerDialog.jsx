@@ -5,8 +5,10 @@ import MessageDialog from './MessageDialog.jsx';
 import { ScreenIcon } from './ScanIcons.jsx';
 
 const CAMERA_STORAGE_KEY = 'qr-camera-device-id';
+const CAMERA_SEQUENCE_HINT_KEY = 'qr-camera-sequence-hint-shown';
 const SCAN_INTERVAL_MS = 200;
 const MAX_SCAN_EDGE = 1280;
+let cameraSequenceHintShown = false;
 
 function BackIcon() {
   return (
@@ -32,6 +34,25 @@ function rememberCamera(deviceId) {
   }
 }
 
+function hasShownCameraSequenceHint() {
+  if (cameraSequenceHintShown) return true;
+  try {
+    cameraSequenceHintShown = sessionStorage.getItem(CAMERA_SEQUENCE_HINT_KEY) === 'true';
+  } catch {
+    // Fall back to the in-memory flag when session storage is unavailable.
+  }
+  return cameraSequenceHintShown;
+}
+
+function rememberCameraSequenceHint() {
+  cameraSequenceHintShown = true;
+  try {
+    sessionStorage.setItem(CAMERA_SEQUENCE_HINT_KEY, 'true');
+  } catch {
+    // The in-memory flag still suppresses repeat prompts on the current page.
+  }
+}
+
 function cameraErrorTag(error) {
   switch (error?.name) {
     case 'NotAllowedError':
@@ -45,6 +66,14 @@ function cameraErrorTag(error) {
       return 'camera-error-busy';
     default:
       return 'camera-error-generic';
+  }
+}
+
+function vibrateOnCameraScan() {
+  try {
+    navigator.vibrate?.(80);
+  } catch {
+    // Vibration is optional and may be blocked by the browser or device.
   }
 }
 
@@ -340,6 +369,12 @@ export default function CameraScannerDialog(
         sequenceRef.current = consumed.sequence;
         setSequence(consumed.sequence);
 
+        const accepted = (
+          consumed.completedText !== null
+          || consumed.acceptedIndex !== null
+        );
+        if (mode === 'camera' && accepted) vibrateOnCameraScan();
+
         if (consumed.completedText !== null) {
           const total = result.sequenceSize >= 1 ? result.sequenceSize : 1;
           onProgress?.({ pending: [], total, complete: true });
@@ -357,7 +392,12 @@ export default function CameraScannerDialog(
           complete: false,
         });
 
-        if (mode === 'camera' && consumed.sequenceStarted) {
+        if (
+          mode === 'camera'
+          && consumed.sequenceStarted
+          && !hasShownCameraSequenceHint()
+        ) {
+          rememberCameraSequenceHint();
           pausedRef.current = true;
           setMessage({
             title: t('camera-sequence-title', {

@@ -1,5 +1,4 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
-import MessageDialog from './MessageDialog.jsx';
+import { useEffect, useRef } from 'preact/hooks';
 import { ClipboardIcon, FileImageIcon } from './ScanIcons.jsx';
 
 function BackIcon() {
@@ -19,8 +18,6 @@ export default function ImageSequenceDialog(
     onContinue,
   }) {
   const dialogRef = useRef(null);
-  const promptedKeyRef = useRef(null);
-  const [instructionOpen, setInstructionOpen] = useState(false);
   const open = Boolean(session);
   const source = session?.source;
   const Icon = source === 'clipboard' ? ClipboardIcon : FileImageIcon;
@@ -38,25 +35,8 @@ export default function ImageSequenceDialog(
     if (!open && dialog.open) dialog.close();
   }, [open]);
 
-  useEffect(() => {
-    if (!session) {
-      promptedKeyRef.current = null;
-      setInstructionOpen(false);
-      return;
-    }
-
-    const key = `${session.source}\u0000${session.sequence.sequenceId}\u0000${
-      session.sequence.sequenceSize
-    }`;
-    if (promptedKeyRef.current !== key) {
-      promptedKeyRef.current = key;
-      setInstructionOpen(true);
-    }
-  }, [session?.source, session?.sequence.sequenceId, session?.sequence.sequenceSize]);
-
   return (
-    <>
-      <dialog
+    <dialog
         ref={dialogRef}
         class="camera-scanner-dialog image-sequence-dialog"
         aria-label={title}
@@ -121,20 +101,6 @@ export default function ImageSequenceDialog(
             </div>
           )}
         </div>
-      </dialog>
-
-      <MessageDialog
-        open={instructionOpen}
-        title={t('camera-sequence-title', {
-          count: session?.sequence.sequenceSize || 0,
-        })}
-        confirmLabel={t('dialog-confirm')}
-        onConfirm={() => setInstructionOpen(false)}
-      >
-        {source === 'clipboard'
-          ? t('clipboard-sequence-instruction')
-          : t('file-sequence-instruction')}
-      </MessageDialog>
-    </>
+    </dialog>
   );
 }

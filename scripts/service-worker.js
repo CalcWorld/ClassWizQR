@@ -6,12 +6,7 @@ const CACHE_PREFIX = 'classwiz-qr-precache-';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 const METADATA_URL = new URL('/__classwizqr_pwa_manifest__', self.location.origin).href;
 const LEGACY_CACHE_NAME = `workbox-precache-v2-${self.registration.scope}`;
-
-const precachedURLs = new Set(
-  PRECACHE_MANIFEST.map(entry => (
-    new URL(entry.url, self.registration.scope).href
-  )),
-);
+const REVISION_PARAM = '__pwa_revision__';
 
 function cacheRequest(url) {
   return new Request(url, { credentials: 'same-origin' });
@@ -46,10 +41,11 @@ async function reusableCaches() {
     if (!metadataResponse) continue;
 
     try {
-      const entries = await metadataResponse.json();
+      const metadata = await metadataResponse.json();
+      if (!Array.isArray(metadata.entries)) continue;
       reusable.push({
         cache,
-        revisions: new Map(entries.map(entry => [entry.url, entry.revision])),
+        entries: new Map(metadata.entries.map(entry => [entry.url, entry])),
       });
     } catch {
       // Ignore incomplete or incompatible caches. They are removed after activation.
@@ -59,31 +55,53 @@ async function reusableCaches() {
   return reusable;
 }
 
+function serializedCacheURL(url) {
+  return url.origin === self.location.origin
+    ? `${url.pathname}${url.search}`
+    : url.href;
+}
+
+function createMetadataEntry(entry, sourceURL, finalURL, preserveSearch = false) {
+  const metadataEntry = {
+    revision: entry.revision,
+    url: entry.url,
+  };
+  if (finalURL.href !== sourceURL.href) {
+    metadataEntry.cacheURL = serializedCacheURL(finalURL);
+    if (preserveSearch) metadataEntry.preserveSearch = true;
+  }
+  return metadataEntry;
+}
+
 async function copyUnchanged(entry, targetCache, sources) {
   for (const source of sources) {
-    if (source.revisions.get(entry.url) !== entry.revision) continue;
+    const previousEntry = source.entries.get(entry.url);
+    if (previousEntry?.revision !== entry.revision) continue;
 
-    const response = await source.cache.match(cacheRequest(
-      new URL(entry.url, self.registration.scope).href,
-    ));
+    const previousCacheURL = new URL(
+      previousEntry.cacheURL || previousEntry.url,
+      self.registration.scope,
+    );
+    const response = await source.cache.match(cacheRequest(previousCacheURL.href));
     if (!response) continue;
 
     await targetCache.put(
-      cacheRequest(new URL(entry.url, self.registration.scope).href),
+      cacheRequest(previousCacheURL.href),
       await withoutRedirect(response),
     );
-    return true;
+    return { ...previousEntry };
   }
 
-  return false;
+  return null;
 }
 
 async function fetchAndCache(entry, cache, sources) {
-  if (await copyUnchanged(entry, cache, sources)) return;
+  const copiedEntry = await copyUnchanged(entry, cache, sources);
+  if (copiedEntry) return copiedEntry;
 
   const resourceURL = new URL(entry.url, self.registration.scope);
   const fetchURL = new URL(resourceURL);
-  fetchURL.searchParams.set('__pwa_revision__', entry.revision || CACHE_VERSION);
+  fetchURL.searchParams.set(REVISION_PARAM, entry.revision || CACHE_VERSION);
 
   const response = await fetch(new Request(fetchURL, {
     cache: 'no-store',
@@ -93,15 +111,24 @@ async function fetchAndCache(entry, cache, sources) {
     throw new Error(`Unable to precache ${entry.url}: HTTP ${response.status}`);
   }
 
+  const finalURL = response.redirected
+    ? new URL(response.url)
+    : new URL(resourceURL);
+  const preserveSearch = finalURL.searchParams.has(REVISION_PARAM);
+  finalURL.searchParams.delete(REVISION_PARAM);
+  finalURL.hash = '';
+
   await cache.put(
-    cacheRequest(resourceURL.href),
+    cacheRequest(finalURL.href),
     await withoutRedirect(response),
   );
+  return createMetadataEntry(entry, resourceURL, finalURL, preserveSearch);
 }
 
 async function installPrecache() {
   const cache = await caches.open(CACHE_NAME);
   const sources = await reusableCaches();
+  const installedEntries = new Array(PRECACHE_MANIFEST.length);
   let nextIndex = 0;
   let failure;
 
@@ -111,7 +138,11 @@ async function installPrecache() {
       if (index >= PRECACHE_MANIFEST.length) return;
 
       try {
-        await fetchAndCache(PRECACHE_MANIFEST[index], cache, sources);
+        installedEntries[index] = await fetchAndCache(
+          PRECACHE_MANIFEST[index],
+          cache,
+          sources,
+        );
       } catch (error) {
         failure ||= error;
       }
@@ -126,7 +157,7 @@ async function installPrecache() {
 
     await cache.put(
       METADATA_URL,
-      new Response(JSON.stringify(PRECACHE_MANIFEST), {
+      new Response(JSON.stringify({ entries: installedEntries }), {
         headers: { 'Content-Type': 'application/json' },
       }),
     );
@@ -137,27 +168,82 @@ async function installPrecache() {
   }
 }
 
-function precachedURL(requestURL) {
+let metadataPromise;
+
+async function precacheMetadata() {
+  metadataPromise ||= (async () => {
+    const cache = await caches.open(CACHE_NAME);
+    const response = await cache.match(METADATA_URL);
+    const metadata = response ? await response.json() : { entries: [] };
+    const bySource = new Map();
+    const cachedURLs = new Set();
+
+    for (const entry of metadata.entries || []) {
+      const sourceURL = new URL(entry.url, self.registration.scope).href;
+      const cacheURL = new URL(
+        entry.cacheURL || entry.url,
+        self.registration.scope,
+      ).href;
+      const record = { ...entry, cacheURL };
+      bySource.set(sourceURL, record);
+      cachedURLs.add(cacheURL);
+    }
+
+    return { bySource, cachedURLs };
+  })();
+  return metadataPromise;
+}
+
+function requestCandidates(requestURL) {
   const exactURL = new URL(requestURL);
   exactURL.hash = '';
-  if (precachedURLs.has(exactURL.href)) return exactURL.href;
+  const withoutSearch = new URL(exactURL);
+  withoutSearch.search = '';
+  return exactURL.href === withoutSearch.href
+    ? [exactURL.href]
+    : [exactURL.href, withoutSearch.href];
+}
 
-  exactURL.search = '';
-  if (precachedURLs.has(exactURL.href)) return exactURL.href;
+async function matchPrecache(requestURL, metadata) {
+  const { cachedURLs } = metadata || await precacheMetadata();
+  const cachedURL = requestCandidates(requestURL)
+    .find(candidate => cachedURLs.has(candidate));
+  if (!cachedURL) return undefined;
 
-  if (exactURL.pathname.endsWith('/')) {
-    const directoryIndex = new URL(exactURL);
-    directoryIndex.pathname += 'index.html';
-    if (precachedURLs.has(directoryIndex.href)) return directoryIndex.href;
+  return caches.match(cacheRequest(cachedURL), { cacheName: CACHE_NAME });
+}
+
+function recordedRedirect(requestURL, metadata) {
+  const sourceURL = new URL(requestURL);
+  const requestSearch = sourceURL.search;
+  sourceURL.search = '';
+  sourceURL.hash = '';
+
+  const entry = metadata.bySource.get(sourceURL.href);
+  if (!entry || entry.cacheURL === sourceURL.href) return null;
+
+  const targetURL = new URL(entry.cacheURL);
+  if (entry.preserveSearch && requestSearch) {
+    const searchParams = new URLSearchParams(requestSearch);
+    for (const [name, value] of searchParams) {
+      targetURL.searchParams.append(name, value);
+    }
   }
+  return targetURL.href;
+}
 
-  if (!exactURL.pathname.split('/').pop().includes('.')) {
-    const cleanURL = new URL(exactURL);
-    cleanURL.pathname += '.html';
-    if (precachedURLs.has(cleanURL.href)) return cleanURL.href;
+async function navigateNetworkFirst(request) {
+  try {
+    return await fetch(request);
+  } catch (error) {
+    const metadata = await precacheMetadata();
+    const redirectURL = recordedRedirect(request.url, metadata);
+    if (redirectURL) return Response.redirect(redirectURL, 308);
+
+    const cached = await matchPrecache(request.url, metadata);
+    if (cached) return cached;
+    throw error;
   }
-
-  return null;
 }
 
 self.addEventListener('install', event => {
@@ -191,13 +277,13 @@ self.addEventListener('fetch', event => {
   const requestURL = new URL(event.request.url);
   if (requestURL.origin !== self.location.origin) return;
 
-  const cachedURL = precachedURL(requestURL);
-  if (!cachedURL) return;
+  if (event.request.mode === 'navigate') {
+    event.respondWith(navigateNetworkFirst(event.request));
+    return;
+  }
 
   event.respondWith((async () => {
-    const cached = await caches.match(cacheRequest(cachedURL), {
-      cacheName: CACHE_NAME,
-    });
+    const cached = await matchPrecache(requestURL);
     return cached || fetch(event.request);
   })());
 });

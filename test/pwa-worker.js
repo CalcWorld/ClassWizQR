@@ -69,7 +69,8 @@ function loadWorker({ caches, entries, fetch, version }) {
     addEventListener(type, listener) {
       listeners.set(type, listener);
     },
-    skipWaiting: async () => {},
+    skipWaiting: async () => {
+    },
   };
 
   vm.runInNewContext(compileWorker(entries, version), {
@@ -83,6 +84,7 @@ function loadWorker({ caches, entries, fetch, version }) {
     Response,
     Set,
     URL,
+    URLSearchParams,
     caches,
     fetch,
     self,
@@ -101,6 +103,18 @@ function loadWorker({ caches, entries, fetch, version }) {
 
   return {
     dispatch,
+    async dispatchFetch(url, mode = 'cors') {
+      let response;
+      const request = new Request(url);
+      Object.defineProperty(request, 'mode', { value: mode });
+      listeners.get('fetch')({
+        request,
+        respondWith(promise) {
+          response = promise;
+        },
+      });
+      return response;
+    },
     wasClaimed: () => claimed,
   };
 }
@@ -125,11 +139,7 @@ test('production service worker limits fetches and atomically reuses caches', as
     maximumFetches = Math.max(maximumFetches, activeFetches);
     await new Promise(resolve => setTimeout(resolve, 2));
     activeFetches--;
-    const response = new Response(request.url);
-    if (new URL(request.url).pathname === '/asset-0.js') {
-      Object.defineProperty(response, 'redirected', { value: true });
-    }
-    return response;
+    return new Response(request.url);
   };
 
   const initialWorker = loadWorker({
@@ -146,15 +156,6 @@ test('production service worker limits fetches and atomically reuses caches', as
     caches.stores.get('classwiz-qr-precache-cache-v1').responses.size,
     initialEntries.length + 1,
   );
-  assert.equal(
-    (await caches.stores
-      .get('classwiz-qr-precache-cache-v1')
-      .match(`${origin}/asset-0.js`))
-      .redirected,
-    false,
-    'Redirected network responses must be stored as regular responses.',
-  );
-
   const updatedEntries = entries(['v2', ...Array.from({ length: 19 }, () => 'v1')]);
   fetchCount = 0;
   const updatedWorker = loadWorker({
@@ -210,4 +211,101 @@ test('production service worker limits fetches and atomically reuses caches', as
     ],
     'A failed update must leave the active cache untouched.',
   );
+});
+
+test('production service worker preserves clean HTML redirects', async () => {
+  const caches = createCacheStorage();
+  let online = true;
+  const worker = loadWorker({
+    caches,
+    entries: [
+      { revision: 'index', url: 'index.html' },
+      { revision: 'api', url: 'api.html' },
+    ],
+    fetch: async request => {
+      if (!online) throw new TypeError('Network unavailable');
+      const requestURL = new URL(request.url);
+      if (request.mode === 'navigate' && requestURL.pathname === '/api.html') {
+        return Response.redirect(`${origin}/source-rule`, 307);
+      }
+      if (request.mode !== 'navigate' && requestURL.pathname.endsWith('.html')) {
+        const finalPath = requestURL.pathname === '/index.html' ? '/' : '/api';
+        const response = new Response(request.url);
+        Object.defineProperties(response, {
+          redirected: { value: true },
+          url: {
+            value: `${origin}${finalPath}?__pwa_revision__=${
+              requestURL.searchParams.get('__pwa_revision__')
+            }`,
+          },
+        });
+        return response;
+      }
+      return new Response(request.url);
+    },
+    version: 'clean-urls',
+  });
+  await worker.dispatch('install');
+
+  const cache = caches.stores.get('classwiz-qr-precache-clean-urls');
+  assert.equal(cache.responses.has(`${origin}/api`), true);
+  assert.equal(cache.responses.has(`${origin}/api.html`), false);
+  assert.equal(cache.responses.has(`${origin}/`), true);
+
+  const sourceRedirect = await worker.dispatchFetch(
+    `${origin}/api.html?lang=zh`,
+    'navigate',
+  );
+  assert.equal(sourceRedirect.status, 307);
+  assert.equal(sourceRedirect.headers.get('Location'), `${origin}/source-rule`);
+
+  online = false;
+  const updatedWorker = loadWorker({
+    caches,
+    entries: [
+      { revision: 'index', url: 'index.html' },
+      { revision: 'api', url: 'api.html' },
+    ],
+    fetch: async () => {
+      throw new TypeError('Network unavailable');
+    },
+    version: 'clean-urls-v2',
+  });
+  await updatedWorker.dispatch('install');
+
+  const apiRedirect = await updatedWorker.dispatchFetch(
+    `${origin}/api.html?lang=zh`,
+    'navigate',
+  );
+  assert.equal(apiRedirect.status, 308);
+  assert.equal(apiRedirect.headers.get('Location'), `${origin}/api?lang=zh`);
+
+  const indexRedirect = await updatedWorker.dispatchFetch(
+    `${origin}/index.html`,
+    'navigate',
+  );
+  assert.equal(indexRedirect.status, 308);
+  assert.equal(indexRedirect.headers.get('Location'), `${origin}/`);
+
+  const cleanPage = await updatedWorker.dispatchFetch(`${origin}/api`, 'navigate');
+  assert.equal(cleanPage.status, 200);
+});
+
+test('production service worker does not invent redirects', async () => {
+  const caches = createCacheStorage();
+  let online = true;
+  const worker = loadWorker({
+    caches,
+    entries: [{ revision: 'api', url: 'api.html' }],
+    fetch: async request => {
+      if (!online) throw new TypeError('Network unavailable');
+      return new Response(request.url);
+    },
+    version: 'plain-html',
+  });
+  await worker.dispatch('install');
+
+  online = false;
+  const response = await worker.dispatchFetch(`${origin}/api.html`, 'navigate');
+  assert.equal(response.status, 200);
 });

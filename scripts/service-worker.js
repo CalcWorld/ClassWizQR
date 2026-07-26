@@ -5,7 +5,7 @@ const PRECACHE_CONCURRENCY = 8;
 const CACHE_PREFIX = 'classwiz-qr-precache-';
 const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 const METADATA_URL = new URL('/__classwizqr_pwa_manifest__', self.location.origin).href;
-const LEGACY_CACHE_PREFIX = 'workbox-precache';
+const LEGACY_CACHE_NAME = `workbox-precache-v2-${self.registration.scope}`;
 
 const precachedURLs = new Set(
   PRECACHE_MANIFEST.map(entry => (
@@ -171,7 +171,7 @@ self.addEventListener('activate', event => {
       cacheNames
         .filter(name => (
           (name.startsWith(CACHE_PREFIX) && name !== CACHE_NAME)
-          || name.startsWith(LEGACY_CACHE_PREFIX)
+          || name === LEGACY_CACHE_NAME
         ))
         .map(name => caches.delete(name)),
     );

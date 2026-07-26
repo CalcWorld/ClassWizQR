@@ -91,15 +91,10 @@ assert.match(
   /classwiz-qr-precache-/,
   'The production service worker does not use versioned application caches.',
 );
-assert.match(
+assert.doesNotMatch(
   serviceWorker,
-  /await copyUnchanged\(/,
-  'The production service worker does not reuse unchanged cached resources.',
-);
-assert.match(
-  serviceWorker,
-  /await caches\.delete\(CACHE_NAME\)/,
-  'The production service worker does not roll back incomplete installations.',
+  /__(?:PRECACHE_MANIFEST|CACHE_VERSION)__/,
+  'The production service worker contains an unresolved template placeholder.',
 );
 assert.equal(
   distFiles.some(file => /^workbox-[\w.-]+\.js(?:\.map)?$/.test(file)),

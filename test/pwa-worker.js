@@ -174,8 +174,16 @@ test('production service worker limits fetches and atomically reuses caches', as
     ],
   );
 
+  await caches.open(`workbox-precache-v2-${scope}`);
+  await caches.open('workbox-precache-v2-https://another-app.test/');
   await updatedWorker.dispatch('activate');
-  assert.deepEqual(await caches.keys(), ['classwiz-qr-precache-cache-v2']);
+  assert.deepEqual(
+    await caches.keys(),
+    [
+      'classwiz-qr-precache-cache-v2',
+      'workbox-precache-v2-https://another-app.test/',
+    ],
+  );
   assert.equal(updatedWorker.wasClaimed(), true);
 
   const failedEntries = entries(['v3', ...Array.from({ length: 19 }, () => 'v1')]);
@@ -196,7 +204,10 @@ test('production service worker limits fetches and atomically reuses caches', as
   );
   assert.deepEqual(
     await caches.keys(),
-    ['classwiz-qr-precache-cache-v2'],
+    [
+      'classwiz-qr-precache-cache-v2',
+      'workbox-precache-v2-https://another-app.test/',
+    ],
     'A failed update must leave the active cache untouched.',
   );
 });

@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { translate } from '../../scripts/i18n.js';
-import '../../styles/buttons.css';
 import '../../styles/pwa.css';
 
 const UPDATE_INTERVAL = 60 * 60 * 1000;
@@ -41,7 +40,8 @@ export default function PwaUpdatePrompt() {
         setNotice('update');
       } else {
         setNotice('offline');
-        navigator.storage?.persist?.().catch(() => {});
+        navigator.storage?.persist?.().catch(() => {
+        });
       }
     }
 

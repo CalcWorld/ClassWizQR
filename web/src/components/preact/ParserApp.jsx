@@ -5,6 +5,7 @@ import { translate } from '../../scripts/i18n.js';
 import BasicInfo from './BasicInfo.jsx';
 import CameraScannerDialog from './CameraScannerDialog.jsx';
 import CalculationView from './CalculationView.jsx';
+import ImageProcessingDialog from './ImageProcessingDialog.jsx';
 import ImageSequenceDialog from './ImageSequenceDialog.jsx';
 import JsonResult from './JsonResult.jsx';
 import MessageDialog from './MessageDialog.jsx';
@@ -97,6 +98,7 @@ export default function ParserApp() {
   const [screenStream, setScreenStream] = useState(null);
   const [imageSession, setImageSession] = useState(null);
   const [imageBusy, setImageBusy] = useState(false);
+  const [imageProgress, setImageProgress] = useState(null);
   const [appMessage, setAppMessage] = useState(null);
   const scanFieldRef = useRef(null);
   const urlInputRef = useRef(null);
@@ -398,22 +400,41 @@ export default function ParserApp() {
 
   async function decodeImageBlobs(blobs) {
     const imageBlobs = blobs.filter(blob => blob?.type?.startsWith('image/'));
-    const decoded = await Promise.all(imageBlobs.map(async blob => {
+    const decoded = [];
+
+    for (const [index, blob] of imageBlobs.entries()) {
+      setImageProgress({
+        current: index + 1,
+        total: imageBlobs.length,
+      });
+      await new Promise(resolve => {
+        requestAnimationFrame(() => setTimeout(resolve, 0));
+      });
+
       try {
-        const prepared = await prepareQrImage(blob);
-        const results = await readQrCodes(prepared.imageData);
-        const result = results.find(item => item.isValid && item.symbology === 'QRCode');
-        if (!result) return null;
-        return {
+        let prepared = await prepareQrImage(blob);
+        let results = await readQrCodes(prepared.imageData);
+        let result = results.find(item => item.isValid && item.symbology === 'QRCode');
+
+        if (!result && prepared.scaled) {
+          await new Promise(resolve => {
+            requestAnimationFrame(() => setTimeout(resolve, 0));
+          });
+          prepared = await prepareQrImage(blob, Number.POSITIVE_INFINITY);
+          results = await readQrCodes(prepared.imageData);
+          result = results.find(item => item.isValid && item.symbology === 'QRCode');
+        }
+        if (!result) continue;
+
+        decoded.push({
           result,
           preview: await createQrPreviewUrl(prepared.canvas, result.position),
-        };
+        });
       } catch (error) {
         console.error(error);
-        return null;
       }
-    }));
-    return decoded.filter(Boolean);
+    }
+    return decoded;
   }
 
   async function processImageBlobs(blobs, source, lockHeld = false) {
@@ -455,6 +476,7 @@ export default function ParserApp() {
 
       setImageSession(consumed.session);
     } finally {
+      setImageProgress(null);
       if (!lockHeld) {
         imageBusyRef.current = false;
         setImageBusy(false);
@@ -526,6 +548,7 @@ export default function ParserApp() {
         body: t('clipboard-error-body'),
       });
     } finally {
+      setImageProgress(null);
       imageBusyRef.current = false;
       setImageBusy(false);
     }
@@ -698,6 +721,7 @@ export default function ParserApp() {
         onClose={closeImageSession}
         onContinue={imageSession?.source === 'clipboard' ? readClipboard : openFilePicker}
       />
+      <ImageProcessingDialog progress={imageProgress} t={t}/>
       <MessageDialog
         open={Boolean(appMessage)}
         title={appMessage?.title || ''}

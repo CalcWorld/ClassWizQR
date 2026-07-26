@@ -1,8 +1,22 @@
 const PREVIEW_SIZE = 512;
 const CROP_PADDING_RATIO = 0.14;
+const DEFAULT_SCAN_MAX_EDGE = 2560;
 
 function clamp(value, minimum, maximum) {
   return Math.min(Math.max(value, minimum), maximum);
+}
+
+export function calculatePreparedImageSize(
+  imageWidth,
+  imageHeight,
+  maxEdge = DEFAULT_SCAN_MAX_EDGE,
+) {
+  const scale = Math.min(1, maxEdge / Math.max(imageWidth, imageHeight));
+  return {
+    width: Math.max(1, Math.round(imageWidth * scale)),
+    height: Math.max(1, Math.round(imageHeight * scale)),
+    scaled: scale < 1,
+  };
 }
 
 export function calculateQrSquareCrop(
@@ -96,12 +110,20 @@ async function loadDrawable(imageBlob) {
   };
 }
 
-export async function prepareQrImage(imageBlob) {
+export async function prepareQrImage(
+  imageBlob,
+  maxEdge = DEFAULT_SCAN_MAX_EDGE,
+) {
   const drawable = await loadDrawable(imageBlob);
   try {
+    const preparedSize = calculatePreparedImageSize(
+      drawable.width,
+      drawable.height,
+      maxEdge,
+    );
     const canvas = document.createElement('canvas');
-    canvas.width = drawable.width;
-    canvas.height = drawable.height;
+    canvas.width = preparedSize.width;
+    canvas.height = preparedSize.height;
     const context = canvas.getContext('2d', { willReadFrequently: true });
     if (!context) throw new Error('Unable to create a canvas context.');
 
@@ -110,11 +132,12 @@ export async function prepareQrImage(imageBlob) {
     // retain the same contrast they have on a light page.
     context.fillStyle = '#fff';
     context.fillRect(0, 0, canvas.width, canvas.height);
-    context.drawImage(drawable.source, 0, 0);
+    context.drawImage(drawable.source, 0, 0, canvas.width, canvas.height);
 
     return {
       canvas,
       imageData: context.getImageData(0, 0, canvas.width, canvas.height),
+      scaled: preparedSize.scaled,
     };
   } finally {
     drawable.close();

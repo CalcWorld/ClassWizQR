@@ -6,12 +6,12 @@ function renderValue(value) {
 }
 
 export default function PreviewTable({
-                                       headers = [],
-                                       rows = [],
-                                       className = 'content preview-table',
-                                       rowNumbers = false,
-                                       transpose = false,
-                                     }) {
+  headers = [],
+  rows = [],
+  className = 'content preview-table',
+  rowNumbers = false,
+  transpose = false,
+}) {
   return (
     <div class="table-scroll">
       <table class={className}>

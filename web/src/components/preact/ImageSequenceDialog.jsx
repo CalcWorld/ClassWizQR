@@ -37,70 +37,70 @@ export default function ImageSequenceDialog(
 
   return (
     <dialog
-        ref={dialogRef}
-        class="camera-scanner-dialog image-sequence-dialog"
-        aria-label={title}
-        onCancel={event => {
-          event.preventDefault();
-          onClose();
-        }}
-      >
-        <div class="camera-scanner-shell">
-          <header class="camera-scanner-header">
-            <button
-              class="camera-back-button"
-              type="button"
-              aria-label={t('scanner-close')}
-              title={t('scanner-close')}
-              onClick={onClose}
-            >
-              <BackIcon/>
-            </button>
-            <strong>{title}</strong>
-            <button
-              class="form-button scanner-header-action"
-              type="button"
-              disabled={busy}
-              onClick={onContinue}
-            >
-              <Icon/>
-              {busy ? t('scanner-reading') : actionLabel}
-            </button>
-          </header>
+      ref={dialogRef}
+      class="camera-scanner-dialog image-sequence-dialog"
+      aria-label={title}
+      onCancel={event => {
+        event.preventDefault();
+        onClose();
+      }}
+    >
+      <div class="camera-scanner-shell">
+        <header class="camera-scanner-header">
+          <button
+            class="camera-back-button"
+            type="button"
+            aria-label={t('scanner-close')}
+            title={t('scanner-close')}
+            onClick={onClose}
+          >
+            <BackIcon/>
+          </button>
+          <strong>{title}</strong>
+          <button
+            class="form-button scanner-header-action"
+            type="button"
+            disabled={busy}
+            onClick={onContinue}
+          >
+            <Icon/>
+            {busy ? t('scanner-reading') : actionLabel}
+          </button>
+        </header>
 
-          {session && (
-            <div
-              class="image-sequence-grid"
-              aria-label={t('camera-sequence-progress')}
-            >
-              {session.previews.map((preview, index) => (
-                preview ? (
-                  <figure class="image-sequence-cell is-scanned" key={index}>
-                    <img src={preview} alt=""/>
-                    <figcaption
-                      aria-label={`${index + 1}: ${t('camera-sequence-scanned')}`}
-                    >
-                      {index + 1}
-                    </figcaption>
-                  </figure>
-                ) : (
-                  <button
-                    class="image-sequence-cell image-sequence-placeholder"
-                    type="button"
-                    disabled={busy}
-                    aria-label={`${index + 1}: ${t('camera-sequence-pending')}; ${
-                      actionLabel
-                    }`}
-                    onClick={onContinue}
-                    key={index}
+        {session && (
+          <div
+            class="image-sequence-grid"
+            aria-label={t('camera-sequence-progress')}
+          >
+            {session.previews.map((preview, index) => (
+              preview ? (
+                <figure class="image-sequence-cell is-scanned" key={index}>
+                  <img src={preview} alt=""/>
+                  <figcaption
+                    aria-label={`${index + 1}: ${t('camera-sequence-scanned')}`}
                   >
-                    <span aria-hidden="true">{index + 1}</span>
-                  </button>
-                )
-              ))}
-            </div>
-          )}
-        </div>
+                    {index + 1}
+                  </figcaption>
+                </figure>
+              ) : (
+                <button
+                  class="image-sequence-cell image-sequence-placeholder"
+                  type="button"
+                  disabled={busy}
+                  aria-label={`${index + 1}: ${t('camera-sequence-pending')}; ${
+                    actionLabel
+                  }`}
+                  onClick={onContinue}
+                  key={index}
+                >
+                  <span aria-hidden="true">{index + 1}</span>
+                </button>
+              )
+            ))}
+          </div>
+        )}
+      </div>
     </dialog>
   );
 }

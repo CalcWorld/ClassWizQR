@@ -5,7 +5,10 @@ import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader';
 import { parseUrl } from '../src/index.js';
 import { consumeQrResult, createEmptySequence, } from '../web/src/scripts/qrSequence.js';
 import { addQrImageResults, createEmptyImageSequenceSession, } from '../web/src/scripts/qrImageSequence.js';
-import { calculateQrSquareCrop } from '../web/src/scripts/qrPreview.js';
+import {
+  calculatePreparedImageSize,
+  calculateQrSquareCrop,
+} from '../web/src/scripts/qrPreview.js';
 
 const wasmBinary = readFileSync(
   new URL('../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm', import.meta.url),
@@ -224,6 +227,27 @@ test('QR preview crop rejects missing or degenerate positions', () => {
     bottomLeft: { x: 10, y: 10 },
     bottomRight: { x: 10, y: 10 },
   }, 500, 500), null);
+});
+
+test('large QR images are proportionally reduced before the first scan attempt', () => {
+  assert.deepEqual(calculatePreparedImageSize(6000, 4000), {
+    width: 2560,
+    height: 1707,
+    scaled: true,
+  });
+  assert.deepEqual(calculatePreparedImageSize(1200, 800), {
+    width: 1200,
+    height: 800,
+    scaled: false,
+  });
+  assert.deepEqual(
+    calculatePreparedImageSize(6000, 4000, Number.POSITIVE_INFINITY),
+    {
+      width: 6000,
+      height: 4000,
+      scaled: false,
+    },
+  );
 });
 
 test('provided QR fixtures expose expected sequence metadata and assemble', async () => {

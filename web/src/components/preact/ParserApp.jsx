@@ -5,9 +5,15 @@ import { translate } from '../../scripts/i18n.js';
 import BasicInfo from './BasicInfo.jsx';
 import CameraScannerDialog from './CameraScannerDialog.jsx';
 import CalculationView from './CalculationView.jsx';
+import ImageSequenceDialog from './ImageSequenceDialog.jsx';
 import JsonResult from './JsonResult.jsx';
+import MessageDialog from './MessageDialog.jsx';
 import ResultPanel from './ResultPanel.jsx';
+import { CameraIcon, ClipboardIcon, FileImageIcon, ScreenIcon, } from './ScanIcons.jsx';
 import SettingsView from './SettingsView.jsx';
+import { addQrImageResults, createEmptyImageSequenceSession, } from '../../scripts/qrImageSequence.js';
+import { createQrPreviewUrl, prepareQrImage, } from '../../scripts/qrPreview.js';
+import { readQrCodes } from '../../scripts/qrReader.js';
 
 const EMPTY_RESULT = {};
 const LANGUAGE_OPTIONS = cwqr.availableLanguages.map(value => {
@@ -19,46 +25,6 @@ const LANGUAGE_OPTIONS = cwqr.availableLanguages.map(value => {
   }
   return { value, label: `${name} (${value})` };
 });
-
-function CameraIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M8 6 9.5 4h5L16 6"/>
-      <rect x="3" y="6" width="18" height="14" rx="2"/>
-      <circle cx="12" cy="13" r="3"/>
-    </svg>
-  );
-}
-
-function ScreenIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="2.5" y="3.5" width="19" height="14" rx="2"/>
-      <path d="M8 21h8M12 17.5V21"/>
-      <path d="M6.5 8.5v-2h2M15.5 6.5h2v2M17.5 12.5v2h-2M8.5 14.5h-2v-2"/>
-    </svg>
-  );
-}
-
-function FileImageIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="3" y="4" width="18" height="16" rx="2"/>
-      <circle cx="8.5" cy="9" r="1.5"/>
-      <path d="m4.5 17 4.5-4 3.5 3 2.5-2 4.5 3.5"/>
-    </svg>
-  );
-}
-
-function ClipboardIcon() {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="5" y="4" width="14" height="17" rx="2"/>
-      <rect x="8" y="2" width="8" height="4" rx="1"/>
-      <path d="M8 10h8M8 14h8M8 18h5"/>
-    </svg>
-  );
-}
 
 function ParseIcon() {
   return (
@@ -133,9 +99,17 @@ export default function ParserApp() {
   const [result, setResult] = useState(EMPTY_RESULT);
   const [editorValue, setEditorValue] = useState(EMPTY_RESULT);
   const [renderVersion, setRenderVersion] = useState(0);
-  const [cameraScannerOpen, setCameraScannerOpen] = useState(false);
+  const [streamScannerMode, setStreamScannerMode] = useState(null);
+  const [screenStream, setScreenStream] = useState(null);
+  const [imageSession, setImageSession] = useState(null);
+  const [imageBusy, setImageBusy] = useState(false);
+  const [appMessage, setAppMessage] = useState(null);
   const scanFieldRef = useRef(null);
   const urlInputRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const baseTitleRef = useRef('');
+  const screenTitleStatusRef = useRef(null);
+  const imageBusyRef = useRef(false);
 
   const t = useCallback(tag => translate(tag, language), [language]);
   const languageReady = language === 'en' || Object.hasOwn(resources, language);
@@ -166,6 +140,39 @@ export default function ParserApp() {
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
+
+  useEffect(() => {
+    baseTitleRef.current = document.title;
+
+    function applyScreenTitle() {
+      const status = screenTitleStatusRef.current;
+      if (document.hasFocus() || !status) {
+        document.title = baseTitleRef.current;
+        if (document.hasFocus() && status?.complete) {
+          screenTitleStatusRef.current = null;
+        }
+        return;
+      }
+
+      let prefix = t('screen-title-scanning');
+      if (status.complete) {
+        prefix = t('screen-title-complete');
+      } else if (status.total > 1) {
+        prefix = t('screen-title-sequence')
+          .replace('{scanned}', status.scanned)
+          .replace('{total}', status.total);
+      }
+      document.title = `${prefix}${baseTitleRef.current}`;
+    }
+
+    window.addEventListener('focus', applyScreenTitle);
+    window.addEventListener('blur', applyScreenTitle);
+    return () => {
+      window.removeEventListener('focus', applyScreenTitle);
+      window.removeEventListener('blur', applyScreenTitle);
+      document.title = baseTitleRef.current;
+    };
+  }, [t]);
 
   useEffect(() => {
     if (!initialized) return undefined;
@@ -336,8 +343,209 @@ export default function ParserApp() {
   }
 
   function acceptScannedUrl(url) {
-    setCameraScannerOpen(false);
+    setStreamScannerMode(null);
+    setScreenStream(null);
+    closeImageSession();
     commitUrl(url.replace(/[\r\n]+/g, ''));
+  }
+
+  function setScreenScanProgress(progress) {
+    screenTitleStatusRef.current = progress;
+    if (!progress) {
+      document.title = baseTitleRef.current;
+      return;
+    }
+    if (!document.hasFocus()) {
+      let prefix = t('screen-title-scanning');
+      if (progress.complete) {
+        prefix = t('screen-title-complete');
+      } else if (progress.total > 1) {
+        prefix = t('screen-title-sequence')
+          .replace('{scanned}', progress.scanned)
+          .replace('{total}', progress.total);
+      }
+      document.title = `${prefix}${baseTitleRef.current}`;
+    }
+  }
+
+  function closeStreamScanner() {
+    setStreamScannerMode(null);
+    setScreenStream(null);
+    screenTitleStatusRef.current = null;
+    document.title = baseTitleRef.current;
+  }
+
+  async function openScreenScanner() {
+    if (!navigator.mediaDevices?.getDisplayMedia) {
+      setAppMessage({
+        title: t('screen-error-title'),
+        body: t('screen-error-unsupported'),
+      });
+      return;
+    }
+
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        audio: false,
+        video: true,
+      });
+      setScreenStream(stream);
+      setScreenScanProgress({ scanned: 0, total: 0, complete: false });
+      setStreamScannerMode('screen');
+    } catch (error) {
+      if (error?.name !== 'NotAllowedError') {
+        setAppMessage({
+          title: t('screen-error-title'),
+          body: t('screen-error-generic'),
+        });
+      }
+    }
+  }
+
+  function revokePreviews(previews) {
+    previews.filter(Boolean).forEach(preview => URL.revokeObjectURL(preview));
+  }
+
+  function closeImageSession() {
+    setImageSession(current => {
+      if (current) revokePreviews(current.previews);
+      return null;
+    });
+  }
+
+  async function decodeImageBlobs(blobs) {
+    const imageBlobs = blobs.filter(blob => blob?.type?.startsWith('image/'));
+    const decoded = await Promise.all(imageBlobs.map(async blob => {
+      try {
+        const prepared = await prepareQrImage(blob);
+        const results = await readQrCodes(prepared.imageData);
+        const result = results.find(item => item.isValid && item.symbology === 'QRCode');
+        if (!result) return null;
+        return {
+          result,
+          preview: await createQrPreviewUrl(prepared.canvas, result.position),
+        };
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    }));
+    return decoded.filter(Boolean);
+  }
+
+  async function processImageBlobs(blobs, source, lockHeld = false) {
+    if (!lockHeld) {
+      if (imageBusyRef.current) return;
+      imageBusyRef.current = true;
+      setImageBusy(true);
+    }
+    try {
+      const items = await decodeImageBlobs(blobs);
+      if (!items.length) {
+        setAppMessage({
+          title: t('image-read-error-title'),
+          body: t('image-read-error-body'),
+        });
+        return;
+      }
+
+      const current = imageSession?.source === source
+        ? imageSession
+        : createEmptyImageSequenceSession(source);
+      const consumed = addQrImageResults(current, items);
+      revokePreviews(consumed.rejectedPreviews);
+
+      if (consumed.status === 'mixed') {
+        setAppMessage({
+          title: t('image-sequence-mixed-title'),
+          body: t('image-sequence-mixed-body'),
+        });
+        return;
+      }
+
+      if (consumed.status === 'complete') {
+        revokePreviews(current.previews);
+        revokePreviews(items.map(item => item.preview));
+        acceptScannedUrl(consumed.completedText);
+        return;
+      }
+
+      setImageSession(consumed.session);
+    } finally {
+      if (!lockHeld) {
+        imageBusyRef.current = false;
+        setImageBusy(false);
+      }
+    }
+  }
+
+  function openFilePicker() {
+    fileInputRef.current?.click();
+  }
+
+  async function handleFileSelection(event) {
+    const files = Array.from(event.currentTarget.files || []);
+    event.currentTarget.value = '';
+    if (files.length) await processImageBlobs(files, 'file');
+  }
+
+  async function readClipboard() {
+    if (imageBusyRef.current) return;
+    if (!navigator.clipboard?.read) {
+      if (navigator.clipboard?.readText) {
+        try {
+          const text = (await navigator.clipboard.readText()).trim();
+          if (text) {
+            acceptScannedUrl(text);
+            return;
+          }
+        } catch {
+          // Fall through to the common clipboard error.
+        }
+      }
+      setAppMessage({
+        title: t('clipboard-error-title'),
+        body: t('clipboard-error-body'),
+      });
+      return;
+    }
+
+    imageBusyRef.current = true;
+    setImageBusy(true);
+    try {
+      const clipboardItems = await navigator.clipboard.read();
+      for (const item of clipboardItems) {
+        if (!item.types.includes('text/plain')) continue;
+        const value = (await (await item.getType('text/plain')).text()).trim();
+        if (value) {
+          acceptScannedUrl(value);
+          return;
+        }
+      }
+
+      const images = [];
+      for (const item of clipboardItems) {
+        const imageType = item.types.find(type => type.startsWith('image/'));
+        if (imageType) images.push(await item.getType(imageType));
+      }
+      if (!images.length) {
+        setAppMessage({
+          title: t('clipboard-error-title'),
+          body: t('clipboard-error-body'),
+        });
+        return;
+      }
+      await processImageBlobs(images, 'clipboard', true);
+    } catch (error) {
+      console.error(error);
+      setAppMessage({
+        title: t('clipboard-error-title'),
+        body: t('clipboard-error-body'),
+      });
+    } finally {
+      imageBusyRef.current = false;
+      setImageBusy(false);
+    }
   }
 
   function handleDownload(key) {
@@ -384,11 +592,23 @@ export default function ParserApp() {
                   <ScanOptionButton
                     icon={CameraIcon}
                     label={t('scan-camera')}
-                    onClick={() => setCameraScannerOpen(true)}
+                    onClick={() => setStreamScannerMode('camera')}
                   />
-                  <ScanOptionButton icon={ScreenIcon} label={t('scan-screen')}/>
-                  <ScanOptionButton icon={FileImageIcon} label={t('scan-file')}/>
-                  <ScanOptionButton icon={ClipboardIcon} label={t('scan-clipboard')}/>
+                  <ScanOptionButton
+                    icon={ScreenIcon}
+                    label={t('scan-screen')}
+                    onClick={openScreenScanner}
+                  />
+                  <ScanOptionButton
+                    icon={FileImageIcon}
+                    label={t('scan-file')}
+                    onClick={openFilePicker}
+                  />
+                  <ScanOptionButton
+                    icon={ClipboardIcon}
+                    label={t('scan-clipboard')}
+                    onClick={readClipboard}
+                  />
                 </div>
               </div>
             )}
@@ -440,6 +660,16 @@ export default function ParserApp() {
           </div>
         )}
       </form>
+      <input
+        ref={fileInputRef}
+        class="visually-hidden-file-input"
+        type="file"
+        accept="image/*"
+        multiple
+        tabindex="-1"
+        aria-hidden="true"
+        onChange={handleFileSelection}
+      />
 
       <ResultPanel title={t('calc-title')}>
         <CalculationView
@@ -460,11 +690,29 @@ export default function ParserApp() {
         <JsonResult value={editorValue} language={language}/>
       </ResultPanel>
       <CameraScannerDialog
-        open={cameraScannerOpen}
+        open={Boolean(streamScannerMode)}
+        mode={streamScannerMode || 'camera'}
+        initialStream={screenStream}
         t={t}
-        onClose={() => setCameraScannerOpen(false)}
+        onClose={closeStreamScanner}
         onScan={acceptScannedUrl}
+        onProgress={streamScannerMode === 'screen' ? setScreenScanProgress : undefined}
       />
+      <ImageSequenceDialog
+        session={imageSession}
+        busy={imageBusy}
+        t={t}
+        onClose={closeImageSession}
+        onContinue={imageSession?.source === 'clipboard' ? readClipboard : openFilePicker}
+      />
+      <MessageDialog
+        open={Boolean(appMessage)}
+        title={appMessage?.title || ''}
+        confirmLabel={t('dialog-confirm')}
+        onConfirm={() => setAppMessage(null)}
+      >
+        {appMessage?.body}
+      </MessageDialog>
     </div>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks';
 import { consumeQrResult, createEmptySequence } from '../../scripts/qrSequence.js';
 import { readQrCodes } from '../../scripts/qrReader.js';
 import MessageDialog from './MessageDialog.jsx';
+import { ScreenIcon } from './ScanIcons.jsx';
 
 const CAMERA_STORAGE_KEY = 'qr-camera-device-id';
 const SCAN_INTERVAL_MS = 200;
@@ -70,7 +71,16 @@ function SequenceProgress({ sequence, t }) {
   );
 }
 
-export default function CameraScannerDialog({ open, t, onClose, onScan }) {
+export default function CameraScannerDialog(
+  {
+    open,
+    mode = 'camera',
+    initialStream = null,
+    t,
+    onClose,
+    onScan,
+    onProgress,
+  }) {
   const dialogRef = useRef(null);
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
@@ -97,6 +107,74 @@ export default function CameraScannerDialog({ open, t, onClose, onScan }) {
     streamRef.current = null;
     stream?.getTracks().forEach(track => track.stop());
     if (videoRef.current) videoRef.current.srcObject = null;
+  }
+
+  async function attachScreenStream(stream) {
+    if (!stream) {
+      setStatus('idle');
+      return;
+    }
+
+    const generation = generationRef.current + 1;
+    generationRef.current = generation;
+    const previousStream = streamRef.current;
+    streamRef.current = stream;
+    if (previousStream && previousStream !== stream) {
+      previousStream.getTracks().forEach(track => track.stop());
+    }
+
+    const video = videoRef.current;
+    if (video) {
+      video.srcObject = stream;
+      try {
+        await video.play();
+      } catch {
+        // The autoplay attribute can still start playback once metadata is ready.
+      }
+    }
+
+    const [track] = stream.getVideoTracks();
+    track?.addEventListener('ended', () => {
+      if (generation !== generationRef.current) return;
+      streamRef.current = null;
+      if (videoRef.current) videoRef.current.srcObject = null;
+      setStatus('idle');
+      onProgress?.(null);
+    }, { once: true });
+    setDevices([]);
+    setStatus('scanning');
+  }
+
+  async function requestScreen() {
+    if (!navigator.mediaDevices?.getDisplayMedia) {
+      setMessage({
+        title: t('screen-error-title'),
+        body: t('screen-error-unsupported'),
+        closesScanner: false,
+      });
+      return;
+    }
+
+    const hadStream = Boolean(streamRef.current);
+    setStatus('loading');
+    try {
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        audio: false,
+        video: true,
+      });
+      resetSequence();
+      onProgress?.({ scanned: 0, total: 0, complete: false });
+      await attachScreenStream(stream);
+    } catch (error) {
+      setStatus(hadStream ? 'scanning' : 'idle');
+      if (error?.name !== 'NotAllowedError') {
+        setMessage({
+          title: t('screen-error-title'),
+          body: t('screen-error-generic'),
+          closesScanner: false,
+        });
+      }
+    }
   }
 
   function closeScanner() {
@@ -206,6 +284,15 @@ export default function CameraScannerDialog({ open, t, onClose, onScan }) {
       return undefined;
     }
 
+    if (mode === 'screen') {
+      pausedRef.current = false;
+      setMessage(null);
+      resetSequence();
+      onProgress?.({ scanned: 0, total: 0, complete: false });
+      attachScreenStream(initialStream);
+      return () => stopStream();
+    }
+
     if (!navigator.mediaDevices?.getUserMedia) {
       setStatus('error');
       pausedRef.current = true;
@@ -223,7 +310,7 @@ export default function CameraScannerDialog({ open, t, onClose, onScan }) {
     requestCamera(getRememberedCamera(), true);
 
     return () => stopStream();
-  }, [open]);
+  }, [open, mode, initialStream]);
 
   useEffect(() => {
     if (!open || status !== 'scanning') return undefined;
@@ -254,12 +341,21 @@ export default function CameraScannerDialog({ open, t, onClose, onScan }) {
         setSequence(consumed.sequence);
 
         if (consumed.completedText !== null) {
+          const total = result.sequenceSize >= 1 ? result.sequenceSize : 1;
+          onProgress?.({ scanned: total, total, complete: true });
           stopStream();
           onScan(consumed.completedText);
           return;
         }
 
-        if (consumed.sequenceStarted) {
+        const scanned = consumed.sequence.parts.filter(part => part !== null).length;
+        onProgress?.({
+          scanned,
+          total: consumed.sequence.sequenceSize,
+          complete: false,
+        });
+
+        if (mode === 'camera' && consumed.sequenceStarted) {
           pausedRef.current = true;
           setMessage({
             title: t('camera-sequence-title').replace(
@@ -284,7 +380,7 @@ export default function CameraScannerDialog({ open, t, onClose, onScan }) {
     }, SCAN_INTERVAL_MS);
 
     return () => window.clearInterval(timer);
-  }, [open, status]);
+  }, [open, status, mode]);
 
   function confirmMessage() {
     const closesScanner = message?.closesScanner;
@@ -301,7 +397,7 @@ export default function CameraScannerDialog({ open, t, onClose, onScan }) {
       <dialog
         ref={dialogRef}
         class="camera-scanner-dialog"
-        aria-label={t('camera-title')}
+        aria-label={mode === 'screen' ? t('screen-scanner-title') : t('camera-title')}
         onCancel={event => {
           event.preventDefault();
           closeScanner();
@@ -318,37 +414,60 @@ export default function CameraScannerDialog({ open, t, onClose, onScan }) {
             >
               <BackIcon/>
             </button>
-            <strong>{t('camera-title')}</strong>
-            <div class="camera-device-control">
-              <label for="camera-device">{t('camera-select')}</label>
-              <select
-                id="camera-device"
-                value={selectedDeviceId}
-                disabled={devices.length < 2 || status === 'loading'}
-                onChange={event => switchCamera(event.currentTarget.value)}
+            <strong>
+              {mode === 'screen' ? t('screen-scanner-title') : t('camera-title')}
+            </strong>
+            {mode === 'screen' ? (
+              <button
+                class="form-button scanner-header-action"
+                type="button"
+                disabled={status === 'loading'}
+                onClick={requestScreen}
               >
-                {devices.length === 0 && (
-                  <option value="">{t('camera-default-device')}</option>
-                )}
-                {devices.map((device, index) => (
-                  <option value={device.deviceId} key={device.deviceId}>
-                    {device.label || `${t('camera-device')} ${index + 1}`}
-                  </option>
-                ))}
-              </select>
-            </div>
+                <ScreenIcon/>
+                {t('screen-reshare')}
+              </button>
+            ) : (
+              <div class="camera-device-control">
+                <label for="camera-device">{t('camera-select')}</label>
+                <select
+                  id="camera-device"
+                  value={selectedDeviceId}
+                  disabled={devices.length < 2 || status === 'loading'}
+                  onChange={event => switchCamera(event.currentTarget.value)}
+                >
+                  {devices.length === 0 && (
+                    <option value="">{t('camera-default-device')}</option>
+                  )}
+                  {devices.map((device, index) => (
+                    <option value={device.deviceId} key={device.deviceId}>
+                      {device.label || `${t('camera-device')} ${index + 1}`}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </header>
 
-          <div class="camera-preview">
+          <div class={mode === 'screen' ? 'camera-preview is-screen' : 'camera-preview'}>
             <video ref={videoRef} autoplay muted playsinline/>
             <canvas ref={canvasRef} hidden/>
-            <div class="camera-scan-guide" aria-hidden="true"/>
+            {mode === 'camera' && <div class="camera-scan-guide" aria-hidden="true"/>}
             <SequenceProgress sequence={sequence} t={t}/>
             {status === 'loading' && (
-              <div class="camera-status">{t('camera-loading')}</div>
+              <div class="camera-status">
+                {mode === 'screen' ? t('screen-loading') : t('camera-loading')}
+              </div>
             )}
             {status === 'scanning' && (
-              <div class="camera-hint">{t('camera-hint')}</div>
+              <div class="camera-hint">
+                {mode === 'screen' ? t('screen-hint') : t('camera-hint')}
+              </div>
+            )}
+            {mode === 'screen' && status === 'idle' && (
+              <div class="camera-status screen-ended-status">
+                {t('screen-ended')}
+              </div>
             )}
           </div>
         </div>

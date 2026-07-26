@@ -20,9 +20,9 @@ async function loadReader() {
   return readerPromise;
 }
 
-export async function readQrCodes(imageData) {
+export async function readQrCodes(imageSource) {
   const { readBarcodes } = await loadReader();
-  return readBarcodes(imageData, {
+  return readBarcodes(imageSource, {
     formats: ['QRCode'],
     maxNumberOfSymbols: 1,
     textMode: 'Plain',

@@ -7,6 +7,11 @@ import {
   consumeQrResult,
   createEmptySequence,
 } from '../web/src/scripts/qrSequence.js';
+import {
+  addQrImageResults,
+  createEmptyImageSequenceSession,
+} from '../web/src/scripts/qrImageSequence.js';
+import { calculateQrSquareCrop } from '../web/src/scripts/qrPreview.js';
 
 const wasmBinary = readFileSync(
   new URL('../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm', import.meta.url),
@@ -107,6 +112,112 @@ test('a changed sequence identity starts fresh from the current QR', () => {
   assert.deepEqual(changed.sequence.parts, [null, 'new-second']);
 });
 
+test('image sequence sessions retain previews by sequence index', () => {
+  const initial = createEmptyImageSequenceSession('file');
+  const secondFirst = addQrImageResults(initial, [{
+    result: qrResult({
+      text: 'right',
+      sequenceId: '90',
+      sequenceIndex: 1,
+      sequenceSize: 2,
+    }),
+    preview: 'second.png',
+  }]);
+
+  assert.equal(secondFirst.status, 'pending');
+  assert.deepEqual(secondFirst.session.previews, [null, 'second.png']);
+
+  const completed = addQrImageResults(secondFirst.session, [{
+    result: qrResult({
+      text: 'left-',
+      sequenceId: '90',
+      sequenceIndex: 0,
+      sequenceSize: 2,
+    }),
+    preview: 'first.png',
+  }]);
+  assert.equal(completed.status, 'complete');
+  assert.equal(completed.completedText, 'left-right');
+});
+
+test('image batches reject QR codes from different sequences', () => {
+  const consumed = addQrImageResults(
+    createEmptyImageSequenceSession('clipboard'),
+    [
+      {
+        result: qrResult({
+          text: 'one',
+          sequenceId: '11',
+          sequenceIndex: 0,
+          sequenceSize: 2,
+        }),
+        preview: 'one.png',
+      },
+      {
+        result: qrResult({
+          text: 'two',
+          sequenceId: '12',
+          sequenceIndex: 1,
+          sequenceSize: 2,
+        }),
+        preview: 'two.png',
+      },
+    ],
+  );
+
+  assert.equal(consumed.status, 'mixed');
+  assert.deepEqual(consumed.rejectedPreviews, ['one.png', 'two.png']);
+});
+
+test('ordinary image QR results complete without opening a sequence session', () => {
+  const consumed = addQrImageResults(
+    createEmptyImageSequenceSession('file'),
+    [{
+      result: qrResult({ text: 'https://example.test/' }),
+      preview: 'ordinary.png',
+    }],
+  );
+
+  assert.equal(consumed.status, 'complete');
+  assert.equal(consumed.completedText, 'https://example.test/');
+});
+
+test('QR preview crop is square, padded, and clamped to the image', () => {
+  const centered = calculateQrSquareCrop({
+    topLeft: { x: 100, y: 80 },
+    topRight: { x: 300, y: 80 },
+    bottomLeft: { x: 100, y: 280 },
+    bottomRight: { x: 300, y: 280 },
+  }, 500, 400, 0.1);
+  assert.deepEqual(centered, {
+    x: 80,
+    y: 60,
+    size: 240,
+  });
+
+  const edge = calculateQrSquareCrop({
+    topLeft: { x: 0, y: 0 },
+    topRight: { x: 100, y: 0 },
+    bottomLeft: { x: 0, y: 100 },
+    bottomRight: { x: 100, y: 100 },
+  }, 300, 200, 0.2);
+  assert.deepEqual(edge, {
+    x: 0,
+    y: 0,
+    size: 140,
+  });
+});
+
+test('QR preview crop rejects missing or degenerate positions', () => {
+  assert.equal(calculateQrSquareCrop(null, 500, 500), null);
+  assert.equal(calculateQrSquareCrop({
+    topLeft: { x: 10, y: 10 },
+    topRight: { x: 10, y: 10 },
+    bottomLeft: { x: 10, y: 10 },
+    bottomRight: { x: 10, y: 10 },
+  }, 500, 500), null);
+});
+
 test('provided QR fixtures expose expected sequence metadata and assemble', async () => {
   const decode = async filename => {
     const [result] = await readBarcodes(
@@ -131,6 +242,12 @@ test('provided QR fixtures expose expected sequence metadata and assemble', asyn
   assert.equal(secondPart.sequenceId, '90');
   assert.equal(secondPart.sequenceIndex, 1);
   assert.equal(secondPart.sequenceSize, 2);
+  assert.deepEqual(Object.keys(firstPart.position).sort(), [
+    'bottomLeft',
+    'bottomRight',
+    'topLeft',
+    'topRight',
+  ]);
 
   const started = consumeQrResult(createEmptySequence(), firstPart);
   const completed = consumeQrResult(started.sequence, secondPart);

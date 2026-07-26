@@ -7,8 +7,13 @@ export function createEmptySequence() {
   };
 }
 
-function isStructuredAppend(result) {
+export function isStructuredQrResult(result) {
   return Number.isInteger(result.sequenceSize) && result.sequenceSize >= 1;
+}
+
+export function getQrSequenceIdentity(result) {
+  if (!isStructuredQrResult(result)) return null;
+  return `${result.format || 'QRCode'}\u0000${result.sequenceId}\u0000${result.sequenceSize}`;
 }
 
 /**
@@ -28,7 +33,7 @@ export function consumeQrResult(current, result) {
     };
   }
 
-  if (!isStructuredAppend(result)) {
+  if (!isStructuredQrResult(result)) {
     return {
       sequence: createEmptySequence(),
       completedText: result.text,

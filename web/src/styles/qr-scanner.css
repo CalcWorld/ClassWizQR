@@ -2,7 +2,7 @@ html:has(.camera-scanner-dialog[open]),
 html:has(.message-dialog[open]) {
     overflow: hidden;
     overscroll-behavior: none;
-    scrollbar-gutter: auto;
+    scrollbar-gutter: stable;
 }
 
 html:has(.camera-scanner-dialog[open]) body,
@@ -127,6 +127,20 @@ html:has(.message-dialog[open]) body {
     opacity: .6;
 }
 
+.scanner-header-action {
+    display: inline-flex;
+    min-height: 38px;
+    padding: 6px 11px;
+    align-items: center;
+    gap: 7px;
+}
+
+.scanner-header-action svg {
+    width: 19px;
+    height: 19px;
+    stroke-width: 1.7;
+}
+
 .camera-sequence-progress {
     position: absolute;
     z-index: 2;
@@ -180,6 +194,10 @@ html:has(.message-dialog[open]) body {
     object-fit: cover;
 }
 
+.camera-preview.is-screen video {
+    object-fit: contain;
+}
+
 .camera-scan-guide {
     position: absolute;
     top: 50%;
@@ -217,6 +235,122 @@ html:has(.message-dialog[open]) body {
     background: rgba(0, 0, 0, .62);
     font-size: .85rem;
     text-align: center;
+    pointer-events: none;
+}
+
+.screen-ended-status {
+    background: rgba(8, 10, 12, .84);
+}
+
+.image-sequence-grid {
+    display: grid;
+    min-height: 0;
+    flex: 1;
+    padding: 20px;
+    overflow: auto;
+    background: var(--surface);
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+    grid-auto-flow: row;
+    align-content: start;
+    gap: 14px;
+}
+
+.image-sequence-cell {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    overflow: hidden;
+    border: 2px solid var(--border);
+    border-radius: 5px;
+    aspect-ratio: 1;
+    background: linear-gradient(135deg, transparent 49.5%, var(--border) 50%, transparent 50.5%),
+    linear-gradient(45deg, transparent 49.5%, var(--border) 50%, transparent 50.5%),
+    var(--surface-subtle);
+}
+
+.image-sequence-cell.is-scanned {
+    background: #fff;
+}
+
+.image-sequence-cell img {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-sequence-cell figcaption {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-grid;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 7px;
+    border: 2px solid var(--accent);
+    border-radius: 4px;
+    color: var(--accent);
+    background: var(--surface);
+    font-size: 1rem;
+    font-weight: 800;
+    place-items: center;
+}
+
+.image-sequence-cell.is-scanned figcaption {
+    color: var(--accent-contrast);
+    background: var(--accent);
+}
+
+.image-sequence-placeholder {
+    padding: 0;
+    color: var(--accent);
+    font: inherit;
+    cursor: pointer;
+}
+
+.image-sequence-placeholder > span {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: inline-grid;
+    min-width: 34px;
+    height: 34px;
+    padding: 0 7px;
+    border: 2px solid var(--accent);
+    border-radius: 4px;
+    background: var(--surface);
+    font-size: 1rem;
+    font-weight: 800;
+    place-items: center;
+}
+
+.image-sequence-placeholder:hover,
+.image-sequence-placeholder:focus-visible {
+    border-color: var(--accent);
+    background: linear-gradient(135deg, transparent 49.5%, var(--accent) 50%, transparent 50.5%),
+    linear-gradient(45deg, transparent 49.5%, var(--accent) 50%, transparent 50.5%),
+    var(--accent-soft);
+}
+
+.image-sequence-placeholder:focus-visible {
+    outline: 3px solid rgba(86, 122, 157, .3);
+    outline-offset: -3px;
+}
+
+.image-sequence-placeholder:disabled {
+    cursor: wait;
+    opacity: .65;
+}
+
+.visually-hidden-file-input {
+    position: fixed;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
     pointer-events: none;
 }
 
@@ -293,6 +427,16 @@ html:has(.message-dialog[open]) body {
 
     .camera-device-control select {
         width: 100%;
+    }
+
+    .scanner-header-action {
+        justify-self: end;
+    }
+
+    .image-sequence-grid {
+        padding: 14px;
+        grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+        gap: 10px;
     }
 
 }

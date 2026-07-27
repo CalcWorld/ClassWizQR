@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import * as cwqr from '../../../../src/index.js';
 import { copyToClipboard, download } from '../../scripts/downloads.js';
 import { translate } from '../../scripts/i18n.js';
@@ -70,16 +70,6 @@ function storeLanguage(language) {
   }
 }
 
-function getIntrinsicButtonWidths(container) {
-  const style = getComputedStyle(container.firstElementChild);
-  const inlineInsets = ['paddingLeft', 'paddingRight', 'borderLeftWidth', 'borderRightWidth']
-    .reduce((total, property) => total + Number.parseFloat(style[property]), 0);
-  return Array.from(
-    container.children,
-    button => button.firstElementChild.getBoundingClientRect().width + inlineInsets,
-  );
-}
-
 function getScreenTitlePrefix(status, t) {
   if (status.complete) return t('screen-title-complete');
   if (status.pending?.length) {
@@ -107,7 +97,6 @@ export default function ParserApp() {
   const [imageBusy, setImageBusy] = useState(false);
   const [imageProgress, setImageProgress] = useState(null);
   const [appMessage, setAppMessage] = useState(null);
-  const scanFieldRef = useRef(null);
   const urlInputRef = useRef(null);
   const fileInputRef = useRef(null);
   const baseTitleRef = useRef('');
@@ -224,55 +213,6 @@ export default function ParserApp() {
     setEditorValue(cloneResult(nextResult));
     setRenderVersion(version => version + 1);
   }, [activeUrl, initialized, language, languageReady, resources]);
-
-  useLayoutEffect(() => {
-    const scanField = scanFieldRef.current;
-    const container = scanField?.querySelector('.scan-actions');
-    if (!scanField || !container) return undefined;
-
-    const scanLabel = scanField.querySelector(':scope > label');
-    const scanContents = container.querySelectorAll('.scan-option-content');
-    let pendingFrame = 0;
-
-    const updateScanLayout = () => {
-      const widths = getIntrinsicButtonWidths(container);
-      const gap = Number.parseFloat(getComputedStyle(container).columnGap) || 0;
-      const fourColumnWidth = widths.reduce((total, width) => total + width, 0)
-        + gap * (widths.length - 1);
-      const twoColumnWidth = Math.max(...widths) * 2 + gap;
-      const scanLabelWidth = scanLabel?.scrollWidth || 0;
-      const fourColumnThreshold = `${Math.max(fourColumnWidth, scanLabelWidth)}px`;
-
-      // Flexbox uses this intrinsic threshold to decide whether the scan field
-      // belongs beside the language field or on its own row.
-      scanField.style.setProperty('--scan-four-column-width', fourColumnThreshold);
-
-      const availableWidth = container.clientWidth;
-      const nextColumns = availableWidth >= fourColumnWidth
-        ? 4
-        : availableWidth >= twoColumnWidth ? 2 : 1;
-
-      scanField.dataset.columns = String(nextColumns);
-    };
-
-    updateScanLayout();
-    if (typeof ResizeObserver === 'undefined') return undefined;
-
-    const observer = new ResizeObserver(() => {
-      cancelAnimationFrame(pendingFrame);
-      pendingFrame = requestAnimationFrame(updateScanLayout);
-    });
-    observer.observe(scanField);
-    if (scanLabel) observer.observe(scanLabel);
-    for (const content of scanContents) {
-      observer.observe(content);
-    }
-
-    return () => {
-      cancelAnimationFrame(pendingFrame);
-      observer.disconnect();
-    };
-  }, [hideUrl]);
 
   const downloads = useMemo(() => {
     const values = {};
@@ -619,7 +559,7 @@ export default function ParserApp() {
     >
       <form id="qr-form" onSubmit={submitUrl}>
         {(!hideLanguage || !hideUrl) && (
-          <div class="controls-row">
+          <div class="controls-stack">
             {!hideLanguage && (
               <div class="form-field language-field">
                 <label for="lang">{t('language-label')}</label>
@@ -638,33 +578,33 @@ export default function ParserApp() {
               </div>
             )}
             {!hideUrl && (
-              <div
-                class="form-field scan-field"
-                data-columns="4"
-                ref={scanFieldRef}
-              >
+              <div class="form-field">
                 <label>{t('scan-title')}</label>
                 <div class="scan-actions">
-                  <ScanOptionButton
-                    icon={CameraIcon}
-                    label={t('scan-camera')}
-                    onClick={() => setStreamScannerMode('camera')}
-                  />
-                  <ScanOptionButton
-                    icon={ScreenIcon}
-                    label={t('scan-screen')}
-                    onClick={openScreenScanner}
-                  />
-                  <ScanOptionButton
-                    icon={FileImageIcon}
-                    label={t('scan-file')}
-                    onClick={openFilePicker}
-                  />
-                  <ScanOptionButton
-                    icon={ClipboardIcon}
-                    label={t('scan-clipboard')}
-                    onClick={readClipboard}
-                  />
+                  <div class="scan-action-pair">
+                    <ScanOptionButton
+                      icon={CameraIcon}
+                      label={t('scan-camera')}
+                      onClick={() => setStreamScannerMode('camera')}
+                    />
+                    <ScanOptionButton
+                      icon={ScreenIcon}
+                      label={t('scan-screen')}
+                      onClick={openScreenScanner}
+                    />
+                  </div>
+                  <div class="scan-action-pair">
+                    <ScanOptionButton
+                      icon={FileImageIcon}
+                      label={t('scan-file')}
+                      onClick={openFilePicker}
+                    />
+                    <ScanOptionButton
+                      icon={ClipboardIcon}
+                      label={t('scan-clipboard')}
+                      onClick={readClipboard}
+                    />
+                  </div>
                 </div>
               </div>
             )}

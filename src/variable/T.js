@@ -149,7 +149,7 @@ export const ParseMathBox = (T, M, C) => {
   return { quantity, attempts, array, csv };
 }
 
-export const ParseSequencesResult = ({ T, C }, { sequence, tableRange }) => {
+export const ParseSequencesResult = ({ T }, { sequence, tableRange }) => {
   let head;
   let numList;
   let colList;

@@ -43,11 +43,6 @@ function cloneResult(value) {
   return JSON.parse(JSON.stringify(value));
 }
 
-function fitUrlInput(input) {
-  input.style.height = 'auto';
-  input.style.height = `${input.scrollHeight + 2}px`;
-}
-
 function yieldForPaint() {
   return new Promise(resolve => {
     requestAnimationFrame(() => setTimeout(resolve, 0));
@@ -231,28 +226,6 @@ export default function ParserApp() {
   }, [activeUrl, initialized, language, languageReady, resources]);
 
   useLayoutEffect(() => {
-    const input = urlInputRef.current;
-    if (!input) return;
-
-    input.style.height = '';
-    if (input.closest('.url-input-shell')?.matches(':focus-within')) fitUrlInput(input);
-  }, [inputUrl]);
-
-  useEffect(() => {
-    const input = urlInputRef.current;
-    if (!input || typeof ResizeObserver === 'undefined') return undefined;
-
-    let previousWidth = input.clientWidth;
-    const observer = new ResizeObserver(([entry]) => {
-      if (entry.contentRect.width === previousWidth) return;
-      previousWidth = entry.contentRect.width;
-      if (input.closest('.url-input-shell')?.matches(':focus-within')) fitUrlInput(input);
-    });
-    observer.observe(input);
-    return () => observer.disconnect();
-  }, [hideUrl]);
-
-  useLayoutEffect(() => {
     const scanField = scanFieldRef.current;
     const container = scanField?.querySelector('.scan-actions');
     if (!scanField || !container) return undefined;
@@ -330,7 +303,6 @@ export default function ParserApp() {
 
   function handleUrlControlFocusOut(event) {
     if (event.currentTarget.contains(event.relatedTarget)) return;
-    urlInputRef.current.style.height = '';
     commitUrl();
   }
 
@@ -708,7 +680,6 @@ export default function ParserApp() {
                 rows="1"
                 placeholder="http://......"
                 value={inputUrl}
-                onFocus={event => fitUrlInput(event.currentTarget)}
                 onInput={event => setInputUrl(event.currentTarget.value.replace(/[\r\n]+/g, ''))}
                 onKeyDown={event => {
                   if (event.key === 'Escape') {

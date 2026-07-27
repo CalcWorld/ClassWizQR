@@ -49,6 +49,7 @@
 
 #qrUrl {
     display: block;
+    field-sizing: fixed;
     width: 100%;
     height: var(--url-collapsed-height);
     min-width: 0;
@@ -78,6 +79,8 @@
 }
 
 .url-input-shell:focus-within #qrUrl {
+    field-sizing: content;
+    height: auto;
     min-height: 132px;
     white-space: pre-wrap;
     overflow-wrap: anywhere;

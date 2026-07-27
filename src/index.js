@@ -241,10 +241,11 @@ export class ClassWizQR {
       variable = ParseVariableList(kv.V, modelType);
     }
 
-    // any calculate in Vector or Matrix contains its defined vector or matrix in C
+    // in Vector or Matrix mode, any calculate contains its defined vector/matrix in C
     // in Equation, Inequality or Ratio mode, it's the entered coefficients
     // in Distribution mode, it's the entered data
     // in MathBox mode, it's the dice/coin number, attempts and relative frequency type (sum/diff) in Dice Roll
+    // in Sequence mode, it's the settings parameter of sequence mode (perhaps S is full so it uses C instead)
     let vector, matrix, equation, distribution;
     if (kv.C) {
       if (kv.C.startsWith('M')) {

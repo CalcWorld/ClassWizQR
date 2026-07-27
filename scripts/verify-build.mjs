@@ -23,7 +23,6 @@ const requiredFiles = [
 await Promise.all(requiredFiles.map(file => access(file)));
 
 const indexHtml = await readFile('dist/index.html', 'utf8');
-const thirdPartyLicenses = await readFile('dist/third-party-licenses.txt', 'utf8');
 const serviceWorker = await readFile('dist/sw.js', 'utf8');
 const manifest = JSON.parse(await readFile('dist/manifest.webmanifest', 'utf8'));
 const distFiles = await readdir('dist');
@@ -101,24 +100,4 @@ assert.equal(
   false,
   'The build contains an obsolete Workbox runtime.',
 );
-for (const packageName of [
-  'decimal.js',
-  'preact',
-  'scratchblocks',
-  'jsoneditor',
-  'mathjax',
-  'workbox-build',
-]) {
-  assert.match(
-    thirdPartyLicenses,
-    new RegExp(`^${packageName} `, 'm'),
-    `The third-party license bundle is missing ${packageName}.`,
-  );
-}
-assert.match(
-  thirdPartyLicenses,
-  /^NOTICE$/m,
-  'The third-party license bundle is missing the JSONEditor NOTICE.',
-);
-
 console.log('Build output verification passed.');

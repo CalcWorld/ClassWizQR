@@ -1,8 +1,9 @@
-import { AsciiTable, MATH_TEMPLATE, REC_DEC_BRACKET_MODEL, REC_DEC_OVERLINE_MODEL } from "../ascii/index.js";
+import { AsciiTable } from "../ascii/index.js";
 import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from "../setup/index.js";
 import { toAsciiArray } from '../utils.js';
 import { MODEL_TYPE } from '../model/index.js';
+import { MATH_TEMPLATE, REC_DEC_BRACKET_MODEL, REC_DEC_OVERLINE_MODEL } from '../ascii/consts.js';
 
 export class ParseExpression {
   constructor(E, modelType, modelId) {

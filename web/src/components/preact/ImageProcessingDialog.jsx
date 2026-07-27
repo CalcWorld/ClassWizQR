@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, } from 'preact/hooks';
 import useModalDialog from '../../hooks/useModalDialog.js';
+import LoadingSpinner from './LoadingSpinner.jsx';
 
 const SHOW_DELAY_MS = 300;
 
@@ -32,7 +33,7 @@ export default function ImageProcessingDialog({
       onCancel={event => event.preventDefault()}
     >
       <div class="image-processing-content">
-        <span class="image-processing-spinner" aria-hidden="true"/>
+        <LoadingSpinner/>
         <div>
           <h2>{t('image-processing-title')}</h2>
           <div role="status" aria-live="polite">

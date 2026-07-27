@@ -18,6 +18,10 @@ test('translate substitutes named parameters', () => {
     translate('screen-title-sequence', 'zh', { pending: '2|4' }),
     '【[2|4] 待扫描】',
   );
+  assert.equal(
+    translate('pwa-caching-progress', 'zh', { current: 12, total: 34 }),
+    '已缓存 12/34 个文件',
+  );
 });
 
 test('translate preserves missing placeholders and stringifies supplied values', () => {

@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 import { translate } from '../../scripts/i18n.js';
+import LoadingSpinner from './LoadingSpinner.jsx';
 import '../../styles/pwa.css';
 
 const UPDATE_INTERVAL = 60 * 60 * 1000;
 const UPDATE_THROTTLE = 60 * 1000;
+const PROGRESS_DELAY = 300;
 
 function readStoredLanguage() {
   try {
@@ -15,7 +17,22 @@ function readStoredLanguage() {
 
 export default function PwaUpdatePrompt() {
   const [notice, setNotice] = useState(null);
+  const [progress, setProgress] = useState(null);
+  const [hiddenProgressVersion, setHiddenProgressVersion] = useState(null);
+  const [visibleProgressVersion, setVisibleProgressVersion] = useState(null);
   const registrationRef = useRef(null);
+
+  useEffect(() => {
+    if (!progress) {
+      setVisibleProgressVersion(null);
+      return undefined;
+    }
+    const timer = window.setTimeout(
+      () => setVisibleProgressVersion(progress.version),
+      PROGRESS_DELAY,
+    );
+    return () => window.clearTimeout(timer);
+  }, [progress?.version]);
 
   useEffect(() => {
     if (!('serviceWorker' in navigator)) return undefined;
@@ -25,6 +42,36 @@ export default function PwaUpdatePrompt() {
     let updateInterval;
     let hadController = Boolean(navigator.serviceWorker.controller);
     let lastUpdateCheck = 0;
+
+    function clearProgress(version) {
+      setProgress(current => (
+        !version || current?.version === version ? null : current
+      ));
+      setHiddenProgressVersion(current => (
+        !version || current === version ? null : current
+      ));
+    }
+
+    function handleWorkerMessage({ data }) {
+      if (data?.type === 'PRECACHE_PROGRESS') {
+        if (
+          typeof data.version !== 'string'
+          || !Number.isInteger(data.completed)
+          || !Number.isInteger(data.total)
+        ) return;
+        setProgress({
+          completed: data.completed,
+          total: data.total,
+          version: data.version,
+        });
+        setNotice(null);
+      } else if (
+        data?.type === 'PRECACHE_COMPLETE'
+        || data?.type === 'PRECACHE_FAILED'
+      ) {
+        clearProgress(data.version);
+      }
+    }
 
     function handleControllerChange() {
       if (hadController) {
@@ -36,6 +83,7 @@ export default function PwaUpdatePrompt() {
 
     function handleInstalled(worker) {
       if (disposed || worker.state !== 'installed') return;
+      clearProgress();
       if (navigator.serviceWorker.controller) {
         setNotice('update');
       } else {
@@ -47,7 +95,10 @@ export default function PwaUpdatePrompt() {
 
     function watchWorker(worker) {
       handleInstalled(worker);
-      worker.addEventListener('statechange', () => handleInstalled(worker));
+      worker.addEventListener('statechange', () => {
+        handleInstalled(worker);
+        if (worker.state === 'redundant') clearProgress();
+      });
     }
 
     async function checkForUpdate() {
@@ -71,6 +122,7 @@ export default function PwaUpdatePrompt() {
     }
 
     navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+    navigator.serviceWorker.addEventListener('message', handleWorkerMessage);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     window.addEventListener('online', checkForUpdate);
 
@@ -95,6 +147,7 @@ export default function PwaUpdatePrompt() {
       disposed = true;
       window.clearInterval(updateInterval);
       navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
+      navigator.serviceWorker.removeEventListener('message', handleWorkerMessage);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('online', checkForUpdate);
       registration?.removeEventListener('updatefound', handleUpdateFound);
@@ -108,9 +161,40 @@ export default function PwaUpdatePrompt() {
     registration.waiting.postMessage({ type: 'SKIP_WAITING' });
   }
 
-  if (!notice) return null;
-
   const language = readStoredLanguage();
+  const showProgress = progress
+    && visibleProgressVersion === progress.version
+    && hiddenProgressVersion !== progress.version;
+  if (!showProgress && !notice) return null;
+
+  if (showProgress) {
+    return (
+      <aside class="pwa-notice">
+        <div class="pwa-progress-content">
+          <LoadingSpinner/>
+          <div>
+            <strong>{translate('pwa-caching-title', language)}</strong>
+            <span role="status" aria-live="polite">
+              {translate('pwa-caching-progress', language, {
+                current: progress.completed,
+                total: progress.total,
+              })}
+            </span>
+          </div>
+        </div>
+        <div class="pwa-notice-actions">
+          <button
+            type="button"
+            class="form-button"
+            onClick={() => setHiddenProgressVersion(progress.version)}
+          >
+            {translate('pwa-hide-progress', language)}
+          </button>
+        </div>
+      </aside>
+    );
+  }
+
   const updating = notice === 'updating';
   const updateAvailable = notice !== 'offline';
   const message = translate(
@@ -120,7 +204,7 @@ export default function PwaUpdatePrompt() {
 
   return (
     <aside class="pwa-notice">
-      <p role="status">{message}</p>
+      <p class="pwa-notice-message" role="status">{message}</p>
       <div class="pwa-notice-actions">
         {updateAvailable && (
           <button

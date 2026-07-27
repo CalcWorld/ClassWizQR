@@ -7,6 +7,7 @@ const CACHE_NAME = `${CACHE_PREFIX}${CACHE_VERSION}`;
 const METADATA_URL = new URL('/__classwizqr_pwa_manifest__', self.location.origin).href;
 const LEGACY_CACHE_NAME = `workbox-precache-v2-${self.registration.scope}`;
 const REVISION_PARAM = '__pwa_revision__';
+const PROGRESS_INTERVAL = 100;
 
 function cacheRequest(url) {
   return new Request(url, { credentials: 'same-origin' });
@@ -125,31 +126,81 @@ async function fetchAndCache(entry, cache, sources) {
   return createMetadataEntry(entry, resourceURL, finalURL, preserveSearch);
 }
 
-async function installPrecache() {
-  const cache = await caches.open(CACHE_NAME);
-  const sources = await reusableCaches();
-  const installedEntries = new Array(PRECACHE_MANIFEST.length);
-  let nextIndex = 0;
-  let failure;
+async function createProgressReporter(total) {
+  const recipients = await self.clients.matchAll({
+    includeUncontrolled: true,
+    type: 'window',
+  }).catch(() => []);
+  let completed = 0;
+  let lastReport = 0;
 
-  async function worker() {
-    while (!failure) {
-      const index = nextIndex++;
-      if (index >= PRECACHE_MANIFEST.length) return;
-
+  function post(type) {
+    const message = {
+      type,
+      version: CACHE_VERSION,
+      completed,
+      total,
+    };
+    for (const client of recipients) {
       try {
-        installedEntries[index] = await fetchAndCache(
-          PRECACHE_MANIFEST[index],
-          cache,
-          sources,
-        );
-      } catch (error) {
-        failure ||= error;
+        client.postMessage(message);
+      } catch {
+        // Progress reporting is best-effort and must never block caching.
       }
     }
   }
 
+  function report(force = false) {
+    const now = Date.now();
+    if (!force && now - lastReport < PROGRESS_INTERVAL) return;
+    lastReport = now;
+    post('PRECACHE_PROGRESS');
+  }
+
+  report(true);
+  return {
+    advance() {
+      completed++;
+      report(completed === total);
+    },
+    complete() {
+      post('PRECACHE_COMPLETE');
+    },
+    fail() {
+      post('PRECACHE_FAILED');
+    },
+  };
+}
+
+async function installPrecache() {
+  const total = PRECACHE_MANIFEST.length;
+  const progress = await createProgressReporter(total);
+
   try {
+    const cache = await caches.open(CACHE_NAME);
+    const sources = await reusableCaches();
+    const installedEntries = new Array(total);
+    let nextIndex = 0;
+    let failure;
+
+    async function worker() {
+      while (!failure) {
+        const index = nextIndex++;
+        if (index >= total) return;
+
+        try {
+          installedEntries[index] = await fetchAndCache(
+            PRECACHE_MANIFEST[index],
+            cache,
+            sources,
+          );
+          progress.advance();
+        } catch (error) {
+          failure ||= error;
+        }
+      }
+    }
+
     await Promise.all(
       Array.from({ length: PRECACHE_CONCURRENCY }, () => worker()),
     );
@@ -161,9 +212,11 @@ async function installPrecache() {
         headers: { 'Content-Type': 'application/json' },
       }),
     );
+    progress.complete();
   } catch (error) {
     // All workers have stopped before deletion, so an incomplete cache cannot reappear.
     await caches.delete(CACHE_NAME);
+    progress.fail();
     throw error;
   }
 }

@@ -57,6 +57,7 @@ function compileWorker(entries, version) {
 
 function loadWorker({ caches, entries, fetch, version }) {
   const listeners = new Map();
+  const messages = [];
   let claimed = false;
   const self = {
     location: { origin },
@@ -64,6 +65,13 @@ function loadWorker({ caches, entries, fetch, version }) {
     clients: {
       async claim() {
         claimed = true;
+      },
+      async matchAll() {
+        return [{
+          postMessage(message) {
+            messages.push(message);
+          },
+        }];
       },
     },
     addEventListener(type, listener) {
@@ -103,6 +111,7 @@ function loadWorker({ caches, entries, fetch, version }) {
 
   return {
     dispatch,
+    messages,
     async dispatchFetch(url, mode = 'cors') {
       let response;
       const request = new Request(url);
@@ -152,6 +161,12 @@ test('production service worker limits fetches and atomically reuses caches', as
 
   assert.equal(fetchCount, initialEntries.length);
   assert.equal(maximumFetches, 8);
+  const initialProgress = initialWorker.messages
+    .filter(message => message.type === 'PRECACHE_PROGRESS');
+  assert.equal(initialProgress[0].completed, 0);
+  assert.equal(initialProgress[0].total, initialEntries.length);
+  assert.equal(initialProgress.at(-1).completed, initialEntries.length);
+  assert.equal(initialWorker.messages.at(-1).type, 'PRECACHE_COMPLETE');
   assert.equal(
     caches.stores.get('classwiz-qr-precache-cache-v1').responses.size,
     initialEntries.length + 1,
@@ -203,6 +218,7 @@ test('production service worker limits fetches and atomically reuses caches', as
     failedWorker.dispatch('install'),
     /Unable to precache asset-0\.js: HTTP 503/,
   );
+  assert.equal(failedWorker.messages.at(-1).type, 'PRECACHE_FAILED');
   assert.deepEqual(
     await caches.keys(),
     [

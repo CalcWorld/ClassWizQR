@@ -13,9 +13,26 @@
     box-shadow: 0 14px 36px rgba(20, 28, 36, .22);
 }
 
-.pwa-notice p {
+.pwa-notice-message {
     margin: 0 0 12px;
     line-height: 1.5;
+}
+
+.pwa-progress-content {
+    display: flex;
+    margin-bottom: 12px;
+    align-items: center;
+    gap: 14px;
+}
+
+.pwa-progress-content > div {
+    display: grid;
+    min-width: 0;
+    gap: 4px;
+}
+
+.pwa-progress-content [role="status"] {
+    color: var(--text-muted, #5f6872);
 }
 
 .pwa-notice-actions {

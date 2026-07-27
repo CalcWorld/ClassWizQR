@@ -399,22 +399,6 @@ html:has(.message-dialog[open]) body {
     color: var(--text-muted);
 }
 
-.image-processing-spinner {
-    width: 34px;
-    height: 34px;
-    flex: 0 0 auto;
-    border: 4px solid var(--accent-soft);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: image-processing-spin .8s linear infinite;
-}
-
-@keyframes image-processing-spin {
-    to {
-        transform: rotate(360deg);
-    }
-}
-
 @media (max-width: 600px) {
     .camera-scanner-dialog {
         width: 100vw;

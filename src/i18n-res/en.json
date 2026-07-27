@@ -71,7 +71,7 @@
     "4F": "Math Box",
     "4FS1": "Dice Roll",
     "4FS2": "Coin Toss",
-    "0G": "Sequences"
+    "0G": "Sequence"
   },
   "format": {
     "0": "Not Specified",
@@ -109,7 +109,7 @@
     "XD": "Spreadsheet Manual",
     "XE": "Algorithm Manual",
     "XF": "Math Box Manual",
-    "XG": "Sequences Manual",
+    "XG": "Sequence Manual",
     "XH": "Math Explorer Manual",
     "Y1": "AC Break",
     "Y2": "Syntax ERROR",

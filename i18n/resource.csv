@@ -68,7 +68,7 @@ mode.0E,Algorithm,算法,Thuật toán,Algo
 mode.4F,Math Box,数学盒,Hộp Toán học,Math Box
 mode.4FS1,Dice Roll,掷骰子,Tung xúc xắc,Lancer de dés
 mode.4FS2,Coin Toss,抛硬币,Tung đồng xu,Pile ou face
-mode.0G,Sequences,数列,Dãy số,Suites
+mode.0G,Sequence,数列,Dãy số,Suites
 format.0,Not Specified,未指定,Không chỉ định,Non spécifié
 format.1,Sexagesimal,度分秒,Hệ lục thập phân,Sexagésimal
 format.2,ENG Notation 4 times,工程记数法(右移4次),Ký pháp kỹ thuật 4 lần,Notation technique 4 fois
@@ -102,7 +102,7 @@ menu.XC,Distribution Manual,分布模式说明,Mô tả Phân phối,Manuel de P
 menu.XD,Spreadsheet Manual,数据表格模式说明,Mô tả Bảng tính,Manuel de Tableur
 menu.XE,Algorithm Manual,算法模式说明,Mô tả Thuật toán,Manuel d’Algo
 menu.XF,Math Box Manual,数学盒说明,Mô tả Hộp toán học,Manuel de Math Box
-menu.XG,Sequences Manual,数列说明,Mô tả Dãy số,Manuel des Suites
+menu.XG,Sequence Manual,数列说明,Mô tả Dãy số,Manuel des Suites
 menu.XH,Math Explorer Manual,数学探索说明,Mô tả Khám Phá Toán,Manuel de l’explorateur mathématique
 menu.Y1,AC Break,AC键中断,Ngắt AC,AC Annulation
 menu.Y2,Syntax ERROR,语法错误,Lỗi cú pháp,ERREUR de syntaxe

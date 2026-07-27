@@ -415,12 +415,6 @@ html:has(.message-dialog[open]) body {
     }
 }
 
-@media (prefers-reduced-motion: reduce) {
-    .image-processing-spinner {
-        animation: none;
-    }
-}
-
 @media (max-width: 600px) {
     .camera-scanner-dialog {
         width: 100vw;

@@ -1,0 +1,109 @@
+diff --git a/node_modules/jsoneditor/dist/jsoneditor-minimalist.js b/node_modules/jsoneditor/dist/jsoneditor-minimalist.js
+index baccbf7..4a0a543 100644
+--- a/node_modules/jsoneditor/dist/jsoneditor-minimalist.js
++++ b/node_modules/jsoneditor/dist/jsoneditor-minimalist.js
+@@ -4459,6 +4459,7 @@ var _defs = {
+     duplicateField: 'Duplicate this field (Ctrl+D)',
+     duplicateFieldError: 'Duplicate field name',
+     empty: 'empty',
++    emptyContainer: '${empty} ${type}',
+     expandAll: 'Expand all fields',
+     expandTitle: 'Click to expand/collapse this field (Ctrl+E). \n' + 'Ctrl+Click to expand/collapse including all childs.',
+     formatTitle: 'Format JSON data, with proper indentation and line feeds (Ctrl+I)',
+@@ -4644,7 +4645,8 @@ var _defs = {
+     duplicateTitle: '复制选中字段(Ctrl+D)',
+     duplicateField: '复制该字段(Ctrl+D)',
+     duplicateFieldError: '重复的字段名称',
+-    empty: '清空',
++    empty: '空',
++    emptyContainer: '空${localizedType}',
+     expandAll: '展开所有字段',
+     expandTitle: '点击 展开/收缩 该字段(Ctrl+E). \n' + 'Ctrl+Click 展开/收缩 包含所有子节点.',
+     formatTitle: '使用适当的缩进和换行符格式化JSON数据 (Ctrl+I)',
+@@ -8781,7 +8783,11 @@ function appendNodeFactory(Node) {
+     }
+     var domText = dom.text;
+     if (domText) {
+-      domText.firstChild.nodeValue = '(' + (0,i18n/* translate */.Tl)('empty') + ' ' + this.parent.type + ')';
++      domText.firstChild.nodeValue = '(' + (0,i18n/* translate */.Tl)('emptyContainer', {
++        empty: (0,i18n/* translate */.Tl)('empty'),
++        type: this.parent.type,
++        localizedType: (0,i18n/* translate */.Tl)(this.parent.type)
++      }) + ')';
+     }
+ 
+     // attach or detach the contents of the append node:
+diff --git a/node_modules/jsoneditor/dist/jsoneditor.js b/node_modules/jsoneditor/dist/jsoneditor.js
+index e0ec55d..bcfe246 100644
+--- a/node_modules/jsoneditor/dist/jsoneditor.js
++++ b/node_modules/jsoneditor/dist/jsoneditor.js
+@@ -4466,6 +4466,7 @@ var _defs = {
+     duplicateField: 'Duplicate this field (Ctrl+D)',
+     duplicateFieldError: 'Duplicate field name',
+     empty: 'empty',
++    emptyContainer: '${empty} ${type}',
+     expandAll: 'Expand all fields',
+     expandTitle: 'Click to expand/collapse this field (Ctrl+E). \n' + 'Ctrl+Click to expand/collapse including all childs.',
+     formatTitle: 'Format JSON data, with proper indentation and line feeds (Ctrl+I)',
+@@ -4651,7 +4652,8 @@ var _defs = {
+     duplicateTitle: '复制选中字段(Ctrl+D)',
+     duplicateField: '复制该字段(Ctrl+D)',
+     duplicateFieldError: '重复的字段名称',
+-    empty: '清空',
++    empty: '空',
++    emptyContainer: '空${localizedType}',
+     expandAll: '展开所有字段',
+     expandTitle: '点击 展开/收缩 该字段(Ctrl+E). \n' + 'Ctrl+Click 展开/收缩 包含所有子节点.',
+     formatTitle: '使用适当的缩进和换行符格式化JSON数据 (Ctrl+I)',
+@@ -8788,7 +8790,11 @@ function appendNodeFactory(Node) {
+     }
+     var domText = dom.text;
+     if (domText) {
+-      domText.firstChild.nodeValue = '(' + (0,i18n/* translate */.Tl)('empty') + ' ' + this.parent.type + ')';
++      domText.firstChild.nodeValue = '(' + (0,i18n/* translate */.Tl)('emptyContainer', {
++        empty: (0,i18n/* translate */.Tl)('empty'),
++        type: this.parent.type,
++        localizedType: (0,i18n/* translate */.Tl)(this.parent.type)
++      }) + ')';
+     }
+ 
+     // attach or detach the contents of the append node:
+diff --git a/node_modules/jsoneditor/src/js/appendNodeFactory.js b/node_modules/jsoneditor/src/js/appendNodeFactory.js
+index 473d7cd..96ae86e 100644
+--- a/node_modules/jsoneditor/src/js/appendNodeFactory.js
++++ b/node_modules/jsoneditor/src/js/appendNodeFactory.js
+@@ -100,7 +100,11 @@ export function appendNodeFactory (Node) {
+ 
+     const domText = dom.text
+     if (domText) {
+-      domText.firstChild.nodeValue = '(' + translate('empty') + ' ' + this.parent.type + ')'
++      domText.firstChild.nodeValue = '(' + translate('emptyContainer', {
++        empty: translate('empty'),
++        type: this.parent.type,
++        localizedType: translate(this.parent.type)
++      }) + ')'
+     }
+ 
+     // attach or detach the contents of the append node:
+diff --git a/node_modules/jsoneditor/src/js/i18n.js b/node_modules/jsoneditor/src/js/i18n.js
+index 266712a..bf4e6a2 100644
+--- a/node_modules/jsoneditor/src/js/i18n.js
++++ b/node_modules/jsoneditor/src/js/i18n.js
+@@ -28,6 +28,7 @@ const _defs = {
+     duplicateField: 'Duplicate this field (Ctrl+D)',
+     duplicateFieldError: 'Duplicate field name',
+     empty: 'empty',
++    emptyContainer: '${empty} ${type}',
+     expandAll: 'Expand all fields',
+     expandTitle: 'Click to expand/collapse this field (Ctrl+E). \n' +
+       'Ctrl+Click to expand/collapse including all childs.',
+@@ -220,7 +221,8 @@ const _defs = {
+     duplicateTitle: '复制选中字段(Ctrl+D)',
+     duplicateField: '复制该字段(Ctrl+D)',
+     duplicateFieldError: '重复的字段名称',
+-    empty: '清空',
++    empty: '空',
++    emptyContainer: '空${localizedType}',
+     expandAll: '展开所有字段',
+     expandTitle: '点击 展开/收缩 该字段(Ctrl+E). \n' +
+       'Ctrl+Click 展开/收缩 包含所有子节点.',

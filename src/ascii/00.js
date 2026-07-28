@@ -405,3 +405,8 @@ export const ascii00_EY = {
   "95": "f(",
   "96": "g(",
 }
+
+export const ascii_DECIMAL_MARK_COMMA={
+  "2C": ";",
+  "2E": ",",
+};

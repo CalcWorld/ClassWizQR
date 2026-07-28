@@ -1,10 +1,10 @@
-import { ascii00, ascii00_EY, ascii00_unicode, ascii00_unicode_EY } from './00.js';
+import { ascii00, ascii00_EY, ascii00_unicode, ascii00_unicode_EY, ascii_DECIMAL_MARK_COMMA } from './00.js';
 import { asciiFA } from './FA.js';
 import { asciiFB, asciiFB_EY } from './FB.js';
 import { asciiFD, asciiFD_EY, asciiFD_unicode } from './FD.js';
 import { asciiFE, asciiFE_FY, asciiFE_JP } from './FE.js';
 import { MODEL_TYPE_EY_FY } from "../model/index.js";
-import { JP_MODEL } from './consts.js';
+import { DECIMAL_MARK_COMMA_MODEL, JP_MODEL } from './consts.js';
 
 export class AsciiTable {
   constructor(modelType, modelId) {
@@ -35,6 +35,9 @@ export class AsciiTable {
     }
 
     combine('', ascii00);
+    if (DECIMAL_MARK_COMMA_MODEL[this.modelType]?.includes(this.modelId)) {
+      combine('', ascii_DECIMAL_MARK_COMMA);
+    }
     type === 'unicode' && combine('', ascii00_unicode);
     if (MODEL_TYPE_EY_FY.includes(this.modelType)) {
       combine('', ascii00_EY);

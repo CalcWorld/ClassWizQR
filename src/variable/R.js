@@ -4,8 +4,8 @@ import { ParseMode } from "../mode/index.js";
 import { RESULT_INFO } from './result.js';
 import { ParseSetup } from "../setup/index.js";
 
-export const ParseNumberResult = (R, M, modelType, modelId) => {
-  const parseM = new ParseMode(M);
+export const ParseNumberResult = ({ R, M }, { modelType, modelId } = {}) => {
+  const parseM = new ParseMode({ M });
   const displayCode = parseM.getResultFormatDisplay();
   const ans1 = R.slice(0, R.length / 2);
   const ans2 = R.slice(R.length / 2);
@@ -53,8 +53,8 @@ export const ParseNumberResult = (R, M, modelType, modelId) => {
   return result;
 }
 
-export const ParseInequalityResult = (R, M) => {
-  const parseM = new ParseMode(M);
+export const ParseInequalityResult = ({ R, M }) => {
+  const parseM = new ParseMode({ M });
   const displayCode = parseM.getResultFormatDisplay();
   const resultCode = R.slice(2, 4);
   const result = RESULT_INFO['INEQUALITY'][resultCode];
@@ -76,10 +76,10 @@ export const ParseInequalityResult = (R, M) => {
   return returnResult;
 }
 
-export const ParseEquationResult = (R, M, S, C) => {
+export const ParseEquationResult = ({ R, M, S, C }) => {
   const resultCode = R.slice(2, 3);
   const split = R.slice(3).match(/.{20}/g);
-  const parseM = new ParseMode(M)
+  const parseM = new ParseMode({ M })
   const subMode = parseM.getSubMode();
   const displayCode = parseM.getResultFormatDisplay();
 
@@ -97,7 +97,7 @@ export const ParseEquationResult = (R, M, S, C) => {
     template = EQ0[subMode];
   } else {
     if (subMode === '05' && split.length === 6) {
-      const complexRoot = new ParseSetup(S).getEquationComplexRoot();
+      const complexRoot = new ParseSetup({ S }).getEquationComplexRoot();
       const [, lastR] = new ParseVariable(split[split.length - 1]).get();
       let variants;
       if (complexRoot === '1' || lastR.isZero()) {
@@ -137,7 +137,10 @@ export const ParseEquationResult = (R, M, S, C) => {
       rootCount = (split.length - 4) / 2;
     }
     for (let i = 0; i < rootCount; i++) {
-      const numberResult = ParseNumberResult(`${split[2 * i]}${split[2 * i + 1]}`, M);
+      const numberResult = ParseNumberResult({
+        R: `${split[2 * i]}${split[2 * i + 1]}`,
+        M,
+      });
       const latex = numberResult[0].latex;
       template = template.replace(`\$\{${i}\}`, latex);
       result.push({ name: `Part${2 * i + 1}`, latex: numberResult[1].latex, decimal: numberResult[1].decimal });
@@ -170,9 +173,9 @@ export const ParseEquationResult = (R, M, S, C) => {
   return result;
 }
 
-export const ParseStatisticResult = (R, M, modelType, modelId) => {
+export const ParseStatisticResult = ({ R, M }, { modelType, modelId }) => {
   const split = R.match(/.{20}/g);
-  const parseM = new ParseMode(M);
+  const parseM = new ParseMode({ M });
   const subMode = parseM.getSubMode();
   const resultType = parseM.getResultTemplate();
   let template;

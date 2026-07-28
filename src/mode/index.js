@@ -29,7 +29,7 @@ export const STAT_DESC_MODEL = {
 };
 
 export class ParseMode {
-  constructor(M) {
+  constructor({ M }) {
     this.M = M;
   }
 

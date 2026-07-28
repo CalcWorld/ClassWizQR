@@ -4,13 +4,11 @@ import { ParseSetup } from '../setup/index.js';
 
 export class ParseAlgorithm {
   /**
-   * @param {string} S
-   * @param {string} E
-   * @param {string} modelType
-   * @param {string} modelId
+   * @param {{S: string, E: string}} payload
+   * @param {{modelType: string, modelId: string}} context
    */
-  constructor(S, E, modelType, modelId) {
-    this.unitSetiing = new ParseSetup(S || '').getAlgorithmUnitSetting() || '0';
+  constructor({ S, E }, { modelType, modelId }) {
+    this.unitSetiing = new ParseSetup({ S }).getAlgorithmUnitSetting() || '0';
     this.E = E;
     const asciiTable = new AsciiTable(modelType, modelId);
     this.asciiLatexTable = asciiTable.get('latex');

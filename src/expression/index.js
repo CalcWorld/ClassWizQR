@@ -6,7 +6,7 @@ import { MODEL_TYPE } from '../model/index.js';
 import { MATH_TEMPLATE, REC_DEC_BRACKET_MODEL, REC_DEC_OVERLINE_MODEL } from '../ascii/consts.js';
 
 export class ParseExpression {
-  constructor(E, modelType, modelId) {
+  constructor({ E }, { modelType, modelId }) {
     this.E = E;
     this.modelType = modelType;
     this.modelId = modelId;
@@ -163,9 +163,9 @@ export class ParseExpression {
     }
   }
 
-  autoParse(M, S) {
-    const parseM = new ParseMode(M)
-    if (new ParseSetup(S).getInput() === '1' &&
+  autoParse({ M, S }) {
+    const parseM = new ParseMode({ M })
+    if (new ParseSetup({ S }).getInput() === '1' &&
       (['88', '89', '09', '0G', 'C1', 'C4'].includes(parseM.getMainMode())
         || ('45' === parseM.getMainMode() && '08' === parseM.getSubMode()))
     ) {

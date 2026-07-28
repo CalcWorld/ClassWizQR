@@ -153,17 +153,17 @@ export class ClassWizQR {
 
     let _parseM, mode, _mainMode, format;
     if (kv.M) {
-      _parseM = new ParseMode(kv.M);
+      _parseM = new ParseMode(kv);
       mode = _parseM.getModeInfo(modelType, modelId);
       _mainMode = _parseM.getMainMode();
       format = _parseM.getFormatInfo();
     } else if (calcId) {
-      mode = new ParseMode().getGetStarted()
+      mode = new ParseMode({}).getGetStarted()
     }
 
     let setup;
     if (kv.S) {
-      const parseS = new ParseSetup(kv.S);
+      const parseS = new ParseSetup(kv);
       setup = parseS.parseAll(modelType);
     }
 
@@ -171,21 +171,21 @@ export class ClassWizQR {
     let sequence, _sequenceDef;
     if (kv.E) {
       if (_mainMode === '0E') {
-        const parseE = new ParseAlgorithm(kv.S, kv.E, modelType, modelId);
+        const parseE = new ParseAlgorithm(kv, { modelType, modelId });
         algorithm = parseE.parseAll();
       } else {
-        const parseE = new ParseExpression(kv.E, modelType, modelId);
+        const parseE = new ParseExpression(kv, { modelType, modelId });
         if (kv.M && kv.S) {
-          expressionE = parseE.autoParse(kv.M, kv.S);
+          expressionE = parseE.autoParse(kv);
         } else {
           expressionE = parseE.parseMath();
         }
       }
     }
     if (kv.G) {
-      const parseG = new ParseExpression(kv.G, modelType, modelId);
+      const parseG = new ParseExpression({ E: kv.G }, { modelType, modelId });
       if (kv.M && kv.S) {
-        expressionG = parseG.autoParse(kv.M, kv.S);
+        expressionG = parseG.autoParse(kv);
       } else {
         expressionG = parseG.parseMath();
       }
@@ -206,31 +206,32 @@ export class ClassWizQR {
 
     let tableRange;
     if (kv.P) {
-      tableRange = ParseTableRange(kv.P);
+      tableRange = ParseTableRange(kv);
     }
 
     let result;
     const R = kv.R || kv.Q;
     if (R) {
+      const resultKv = { ...kv, R };
       const typeCode = R.slice(0, 2);
       switch (typeCode) {
         case 'MT':
-          result = ParseMatrixList(R, kv.S);
+          result = ParseMatrixList({ C: R, S: kv.S });
           break;
         case 'VT':
-          result = ParseVectorList(R, kv.S);
+          result = ParseVectorList({ C: R, S: kv.S });
           break;
         case 'EQ':
-          result = ParseEquationResult(R, kv.M, kv.S, kv.C);
+          result = ParseEquationResult(resultKv);
           break;
         case 'IN':
-          result = ParseInequalityResult(R, kv.M);
+          result = ParseInequalityResult(resultKv);
           break;
         default:
           if (_mainMode === '03' && _parseM.getResultTemplate().startsWith('F')) {
-            result = ParseStatisticResult(R, kv.M, modelType, modelId);
+            result = ParseStatisticResult(resultKv, { modelType, modelId });
           } else {
-            result = ParseNumberResult(R, kv.M, modelType, modelId);
+            result = ParseNumberResult(resultKv, { modelType, modelId });
           }
       }
     }
@@ -238,7 +239,7 @@ export class ClassWizQR {
     // variable in Table mode, create table based on variable if the formula contains variable
     let variable;
     if (kv.V) {
-      variable = ParseVariableList(kv.V, modelType);
+      variable = ParseVariableList(kv, { modelType });
     }
 
     // in Vector or Matrix mode, any calculate contains its defined vector/matrix in C
@@ -249,14 +250,14 @@ export class ClassWizQR {
     let vector, matrix, equation, distribution;
     if (kv.C) {
       if (kv.C.startsWith('M')) {
-        matrix = ParseMatrixList(kv.C, kv.S);
+        matrix = ParseMatrixList(kv);
       } else if (kv.C.startsWith('V')) {
-        vector = ParseVectorList(kv.C, kv.S);
+        vector = ParseVectorList(kv);
       } else if (kv.M) {
         if (['45', '4A', '4B'].includes(_mainMode)) {
-          equation = ParseEquation(kv.C, kv.M, kv.S);
+          equation = ParseEquation(kv);
         } else if (_mainMode === '0C') {
-          distribution = ParseDistribution(kv.C, kv.M);
+          distribution = ParseDistribution(kv);
         } else if (_mainMode === '0G') {
           const seq = ParseSequenceSetting(kv);
           sequence = {};
@@ -274,13 +275,13 @@ export class ClassWizQR {
     let spreadsheet, statistic, mathBox;
     if (kv.T) {
       if (kv.T.startsWith('SP')) {
-        spreadsheet = ParseSpreadsheet(kv.T);
+        spreadsheet = ParseSpreadsheet(kv);
       } else if (_mainMode === '4F') {
-        mathBox = ParseMathBox(kv.T, kv.M, kv.C);
+        mathBox = ParseMathBox(kv);
       } else if (_mainMode === '0G') {
         sequence['result'] = ParseSequencesResult(kv, { sequence, tableRange });
       } else {
-        statistic = ParseStatistic(kv.T, kv.M, kv.S);
+        statistic = ParseStatistic(kv);
       }
     }
 

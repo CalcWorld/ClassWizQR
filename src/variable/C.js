@@ -36,12 +36,11 @@ const ParseMatrix = (matrix, m, n, fractionResult) => {
   return [latexResult, decimalResult, element];
 }
 /**
- * @param {string} C
- * @param {string} S
+ * @param {{C: string, S: string}} payload
  * @return {*[]}
  */
-export const ParseMatrixList = (C, S) => {
-  const parseS = new ParseSetup(S);
+export const ParseMatrixList = ({ C, S }) => {
+  const parseS = new ParseSetup({ S });
   const fractionResult = parseS.getFractionResult();
   const regx = /M([A-DT])(\d)(\d)([\dA]+)/g;
   let match;
@@ -85,12 +84,11 @@ const ParseVector = (vector, n, fractionResult) => {
 
 /**
  *
- * @param {string} C
- * @param {string} S
+ * @param {{C: string, S: string}} payload
  * @return {*[]}
  */
-export const ParseVectorList = (C, S) => {
-  const parseS = new ParseSetup(S);
+export const ParseVectorList = ({ C, S }) => {
+  const parseS = new ParseSetup({ S });
   const fractionResult = parseS.getFractionResult();
   const regx = /V([A-CT])(\d)(\d)([\dA]+)/g;
   let match;
@@ -106,16 +104,14 @@ export const ParseVectorList = (C, S) => {
 
 /**
  *
- * @param {string} C
- * @param {string} M
- * @param {string} S
+ * @param {{C: string, M: string, S: string}} payload
  * @return {{latex: *, decimal: *[], element: *[]}}
  */
-export const ParseEquation = (C, M, S) => {
-  const parseS = new ParseSetup(S);
+export const ParseEquation = ({ C, M, S }) => {
+  const parseS = new ParseSetup({ S });
   const fractionResult = parseS.getFractionResult();
   const split = C.match(/.{20}/g);
-  const parseM = new ParseMode(M);
+  const parseM = new ParseMode({ M });
   const mainMode = parseM.getMainMode();
   const subMode = parseM.getSubMode();
   const sb = +subMode;
@@ -223,12 +219,11 @@ export const ParseEquation = (C, M, S) => {
 }
 
 /**
- * @param C
- * @param M
+ * @param {{C: string, M: string}} payload
  * @return {{latex: *, decimal: *[]}}
  */
-export const ParseDistribution = (C, M) => {
-  const subMode = new ParseMode(M).getSubMode();
+export const ParseDistribution = ({ C, M }) => {
+  const subMode = new ParseMode({ M }).getSubMode();
   const split = C.match(/.{20}/g);
   let template = INPUT_INFO['DISTRIBUTION'][subMode][split.length];
   if (split.length !== template.length) {

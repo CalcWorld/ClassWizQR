@@ -12,7 +12,7 @@ const generateArray = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => new 
  */
 const array2Csv = (array) => array.map(row => row.join(',')).join('\n');
 
-export const ParseSpreadsheet = (T) => {
+export const ParseSpreadsheet = ({ T }) => {
   const position = T.slice(2, 62).match(/[\dA-F]{12}/g).map(t => {
     return parseInt(t, 16).toString(2).padStart(48, '0').slice(0, 45);
   });
@@ -36,7 +36,7 @@ export const ParseSpreadsheet = (T) => {
   return { array, csv };
 }
 
-const ParseCompressStatistic = (T) => {
+const ParseCompressStatistic = ({ T }) => {
   return T.match(/.{6}/g).map(t => {
     const data = t.match(/.{2}/g).map(tt => {
       return parseInt(tt, 32).toString(10).padStart(3, '0')
@@ -52,15 +52,15 @@ const ParseCompressStatistic = (T) => {
   });
 }
 
-const ParseRawStatistic = (T) => {
+const ParseRawStatistic = ({ T }) => {
   return T.match(/.{9}/g).map(t => {
     const [, decimal] = new ParseVariable(`0${t}`).get();
     return decimal;
   })
 }
 
-export const ParseStatistic = (T, M, S) => {
-  const parseM = new ParseMode(M);
+export const ParseStatistic = ({ T, M, S }) => {
+  const parseM = new ParseMode({ M });
   const mainMode = parseM.getMainMode();
   const subMode = parseM.getSubMode();
   const head = [];
@@ -69,14 +69,14 @@ export const ParseStatistic = (T, M, S) => {
     // Statistic Mode
     head.push('x');
     subMode !== '01' && head.push('y');
-    const freqOn = new ParseSetup(S).getStatisticsFrequency() === '1';
+    const freqOn = new ParseSetup({ S }).getStatisticsFrequency() === '1';
     freqOn && head.push('Freq');
-    numList = ParseCompressStatistic(T);
+    numList = ParseCompressStatistic({ T });
   } else if (mainMode === '0C') {
     // Distribution Mode
     head.push('x');
     head.push('P');
-    numList = ParseRawStatistic(T);
+    numList = ParseRawStatistic({ T });
   } else {
     return void 0;
   }
@@ -91,15 +91,15 @@ export const ParseStatistic = (T, M, S) => {
   return { array, csv };
 }
 
-export const ParseMathBox = (T, M, C) => {
+export const ParseMathBox = ({ T, M, C }) => {
   const split = C.match(/.{20}/g);
-  const parseM = new ParseMode(M);
+  const parseM = new ParseMode({ M });
   const subMode = parseM.getResultTemplate();
   const quantity = (new ParseVariable(split[0]).get())[1];
   const attempts = (new ParseVariable(split[1]).get())[1];
   let freqResultTypeName;
   let typeList;
-  const freqList = ParseCompressStatistic(T);
+  const freqList = ParseCompressStatistic({ T });
 
   switch (subMode) {
     case 'S1':
@@ -154,7 +154,7 @@ export const ParseSequencesResult = ({ T }, { sequence, tableRange }) => {
   let numList;
   let colList;
   head = sequence.setting.resultHeader;
-  numList = ParseCompressStatistic(T);
+  numList = ParseCompressStatistic({ T });
   const a = tableRange[0].decimal.toNumber();
   const b = tableRange[1].decimal.toNumber();
   colList = generateArray(a, b);

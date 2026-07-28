@@ -1,7 +1,7 @@
 import { tt } from "../utils.js";
 
 export class ParseSetup {
-  constructor(S) {
+  constructor({ S }) {
     this.S = S;
   }
 

@@ -1,10 +1,10 @@
 import util from 'util';
-import { ParseAlgorithm } from '../src/algo/index.js';
-import enI18n from '../src/i18n-res/en.json' with { type: 'json' };
-import zhI18n from '../src/i18n-res/zh.json' with { type: 'json' };
-import viI18n from '../src/i18n-res/vi.json' with { type: 'json' };
-import frI18n from '../src/i18n-res/fr.json' with { type: 'json' };
-import { loadResource } from '../src/utils.js';
+import { ParseAlgorithm } from '../../src/algo/index.js';
+import enI18n from '../../src/i18n-res/en.json' with { type: 'json' };
+import zhI18n from '../../src/i18n-res/zh.json' with { type: 'json' };
+import viI18n from '../../src/i18n-res/vi.json' with { type: 'json' };
+import frI18n from '../../src/i18n-res/fr.json' with { type: 'json' };
+import { loadResource } from '../../src/utils.js';
 
 loadResource('en', enI18n);
 loadResource('zh', zhI18n);

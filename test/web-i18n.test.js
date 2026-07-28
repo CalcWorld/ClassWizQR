@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import test from 'node:test';
+import { test } from 'vitest';
 import { translate } from '../web/src/scripts/i18n.js';
 
 test('translate preserves calls without parameters', () => {

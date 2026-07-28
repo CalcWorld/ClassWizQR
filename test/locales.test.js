@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import test from 'node:test';
+import { test } from 'vitest';
 import { matchSupportedLocale } from '../web/src/scripts/locales.js';
 
 const regionalLanguages = ['en', 'zh-CN', 'zh-TW', 'fr-FR'];

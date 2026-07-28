@@ -1,9 +1,9 @@
-import { ParseMathBox } from '../src/variable/T.js';
-import { parseUrl } from '../src/index.js';
-import en from '../src/i18n-res/en.json' with { type: 'json' };
-import zh from '../src/i18n-res/zh.json' with { type: 'json' };
-import vi from '../src/i18n-res/vi.json' with { type: 'json' };
-import fr from '../src/i18n-res/fr.json' with { type: 'json' };
+import { ParseMathBox } from '../../src/variable/T.js';
+import { parseUrl } from '../../src/index.js';
+import en from '../../src/i18n-res/en.json' with { type: 'json' };
+import zh from '../../src/i18n-res/zh.json' with { type: 'json' };
+import vi from '../../src/i18n-res/vi.json' with { type: 'json' };
+import fr from '../../src/i18n-res/fr.json' with { type: 'json' };
 
 console.log(ParseMathBox({ T: '000000000000000000340034000000000000000000340034340034340034000000000000340034000000000000000000', M: '4F00S10000', C: '030000000000000001000500000000000000010000000000000000000000' }))
 console.log(ParseMathBox({ T: '3400349C0034340034000000', M: '4F00S20000', C: '0300000000000000010005000000000000000100' }))

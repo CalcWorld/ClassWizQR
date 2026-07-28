@@ -1,10 +1,10 @@
 import Decimal from 'decimal.js';
 import { numberToPiFrac } from '../src/variable/index.js';
 import assert from 'assert';
+import { test } from 'vitest';
 
 function cmp({ num, a, b, digits, pi_25200 }) {
   const frac = numberToPiFrac(num, pi_25200, digits);
-  console.log(frac, num);
   assert.strictEqual(true, !!frac);
   const [d, c] = frac;
   assert.strictEqual(true, new Decimal(a).eq(d));
@@ -24,7 +24,9 @@ const cy_cmp = [
 const cy_digits = 13;
 
 cy_cmp.forEach(([num, a, b]) => {
-  cmp({ num, a, b, digits: cy_digits, pi_25200: cy_pi_25200 });
+  test(`converts ClassWiz EX value ${num} to ${a}π/${b}`, () => {
+    cmp({ num, a, b, digits: cy_digits, pi_25200: cy_pi_25200 });
+  });
 });
 
 
@@ -35,5 +37,7 @@ const ey_cmp = [
 const ey_digits = 19;
 
 ey_cmp.forEach(([num, a, b]) => {
-  cmp({ num, a, b, digits: ey_digits, pi_25200: ey_pi_25200 });
+  test(`converts ClassWiz CW value ${num} to ${a}π/${b}`, () => {
+    cmp({ num, a, b, digits: ey_digits, pi_25200: ey_pi_25200 });
+  });
 });

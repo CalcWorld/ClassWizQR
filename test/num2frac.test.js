@@ -1,6 +1,7 @@
 import { numberToFrac } from '../src/variable/index.js';
 import assert from 'assert';
 import Decimal from 'decimal.js';
+import { test } from 'vitest';
 
 /**
  *
@@ -11,7 +12,6 @@ import Decimal from 'decimal.js';
  */
 function testNum2Frac(x, a, b, error) {
   const frac = numberToFrac(x, error);
-  console.log(x, a, b, frac);
   assert.strictEqual(true, Boolean(frac));
   assert.strictEqual(true, new Decimal(a).eq(frac[0]));
   assert.strictEqual(true, new Decimal(b).eq(frac[1]));
@@ -26,7 +26,9 @@ const cy_cmp = [
 ];
 // const ex_error = '0.00000000000005';
 cy_cmp.forEach(([x, e, a, b]) => {
-  testNum2Frac(x, a, b, e);
+  test(`converts ClassWiz EX value ${x} to ${a}/${b}`, () => {
+    testNum2Frac(x, a, b, e);
+  });
 });
 
 const ey_cmp = [
@@ -36,5 +38,7 @@ const ey_cmp = [
 ];
 // const ey_error = '0.000000000000000005';
 ey_cmp.forEach(([x, e, a, b]) => {
-  testNum2Frac(x, a, b, e);
+  test(`converts ClassWiz CW value ${x} to ${a}/${b}`, () => {
+    testNum2Frac(x, a, b, e);
+  });
 });

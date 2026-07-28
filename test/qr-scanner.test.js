@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import test from 'node:test';
+import { test } from 'vitest';
 import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader';
-import { parseUrl } from '../src/index.js';
+import { parse } from './support/parser.js';
 import {
   consumeQrResult,
   createEmptySequence,
@@ -459,7 +459,7 @@ test('provided QR fixtures expose expected sequence metadata and assemble', asyn
   assert.equal(completed.completedText, firstPart.text + secondPart.text);
   assert.match(completed.completedText, /^http:\/\/wes\.casio\.com\/ncal\//);
 
-  const parsed = parseUrl(completed.completedText, 'en');
+  const parsed = parse(completed.completedText);
   assert.equal(parsed.model.name, 'fx-991CW');
   assert.equal(parsed.spreadsheet.array.length, 45);
 
@@ -495,7 +495,7 @@ test('six-part QR fixtures assemble by index in arbitrary scan order', async () 
   assert.equal(completedText, expectedUrl);
   assert.match(completedText, /^http:\/\/wes\.casio\.com\/ncal\//);
 
-  const parsed = parseUrl(completedText, 'en');
+  const parsed = parse(completedText);
   assert.equal(parsed.model.name, 'fx-991CW');
   assert.equal(parsed.spreadsheet.array.length, 45);
 });

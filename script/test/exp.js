@@ -1,4 +1,4 @@
-import { ParseExpression } from '../src/expression/index.js';
+import { ParseExpression } from '../../src/expression/index.js';
 import util from 'util';
 
 util.inspect.defaultOptions.depth = null;

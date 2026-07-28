@@ -1,4 +1,4 @@
-import { AsciiTable } from '../src/ascii/index.js';
+import { AsciiTable } from '../../src/ascii/index.js';
 
 let unicode, latex;
 

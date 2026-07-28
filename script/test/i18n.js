@@ -1,5 +1,5 @@
-import { getResource, loadResource, tt } from '../src/utils.js';
-import enI18n from '../src/i18n-res/en.json' with { type: 'json' };
+import { getResource, loadResource, tt } from '../../src/utils.js';
+import enI18n from '../../src/i18n-res/en.json' with { type: 'json' };
 
 loadResource('en', enI18n);
 console.log(globalThis.i18nResource);

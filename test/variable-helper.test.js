@@ -3,6 +3,7 @@ import Decimal from 'decimal.js';
 import { test } from 'vitest';
 import {
   decimalToDmsLatex,
+  decimalToPrimeFactor,
   decimalToRecDecLatex,
   fracToRecDecLatex,
 } from '../src/variable/helper/index.js';
@@ -20,6 +21,34 @@ test('carries rounded minutes into degrees', () => {
     decimalToDmsLatex(new Decimal('12.999999')),
     "13^\\circ 0' 0'' ",
   );
+});
+
+test('converts an integer to prime factor notation', () => {
+  assert.strictEqual(
+    decimalToPrimeFactor(new Decimal('114514')),
+    '2 \\times 31 \\times 1847',
+  );
+});
+
+test('uses integer exponents for repeated prime factors', () => {
+  assert.strictEqual(
+    decimalToPrimeFactor(new Decimal('360')),
+    '2^{3} \\times 3^{2} \\times 5',
+  );
+});
+
+test('leaves the unsupported part of a prime factorization in parentheses', () => {
+  assert.strictEqual(
+    decimalToPrimeFactor(new Decimal('2036162')),
+    '2 \\times (1018081)',
+  );
+});
+
+test('does not factor unsupported values', () => {
+  assert.strictEqual(decimalToPrimeFactor(new Decimal('-2')), undefined);
+  assert.strictEqual(decimalToPrimeFactor(new Decimal('0')), undefined);
+  assert.strictEqual(decimalToPrimeFactor(new Decimal('1')), undefined);
+  assert.strictEqual(decimalToPrimeFactor(new Decimal('10000000000')), undefined);
 });
 
 test('converts a decimal to dotted recurring notation', () => {
@@ -93,5 +122,21 @@ test('uses recurring decimal notation for a fraction with display code E', () =>
       modelId: '523',
     })[0],
     '0 . \\left( 1 4 2 8 5 7 \\right) ',
+  );
+});
+
+test('uses prime factor notation for display code F', () => {
+  const valNum = '114514'.padEnd(24, '0');
+  assert.strictEqual(
+    new ParseVariable(`0${valNum}105`).get({ displayCode: 'F' })[0],
+    '2 \\times 31 \\times 1847',
+  );
+});
+
+test('does not use prime factor notation for a negative integer', () => {
+  const valNum = '2036162'.padEnd(24, '0');
+  assert.strictEqual(
+    new ParseVariable(`0${valNum}606`).get({ displayCode: 'F' })[0],
+    '-2036162',
   );
 });

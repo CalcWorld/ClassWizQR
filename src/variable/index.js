@@ -3,6 +3,7 @@ import { tt } from "../utils.js";
 import {
   decimalToDmsLatex,
   decimalToRecDecLatex,
+  decimalToPrimeFactor,
   fracToRecDecLatex,
   getImpFrac,
   getMixedFrac,
@@ -68,9 +69,10 @@ export class ParseVariable {
         modelType,
         modelId,
       });
-    } /*else if (displayCode === 'F' && numDec.isInt()) {
+    } else if (displayCode === 'F' && numDec.isInt() && numDec.gte(2) && numDec.lte('9999999999')) {
       // Prime Factor
-    }*/ else if (!numDec.isInt()) {
+      numLatex = decimalToPrimeFactor(numDec);
+    } else if (!numDec.isInt()) {
       numLatex = decimalToPiFracLatex({
         numSign,
         valNum,

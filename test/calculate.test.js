@@ -1254,6 +1254,40 @@ for (const { name, url, latex } of recurringDecimalCases) {
   });
 }
 
+const primeFactorCases = [
+  {
+    name: 'Prime factor result with one four-digit factor',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-544A+U-000000000000+M-C10000FF00+S-401410101000001E0000B000CBF1+Q-01005973000000000000000001060000000000000000000000000000+E-31303039A8393937',
+    latex: '997 \\times 1009',
+  },
+  {
+    name: 'Prime factor result at the unfactored threshold',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-544A+U-000000000000+M-C10000FF00+S-401410101000001E0000B000CBF1+Q-01018081000000000000000001060000000000000000000000000000+E-31303039A831303039',
+    latex: '(1018081)',
+  },
+  {
+    name: 'Prime factor result with a partially factored value',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-544A+U-000000000000+M-C10000FF00+S-401410101000001E0000B000CBF1+Q-02036162000000000000000001060000000000000000000000000000+E-32303336313632',
+    latex: '2 \\times (1018081)',
+  },
+  {
+    name: 'Prime factor result containing one four-digit prime',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-544A+U-000000000000+M-C10000FF00+S-401410101000001E0000B000CBF1+Q-01847000000000000000000001030000000000000000000000000000+E-31383437',
+    latex: '1847',
+  },
+  {
+    name: 'Prime factor result for a ten-digit integer',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-544A+U-000000000000+M-C10000FF00+S-401410101000001E0000B000CBF1+Q-09999999999000000000000001090000000000000000000000000000+E-39393939393939393939',
+    latex: '3^{2} \\times 11 \\times 41 \\times 271 \\times 9091',
+  },
+];
+
+for (const { name, url, latex } of primeFactorCases) {
+  test(name, () => {
+    assert.equal(parse(url).result[0].latex, latex);
+  });
+}
+
 const localizationCases = [
   {
     "name": "Calculate localization",

@@ -197,6 +197,44 @@ export const decimalToDmsLatex = (decimal) => {
 };
 
 /**
+ * @param {Decimal} decimal
+ * @return {string|undefined}
+ */
+export const decimalToPrimeFactor = (decimal) => {
+  if (
+    !Decimal.isDecimal(decimal)
+    || !decimal.isFinite()
+    || !decimal.isInt()
+    || decimal.lt(2)
+    || decimal.gt('9999999999')
+  ) return;
+
+  let remaining = BigInt(decimal.toFixed(0));
+  const factors = [];
+
+  for (
+    let divisor = 2n;
+    divisor <= 997n && divisor * divisor <= remaining;
+    divisor = divisor === 2n ? 3n : divisor + 2n
+  ) {
+    let exponent = 0;
+    while (remaining % divisor === 0n) {
+      remaining /= divisor;
+      exponent += 1;
+    }
+    if (exponent > 0) {
+      factors.push(exponent === 1 ? `${divisor}` : `${divisor}^{${exponent}}`);
+    }
+  }
+
+  if (remaining > 1n) {
+    factors.push(remaining >= 1018081n ? `(${remaining})` : `${remaining}`);
+  }
+
+  return factors.join(' \\times ');
+};
+
+/**
  * @param {object} options
  * @param {Decimal|string|number} options.numerator
  * @param {Decimal|string|number} options.denominator

@@ -103,7 +103,7 @@ export class ParseVariable {
     const d = decimal.floor();
     const mm = decimal.sub(d).times(60);
     const m = mm.floor();
-    const s = mm.sub(m).times(60).toFixed(2);    // seems the accuracy is not enough
+    const s = mm.sub(m).times(60).toDP(2);    // seems the accuracy is not enough
     const dms = `${d}^\\circ ${m}' ${s}'' `;
     return [dms, decimal];
   }

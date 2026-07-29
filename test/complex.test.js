@@ -145,3 +145,10 @@ for (const { name, url, expected } of cases) {
     assert.deepEqual(projectResult(parse(url)), expected);
   });
 }
+
+test('wraps a compound imaginary coefficient in parentheses', () => {
+  const url = 'http://wes.casio.com/math/index.php?q=I-251F+U-000000000000+M-C40000DD00+S-000410101000100E1010B00023EB+R-8000000100050101000180020201000701010106+E-741A381B20A6C81D1A741A371B1B1A201B1EA6741A351B';
+  const result = parse(url).result;
+
+  assert.ok(result[0].latex.includes(')i'));
+});

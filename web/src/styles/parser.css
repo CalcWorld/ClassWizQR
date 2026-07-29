@@ -359,6 +359,23 @@ details[open] > summary:hover {
     text-align: right;
 }
 
+#calc .right {
+    text-align: right;
+}
+
+/* fix multi-line formula */
+#calc .right .MathJax_CHTML .mjx-math > .mjx-mrow {
+    text-align: right;
+}
+
+#calc .right .MathJax_CHTML .mjx-math > .mjx-mrow > .mjx-stack {
+    width: auto !important;
+}
+
+#calc .right .MathJax_CHTML .mjx-stack > .mjx-block {
+    text-align: left !important;
+}
+
 #loading {
     padding: 20px 4px;
     color: var(--text-muted);

@@ -15,6 +15,24 @@ import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseSta
 import { ParseSetup } from "./setup/index.js";
 import { availableLanguages, loadResource } from "./utils.js";
 import { ParseAlgorithm } from './algo/index.js';
+import Decimal from 'decimal.js';
+
+const withDecimalMark = (decimalMark, callback) => {
+  if (decimalMark !== '0') {
+    return callback();
+  }
+
+  const previousToString = Decimal.prototype.toString;
+  Decimal.prototype.toString = function (...args) {
+    return previousToString.call(this, ...args).replace('.', ',');
+  };
+
+  try {
+    return callback();
+  } finally {
+    Decimal.prototype.toString = previousToString;
+  }
+};
 
 const getRawQueryParameter = (query, name) => {
   const queryStart = query.indexOf('?');
@@ -141,6 +159,13 @@ export class ClassWizQR {
   }
 
   getResult() {
+    const decimalMark = this.kv.S
+      ? new ParseSetup(this.kv).getDecimalMark()
+      : undefined;
+    return withDecimalMark(decimalMark, () => this.#getResult());
+  }
+
+  #getResult() {
     const { modelType, kv, calcId } = this;
     let modelId, modelName, qr, modelVersion;
     if (kv.I) {

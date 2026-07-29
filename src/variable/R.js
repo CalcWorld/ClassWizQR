@@ -4,7 +4,7 @@ import { ParseMode } from "../mode/index.js";
 import { RESULT_INFO } from './result.js';
 import { ParseSetup } from "../setup/index.js";
 
-export const ParseNumberResult = ({ R, M }, { modelType, modelId } = {}) => {
+export const ParseNumberResult = ({ R, M, S }, { modelType, modelId } = {}) => {
   const parseM = new ParseMode({ M });
   const displayCode = parseM.getResultFormatDisplay();
   const ans1 = R.slice(0, R.length / 2);
@@ -12,7 +12,9 @@ export const ParseNumberResult = ({ R, M }, { modelType, modelId } = {}) => {
   const [ans1Latex, ans1Decimal] = new ParseVariable(ans1).get({ displayCode });
   const [ans2Latex, ans2Decimal] = new ParseVariable(ans2).get({ displayCode });
 
-  let template = RESULT_INFO['NUMBER'][parseM.getResultTemplate()];
+  const _parseS = new ParseSetup({ S });
+
+  let template = RESULT_INFO['NUMBER'][parseM.getResultTemplate()]?.()?.join(_parseS.getDecimalMark() === '0' ? ';' : ',');
   let result = [];
   if (!template) {
     const ans2LatexBracket =  /^.+[+-]/.test(ans2Latex) ? `(${ans2Latex})` : ans2Latex;
@@ -141,6 +143,7 @@ export const ParseEquationResult = ({ R, M, S, C }) => {
       const numberResult = ParseNumberResult({
         R: `${split[2 * i]}${split[2 * i + 1]}`,
         M,
+        S,
       });
       const latex = numberResult[0].latex;
       template = template.replace(`\$\{${i}\}`, latex);

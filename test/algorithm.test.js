@@ -146,7 +146,7 @@ const cases = [
           "If\\ \\mathrm{A} = 1 3\\ then",
           "\\ \\ Turn\\ ⟲\\ 1 4\\ degrees",
           "Else",
-          "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) , \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 . + - \\times \\div\\ pixels",
+          "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixels",
           "\\ \\ Move\\ \\theta \\% ! \\textbf{P} \\textbf{C} \\mathrm{Ran\\#} \\mathrm{RanInt\\#}( \\mathrm{GCD}( \\mathrm{LCM}( \\mathrm{Abs}( \\mathrm{Int}( \\mathrm{Rnd}( \\mathrm{Intg}( \\mathrm{RndFix}( \\!^{\\circ} \\!^{\\mathrm{r}} \\!^{\\mathrm{g}} \\!^{▫} \\sinh( \\cosh( \\tanh( \\sinh^{-1}( \\cosh^{-1}( \\tanh^{-1}( \\textbf{m} \\textbf{μ} \\textbf{n} \\textbf{p} \\textbf{f} \\textbf{k} \\textbf{M} \\textbf{G} \\textbf{T} \\textbf{P} \\textbf{E} {h}\\ pixels",
           "End",
           "\\ "
@@ -178,7 +178,7 @@ const cases = [
           "If A=13 then",
           "  Turn ⟲ 14 degrees",
           "Else",
-          "  Move ⌟√(^(²log(ln(log(⁻¹[x]√(Anssin(cos(tan((),tan⁻¹(cos⁻¹(sin⁻¹(πeABCDEFxyz▫-1234567890.+-×÷ pixels",
+          "  Move ⌟√(^(²log(ln(log(⁻¹[x]√(Anssin(cos(tan(();tan⁻¹(cos⁻¹(sin⁻¹(πeABCDEFxyz▫-1234567890,+-×÷ pixels",
           "  Move θ%!𝐏𝐂Ran#RanInt#(GCD(LCM(Abs(Int(Rnd(Intg(RndFix(°ʳᵍ▫sinh(cosh(tanh(sinh⁻¹(cosh⁻¹(tanh⁻¹(𝐦𝐦𝐧𝐩𝐟𝐤𝐌𝐆𝐓𝐏𝐄h pixels",
           "End",
           " "
@@ -210,7 +210,7 @@ const cases = [
           "if [A=13] then",
           "  turn @turnLeft (14) degrees",
           "else",
-          "  move (⌟√\\(^\\(²log\\(ln\\(log\\(⁻¹\\[x\\]√\\(Anssin\\(cos\\(tan\\(\\(\\),tan⁻¹\\(cos⁻¹\\(sin⁻¹\\(πeABCDEFxyz▫-1234567890.+-×÷) steps",
+          "  move (⌟√\\(^\\(²log\\(ln\\(log\\(⁻¹\\[x\\]√\\(Anssin\\(cos\\(tan\\(\\(\\);tan⁻¹\\(cos⁻¹\\(sin⁻¹\\(πeABCDEFxyz▫-1234567890,+-×÷) steps",
           "  move (θ%!𝐏𝐂Ran#RanInt#\\(GCD\\(LCM\\(Abs\\(Int\\(Rnd\\(Intg\\(RndFix\\(°ʳᵍ▫sinh\\(cosh\\(tanh\\(sinh⁻¹\\(cosh⁻¹\\(tanh⁻¹\\(𝐦𝐦𝐧𝐩𝐟𝐤𝐌𝐆𝐓𝐏𝐄h) steps",
           "end",
           " "
@@ -402,7 +402,7 @@ const localizationCases = [
             "If\\ \\mathrm{A} = 1 3\\ then",
             "\\ \\ Turn\\ ⟲\\ 1 4\\ degrees",
             "Else",
-            "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) , \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 . + - \\times \\div\\ pixels",
+            "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixels",
             "\\ \\ Move\\ \\theta \\% ! \\textbf{P} \\textbf{C} \\mathrm{Ran\\#} \\mathrm{RanInt\\#}( \\mathrm{GCD}( \\mathrm{LCM}( \\mathrm{Abs}( \\mathrm{Int}( \\mathrm{Rnd}( \\mathrm{Intg}( \\mathrm{RndFix}( \\!^{\\circ} \\!^{\\mathrm{r}} \\!^{\\mathrm{g}} \\!^{▫} \\sinh( \\cosh( \\tanh( \\sinh^{-1}( \\cosh^{-1}( \\tanh^{-1}( \\textbf{m} \\textbf{μ} \\textbf{n} \\textbf{p} \\textbf{f} \\textbf{k} \\textbf{M} \\textbf{G} \\textbf{T} \\textbf{P} \\textbf{E} {h}\\ pixels",
             "End",
             "\\ "
@@ -434,7 +434,7 @@ const localizationCases = [
             "If A=13 then",
             "  Turn ⟲ 14 degrees",
             "Else",
-            "  Move ⌟√(^(²log(ln(log(⁻¹[x]√(Anssin(cos(tan((),tan⁻¹(cos⁻¹(sin⁻¹(πeABCDEFxyz▫-1234567890.+-×÷ pixels",
+            "  Move ⌟√(^(²log(ln(log(⁻¹[x]√(Anssin(cos(tan(();tan⁻¹(cos⁻¹(sin⁻¹(πeABCDEFxyz▫-1234567890,+-×÷ pixels",
             "  Move θ%!𝐏𝐂Ran#RanInt#(GCD(LCM(Abs(Int(Rnd(Intg(RndFix(°ʳᵍ▫sinh(cosh(tanh(sinh⁻¹(cosh⁻¹(tanh⁻¹(𝐦𝐦𝐧𝐩𝐟𝐤𝐌𝐆𝐓𝐏𝐄h pixels",
             "End",
             " "
@@ -466,7 +466,7 @@ const localizationCases = [
             "if [A=13] then",
             "  turn @turnLeft (14) degrees",
             "else",
-            "  move (⌟√\\(^\\(²log\\(ln\\(log\\(⁻¹\\[x\\]√\\(Anssin\\(cos\\(tan\\(\\(\\),tan⁻¹\\(cos⁻¹\\(sin⁻¹\\(πeABCDEFxyz▫-1234567890.+-×÷) steps",
+            "  move (⌟√\\(^\\(²log\\(ln\\(log\\(⁻¹\\[x\\]√\\(Anssin\\(cos\\(tan\\(\\(\\);tan⁻¹\\(cos⁻¹\\(sin⁻¹\\(πeABCDEFxyz▫-1234567890,+-×÷) steps",
             "  move (θ%!𝐏𝐂Ran#RanInt#\\(GCD\\(LCM\\(Abs\\(Int\\(Rnd\\(Intg\\(RndFix\\(°ʳᵍ▫sinh\\(cosh\\(tanh\\(sinh⁻¹\\(cosh⁻¹\\(tanh⁻¹\\(𝐦𝐦𝐧𝐩𝐟𝐤𝐌𝐆𝐓𝐏𝐄h) steps",
             "end",
             " "
@@ -641,7 +641,7 @@ const localizationCases = [
             "如果\\ \\mathrm{A} = 1 3\\ 则",
             "\\ \\ 旋转⟲\\ 1 4\\ 度",
             "否则",
-            "\\ \\ 前进\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) , \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 . + - \\times \\div\\ 像素",
+            "\\ \\ 前进\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ 像素",
             "\\ \\ 前进\\ \\theta \\% ! \\textbf{P} \\textbf{C} \\mathrm{Ran\\#} \\mathrm{RanInt\\#}( \\mathrm{GCD}( \\mathrm{LCM}( \\mathrm{Abs}( \\mathrm{Int}( \\mathrm{Rnd}( \\mathrm{Intg}( \\mathrm{RndFix}( \\!^{\\circ} \\!^{\\mathrm{r}} \\!^{\\mathrm{g}} \\!^{▫} \\sinh( \\cosh( \\tanh( \\sinh^{-1}( \\cosh^{-1}( \\tanh^{-1}( \\textbf{m} \\textbf{μ} \\textbf{n} \\textbf{p} \\textbf{f} \\textbf{k} \\textbf{M} \\textbf{G} \\textbf{T} \\textbf{P} \\textbf{E} {h}\\ 像素",
             "结束",
             "\\ "
@@ -673,7 +673,7 @@ const localizationCases = [
             "如果 A=13 则",
             "  旋转⟲ 14 度",
             "否则",
-            "  前进 ⌟√(^(²log(ln(log(⁻¹[x]√(Anssin(cos(tan((),tan⁻¹(cos⁻¹(sin⁻¹(πeABCDEFxyz▫-1234567890.+-×÷ 像素",
+            "  前进 ⌟√(^(²log(ln(log(⁻¹[x]√(Anssin(cos(tan(();tan⁻¹(cos⁻¹(sin⁻¹(πeABCDEFxyz▫-1234567890,+-×÷ 像素",
             "  前进 θ%!𝐏𝐂Ran#RanInt#(GCD(LCM(Abs(Int(Rnd(Intg(RndFix(°ʳᵍ▫sinh(cosh(tanh(sinh⁻¹(cosh⁻¹(tanh⁻¹(𝐦𝐦𝐧𝐩𝐟𝐤𝐌𝐆𝐓𝐏𝐄h 像素",
             "结束",
             " "
@@ -705,7 +705,7 @@ const localizationCases = [
             "if [A=13] then",
             "  turn @turnLeft (14) degrees",
             "else",
-            "  move (⌟√\\(^\\(²log\\(ln\\(log\\(⁻¹\\[x\\]√\\(Anssin\\(cos\\(tan\\(\\(\\),tan⁻¹\\(cos⁻¹\\(sin⁻¹\\(πeABCDEFxyz▫-1234567890.+-×÷) steps",
+            "  move (⌟√\\(^\\(²log\\(ln\\(log\\(⁻¹\\[x\\]√\\(Anssin\\(cos\\(tan\\(\\(\\);tan⁻¹\\(cos⁻¹\\(sin⁻¹\\(πeABCDEFxyz▫-1234567890,+-×÷) steps",
             "  move (θ%!𝐏𝐂Ran#RanInt#\\(GCD\\(LCM\\(Abs\\(Int\\(Rnd\\(Intg\\(RndFix\\(°ʳᵍ▫sinh\\(cosh\\(tanh\\(sinh⁻¹\\(cosh⁻¹\\(tanh⁻¹\\(𝐦𝐦𝐧𝐩𝐟𝐤𝐌𝐆𝐓𝐏𝐄h) steps",
             "end",
             " "
@@ -880,7 +880,7 @@ const localizationCases = [
             "If\\ \\mathrm{A} = 1 3\\ then",
             "\\ \\ Turn\\ ⟲\\ 1 4\\ degrees",
             "Else",
-            "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) , \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 . + - \\times \\div\\ pixel",
+            "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixel",
             "\\ \\ Move\\ \\theta \\% ! \\textbf{P} \\textbf{C} \\mathrm{Ran\\#} \\mathrm{RanInt\\#}( \\mathrm{GCD}( \\mathrm{LCM}( \\mathrm{Abs}( \\mathrm{Int}( \\mathrm{Rnd}( \\mathrm{Intg}( \\mathrm{RndFix}( \\!^{\\circ} \\!^{\\mathrm{r}} \\!^{\\mathrm{g}} \\!^{▫} \\sinh( \\cosh( \\tanh( \\sinh^{-1}( \\cosh^{-1}( \\tanh^{-1}( \\textbf{m} \\textbf{μ} \\textbf{n} \\textbf{p} \\textbf{f} \\textbf{k} \\textbf{M} \\textbf{G} \\textbf{T} \\textbf{P} \\textbf{E} {h}\\ pixel",
             "End",
             "\\ "
@@ -912,7 +912,7 @@ const localizationCases = [
             "If A=13 then",
             "  Turn ⟲ 14 degrees",
             "Else",
-            "  Move ⌟√(^(²log(ln(log(⁻¹[x]√(Anssin(cos(tan((),tan⁻¹(cos⁻¹(sin⁻¹(πeABCDEFxyz▫-1234567890.+-×÷ pixel",
+            "  Move ⌟√(^(²log(ln(log(⁻¹[x]√(Anssin(cos(tan(();tan⁻¹(cos⁻¹(sin⁻¹(πeABCDEFxyz▫-1234567890,+-×÷ pixel",
             "  Move θ%!𝐏𝐂Ran#RanInt#(GCD(LCM(Abs(Int(Rnd(Intg(RndFix(°ʳᵍ▫sinh(cosh(tanh(sinh⁻¹(cosh⁻¹(tanh⁻¹(𝐦𝐦𝐧𝐩𝐟𝐤𝐌𝐆𝐓𝐏𝐄h pixel",
             "End",
             " "
@@ -944,7 +944,7 @@ const localizationCases = [
             "if [A=13] then",
             "  turn @turnLeft (14) degrees",
             "else",
-            "  move (⌟√\\(^\\(²log\\(ln\\(log\\(⁻¹\\[x\\]√\\(Anssin\\(cos\\(tan\\(\\(\\),tan⁻¹\\(cos⁻¹\\(sin⁻¹\\(πeABCDEFxyz▫-1234567890.+-×÷) steps",
+            "  move (⌟√\\(^\\(²log\\(ln\\(log\\(⁻¹\\[x\\]√\\(Anssin\\(cos\\(tan\\(\\(\\);tan⁻¹\\(cos⁻¹\\(sin⁻¹\\(πeABCDEFxyz▫-1234567890,+-×÷) steps",
             "  move (θ%!𝐏𝐂Ran#RanInt#\\(GCD\\(LCM\\(Abs\\(Int\\(Rnd\\(Intg\\(RndFix\\(°ʳᵍ▫sinh\\(cosh\\(tanh\\(sinh⁻¹\\(cosh⁻¹\\(tanh⁻¹\\(𝐦𝐦𝐧𝐩𝐟𝐤𝐌𝐆𝐓𝐏𝐄h) steps",
             "end",
             " "
@@ -1119,7 +1119,7 @@ const localizationCases = [
             "Si\\ \\mathrm{A} = 1 3\\ Alors",
             "\\ \\ Tourner\\ de\\ ⟲\\ 1 4\\ degrés",
             "Sinon",
-            "\\ \\ Avancer\\ de\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) , \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 . + - \\times \\div\\ pixels",
+            "\\ \\ Avancer\\ de\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixels",
             "\\ \\ Avancer\\ de\\ \\theta \\% ! \\textbf{P} \\textbf{C} \\mathrm{Ran\\#} \\mathrm{RanInt\\#}( \\mathrm{GCD}( \\mathrm{LCM}( \\mathrm{Abs}( \\mathrm{Int}( \\mathrm{Rnd}( \\mathrm{Intg}( \\mathrm{RndFix}( \\!^{\\circ} \\!^{\\mathrm{r}} \\!^{\\mathrm{g}} \\!^{▫} \\sinh( \\cosh( \\tanh( \\sinh^{-1}( \\cosh^{-1}( \\tanh^{-1}( \\textbf{m} \\textbf{μ} \\textbf{n} \\textbf{p} \\textbf{f} \\textbf{k} \\textbf{M} \\textbf{G} \\textbf{T} \\textbf{P} \\textbf{E} {h}\\ pixels",
             "Fin",
             "\\ "
@@ -1151,7 +1151,7 @@ const localizationCases = [
             "Si A=13 Alors",
             "  Tourner de ⟲ 14 degrés",
             "Sinon",
-            "  Avancer de ⌟√(^(²log(ln(log(⁻¹[x]√(Anssin(cos(tan((),tan⁻¹(cos⁻¹(sin⁻¹(πeABCDEFxyz▫-1234567890.+-×÷ pixels",
+            "  Avancer de ⌟√(^(²log(ln(log(⁻¹[x]√(Anssin(cos(tan(();tan⁻¹(cos⁻¹(sin⁻¹(πeABCDEFxyz▫-1234567890,+-×÷ pixels",
             "  Avancer de θ%!𝐏𝐂Ran#RanInt#(GCD(LCM(Abs(Int(Rnd(Intg(RndFix(°ʳᵍ▫sinh(cosh(tanh(sinh⁻¹(cosh⁻¹(tanh⁻¹(𝐦𝐦𝐧𝐩𝐟𝐤𝐌𝐆𝐓𝐏𝐄h pixels",
             "Fin",
             " "
@@ -1183,7 +1183,7 @@ const localizationCases = [
             "if [A=13] then",
             "  turn @turnLeft (14) degrees",
             "else",
-            "  move (⌟√\\(^\\(²log\\(ln\\(log\\(⁻¹\\[x\\]√\\(Anssin\\(cos\\(tan\\(\\(\\),tan⁻¹\\(cos⁻¹\\(sin⁻¹\\(πeABCDEFxyz▫-1234567890.+-×÷) steps",
+            "  move (⌟√\\(^\\(²log\\(ln\\(log\\(⁻¹\\[x\\]√\\(Anssin\\(cos\\(tan\\(\\(\\);tan⁻¹\\(cos⁻¹\\(sin⁻¹\\(πeABCDEFxyz▫-1234567890,+-×÷) steps",
             "  move (θ%!𝐏𝐂Ran#RanInt#\\(GCD\\(LCM\\(Abs\\(Int\\(Rnd\\(Intg\\(RndFix\\(°ʳᵍ▫sinh\\(cosh\\(tanh\\(sinh⁻¹\\(cosh⁻¹\\(tanh⁻¹\\(𝐦𝐦𝐧𝐩𝐟𝐤𝐌𝐆𝐓𝐏𝐄h) steps",
             "end",
             " "

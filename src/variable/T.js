@@ -10,7 +10,16 @@ const generateArray = (a, b) => Array.from({ length: b - a + 1 }, (_, i) => new 
  * @param {*[][]} array
  * @return {string}
  */
-const array2Csv = (array) => array.map(row => row.join(',')).join('\n');
+export const array2Csv = (array) => array
+  .map(row => row.map(value => {
+    const field = value == null
+      ? ''
+      : String(Decimal.isDecimal(value) ? value.valueOf() : value);
+    return /[",\r\n]/.test(field)
+      ? `"${field.replaceAll('"', '""')}"`
+      : field;
+  }).join(','))
+  .join('\n');
 
 export const ParseSpreadsheet = ({ T }) => {
   const position = T.slice(2, 62).match(/[\dA-F]{12}/g).map(t => {

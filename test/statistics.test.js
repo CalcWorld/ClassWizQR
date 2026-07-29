@@ -1090,7 +1090,7 @@ const cases = [
       "result": [
         {
           "name": "templated",
-          "latex": "y=a+bx \\\\ a=2 \\\\ b= \\dfrac {\\displaystyle 5} {\\displaystyle 3} \\\\ r=0.960768922830522 \\\\ r²= \\dfrac {\\displaystyle 12} {\\displaystyle 13}"
+          "latex": "y=a+bx \\\\ a=2 \\\\ b= \\dfrac {\\displaystyle 5} {\\displaystyle 3} \\\\ r=0,960768922830522 \\\\ r²= \\dfrac {\\displaystyle 12} {\\displaystyle 13}"
         },
         {
           "name": "Part1",
@@ -1104,7 +1104,7 @@ const cases = [
         },
         {
           "name": "Part3",
-          "latex": "0.960768922830522",
+          "latex": "0,960768922830522",
           "decimal": "0.960768922830522"
         },
         {

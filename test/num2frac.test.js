@@ -1,7 +1,7 @@
 import assert from 'assert';
 import Decimal from 'decimal.js';
 import { test } from 'vitest';
-import { numberToFrac } from '../src/variable/num2frac.js';
+import { numberToFrac } from '../src/variable/helper/num2frac.js';
 
 /**
  *

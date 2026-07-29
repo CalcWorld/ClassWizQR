@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js';
-import { numberToPiFrac } from '../src/variable/index.js';
 import assert from 'assert';
 import { test } from 'vitest';
+import { numberToPiFrac } from '../src/variable/helper/index.js';
 
 function cmp({ num, a, b, digits, pi_25200 }) {
   const frac = numberToPiFrac(num, pi_25200, digits);

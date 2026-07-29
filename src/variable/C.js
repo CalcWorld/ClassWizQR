@@ -1,5 +1,5 @@
 import { ParseVariable } from "./index.js";
-import { INPUT_INFO } from './input.js';
+import { INPUT_INFO } from './template/input.js';
 import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from '../setup/index.js';
 

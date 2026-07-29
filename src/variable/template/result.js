@@ -1,4 +1,4 @@
-import { tt } from '../utils.js';
+import { tt } from '../../utils.js';
 
 const X_EQ_$0 = "x=${0}";
 

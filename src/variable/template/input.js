@@ -1,4 +1,4 @@
-import { tt } from '../utils.js';
+import { tt } from '../../utils.js';
 
 export const INPUT_INFO = {
   EQUATION: {

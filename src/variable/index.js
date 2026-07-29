@@ -1,5 +1,6 @@
 import Decimal from "decimal.js";
 import { tt } from "../utils.js";
+import { numberToFrac } from './num2frac.js';
 
 /**
  *
@@ -104,55 +105,6 @@ const numberToLatex = (num) => {
 }
 
 /**
- * https://stackoverflow.com/a/5128558
- * @param {string|Decimal} num
- * @param {string|Decimal} error
- */
-export const numberToFrac = (num, error) => {
-  const _0 = new Decimal(0);
-  const _1 = new Decimal(1);
-
-  const e = new Decimal(error);
-  let x = new Decimal(num);
-  const n = x.floor();
-  x = x.minus(n);
-
-  if (x.lt(e)) {
-    // return [n, _1];
-    return;
-  } else if (_1.minus(e).lt(x)) {
-    // return [n.plus(_1), _1];
-    return;
-  }
-
-  let lowerN = _0;
-  let lowerD = _1;
-
-  let upperN = _1;
-  let upperD = _1;
-
-  while (true) {
-    const middleN = lowerN.plus(upperN);
-    const middleD = lowerD.plus(upperD);
-    const N = n.times(middleD).plus(middleN);
-
-    if (N.toString().length + middleD.toString().length > 10) {
-      return;
-    }
-
-    if (middleD.times(x.plus(e)).lt(middleN)) {
-      upperN = middleN;
-      upperD = middleD;
-    } else if (middleN.lt(middleD.times(x.minus(e)))) {
-      lowerN = middleN;
-      lowerD = middleD;
-    } else {
-      return [N, middleD];
-    }
-  }
-}
-
-/**
  *
  * @param displayCode
  * @param fractionResult
@@ -162,14 +114,14 @@ export const numberToFrac = (num, error) => {
  * @param num
  * @return {*}
  */
-const numberToFracLatex = ({ displayCode, fractionResult, numSign, exp, valNum, num }) => {
-  const error = {
-    '16': '0.00000000000005', // EX
-    '24': '0.000000000000000005', // CW
+const numberToFracLatex = ({ displayCode, fractionResult, numSign, valNum, num }) => {
+  const type = {
+    '16': 'CY', // EX
+    '24': 'EY', // CW
   }[`${valNum.length}`];
-  if (!error) return;
+  if (!type) return;
 
-  const frac = numberToFrac(num, new Decimal(error).times(Decimal.pow(10, exp + 1)));
+  const frac = numberToFrac(num, type);
   if (!frac) return;
 
   const [d, c] = frac;
@@ -265,9 +217,7 @@ export class ParseVariable {
     const num = numDec.abs();
     let numLatex;
 
-    if (!numDec.isInt() && num.lt(1000000)
-      // TODO to fix too many iterations
-      && num.gt(1e-4)) {
+    if (!numDec.isInt()) {
       numLatex = numberToPiFracLatex({
         numSign,
         valNum,
@@ -278,7 +228,6 @@ export class ParseVariable {
         numSign,
         valNum,
         num,
-        exp,
         displayCode,
         fractionResult,
       });

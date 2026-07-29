@@ -18,7 +18,7 @@ export const ParseNumberResult = ({ R, M, S = '' }, { modelType, modelId } = {})
   let template = RESULT_INFO.NUMBER[parseM.getResultTemplate()]?.()?.join(separator);
   let result = [];
   if (!template) {
-    const ans2LatexBracket = /^.+[+-]/.test(ans2Latex) ? `(${ans2Latex})` : ans2Latex;
+    const ans2LatexBracket = !ans2Latex.includes('\\dfrac') && /^.+[+-]/.test(ans2Latex) ? `(${ans2Latex})` : ans2Latex;
     const real_is_zero = ans1Decimal.isZero();
     const imaginary_is_zero = ans2Decimal.isZero();
 

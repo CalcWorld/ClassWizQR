@@ -152,3 +152,10 @@ test('wraps a compound imaginary coefficient in parentheses', () => {
 
   assert.ok(result[0].latex.includes(')i'));
 });
+
+test('does not wrap a fractional imaginary coefficient in parentheses', () => {
+  const url = 'http://wes.casio.com/math/index.php?q=I-234F+U-000000000000+M-C40000DD00+S-000410100000100E1010B00018C2+R-0000000000000000000080010803000201030101+E-C81D1A741A321BA6381B1A331B1E20';
+  const result = parse(url).result;
+
+  assert.ok(!result[0].latex.includes(')i'));
+});

@@ -40,7 +40,7 @@ export class ParseVariable {
    * @param {string} [displayCode]
    * @param {string} [fractionResult]
    */
-  #toStandardByDecimal(displayCode, fractionResult) {
+  #toStandardByDecimal({ displayCode, fractionResult }) {
     const { valSign, valExp, valNum } = this;
     const exp = valExp < 500 ? valExp - 100 : valExp - 600;
     let numSign, int, dec;
@@ -79,7 +79,7 @@ export class ParseVariable {
    * @param {string} [displayCode]
    * @param {string} [fractionResult]
    */
-  #toFrac(displayCode, fractionResult) {
+  #toFrac({ displayCode, fractionResult }) {
     const numSign = this.valSign < 5 ? '' : '-';
     const signFix = this.valSign < 5 ? 1 : -1;
     const fracArr = this.valNum.slice(0, this.valExp % 100).split('A');
@@ -101,16 +101,16 @@ export class ParseVariable {
     return [fracLatex, fracDec];
   }
 
-  #toDMS(displayCode, fractionResult) {
+  #toDMS({ displayCode, fractionResult }) {
     const [, decimal] = this.#toDecimal();
     if (displayCode === '1') {
       const dms = decimalToDmsLatex(decimal)
       return [dms, decimal];
     }
-    return this.#toStandardByDecimal(displayCode, fractionResult);
+    return this.#toStandardByDecimal({ displayCode, fractionResult });
   }
 
-  #toSqrt(displayCode, fractionResult) {
+  #toSqrt({ displayCode }) {
     const toOneSqrt = (sqrt) => {
       // sqrt(r) * (a/b)
       const r = new Decimal(sqrt.slice(0, 3)); // root
@@ -184,6 +184,9 @@ export class ParseVariable {
       latex = sign ? latex : `-${latex}`;
       decimal = sign ? decimal : decimal.neg();
     }
+    if (displayCode === '1') {
+      latex = decimalToDmsLatex(decimal);
+    }
     return [latex, decimal];
   }
 
@@ -203,13 +206,13 @@ export class ParseVariable {
     switch (this.valType) {
       case '0':
         // return this.#toDecimal();
-        return this.#toStandardByDecimal(displayCode, fractionResult);
+        return this.#toStandardByDecimal({ displayCode, fractionResult });
       case '2':
-        return this.#toFrac(displayCode, fractionResult);
+        return this.#toFrac({ displayCode, fractionResult });
       case '4':
-        return this.#toDMS(displayCode, fractionResult);
+        return this.#toDMS({ displayCode, fractionResult });
       case '8':
-        return this.#toSqrt(displayCode, fractionResult);
+        return this.#toSqrt({ displayCode });
       case 'F':
         return this.#toError();
     }

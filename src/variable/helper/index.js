@@ -164,3 +164,22 @@ export const numberToPiFracLatex = ({ displayCode, fractionResult, numSign, valN
   }
   return `${template} \\pi `;
 }
+
+export const decimalToDmsLatex = (decimal) => {
+  let d = decimal.floor();
+  const mm = decimal.sub(d).times(60);
+  let m = mm.floor();
+  let s = mm.sub(m).times(60).toDP(2);
+
+  // Rounding can produce 60 seconds (or 60 minutes after carrying).
+  if (s.gte(60)) {
+    s = new Decimal(0);
+    m = m.plus(1);
+  }
+  if (m.gte(60)) {
+    m = new Decimal(0);
+    d = d.plus(1);
+  }
+
+  return `${d}^\\circ ${m}' ${s}'' `;
+};

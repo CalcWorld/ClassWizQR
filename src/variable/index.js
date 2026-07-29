@@ -1,6 +1,7 @@
 import Decimal from "decimal.js";
 import { tt } from "../utils.js";
 import {
+  decimalToDmsLatex,
   getImpFrac,
   getMixedFrac,
   isMixedFrac,
@@ -51,7 +52,9 @@ export class ParseVariable {
     const num = numDec.abs();
     let numLatex;
 
-    if (!numDec.isInt()) {
+    if (displayCode === '1') {
+      numLatex = decimalToDmsLatex(numDec);
+    } else if (!numDec.isInt()) {
       numLatex = numberToPiFracLatex({
         numSign,
         valNum,
@@ -98,17 +101,16 @@ export class ParseVariable {
     return [fracLatex, fracDec];
   }
 
-  #toDMS() {
+  #toDMS(displayCode, fractionResult) {
     const [, decimal] = this.#toDecimal();
-    const d = decimal.floor();
-    const mm = decimal.sub(d).times(60);
-    const m = mm.floor();
-    const s = mm.sub(m).times(60).toDP(2);    // seems the accuracy is not enough
-    const dms = `${d}^\\circ ${m}' ${s}'' `;
-    return [dms, decimal];
+    if (displayCode === '1') {
+      const dms = decimalToDmsLatex(decimal)
+      return [dms, decimal];
+    }
+    return this.#toStandardByDecimal(displayCode, fractionResult);
   }
 
-  #toSqrt() {
+  #toSqrt(displayCode, fractionResult) {
     const toOneSqrt = (sqrt) => {
       // sqrt(r) * (a/b)
       const r = new Decimal(sqrt.slice(0, 3)); // root
@@ -205,9 +207,9 @@ export class ParseVariable {
       case '2':
         return this.#toFrac(displayCode, fractionResult);
       case '4':
-        return this.#toDMS();
+        return this.#toDMS(displayCode, fractionResult);
       case '8':
-        return this.#toSqrt();
+        return this.#toSqrt(displayCode, fractionResult);
       case 'F':
         return this.#toError();
     }

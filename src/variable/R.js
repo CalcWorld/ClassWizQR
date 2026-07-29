@@ -4,7 +4,10 @@ import { ParseMode } from "../mode/index.js";
 import { RESULT_INFO } from './result.js';
 import { ParseSetup } from "../setup/index.js";
 
-export const ParseNumberResult = ({ R, M, S }, { modelType, modelId } = {}) => {
+export const ParseNumberResult = ({ R, M, S = '' }, { modelType, modelId } = {}) => {
+  const parseS = new ParseSetup({ S });
+  const separator = parseS.getDecimalMark() === '0' ? ';' : ',';
+
   const parseM = new ParseMode({ M });
   const displayCode = parseM.getResultFormatDisplay();
   const ans1 = R.slice(0, R.length / 2);
@@ -12,9 +15,7 @@ export const ParseNumberResult = ({ R, M, S }, { modelType, modelId } = {}) => {
   const [ans1Latex, ans1Decimal] = new ParseVariable(ans1).get({ displayCode });
   const [ans2Latex, ans2Decimal] = new ParseVariable(ans2).get({ displayCode });
 
-  const parseS = new ParseSetup({ S });
-
-  let template = RESULT_INFO.NUMBER[parseM.getResultTemplate()]?.()?.join(parseS.getDecimalMark() === '0' ? ';' : ',');
+  let template = RESULT_INFO.NUMBER[parseM.getResultTemplate()]?.()?.join(separator);
   let result = [];
   if (!template) {
     const ans2LatexBracket = /^.+[+-]/.test(ans2Latex) ? `(${ans2Latex})` : ans2Latex;
@@ -56,7 +57,7 @@ export const ParseNumberResult = ({ R, M, S }, { modelType, modelId } = {}) => {
   return result;
 }
 
-export const ParseInequalityResult = ({ R, M, S }) => {
+export const ParseInequalityResult = ({ R, M, S = '' }) => {
   const parseS = new ParseSetup({ S });
   const separator = parseS.getDecimalMark() === '0' ? '; ' : ', '
 

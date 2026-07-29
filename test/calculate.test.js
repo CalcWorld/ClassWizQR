@@ -1210,6 +1210,45 @@ for (const { name, url, expected } of cases) {
   });
 }
 
+const recurringDecimalCases = [
+  {
+    name: 'Recurring decimal result with brackets',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-C10000EE00+S-001410100000000E1010B00079F6+Q-02127659574468085106382900980000000000000000000000000000+E-31A93437',
+    latex: '0 . \\left( 0 2 1 2 7 6 5 9 5 7 4 4 6 8 0 8 5 1 0 6 3 8 2 9 7 8 7 2 3 4 0 4 2 5 5 3 1 9 1 4 8 9 3 6 1 7 \\right) ',
+  },
+  {
+    name: 'Recurring decimal result with an overline',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-015A+U-000000000000+M-C10000EE00+S-400410100000000E1010B000B412+Q-02127659574468085106382900980000000000000000000000000000+E-31A93437',
+    latex: '0 , \\overline{0 2 1 2 7 6 5 9 5 7 4 4 6 8 0 8 5 1 0 6 3 8 2 9 7 8 7 2 3 4 0 4 2 5 5 3 1 9 1 4 8 9 3 6 1 7} ',
+  },
+  {
+    name: 'Recurring decimal result with dots',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-031A+U-000000000000+M-C10000EE00+S-001410100000000E1110B000252B+Q-04347826086956521739130400980000000000000000000000000000+E-31A93233',
+    latex: '0 . \\dot{0}43478260869565217391\\dot{3} ',
+  },
+  {
+    name: 'Recurring decimal fraction result with brackets',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-C10000EE00+S-001410100000000E1010B00079F6+Q-21A47000000000000000000001040000000000000000000000000000+E-C81D1A311B1A34371B1E',
+    latex: '0 . \\left( 0 2 1 2 7 6 5 9 5 7 4 4 6 8 0 8 5 1 0 6 3 8 2 9 7 8 7 2 3 4 0 4 2 5 5 3 1 9 1 4 8 9 3 6 1 7 \\right) ',
+  },
+  {
+    name: 'Recurring decimal fraction result with dots',
+    url: 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000EE00+S-001410101000100E1110B0004249+R-21A5900000000000010400000000000000000000+E-C81D1A311B1A35391B1E',
+    latex: '0 . \\dot{0}16949152542372881355932203389830508474576271186440677966\\dot{1} ',
+  },
+  {
+    name: 'Recurring decimal mixed fraction result with an overline',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-544A+U-000000000000+M-C10000EE00+S-401410101000001E0000B0003CEE+Q-286A22A2300000000000000001080000000000000000000000000000+E-C81D1A323030301B1A32331B1E',
+    latex: '86 . \\overline{9 5 6 5 2 1 7 3 9 1 3 0 4 3 4 7 8 2 6 0 8 6} ',
+  },
+];
+
+for (const { name, url, latex } of recurringDecimalCases) {
+  test(name, () => {
+    assert.equal(parse(url).result[0].latex, latex);
+  });
+}
+
 const localizationCases = [
   {
     "name": "Calculate localization",

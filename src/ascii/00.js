@@ -406,7 +406,7 @@ export const ascii00_EY = {
   "96": "g(",
 }
 
-export const ascii_DECIMAL_MARK_COMMA={
+export const ascii_DECIMAL_MARK_COMMA = {
   "2C": ";",
   "2E": ",",
 };

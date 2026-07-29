@@ -12,8 +12,9 @@ export const ParseNumberResult = ({ R, M, S = '' }, { modelType, modelId } = {})
   const displayCode = parseM.getResultFormatDisplay();
   const ans1 = R.slice(0, R.length / 2);
   const ans2 = R.slice(R.length / 2);
-  const [ans1Latex, ans1Decimal] = new ParseVariable(ans1).get({ displayCode });
-  const [ans2Latex, ans2Decimal] = new ParseVariable(ans2).get({ displayCode });
+  const variableOptions = { displayCode, modelType, modelId };
+  const [ans1Latex, ans1Decimal] = new ParseVariable(ans1).get(variableOptions);
+  const [ans2Latex, ans2Decimal] = new ParseVariable(ans2).get(variableOptions);
 
   let template = RESULT_INFO.NUMBER[parseM.getResultTemplate()]?.()?.join(separator);
   let result = [];

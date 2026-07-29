@@ -3,7 +3,8 @@ import { ParseMode } from "../mode/index.js";
 import { ParseSetup } from "../setup/index.js";
 import { toAsciiArray } from '../utils.js';
 import { MODEL_TYPE } from '../model/index.js';
-import { MATH_TEMPLATE, REC_DEC_BRACKET_MODEL, REC_DEC_OVERLINE_MODEL } from '../ascii/consts.js';
+import { MATH_TEMPLATE } from '../ascii/consts.js';
+import { recDecToLatex } from '../ascii/recdec.js';
 
 export class ParseExpression {
   constructor({ E }, { modelType, modelId }) {
@@ -16,16 +17,6 @@ export class ParseExpression {
   parseLine() {
     const asciiArray = toAsciiArray(this.E);
     return asciiArray.map(a => this.asciiTable[a]).join(' ');
-  }
-
-  #setRecDecType() {
-    if (REC_DEC_OVERLINE_MODEL[this.modelType]?.includes(this.modelId)) {
-      this.recDecType = 1;
-    } else if (REC_DEC_BRACKET_MODEL[this.modelType]?.includes(this.modelId)) {
-      this.recDecType = 2;
-    } else {
-      this.recDecType = 0;
-    }
   }
 
   #parseToTree() {
@@ -89,25 +80,7 @@ export class ParseExpression {
             result += `{${a}} \\dfrac {\\displaystyle ${b}} {\\displaystyle ${c}} `;
             break;
           case '2F':
-            if (!this.recDecType) {
-              const n = a.replaceAll(' ', '');
-              if (n.length === 1) {
-                result += `\\dot{${n}} `;
-                break;
-              } else {
-                const first = n[0];
-                const last = n[n.length - 1];
-                const middle = n.slice(1, -1);
-                result += `\\dot{${first}}${middle}\\dot{${last}} `;
-                break;
-              }
-            } else if (this.recDecType === 1) {
-              result += `\\overline{${a}} `;
-              break;
-            } else if (this.recDecType === 2) {
-              result += `\\left( ${a} \\right) `;
-              break;
-            }
+            result += recDecToLatex(a, this.modelType, this.modelId);
             break;
           case '50':
             result += `\\sum_{x=${b}}^{${c}}{\\left(${a}\\right)} `;
@@ -153,7 +126,6 @@ export class ParseExpression {
   }
 
   parseMath() {
-    this.#setRecDecType();
     try {
       const tree = this.#parseToTree();
       return this.#parseToLatex(tree);

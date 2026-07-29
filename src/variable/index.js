@@ -2,6 +2,8 @@ import Decimal from "decimal.js";
 import { tt } from "../utils.js";
 import {
   decimalToDmsLatex,
+  decimalToRecDecLatex,
+  fracToRecDecLatex,
   getImpFrac,
   getMixedFrac,
   isMixedFrac,
@@ -39,8 +41,10 @@ export class ParseVariable {
   /**
    * @param {string} [displayCode]
    * @param {string} [fractionResult]
+   * @param {string} [modelType]
+   * @param {string} [modelId]
    */
-  #toStandardByDecimal({ displayCode, fractionResult }) {
+  #toStandardByDecimal({ displayCode, fractionResult, modelType, modelId }) {
     const { valSign, valExp, valNum } = this;
     const exp = valExp < 500 ? valExp - 100 : valExp - 600;
     let numSign, int, dec;
@@ -53,8 +57,18 @@ export class ParseVariable {
     let numLatex;
 
     if (displayCode === '1') {
+      // DMS result
       numLatex = decimalToDmsLatex(numDec);
-    } else if (!numDec.isInt()) {
+    } else if (displayCode === 'E') {
+      // Recurring Decimal
+      numLatex = decimalToRecDecLatex({
+        decimal: numDec,
+        modelType,
+        modelId,
+      });
+    } /*else if (displayCode === 'F' && numDec.isInt()) {
+      // Prime Factor
+    }*/ else if (!numDec.isInt()) {
       numLatex = numberToPiFracLatex({
         numSign,
         valNum,
@@ -78,36 +92,55 @@ export class ParseVariable {
   /**
    * @param {string} [displayCode]
    * @param {string} [fractionResult]
+   * @param {string} [modelType]
+   * @param {string} [modelId]
    */
-  #toFrac({ displayCode, fractionResult }) {
+  #toFrac({ displayCode, fractionResult, modelType, modelId }) {
     const numSign = this.valSign < 5 ? '' : '-';
     const signFix = this.valSign < 5 ? 1 : -1;
     const fracArr = this.valNum.slice(0, this.valExp % 100).split('A');
     const a = fracArr[0];
     const b = fracArr[1];
     const c = fracArr[2] || '';
-    let fracLatex, fracDec;
+    let fracLatex, fracDec, numerator, denominator;
     if (fracArr.length === 2) {
-      fracDec = new Decimal(a).div(b).mul(signFix);
+      numerator = new Decimal(a).mul(signFix);
+      denominator = new Decimal(b);
+      fracDec = numerator.div(denominator);
       fracLatex = getImpFrac(numSign, a, b);
     } else if (fracArr.length === 3) {
-      fracDec = new Decimal(a).add(new Decimal(b).div(c)).mul(signFix);
+      numerator = new Decimal(a).mul(c).plus(b).mul(signFix);
+      denominator = new Decimal(c);
+      fracDec = numerator.div(denominator);
       if (isMixedFrac({ displayCode, fractionResult })) {
         fracLatex = getMixedFrac(numSign, a, b, c);
       } else {
         fracLatex = getImpFrac(numSign, a * c + +b, c);
       }
     }
+    if (displayCode === 'E') {
+      fracLatex = fracToRecDecLatex({
+        numerator,
+        denominator,
+        modelType,
+        modelId,
+      }) || fracLatex;
+    }
     return [fracLatex, fracDec];
   }
 
-  #toDMS({ displayCode, fractionResult }) {
+  #toDMS({ displayCode, fractionResult, modelType, modelId, }) {
     const [, decimal] = this.#toDecimal();
     if (displayCode === '1') {
       const dms = decimalToDmsLatex(decimal)
       return [dms, decimal];
     }
-    return this.#toStandardByDecimal({ displayCode, fractionResult });
+    return this.#toStandardByDecimal({
+      displayCode,
+      fractionResult,
+      modelType,
+      modelId,
+    });
   }
 
   #toSqrt({ displayCode }) {
@@ -199,18 +232,20 @@ export class ParseVariable {
    * @param {object} [options]
    * @param {string} [options.displayCode]
    * @param {string} [options.fractionResult]
+   * @param {string} [options.modelType]
+   * @param {string} [options.modelId]
    * @return {[string,Decimal]}
    */
-  get(options) {
-    const { displayCode, fractionResult } = options || {};
+  get(options = {}) {
+    const { displayCode } = options;
     switch (this.valType) {
       case '0':
         // return this.#toDecimal();
-        return this.#toStandardByDecimal({ displayCode, fractionResult });
+        return this.#toStandardByDecimal(options);
       case '2':
-        return this.#toFrac({ displayCode, fractionResult });
+        return this.#toFrac(options);
       case '4':
-        return this.#toDMS({ displayCode, fractionResult });
+        return this.#toDMS(options);
       case '8':
         return this.#toSqrt({ displayCode });
       case 'F':

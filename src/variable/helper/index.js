@@ -1,4 +1,7 @@
 import Decimal from 'decimal.js';
+import { AsciiTable } from '../../ascii/index.js';
+import { recDecToLatex } from '../../ascii/recdec.js';
+import { MODEL_TYPE } from '../../model/index.js';
 import { numberToFrac } from './num2frac.js';
 
 /**
@@ -182,4 +185,73 @@ export const decimalToDmsLatex = (decimal) => {
   }
 
   return `${d}^\\circ ${m}' ${s}'' `;
+};
+
+/**
+ * @param {object} options
+ * @param {Decimal|string|number} options.numerator
+ * @param {Decimal|string|number} options.denominator
+ * @param {string} [options.modelType]
+ * @param {string} [options.modelId]
+ * @return {string|undefined}
+ */
+export const fracToRecDecLatex = ({ numerator, denominator, modelType, modelId }) => {
+  const numeratorDecimal = new Decimal(numerator);
+  const denominatorDecimal = new Decimal(denominator);
+  if (
+    !numeratorDecimal.isFinite()
+    || !denominatorDecimal.isFinite()
+    || !numeratorDecimal.isInt()
+    || !denominatorDecimal.isInt()
+    || denominatorDecimal.isZero()
+  ) return;
+
+  const negative = numeratorDecimal.isNegative() !== denominatorDecimal.isNegative();
+  const numeratorBigInt = BigInt(numeratorDecimal.abs().toFixed(0));
+  const denominatorBigInt = BigInt(denominatorDecimal.abs().toFixed(0));
+  const integer = numeratorBigInt / denominatorBigInt;
+  let remainder = numeratorBigInt % denominatorBigInt;
+  const positions = new Map();
+  const digits = [];
+
+  while (remainder !== 0n && !positions.has(remainder)) {
+    positions.set(remainder, digits.length);
+    remainder *= 10n;
+    digits.push((remainder / denominatorBigInt).toString());
+    remainder %= denominatorBigInt;
+  }
+
+  // A terminating decimal has no recurring part.
+  if (remainder === 0n) return;
+
+  const recurringStart = positions.get(remainder);
+  const nonRecurring = digits.slice(0, recurringStart).join(' ');
+  const recurring = digits.slice(recurringStart).join(' ');
+  const decimalMark = new AsciiTable(modelType, modelId).get()['2E'];
+  const sign = negative && numeratorBigInt !== 0n ? '-' : '';
+  const prefix = nonRecurring ? `${nonRecurring} ` : '';
+
+  return `${sign}${integer} ${decimalMark} ${prefix}${recDecToLatex(recurring, modelType, modelId)}`;
+};
+
+/**
+ * @param {object} options
+ * @param {Decimal} options.decimal
+ * @param {string} [options.modelType]
+ * @param {string} [options.modelId]
+ * @return {string|undefined}
+ */
+export const decimalToRecDecLatex = ({ decimal, modelType, modelId }) => {
+  if (!Decimal.isDecimal(decimal) || !decimal.isFinite()) return;
+
+  const fractionModel = modelType === MODEL_TYPE.CY ? MODEL_TYPE.CY : MODEL_TYPE.EY;
+  const fraction = numberToFrac(decimal.abs(), fractionModel);
+  if (!fraction) return;
+
+  return fracToRecDecLatex({
+    numerator: decimal.isNegative() ? fraction[0].neg() : fraction[0],
+    denominator: fraction[1],
+    modelType,
+    modelId,
+  });
 };

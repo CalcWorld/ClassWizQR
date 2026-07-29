@@ -7,13 +7,13 @@ const MODEL_CONFIGS = {
     intervalDigits: 13,
     maxContinuedFractionDepth: 21,
     maxComponentDigits: 8,
-    maxTotalFractionDigits: 9,
+    layoutExponentLimit: 8,
   },
   EY: {
     intervalDigits: 17,
     maxContinuedFractionDepth: 29,
     maxComponentDigits: 8,
-    maxTotalFractionDigits: 9,
+    layoutExponentLimit: 8,
   },
 };
 
@@ -83,10 +83,7 @@ function floorPositiveRational(value) {
 }
 
 function pow10(exponent) {
-  if (
-    !Number.isSafeInteger(exponent) ||
-    exponent < 0
-  ) {
+  if (!Number.isSafeInteger(exponent) || exponent < 0) {
     throw new RangeError(
       "decimal exponent is outside the supported range",
     );
@@ -97,13 +94,10 @@ function pow10(exponent) {
 
 function parseDecimalExactly(value) {
   const text = value.abs().valueOf();
-  const match =
-    /^(\d+)(?:\.(\d*))?(?:e([+-]?\d+))?$/i.exec(text);
+  const match = /^(\d+)(?:\.(\d*))?(?:e([+-]?\d+))?$/i.exec(text);
 
   if (!match) {
-    throw new TypeError(
-      `cannot parse Decimal.js value: ${text}`,
-    );
+    throw new TypeError(`cannot parse Decimal.js value: ${text}`);
   }
 
   const integerPart = match[1];
@@ -111,9 +105,7 @@ function parseDecimalExactly(value) {
   const explicitExponent = Number(match[3] ?? 0);
 
   if (!Number.isSafeInteger(explicitExponent)) {
-    throw new RangeError(
-      "decimal exponent is outside the supported range",
-    );
+    throw new RangeError("decimal exponent is outside the supported range");
   }
 
   const allDigits = integerPart + fractionalPart;
@@ -126,8 +118,7 @@ function parseDecimalExactly(value) {
     };
   }
 
-  const scale =
-    fractionalPart.length - explicitExponent;
+  const scale = fractionalPart.length - explicitExponent;
 
   let numerator = BigInt(allDigits);
   let denominator = 1n;
@@ -138,8 +129,7 @@ function parseDecimalExactly(value) {
     numerator *= pow10(-scale);
   }
 
-  const decimalPointPosition =
-    integerPart.length + explicitExponent;
+  const decimalPointPosition = integerPart.length + explicitExponent;
 
   return {
     value: rational(numerator, denominator),
@@ -148,12 +138,8 @@ function parseDecimalExactly(value) {
   };
 }
 
-function makeIntervalDelta(
-  decimalExponent,
-  intervalDigits,
-) {
-  const exponent =
-    decimalExponent - intervalDigits;
+function makeIntervalDelta(decimalExponent, intervalDigits) {
+  const exponent = decimalExponent - intervalDigits;
 
   if (exponent >= 0) {
     return rational(4n * pow10(exponent));
@@ -169,13 +155,8 @@ function reconstructContinuedFraction(coefficients) {
   let denominatorPrev1 = 0n;
 
   for (const coefficient of coefficients) {
-    const numerator =
-      coefficient * numeratorPrev1 +
-      numeratorPrev2;
-
-    const denominator =
-      coefficient * denominatorPrev1 +
-      denominatorPrev2;
+    const numerator = coefficient * numeratorPrev1 + numeratorPrev2;
+    const denominator = coefficient * denominatorPrev1 + denominatorPrev2;
 
     numeratorPrev2 = numeratorPrev1;
     numeratorPrev1 = numerator;
@@ -189,15 +170,8 @@ function reconstructContinuedFraction(coefficients) {
   );
 }
 
-function simplestRationalInClosedInterval(
-  lower,
-  upper,
-  maxDepth,
-) {
-  if (
-    lower.numerator <= 0n ||
-    upper.numerator <= 0n
-  ) {
+function simplestRationalInClosedInterval(lower, upper, maxDepth) {
+  if (lower.numerator <= 0n || upper.numerator <= 0n) {
     return null;
   }
 
@@ -211,18 +185,13 @@ function simplestRationalInClosedInterval(
     depth <= maxDepth;
     depth++
   ) {
-    const lowerInteger =
-      floorPositiveRational(lower);
+    const lowerInteger = floorPositiveRational(lower);
 
-    const upperInteger =
-      floorPositiveRational(upper);
+    const upperInteger = floorPositiveRational(upper);
 
     // 下端点恰好为整数时，它就是该闭区间内
     // 最简单的有理数。
-    if (
-      lower.numerator % lower.denominator ===
-      0n
-    ) {
+    if (lower.numerator % lower.denominator === 0n) {
       coefficients.push(lowerInteger);
       completed = true;
       break;
@@ -236,15 +205,8 @@ function simplestRationalInClosedInterval(
 
     coefficients.push(lowerInteger);
 
-    lower = subtractRational(
-      lower,
-      rational(lowerInteger),
-    );
-
-    upper = subtractRational(
-      upper,
-      rational(upperInteger),
-    );
+    lower = subtractRational(lower, rational(lowerInteger));
+    upper = subtractRational(upper, rational(upperInteger));
 
     if (lower.numerator === 0n) {
       completed = true;
@@ -269,25 +231,32 @@ function bigintDigitCount(value) {
   return absBigInt(value).toString().length;
 }
 
-function fractionFitsCalculator(
-  numerator,
-  denominator,
-  config,
-) {
-  const numeratorDigits =
-    bigintDigitCount(numerator);
+function fractionFitsCalculator(numerator, denominator, config) {
+  const absoluteNumerator = absBigInt(numerator);
 
-  const denominatorDigits =
-    bigintDigitCount(denominator);
+  const integerPart = absoluteNumerator / denominator;
 
-  return (
-    numeratorDigits <=
-    config.maxComponentDigits &&
-    denominatorDigits <=
-    config.maxComponentDigits &&
-    numeratorDigits + denominatorDigits <=
-    config.maxTotalFractionDigits
-  );
+  const remainder = absoluteNumerator % denominator;
+
+  // 整数结果不走普通分数显示路径。
+  if (remainder === 0n) {
+    return false;
+  }
+
+  const remainderDigits = bigintDigitCount(remainder);
+  const denominatorDigits = bigintDigitCount(denominator);
+
+  if (remainderDigits > config.maxComponentDigits || denominatorDigits > config.maxComponentDigits) {
+    return false;
+  }
+
+  let layoutExponentSum = (remainderDigits - 1) + (denominatorDigits - 1);
+
+  if (integerPart !== 0n) {
+    layoutExponentSum += (bigintDigitCount(integerPart) - 1) + 2;
+  }
+
+  return layoutExponentSum < config.layoutExponentLimit;
 }
 
 /**
@@ -296,18 +265,15 @@ function fractionFitsCalculator(
  * @param {String} model
  * @return {Decimal[]|null}
  */
-export function numberToFrac(
-  value,
-  model = "CY",
-) {
+export function numberToFrac(value, model = "CY") {
   if (!Decimal.isDecimal(value)) {
-    throw new TypeError("value must be a Decimal.js object",);
+    throw new TypeError("value must be a Decimal.js object");
   }
 
   const config = MODEL_CONFIGS[model];
 
   if (!config) {
-    throw new RangeError('model must be "CY" or "EY"',);
+    throw new RangeError('model must be "CY" or "EY"');
   }
 
   if (!value.isFinite() || value.isZero()) {
@@ -317,32 +283,12 @@ export function numberToFrac(
   const negative = value.isNegative();
   const parsed = parseDecimalExactly(value);
 
-  const delta = makeIntervalDelta(
-    parsed.decimalExponent,
-    config.intervalDigits,
-  );
+  const delta = makeIntervalDelta(parsed.decimalExponent, config.intervalDigits);
+  const lower = subtractRational(parsed.value, delta);
+  const upper = addRational(parsed.value, delta);
+  const candidate = simplestRationalInClosedInterval(lower, upper, config.maxContinuedFractionDepth);
 
-  const lower = subtractRational(
-    parsed.value,
-    delta,
-  );
-
-  const upper = addRational(
-    parsed.value,
-    delta,
-  );
-
-  const candidate =
-    simplestRationalInClosedInterval(
-      lower,
-      upper,
-      config.maxContinuedFractionDepth,
-    );
-
-  if (
-    candidate === null ||
-    candidate.denominator === 1n
-  ) {
+  if (candidate === null || candidate.denominator === 1n) {
     return null;
   }
 
@@ -353,13 +299,7 @@ export function numberToFrac(
     numerator = -numerator;
   }
 
-  if (
-    !fractionFitsCalculator(
-      numerator,
-      denominator,
-      config,
-    )
-  ) {
+  if (!fractionFitsCalculator(numerator, denominator, config)) {
     return null;
   }
 

@@ -78,7 +78,6 @@ function invertRational(value) {
 }
 
 function floorPositiveRational(value) {
-  // 本函数只在非负区间中使用。
   return value.numerator / value.denominator;
 }
 
@@ -178,19 +177,10 @@ function simplestRationalInClosedInterval(lower, upper, maxDepth) {
   const coefficients = [];
   let completed = false;
 
-  // depth=0 是整数部分；ROM 的 21/29 上限针对
-  // 后续连分数层，因此允许索引达到 maxDepth。
-  for (
-    let depth = 0;
-    depth <= maxDepth;
-    depth++
-  ) {
+  for (let depth = 0; depth <= maxDepth; depth++) {
     const lowerInteger = floorPositiveRational(lower);
-
     const upperInteger = floorPositiveRational(upper);
 
-    // 下端点恰好为整数时，它就是该闭区间内
-    // 最简单的有理数。
     if (lower.numerator % lower.denominator === 0n) {
       coefficients.push(lowerInteger);
       completed = true;
@@ -213,7 +203,6 @@ function simplestRationalInClosedInterval(lower, upper, maxDepth) {
       break;
     }
 
-    // 0 < lower <= upper；取倒数后顺序反转。
     [lower, upper] = [
       invertRational(upper),
       invertRational(lower),
@@ -238,7 +227,6 @@ function fractionFitsCalculator(numerator, denominator, config) {
 
   const remainder = absoluteNumerator % denominator;
 
-  // 整数结果不走普通分数显示路径。
   if (remainder === 0n) {
     return false;
   }

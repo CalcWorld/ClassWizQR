@@ -1241,6 +1241,11 @@ const recurringDecimalCases = [
     url: 'http://wes.casio.com/ncal/index.php?q=I-544A+U-000000000000+M-C10000EE00+S-401410101000001E0000B0003CEE+Q-286A22A2300000000000000001080000000000000000000000000000+E-C81D1A323030301B1A32331B1E',
     latex: '86 . \\overline{9 5 6 5 2 1 7 3 9 1 3 0 4 3 4 7 8 2 6 0 8 6} ',
   },
+  {
+    name: 'Negative recurring decimal result with an overline',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-544A+U-000000000000+M-C10000EE00+S-401410101000001E0000B0003CEE+Q-08695652173913043478260806000000000000000000000000000000+E-C0323030A93233',
+    latex: '-8 . \\overline{6 9 5 6 5 2 1 7 3 9 1 3 0 4 3 4 7 8 2 6 0 8} ',
+  },
 ];
 
 for (const { name, url, latex } of recurringDecimalCases) {

@@ -62,7 +62,9 @@ export class ParseVariable {
     } else if (displayCode === 'E') {
       // Recurring Decimal
       numLatex = decimalToRecDecLatex({
-        decimal: numDec,
+        numSign,
+        valNum,
+        num,
         modelType,
         modelId,
       });

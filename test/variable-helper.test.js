@@ -25,7 +25,9 @@ test('carries rounded minutes into degrees', () => {
 test('converts a decimal to dotted recurring notation', () => {
   assert.strictEqual(
     decimalToRecDecLatex({
-      decimal: new Decimal('0.14285714285714285714'),
+      numSign: '',
+      valNum: '142857142857142857142857',
+      num: new Decimal('0.14285714285714285714'),
       modelType: 'EY',
       modelId: '031',
     }),
@@ -48,7 +50,9 @@ test('converts a fraction to recurring notation', () => {
 test('converts a decimal to overline recurring notation', () => {
   assert.strictEqual(
     decimalToRecDecLatex({
-      decimal: new Decimal('1.16666666666666666667'),
+      numSign: '',
+      valNum: '116666666666666666666667',
+      num: new Decimal('1.16666666666666666667'),
       modelType: 'EY',
       modelId: '008',
     }),
@@ -59,7 +63,9 @@ test('converts a decimal to overline recurring notation', () => {
 test('converts a decimal to bracket recurring notation', () => {
   assert.strictEqual(
     decimalToRecDecLatex({
-      decimal: new Decimal('-0.14285714285714285714'),
+      numSign: '-',
+      valNum: '142857142857142857142857',
+      num: new Decimal('0.14285714285714285714'),
       modelType: 'EY',
       modelId: '023',
     }),

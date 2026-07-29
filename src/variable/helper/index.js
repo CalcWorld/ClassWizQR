@@ -1,7 +1,6 @@
 import Decimal from 'decimal.js';
 import { AsciiTable } from '../../ascii/index.js';
 import { recDecToLatex } from '../../ascii/recdec.js';
-import { MODEL_TYPE } from '../../model/index.js';
 import { numberToFrac } from './num2frac.js';
 
 /**
@@ -99,6 +98,22 @@ export const numberToLatex = (num) => {
   return latex;
 }
 /**
+ * @param {object} options
+ * @param {Decimal} options.num
+ * @param {string} [options.valNum]
+ * @return {Decimal[]|null|undefined}
+ */
+export const decimalToFrac = ({ num, valNum }) => {
+  const type = {
+    '16': 'CY', // EX
+    '24': 'EY', // CW
+  }[`${valNum?.length}`];
+  if (!type) return;
+
+  return numberToFrac(num, type);
+};
+
+/**
  *
  * @param displayCode
  * @param fractionResult
@@ -109,13 +124,7 @@ export const numberToLatex = (num) => {
  * @return {*}
  */
 export const numberToFracLatex = ({ displayCode, fractionResult, numSign, valNum, num }) => {
-  const type = {
-    '16': 'CY', // EX
-    '24': 'EY', // CW
-  }[`${valNum.length}`];
-  if (!type) return;
-
-  const frac = numberToFrac(num, type);
+  const frac = decimalToFrac({ num, valNum });
   if (!frac) return;
 
   const [d, c] = frac;
@@ -236,20 +245,24 @@ export const fracToRecDecLatex = ({ numerator, denominator, modelType, modelId }
 
 /**
  * @param {object} options
- * @param {Decimal} options.decimal
+ * @param {string} options.numSign
+ * @param {string} options.valNum
+ * @param {Decimal} options.num
  * @param {string} [options.modelType]
  * @param {string} [options.modelId]
  * @return {string|undefined}
  */
-export const decimalToRecDecLatex = ({ decimal, modelType, modelId }) => {
-  if (!Decimal.isDecimal(decimal) || !decimal.isFinite()) return;
+export const decimalToRecDecLatex = ({ numSign, valNum, num, modelType, modelId }) => {
+  if (!Decimal.isDecimal(num) || !num.isFinite()) return;
 
-  const fractionModel = modelType === MODEL_TYPE.CY ? MODEL_TYPE.CY : MODEL_TYPE.EY;
-  const fraction = numberToFrac(decimal.abs(), fractionModel);
+  const fraction = decimalToFrac({
+    num: num.abs(),
+    valNum,
+  });
   if (!fraction) return;
 
   return fracToRecDecLatex({
-    numerator: decimal.isNegative() ? fraction[0].neg() : fraction[0],
+    numerator: numSign === '-' || num.isNegative() ? fraction[0].neg() : fraction[0],
     denominator: fraction[1],
     modelType,
     modelId,

@@ -84,7 +84,7 @@ const autoGetFrac = ({ numSign, d, c, displayCode, fractionResult }) => {
  * @param {string|Decimal} num
  * @return {string}
  */
-export const numberToLatex = (num) => {
+export const decimalToLatex = (num) => {
   const decimalNum = new Decimal(num);
   const expSplit = decimalNum.toString().split('e');
   let latex;
@@ -123,7 +123,7 @@ export const decimalToFrac = ({ num, valNum }) => {
  * @param num
  * @return {*}
  */
-export const numberToFracLatex = ({ displayCode, fractionResult, numSign, valNum, num }) => {
+export const decimalToFracLatex = ({ displayCode, fractionResult, numSign, valNum, num }) => {
   const frac = decimalToFrac({ num, valNum });
   if (!frac) return;
 
@@ -155,7 +155,7 @@ export const numberToPiFrac = (num, pi_25200, digits) => {
  * @param num
  * @return {*}
  */
-export const numberToPiFracLatex = ({ displayCode, fractionResult, numSign, valNum, num }) => {
+export const decimalToPiFracLatex = ({ displayCode, fractionResult, numSign, valNum, num }) => {
   const [pi_25200, digits] = {
     '16': ['0.000124666375142452', 13], // EX
     '24': ['0.0001246663751424521126374', 19], // CW

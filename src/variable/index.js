@@ -8,9 +8,9 @@ import {
   getMixedFrac,
   isMixedFrac,
   lcm,
-  numberToFracLatex,
-  numberToLatex,
-  numberToPiFracLatex
+  decimalToFracLatex,
+  decimalToLatex,
+  decimalToPiFracLatex
 } from './helper/index.js';
 
 export class ParseVariable {
@@ -34,7 +34,7 @@ export class ParseVariable {
     dec = this.valNum.slice(1);
     const result = `${numSign}${int}.${dec}E${exp}`;
     const numDec = new Decimal(result);
-    const numLatex = numberToLatex(numDec);
+    const numLatex = decimalToLatex(numDec);
     return [numLatex, numDec];
   }
 
@@ -71,13 +71,13 @@ export class ParseVariable {
     } /*else if (displayCode === 'F' && numDec.isInt()) {
       // Prime Factor
     }*/ else if (!numDec.isInt()) {
-      numLatex = numberToPiFracLatex({
+      numLatex = decimalToPiFracLatex({
         numSign,
         valNum,
         num,
         displayCode,
         fractionResult,
-      }) || numberToFracLatex({
+      }) || decimalToFracLatex({
         numSign,
         valNum,
         num,
@@ -86,7 +86,7 @@ export class ParseVariable {
       });
     }
     if (!numLatex) {
-      numLatex = numberToLatex(numDec);
+      numLatex = decimalToLatex(numDec);
     }
     return [numLatex, numDec];
   }

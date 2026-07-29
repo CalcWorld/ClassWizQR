@@ -301,17 +301,13 @@ export function numberToFrac(
   model = "CY",
 ) {
   if (!Decimal.isDecimal(value)) {
-    throw new TypeError(
-      "value must be a Decimal.js object",
-    );
+    throw new TypeError("value must be a Decimal.js object",);
   }
 
   const config = MODEL_CONFIGS[model];
 
   if (!config) {
-    throw new RangeError(
-      'model must be "CY" or "EY"',
-    );
+    throw new RangeError('model must be "CY" or "EY"',);
   }
 
   if (!value.isFinite() || value.isZero()) {

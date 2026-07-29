@@ -290,6 +290,154 @@ const cases = [
         }
       ]
     }
+  },
+  {
+    "name": "Inequality sample 3 (comma decimal mark)",
+    "url": "http://wes.casio.com/math/index.php?q=I-251F+U-000000000000+M-4B04BD0100+S-000410101000100E1010B000B1CA+R-IN0B23A4000000000000060302000000000000000100+C-040000000000000006000500000000000000010006000000000000000100",
+    "expected": {
+      "model": {
+        "type": "ClassWiz EX",
+        "prefix": "CY",
+        "id": "251",
+        "name": "fx-991DE X",
+        "version": "F",
+        "qr": 1,
+        "serialNumber": "000000000000"
+      },
+      "mode": {
+        "mainName": "Inequality",
+        "subName": "ax²+bx+c<0",
+        "mainMode": "4B",
+        "subMode": "0401"
+      },
+      "format": {
+        "displayName": "Improper Fraction",
+        "storeName": "Standard",
+        "displayCode": "B",
+        "storeCode": "D"
+      },
+      "setup": [
+        {
+          "type": "NUMBER_FORMAT",
+          "code": "00"
+        },
+        {
+          "type": "INPUT_OUTPUT",
+          "code": "10"
+        },
+        {
+          "type": "DECIMAL_MARK",
+          "code": "0"
+        },
+        {
+          "type": "ANGLE_UNIT",
+          "code": "4"
+        },
+        {
+          "type": "FRACTION_RESULT",
+          "code": "0"
+        },
+        {
+          "type": "COMPLEX_RESULT",
+          "code": "1"
+        },
+        {
+          "type": "STATISTICS_FREQUENCY",
+          "code": "0"
+        },
+        {
+          "type": "RECURRING_DECIMAL",
+          "code": "1"
+        },
+        {
+          "type": "SIMPLIFY",
+          "code": "0"
+        },
+        {
+          "type": "AUTO_POWER_OFF",
+          "code": "0"
+        },
+        {
+          "type": "TABLE_TYPE",
+          "code": "1"
+        },
+        {
+          "type": "ENGINEER_SYMBOL",
+          "code": "0"
+        },
+        {
+          "type": "DIGIT_SEPARATOR",
+          "code": "0"
+        },
+        {
+          "type": "MULTI_LINE_FONT",
+          "code": "E"
+        },
+        {
+          "type": "EQUATION_COMPLEX_ROOT",
+          "code": "1"
+        },
+        {
+          "type": "LANGUAGE",
+          "code": "0"
+        },
+        {
+          "type": "SPREADSHEET_AUTO_CALC",
+          "code": "1"
+        },
+        {
+          "type": "SPREADSHEET_SHOW_CELL",
+          "code": "0"
+        },
+        {
+          "type": "QR_CODE_VERSION",
+          "code": "B"
+        },
+        {
+          "type": "ALGORITHM_BACKGROUND",
+          "code": "0"
+        },
+        {
+          "type": "ALGORITHM_UNIT_SETTING",
+          "code": "0"
+        }
+      ],
+      "semanticFields": [
+        "equation",
+        "result"
+      ],
+      "equation": {
+        "latex": "-4x^2 +5x +6 <0",
+        "decimal": [
+          "-4",
+          "5",
+          "6"
+        ],
+        "element": [
+          [
+            "-4",
+            "5",
+            "6"
+          ]
+        ]
+      },
+      "result": [
+        {
+          "name": "templated",
+          "latex": "x<- \\dfrac {\\displaystyle 3} {\\displaystyle 4}; 2<x"
+        },
+        {
+          "name": "Part1",
+          "latex": "- \\dfrac {\\displaystyle 3} {\\displaystyle 4}",
+          "decimal": "-0.75"
+        },
+        {
+          "name": "Part2",
+          "latex": "2",
+          "decimal": "2"
+        }
+      ]
+    }
   }
 ];
 

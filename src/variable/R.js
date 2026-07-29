@@ -12,12 +12,12 @@ export const ParseNumberResult = ({ R, M, S }, { modelType, modelId } = {}) => {
   const [ans1Latex, ans1Decimal] = new ParseVariable(ans1).get({ displayCode });
   const [ans2Latex, ans2Decimal] = new ParseVariable(ans2).get({ displayCode });
 
-  const _parseS = new ParseSetup({ S });
+  const parseS = new ParseSetup({ S });
 
-  let template = RESULT_INFO['NUMBER'][parseM.getResultTemplate()]?.()?.join(_parseS.getDecimalMark() === '0' ? ';' : ',');
+  let template = RESULT_INFO.NUMBER[parseM.getResultTemplate()]?.()?.join(parseS.getDecimalMark() === '0' ? ';' : ',');
   let result = [];
   if (!template) {
-    const ans2LatexBracket =  /^.+[+-]/.test(ans2Latex) ? `(${ans2Latex})` : ans2Latex;
+    const ans2LatexBracket = /^.+[+-]/.test(ans2Latex) ? `(${ans2Latex})` : ans2Latex;
     const real_is_zero = ans1Decimal.isZero();
     const imaginary_is_zero = ans2Decimal.isZero();
 
@@ -56,16 +56,19 @@ export const ParseNumberResult = ({ R, M, S }, { modelType, modelId } = {}) => {
   return result;
 }
 
-export const ParseInequalityResult = ({ R, M }) => {
+export const ParseInequalityResult = ({ R, M, S }) => {
+  const parseS = new ParseSetup({ S });
+  const separator = parseS.getDecimalMark() === '0' ? '; ' : ', '
+
   const parseM = new ParseMode({ M });
   const displayCode = parseM.getResultFormatDisplay();
   const resultCode = R.slice(2, 4);
-  const result = RESULT_INFO['INEQUALITY'][resultCode];
+  const result = RESULT_INFO.INEQUALITY[resultCode];
   if (typeof result === 'function') {
     return [{ name: 'templated', latex: result() }];
   }
   const split = R.slice(4).match(/.{20}/g);
-  let template = result;
+  let template = result?.join(separator);
   const returnResult = [];
   for (let i = 0; i < split.length; i++) {
     const [latex, decimal] = new ParseVariable(split[i]).get({ displayCode });
@@ -88,14 +91,14 @@ export const ParseEquationResult = ({ R, M, S, C }) => {
 
   if (['1', '2', '4'].includes(resultCode)) {
     if (!split || split.length === 0) {
-      return [{ name: 'templated', latex: RESULT_INFO['EQUATION'][resultCode]() }];
+      return [{ name: 'templated', latex: RESULT_INFO.EQUATION[resultCode]() }];
     }
   }
   const noLocal = resultCode === '5';
 
   let template;
   const SIMUL_SUB_MODE = ['01', '02', '03', '11', '12'];
-  const EQ0 = RESULT_INFO['EQUATION']['0'];
+  const EQ0 = RESULT_INFO.EQUATION['0'];
   if (SIMUL_SUB_MODE.includes(subMode)) {
     template = EQ0[subMode];
   } else {
@@ -113,7 +116,7 @@ export const ParseEquationResult = ({ R, M, S, C }) => {
       let variants;
       if (resultCode === '4') {
         variants = '0';
-        template = [RESULT_INFO['EQUATION'][resultCode]()];
+        template = [RESULT_INFO.EQUATION[resultCode]()];
       } else {
         variants = '1';
         template = [];
@@ -171,7 +174,7 @@ export const ParseEquationResult = ({ R, M, S, C }) => {
     throw new Error('Equation template not match');
   }
   if (noLocal) {
-    template += ` \\\\ ${RESULT_INFO['EQUATION']['5']()}`;
+    template += ` \\\\ ${RESULT_INFO.EQUATION['5']()}`;
   }
   result.unshift({ name: 'templated', latex: template });
   return result;

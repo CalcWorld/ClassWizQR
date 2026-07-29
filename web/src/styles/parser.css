@@ -355,11 +355,8 @@ details[open] > summary:hover {
     padding: 2px 0 6px;
 }
 
-#calc .right {
-    text-align: right;
-}
-
-#calc .right {
+#calc .content.right {
+    padding-right: 2px;
     text-align: right;
 }
 

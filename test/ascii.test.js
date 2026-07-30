@@ -27,6 +27,10 @@ test('model profiles contain only non-default capabilities', () => {
     decimalMark: 'comma',
     recurringDecimal: 'overline',
   });
+  assert.deepEqual(getModelProfile('CY', '215'), {
+    decimalMark: 'comma',
+    recurringDecimal: 'overline',
+  });
   assert.deepEqual(getModelProfile('FY', '523'), {
     recurringDecimal: 'bracket',
   });

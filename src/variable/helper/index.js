@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js';
-import { AsciiTable } from '../../ascii/index.js';
 import { recDecToLatex } from '../../ascii/recdec.js';
 import { numberToFrac } from './num2frac.js';
 
@@ -274,7 +273,7 @@ export const fracToRecDecLatex = ({ numerator, denominator, modelType, modelId }
   const recurringStart = positions.get(remainder);
   const nonRecurring = digits.slice(0, recurringStart).join(' ');
   const recurring = digits.slice(recurringStart).join(' ');
-  const decimalMark = new AsciiTable(modelType, modelId).get()['2E'];
+  const decimalMark = new Decimal("0.1").toString()[1];
   const sign = negative && numeratorBigInt !== 0n ? '-' : '';
   const prefix = nonRecurring ? `${nonRecurring} ` : '';
 

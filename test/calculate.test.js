@@ -1210,6 +1210,45 @@ for (const { name, url, expected } of cases) {
   });
 }
 
+const asciiExpressionCases = [
+  {
+    name: 'Calculate French CY ASCII expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-295A+U-000000000000+M-C10000AD00+S-000410110000100E0010B0006D13+R-0670000000000000010100000000000000000000+E-41A64AA68331D0A68432D0A688332C36D0A689352C3535D0A68A322E332C30D0A639AA32A642434445464740',
+    expression: '\\mathrm{Rép} + \\mathrm{Pré−Rép} + \\mathrm{Ent}( 1 ) + \\mathrm{EntEx}( 2 ) + \\mathrm{PGCD}( 3 ; 6 ) + \\mathrm{PPCM}( 5 ; 5 5 ) + \\mathrm{Arond}( 2 , 3 ; 0 ) + 9 ├ 2 + \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} \\mathrm{M}',
+  },
+  {
+    name: 'Calculate decimal-comma CY ASCII expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-247A+U-000000000000+M-C10000AD00+S-000410110000100E0000B000D695+R-0134000000000000010200000000000000000000+E-41A64AA68331D0A68432D0A688332C36D0A689352C3535D0A68A322E332C30D0A639AA32A642434445464740',
+    expression: '\\mathrm{Ans} + \\mathrm{PreAns} + \\mathrm{Int}( 1 ) + \\mathrm{Intg}( 2 ) + \\mathrm{GCD}( 3 ; 6 ) + \\mathrm{LCM}( 5 ; 5 5 ) + \\mathrm{RndFix}( 2 , 3 ; 0 ) + 9 \\div \\mathrm{R} 2 + \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} \\mathrm{M}',
+  },
+  {
+    name: 'Calculate Japanese CY ASCII expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000AD00+S-001410100000100E1110B0005EC6+R-0670000000000000010100000000000000000000+E-41A64AA68331D0A68432D0A688332C36D0A689352C3535D0A68A322E332C30D0A639AA32A642434445464740',
+    expression: '\\mathrm{Ans} + \\mathrm{PreAns} + \\mathrm{Int}( 1 ) + \\mathrm{Intg}( 2 ) + \\mathrm{GCD}( 3 , 6 ) + \\mathrm{LCM}( 5 , 5 5 ) + \\mathrm{RndFix}( 2 . 3 , 0 ) + 9 \\div \\mathrm{R} 2 + \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} \\mathrm{M}',
+  },
+  {
+    name: 'Calculate decimal-comma EY ASCII expression',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-007A+U-000000000000+M-C10000AD00+S-000410110000000E0010B0007D91+Q-06700000000000000000000001010000000000000000000000000000+E-41A64AA68331D0A68432D0A688332C36D0A689352C3535D0A68A322E332C30D0A639AA32A642434445464740',
+    expression: '\\mathrm{A} + \\mathrm{PreAns} + \\mathrm{Int}( 1 ) + \\mathrm{Intg}( 2 ) + \\mathrm{GCD}( 3 ; 6 ) + \\mathrm{LCM}( 5 ; 5 5 ) + \\mathrm{RndFix}( 2 , 3 ; 0 ) + 9 \\div \\mathrm{R} 2 + \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x \\mathrm{Ans}',
+  },
+  {
+    name: 'Calculate French FY ASCII expression',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-506A+U-000000000000+M-C10000AD00+S-400410111000000E0010B0007135+Q-06700000000000000000000001010000000000000000000000000000+E-41A64AA68331D0A68432D0A688332C36D0A689352C3535D0A68A322E332C30D0A639AA32A642434445464740',
+    expression: '\\mathrm{A} + \\mathrm{PreAns} + \\mathrm{Ent}( 1 ) + \\mathrm{EntEx}( 2 ) + \\mathrm{PGCD}( 3 ; 6 ) + \\mathrm{PPCM}( 5 ; 5 5 ) + \\mathrm{Arond}( 2 , 3 ; 0 ) + 9 ├ 2 + \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x \\mathrm{Rép}',
+  },
+  {
+    name: 'Calculate Japanese EY ASCII expression',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-031A+U-000000000000+M-C10000AD00+S-001410100000000E1110B0007EB0+Q-06700000000000000000000001010000000000000000000000000000+E-41A64AA68331D0A68432D0A688332C36D0A689352C3535D0A68A322E332C30D0A639AA32A642434445464740',
+    expression: '\\mathrm{A} + \\mathrm{PreAns} + \\mathrm{Int}( 1 ) + \\mathrm{Intg}( 2 ) + \\mathrm{GCD}( 3 , 6 ) + \\mathrm{LCM}( 5 , 5 5 ) + \\mathrm{RndFix}( 2 . 3 , 0 ) + 9 \\div \\mathrm{R} 2 + \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x \\mathrm{Ans}',
+  },
+];
+
+for (const { name, url, expression } of asciiExpressionCases) {
+  test(name, () => {
+    assert.equal(parse(url).expression, expression);
+  });
+}
+
 const recurringDecimalCases = [
   {
     name: 'Recurring decimal result with brackets',

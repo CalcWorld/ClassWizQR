@@ -150,16 +150,3 @@ html:has(.history-dialog[open]) body {
 .image-processing-content [role="status"] {
     color: var(--text-muted);
 }
-
-@media (max-width: 600px) {
-    .history-dialog {
-        width: 100vw;
-        height: 100dvh;
-        margin: 0;
-        border-radius: 0;
-    }
-
-    .history-dialog-header {
-        padding-top: max(8px, env(safe-area-inset-top));
-    }
-}

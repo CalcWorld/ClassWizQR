@@ -687,4 +687,15 @@ pre {
         grid-column: 1;
         grid-row: auto;
     }
+
+    .history-dialog {
+        width: 100vw;
+        height: 100dvh;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .history-dialog-header {
+        padding-top: max(8px, env(safe-area-inset-top));
+    }
 }

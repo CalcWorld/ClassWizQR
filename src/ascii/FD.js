@@ -347,3 +347,7 @@ export const asciiFD_EY = {
   "4B": "c",
   "52": "g_n",
 };
+
+export const asciiFD_FR = {
+  "1B": "méd",
+};

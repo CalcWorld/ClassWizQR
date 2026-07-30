@@ -257,19 +257,6 @@ export const ascii00 = {
   "FF": ""
 }
 
-export const ascii00_unicode_EY = {
-  "40": "Ans",
-  "41": "A",
-  "42": "B",
-  "43": "C",
-  "44": "D",
-  "45": "E",
-  "46": "F",
-  "4A": "PreAns",
-  "4B": "θ",
-  "4C": "s",
-}
-
 export const ascii00_unicode = {
   "19": "□",
   "22": "π",
@@ -406,7 +393,36 @@ export const ascii00_EY = {
   "96": "g(",
 }
 
-export const ascii_DECIMAL_MARK_COMMA = {
+export const ascii00_unicode_EY = {
+  "40": "Ans",
+  "41": "A",
+  "42": "B",
+  "43": "C",
+  "44": "D",
+  "45": "E",
+  "46": "F",
+  "4A": "PreAns",
+  "4B": "θ",
+  "4C": "s",
+}
+
+export const ascii00_DECIMAL_MARK_COMMA = {
   "2C": ";",
   "2E": ",",
+};
+
+export const ascii00_FR = {
+  "41": "Rép",
+  "4A": "Pré−Rép",
+  "83": "Ent(",
+  "84": "EntEx(",
+  "88": "PGCD(",
+  "89": "PPCM(",
+  "8A": "Arond(",
+  "AA": "├",
+};
+
+export const ascii00_FR_EY = {
+  "40": "Rép",
+  "4A": "Pré−Rép",
 };

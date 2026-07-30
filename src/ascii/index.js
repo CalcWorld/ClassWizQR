@@ -1,10 +1,18 @@
-import { ascii00, ascii00_EY, ascii00_unicode, ascii00_unicode_EY, ascii_DECIMAL_MARK_COMMA } from './00.js';
+import {
+  ascii00,
+  ascii00_DECIMAL_MARK_COMMA,
+  ascii00_EY,
+  ascii00_FR,
+  ascii00_FR_EY,
+  ascii00_unicode,
+  ascii00_unicode_EY
+} from './00.js';
 import { asciiFA } from './FA.js';
 import { asciiFB, asciiFB_EY } from './FB.js';
-import { asciiFD, asciiFD_EY, asciiFD_unicode } from './FD.js';
+import { asciiFD, asciiFD_EY, asciiFD_FR, asciiFD_unicode } from './FD.js';
 import { asciiFE, asciiFE_FY, asciiFE_JP } from './FE.js';
 import { MODEL_TYPE_EY_FY } from "../model/index.js";
-import { DECIMAL_MARK_COMMA_MODEL, JP_MODEL } from './consts.js';
+import { DECIMAL_MARK_COMMA_MODEL, FR_MODEL, JP_MODEL } from './consts.js';
 
 export class AsciiTable {
   constructor(modelType, modelId) {
@@ -35,13 +43,19 @@ export class AsciiTable {
     }
 
     combine('', ascii00);
-    if (DECIMAL_MARK_COMMA_MODEL[this.modelType]?.includes(this.modelId)) {
-      combine('', ascii_DECIMAL_MARK_COMMA);
-    }
     type === 'unicode' && combine('', ascii00_unicode);
+    if (DECIMAL_MARK_COMMA_MODEL[this.modelType]?.includes(this.modelId)) {
+      combine('', ascii00_DECIMAL_MARK_COMMA);
+    }
+    if (FR_MODEL[this.modelType]?.includes(this.modelId)) {
+      combine('', ascii00_FR);
+    }
     if (MODEL_TYPE_EY_FY.includes(this.modelType)) {
       combine('', ascii00_EY);
       type === 'unicode' && combine('', ascii00_unicode_EY);
+      if (FR_MODEL[this.modelType]?.includes(this.modelId)) {
+        combine('', ascii00_FR_EY);
+      }
     }
 
     combine('FA', asciiFA, type === 'unicode');
@@ -53,6 +67,9 @@ export class AsciiTable {
 
     combine('FD', asciiFD);
     type === 'unicode' && combine('FD', asciiFD_unicode);
+    if (FR_MODEL[this.modelType]?.includes(this.modelId)) {
+      combine('FD', asciiFD_FR, type === 'unicode');
+    }
     if (MODEL_TYPE_EY_FY.includes(this.modelType)) {
       combine('FD', asciiFD_EY);
     }

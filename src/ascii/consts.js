@@ -21,6 +21,21 @@ export const JP_MODEL = {
   ],
 };
 
+export const FR_MODEL = {
+  [MODEL_TYPE.CY]: [
+    '246',
+    '295',
+  ],
+  [MODEL_TYPE.EY]: [
+    '006',
+    '090',
+    '091',
+  ],
+  [MODEL_TYPE.FY]: [
+    '506',
+  ],
+};
+
 export const MATH_TEMPLATE = [
   '18',  // mixed fraction
   '2F',  // recurring decimal

@@ -1241,6 +1241,36 @@ const asciiExpressionCases = [
     url: 'http://wes.casio.com/ncal/index.php?q=I-031A+U-000000000000+M-C10000AD00+S-001410100000000E1110B0007EB0+Q-06700000000000000000000001010000000000000000000000000000+E-41A64AA68331D0A68432D0A688332C36D0A689352C3535D0A68A322E332C30D0A639AA32A642434445464740',
     expression: '\\mathrm{A} + \\mathrm{PreAns} + \\mathrm{Int}( 1 ) + \\mathrm{Intg}( 2 ) + \\mathrm{GCD}( 3 , 6 ) + \\mathrm{LCM}( 5 , 5 5 ) + \\mathrm{RndFix}( 2 . 3 , 0 ) + 9 \\div \\mathrm{R} 2 + \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x \\mathrm{Ans}',
   },
+  {
+    name: 'Calculate Spanish CY integer ASCII expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-268F+U-000000000000+M-C10014AD00+S-401410101000100E1010B000B181+R-0300000000000000010009000000000000000100+E-3939AA603688352C3689352C36',
+    expression: '9 9 ∟ ( 6 \\mathrm{MCD}( 5 , 6 \\mathrm{MCM}( 5 , 6',
+  },
+  {
+    name: 'Calculate Spanish CY trigonometric ASCII expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-268F+U-000000000000+M-C10000AD00+S-401410101000100E1010B000A93C+R-0900000000733338010000000000000000000000+E-7A7B7C79787739',
+    expression: '\\mathrm{Arcsen}( \\mathrm{Arccos}( \\mathrm{Arctan}( \\tan( \\cos( \\mathrm{sen}( 9',
+  },
+  {
+    name: 'Calculate Spanish CY hyperbolic ASCII expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-268F+U-000000000000+M-C10000AD00+S-401410101000100E1010B000A93C+R-0999999999999981009900000000000000000000+E-6F70716E6D6C31',
+    expression: '\\mathrm{Arcsenh}( \\mathrm{Arccosh}( \\mathrm{Arctanh}( \\tanh( \\cosh( \\mathrm{senh}( 1',
+  },
+  {
+    name: 'Calculate Spanish EY integer ASCII expression',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-011A+U-000000000000+M-C10014AD00+S-401410100000000E1010B000AC47+Q-03000000000000000000000001000900000000000000000000000100+E-3939AA603688352C3689352C36',
+    expression: '9 9 ∟ ( 6 \\mathrm{MCD}( 5 , 6 \\mathrm{MCM}( 5 , 6',
+  },
+  {
+    name: 'Calculate Spanish EY trigonometric ASCII expression',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-011A+U-000000000000+M-C10000AD00+S-401410100000000E1010B000ACE1+Q-09000000000000000007552801000000000000000000000000000000+E-7A7B7C79787739',
+    expression: '\\mathrm{Arcsen}( \\mathrm{Arccos}( \\mathrm{Arctan}( \\tan( \\cos( \\mathrm{sen}( 9',
+  },
+  {
+    name: 'Calculate Spanish EY hyperbolic ASCII expression',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-011A+U-000000000000+M-C10000AD00+S-401410100000000E1010B000ACE1+Q-09999999999999999999998800990000000000000000000000000000+E-6F70716E6D6C31',
+    expression: '\\mathrm{Arcsenh}( \\mathrm{Arccosh}( \\mathrm{Arctanh}( \\tanh( \\cosh( \\mathrm{senh}( 1',
+  },
 ];
 
 for (const { name, url, expression } of asciiExpressionCases) {

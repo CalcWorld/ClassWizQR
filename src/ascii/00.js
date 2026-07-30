@@ -183,3 +183,17 @@ export const ascii00_FR = {
 export const ascii00_FR_EY = {
   "40": roman("Rép"),
 };
+
+export const ascii00_SP = {
+  "6C": romanCall("senh"),
+  "6F": romanCall("Arcsenh"),
+  "70": romanCall("Arccosh"),
+  "71": romanCall("Arctanh"),
+  "77": romanCall("sen"),
+  "7A": romanCall("Arcsen"),
+  "7B": romanCall("Arccos"),
+  "7C": romanCall("Arctan"),
+  "88": romanCall("MCD"),
+  "89": romanCall("MCM"),
+  "AA": "∟",
+};

@@ -36,6 +36,15 @@ const MODEL_FEATURES = [
   },
   {
     capabilities: {
+      locale: 'sp',
+    },
+    models: {
+      [MODEL_TYPE.CY]: ['252', '253', '254', '255', '266', '267', '268', '269', '296'],
+      [MODEL_TYPE.EY]: ['008', '009', '010', '011'],
+    },
+  },
+  {
+    capabilities: {
       decimalMark: 'comma',
     },
     models: {

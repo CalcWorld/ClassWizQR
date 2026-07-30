@@ -1,6 +1,7 @@
 import { getModelProfile } from '../model/index.js';
 import { ASCII_PAGE_DEFINITIONS } from './registry.js';
-import { removeLatex } from './renderers/unicode.js';
+
+import { removeLatex } from './helper.js';
 
 const applyMap = (page, map, type, convertUnicode) => {
   for (const key in map) {

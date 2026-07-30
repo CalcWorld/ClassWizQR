@@ -12,6 +12,8 @@ const PAGE_PREFIXES = ['', 'FA', 'FB', 'FD', 'FE'];
 test('ASCII entries use strings or [latex, unicode] pairs', () => {
   assert.equal(ascii00['30'], '0');
   assert.deepEqual(ascii00['22'], ['\\pi', 'π']);
+  assert.deepEqual(ascii00['41'], ['\\mathrm{Ans}', 'Ans']);
+  assert.deepEqual(ascii00['58'], ['\\mathrm{Min}(', 'Min(']);
   assert.deepEqual(asciiFD['01'], ['\\Sigma \\mathrm{x}^2', 'Σx²']);
 });
 
@@ -53,8 +55,11 @@ test('AsciiTable applies family, locale, notation, and regional variants', () =>
   const frEy = new AsciiTable('EY', '006').get();
   assert.equal(frEy['2C'], ';');
   assert.equal(frEy['2E'], ',');
-  assert.equal(frEy['40'], 'Rép');
+  assert.equal(frEy['40'], '\\mathrm{Rép}');
   assert.equal(frEy['41'], '\\mathrm{A}');
+
+  const frEyUnicode = new AsciiTable('EY', '006').get('unicode');
+  assert.equal(frEyUnicode['40'], 'Rép');
 
   const jp = new AsciiTable('CY', '240').get();
   assert.equal(jp['FE3D'], '\\mathrm{ft²▸cm²}');

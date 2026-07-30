@@ -1214,7 +1214,7 @@ const asciiExpressionCases = [
   {
     name: 'Calculate French CY ASCII expression',
     url: 'http://wes.casio.com/math/index.php?q=I-295A+U-000000000000+M-C10000AD00+S-000410110000100E0010B0006D13+R-0670000000000000010100000000000000000000+E-41A64AA68331D0A68432D0A688332C36D0A689352C3535D0A68A322E332C30D0A639AA32A642434445464740',
-    expression: '\\mathrm{Rép} + \\mathrm{Pré−Rép} + \\mathrm{Ent}( 1 ) + \\mathrm{EntEx}( 2 ) + \\mathrm{PGCD}( 3 ; 6 ) + \\mathrm{PPCM}( 5 ; 5 5 ) + \\mathrm{Arond}( 2 , 3 ; 0 ) + 9 ├ 2 + \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} \\mathrm{M}',
+    expression: '\\mathrm{Rép} + \\mathrm{Pré\\text{-}Rép} + \\mathrm{Ent}( 1 ) + \\mathrm{EntEx}( 2 ) + \\mathrm{PGCD}( 3 ; 6 ) + \\mathrm{PPCM}( 5 ; 5 5 ) + \\mathrm{Arond}( 2 , 3 ; 0 ) + 9 ├ 2 + \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} \\mathrm{M}',
   },
   {
     name: 'Calculate decimal-comma CY ASCII expression',

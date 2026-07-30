@@ -146,7 +146,7 @@ const cases = [
           "If\\ \\mathrm{A} = 1 3\\ then",
           "\\ \\ Turn\\ ⟲\\ 1 4\\ degrees",
           "Else",
-          "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixels",
+          "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} \\text{-} 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixels",
           "\\ \\ Move\\ \\theta \\% ! \\textbf{P} \\textbf{C} \\mathrm{Ran\\#} \\mathrm{RanInt\\#}( \\mathrm{GCD}( \\mathrm{LCM}( \\mathrm{Abs}( \\mathrm{Int}( \\mathrm{Rnd}( \\mathrm{Intg}( \\mathrm{RndFix}( \\!^{\\circ} \\!^{\\mathrm{r}} \\!^{\\mathrm{g}} \\!^{▫} \\sinh( \\cosh( \\tanh( \\sinh^{-1}( \\cosh^{-1}( \\tanh^{-1}( \\textbf{m} \\textbf{μ} \\textbf{n} \\textbf{p} \\textbf{f} \\textbf{k} \\textbf{M} \\textbf{G} \\textbf{T} \\textbf{P} \\textbf{E} {h}\\ pixels",
           "End",
           "\\ "
@@ -402,7 +402,7 @@ const localizationCases = [
             "If\\ \\mathrm{A} = 1 3\\ then",
             "\\ \\ Turn\\ ⟲\\ 1 4\\ degrees",
             "Else",
-            "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixels",
+            "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} \\text{-} 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixels",
             "\\ \\ Move\\ \\theta \\% ! \\textbf{P} \\textbf{C} \\mathrm{Ran\\#} \\mathrm{RanInt\\#}( \\mathrm{GCD}( \\mathrm{LCM}( \\mathrm{Abs}( \\mathrm{Int}( \\mathrm{Rnd}( \\mathrm{Intg}( \\mathrm{RndFix}( \\!^{\\circ} \\!^{\\mathrm{r}} \\!^{\\mathrm{g}} \\!^{▫} \\sinh( \\cosh( \\tanh( \\sinh^{-1}( \\cosh^{-1}( \\tanh^{-1}( \\textbf{m} \\textbf{μ} \\textbf{n} \\textbf{p} \\textbf{f} \\textbf{k} \\textbf{M} \\textbf{G} \\textbf{T} \\textbf{P} \\textbf{E} {h}\\ pixels",
             "End",
             "\\ "
@@ -641,7 +641,7 @@ const localizationCases = [
             "如果\\ \\mathrm{A} = 1 3\\ 则",
             "\\ \\ 旋转⟲\\ 1 4\\ 度",
             "否则",
-            "\\ \\ 前进\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ 像素",
+            "\\ \\ 前进\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} \\text{-} 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ 像素",
             "\\ \\ 前进\\ \\theta \\% ! \\textbf{P} \\textbf{C} \\mathrm{Ran\\#} \\mathrm{RanInt\\#}( \\mathrm{GCD}( \\mathrm{LCM}( \\mathrm{Abs}( \\mathrm{Int}( \\mathrm{Rnd}( \\mathrm{Intg}( \\mathrm{RndFix}( \\!^{\\circ} \\!^{\\mathrm{r}} \\!^{\\mathrm{g}} \\!^{▫} \\sinh( \\cosh( \\tanh( \\sinh^{-1}( \\cosh^{-1}( \\tanh^{-1}( \\textbf{m} \\textbf{μ} \\textbf{n} \\textbf{p} \\textbf{f} \\textbf{k} \\textbf{M} \\textbf{G} \\textbf{T} \\textbf{P} \\textbf{E} {h}\\ 像素",
             "结束",
             "\\ "
@@ -880,7 +880,7 @@ const localizationCases = [
             "If\\ \\mathrm{A} = 1 3\\ then",
             "\\ \\ Turn\\ ⟲\\ 1 4\\ degrees",
             "Else",
-            "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixel",
+            "\\ \\ Move\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} \\text{-} 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixel",
             "\\ \\ Move\\ \\theta \\% ! \\textbf{P} \\textbf{C} \\mathrm{Ran\\#} \\mathrm{RanInt\\#}( \\mathrm{GCD}( \\mathrm{LCM}( \\mathrm{Abs}( \\mathrm{Int}( \\mathrm{Rnd}( \\mathrm{Intg}( \\mathrm{RndFix}( \\!^{\\circ} \\!^{\\mathrm{r}} \\!^{\\mathrm{g}} \\!^{▫} \\sinh( \\cosh( \\tanh( \\sinh^{-1}( \\cosh^{-1}( \\tanh^{-1}( \\textbf{m} \\textbf{μ} \\textbf{n} \\textbf{p} \\textbf{f} \\textbf{k} \\textbf{M} \\textbf{G} \\textbf{T} \\textbf{P} \\textbf{E} {h}\\ pixel",
             "End",
             "\\ "
@@ -1119,7 +1119,7 @@ const localizationCases = [
             "Si\\ \\mathrm{A} = 1 3\\ Alors",
             "\\ \\ Tourner\\ de\\ ⟲\\ 1 4\\ degrés",
             "Sinon",
-            "\\ \\ Avancer\\ de\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} - 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixels",
+            "\\ \\ Avancer\\ de\\ ⌟ \\sqrt\\!( \\hat{}( \\!^2 \\log( \\ln( \\log( \\!^{-1} \\sqrt[x]\\!( \\mathrm{Ans} \\sin( \\cos( \\tan( ( ) ; \\tan^{-1}( \\cos^{-1}( \\sin^{-1}( \\pi e \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\!^{▫} \\text{-} 1 2 3 4 5 6 7 8 9 0 , + - \\times \\div\\ pixels",
             "\\ \\ Avancer\\ de\\ \\theta \\% ! \\textbf{P} \\textbf{C} \\mathrm{Ran\\#} \\mathrm{RanInt\\#}( \\mathrm{GCD}( \\mathrm{LCM}( \\mathrm{Abs}( \\mathrm{Int}( \\mathrm{Rnd}( \\mathrm{Intg}( \\mathrm{RndFix}( \\!^{\\circ} \\!^{\\mathrm{r}} \\!^{\\mathrm{g}} \\!^{▫} \\sinh( \\cosh( \\tanh( \\sinh^{-1}( \\cosh^{-1}( \\tanh^{-1}( \\textbf{m} \\textbf{μ} \\textbf{n} \\textbf{p} \\textbf{f} \\textbf{k} \\textbf{M} \\textbf{G} \\textbf{T} \\textbf{P} \\textbf{E} {h}\\ pixels",
             "Fin",
             "\\ "

@@ -3,7 +3,7 @@ import Decimal from 'decimal.js';
 import { test } from 'vitest';
 import {
   decimalToDmsLatex,
-  decimalToPrimeFactor,
+  decimalToPrimeFactorLatex,
   decimalToRecDecLatex,
   fracToRecDecLatex,
 } from '../src/variable/helper/index.js';
@@ -25,30 +25,30 @@ test('carries rounded minutes into degrees', () => {
 
 test('converts an integer to prime factor notation', () => {
   assert.strictEqual(
-    decimalToPrimeFactor(new Decimal('114514')),
+    decimalToPrimeFactorLatex(new Decimal('114514')),
     '2 \\times 31 \\times 1847',
   );
 });
 
 test('uses integer exponents for repeated prime factors', () => {
   assert.strictEqual(
-    decimalToPrimeFactor(new Decimal('360')),
+    decimalToPrimeFactorLatex(new Decimal('360')),
     '2^{3} \\times 3^{2} \\times 5',
   );
 });
 
 test('leaves the unsupported part of a prime factorization in parentheses', () => {
   assert.strictEqual(
-    decimalToPrimeFactor(new Decimal('2036162')),
+    decimalToPrimeFactorLatex(new Decimal('2036162')),
     '2 \\times (1018081)',
   );
 });
 
 test('does not factor unsupported values', () => {
-  assert.strictEqual(decimalToPrimeFactor(new Decimal('-2')), undefined);
-  assert.strictEqual(decimalToPrimeFactor(new Decimal('0')), undefined);
-  assert.strictEqual(decimalToPrimeFactor(new Decimal('1')), undefined);
-  assert.strictEqual(decimalToPrimeFactor(new Decimal('10000000000')), undefined);
+  assert.strictEqual(decimalToPrimeFactorLatex(new Decimal('-2')), undefined);
+  assert.strictEqual(decimalToPrimeFactorLatex(new Decimal('0')), undefined);
+  assert.strictEqual(decimalToPrimeFactorLatex(new Decimal('1')), undefined);
+  assert.strictEqual(decimalToPrimeFactorLatex(new Decimal('10000000000')), undefined);
 });
 
 test('converts a decimal to dotted recurring notation', () => {

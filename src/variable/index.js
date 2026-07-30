@@ -5,7 +5,7 @@ import {
   decimalToFracLatex,
   decimalToLatex,
   decimalToPiFracLatex,
-  decimalToPrimeFactor,
+  decimalToPrimeFactorLatex,
   decimalToRecDecLatex,
   fracToRecDecLatex,
   getImpFrac,
@@ -71,7 +71,7 @@ export class ParseVariable {
       });
     } else if (displayCode === 'F' && numDec.isInt() && numDec.gte(2) && numDec.lte('9999999999')) {
       // Prime Factor
-      numLatex = decimalToPrimeFactor(numDec);
+      numLatex = decimalToPrimeFactorLatex(numDec);
     } else if (!numDec.isInt()) {
       numLatex = decimalToPiFracLatex({
         numSign,

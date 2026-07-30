@@ -200,7 +200,7 @@ export const decimalToDmsLatex = (decimal) => {
  * @param {Decimal} decimal
  * @return {string|undefined}
  */
-export const decimalToPrimeFactor = (decimal) => {
+export const decimalToPrimeFactorLatex = (decimal) => {
   if (
     !Decimal.isDecimal(decimal)
     || !decimal.isFinite()

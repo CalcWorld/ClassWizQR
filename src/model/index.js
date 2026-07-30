@@ -53,6 +53,14 @@ const MODEL_FEATURES = [
   },
   {
     capabilities: {
+      locale: 'rs',
+    },
+    models: {
+      [MODEL_TYPE.CY]: ['217'],
+    },
+  },
+  {
+    capabilities: {
       decimalMark: 'comma',
     },
     models: {

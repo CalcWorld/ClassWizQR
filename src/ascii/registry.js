@@ -5,6 +5,7 @@ import {
   ascii00_EY,
   ascii00_FR,
   ascii00_FR_EY,
+  ascii00_RS,
   ascii00_SP,
 } from './00.js';
 import { asciiFA } from './FA.js';
@@ -18,6 +19,7 @@ const isJP = ({ profile }) => profile.locale === 'jp';
 const isFR = ({ profile }) => profile.locale === 'fr';
 const isSP = ({ profile }) => profile.locale === 'sp';
 const isCE = ({ profile }) => profile.locale === 'ce';
+const isRS = ({ profile }) => profile.locale === 'rs';
 const usesDecimalComma = ({ profile }) => profile.decimalMark === 'comma';
 
 export const ASCII_PAGE_DEFINITIONS = [
@@ -40,6 +42,10 @@ export const ASCII_PAGE_DEFINITIONS = [
       {
         when: isCE,
         map: ascii00_CE,
+      },
+      {
+        when: isRS,
+        map: ascii00_RS,
       },
       {
         when: isEYOrFY,

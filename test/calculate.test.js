@@ -1281,6 +1281,16 @@ const asciiExpressionCases = [
     url: 'http://wes.casio.com/math/index.php?q=I-294F+U-000000000000+M-C10000AD00+S-000410100000100E1010B000B24B+R-0999999999999981009900000000000000000000+E-6F70716E6D6C31',
     expression: '\\sinh^{-1}( \\cosh^{-1}( \\mathrm{tgh}^{-1}( \\mathrm{tgh}( \\cosh( \\sinh( 1',
   },
+  {
+    name: 'Calculate RS trigonometric ASCII expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-217A+U-000000000000+M-C10000A000+S-000400100000100E1010B0004E46+R-0900000000733338010000000000000000000000+E-7A7B7C79787739',
+    expression: '\\mathrm{Arcsin}( \\mathrm{Arccos}( \\mathrm{Arctg}( \\mathrm{tg}( \\cos( \\sin( 9',
+  },
+  {
+    name: 'Calculate RS hyperbolic ASCII expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-217A+U-000000000000+M-C10000A000+S-000400100000100E1010B0004E46+R-0999999999999981009900000000000000000000+E-6F70716E6D6C31',
+    expression: '\\mathrm{Arcsinh}( \\mathrm{Arccosh}( \\mathrm{Arctgh}( \\mathrm{tgh}( \\cosh( \\sinh( 1',
+  },
 ];
 
 for (const { name, url, expression } of asciiExpressionCases) {

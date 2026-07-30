@@ -204,3 +204,14 @@ export const ascii00_CE = {
   "79": romanCall("tg"),
   "7C": ["\\mathrm{tg}^{-1}(", "tg⁻¹("],
 };
+
+export const ascii00_RS = {
+  "6E": romanCall("tgh"),
+  "6F": romanCall("Arcsinh"),
+  "70": romanCall("Arccosh"),
+  "71": romanCall("Arctgh"),
+  "79": romanCall("tg"),
+  "7A": romanCall("Arcsin"),
+  "7B": romanCall("Arccos"),
+  "7C": romanCall("Arctg"),
+};

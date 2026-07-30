@@ -159,7 +159,7 @@ export const ascii00_EY = {
   "49": "z",
   "4A": roman("PreAns"),
   "4B": ["\\theta", "θ"],
-  "4C": [" ", "s"],
+  "4C": "S",
   "95": "f(",
   "96": "g(",
 };

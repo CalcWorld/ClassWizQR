@@ -182,5 +182,4 @@ export const ascii00_FR = {
 
 export const ascii00_FR_EY = {
   "40": roman("Rép"),
-  "4A": roman("Pré−Rép"),
 };

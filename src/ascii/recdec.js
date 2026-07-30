@@ -1,4 +1,4 @@
-import { REC_DEC_BRACKET_MODEL, REC_DEC_OVERLINE_MODEL } from './consts.js';
+import { getModelProfile } from '../model/index.js';
 
 /**
  * Converts the recurring part of a decimal to the notation used by a model.
@@ -9,10 +9,12 @@ import { REC_DEC_BRACKET_MODEL, REC_DEC_OVERLINE_MODEL } from './consts.js';
  * @return {string}
  */
 export const recDecToLatex = (recurring, modelType, modelId) => {
-  if (REC_DEC_OVERLINE_MODEL[modelType]?.includes(modelId)) {
+  const profile = getModelProfile(modelType, modelId);
+
+  if (profile.recurringDecimal === 'overline') {
     return `\\overline{${recurring}} `;
   }
-  if (REC_DEC_BRACKET_MODEL[modelType]?.includes(modelId)) {
+  if (profile.recurringDecimal === 'bracket') {
     return `\\left( ${recurring} \\right) `;
   }
 

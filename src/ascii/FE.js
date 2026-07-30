@@ -1,5 +1,4 @@
 export const asciiFE = {
-  "00": "",
   "01": "\\mathrm{in▸cm}",
   "02": "\\mathrm{cm▸in}",
   "03": "\\mathrm{ft▸m}",
@@ -238,23 +237,6 @@ export const asciiFE = {
   "EC": "\\mathrm{in▸ch}",
   "ED": "\\mathrm{ch▸ft}",
   "EE": "\\mathrm{ft▸ch}",
-  "EF": "",
-  "F0": "",
-  "F1": "",
-  "F2": "",
-  "F3": "",
-  "F4": "",
-  "F5": "",
-  "F6": "",
-  "F7": "",
-  "F8": "",
-  "F9": "",
-  "FA": "",
-  "FB": "",
-  "FC": "",
-  "FD": "",
-  "FE": "",
-  "FF": ""
 };
 
 export const asciiFE_JP = {

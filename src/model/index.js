@@ -2,6 +2,8 @@ import { modelCY } from './CY.js';
 import { modelEY } from './EY.js';
 import { modelFY } from './FY.js';
 
+export { getModelProfile } from './profiles.js';
+
 export const MODEL_TYPE = {
   CY: 'CY',
   EY: 'EY',

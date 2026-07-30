@@ -1,23 +1,63 @@
-import {
-  ascii00,
-  ascii00_DECIMAL_MARK_COMMA,
-  ascii00_EY,
-  ascii00_FR,
-  ascii00_FR_EY,
-  ascii00_unicode,
-  ascii00_unicode_EY
-} from './00.js';
-import { asciiFA } from './FA.js';
-import { asciiFB, asciiFB_EY } from './FB.js';
-import { asciiFD, asciiFD_EY, asciiFD_FR, asciiFD_unicode } from './FD.js';
-import { asciiFE, asciiFE_FY, asciiFE_JP } from './FE.js';
-import { MODEL_TYPE_EY_FY } from "../model/index.js";
-import { DECIMAL_MARK_COMMA_MODEL, FR_MODEL, JP_MODEL } from './consts.js';
+import { getModelProfile } from '../model/index.js';
+import { ASCII_PAGE_DEFINITIONS } from './registry.js';
+import { removeLatex } from './renderers/unicode.js';
+
+const applyMap = (page, map, type, convertUnicode) => {
+  for (const key in map) {
+    const entry = map[key];
+    if (Array.isArray(entry)) {
+      page[key] = entry[type === 'unicode' ? 1 : 0];
+    } else {
+      page[key] = type === 'unicode' && convertUnicode
+        ? removeLatex(entry)
+        : entry;
+    }
+  }
+};
+
+const completePage = (page) => Object.fromEntries(
+  Array.from({ length: 256 }, (_, code) => {
+    const key = code.toString(16).toUpperCase().padStart(2, '0');
+    return [key, page[key] ?? ''];
+  }),
+);
+
+const buildAsciiTable = (context) => {
+  const table = {};
+
+  for (const definition of ASCII_PAGE_DEFINITIONS) {
+    const page = {};
+    applyMap(
+      page,
+      definition.base,
+      context.type,
+      definition.convertUnicode,
+    );
+
+    for (const patch of definition.patches ?? []) {
+      if (patch.when(context)) {
+        applyMap(
+          page,
+          patch.map,
+          context.type,
+          patch.convertUnicode,
+        );
+      }
+    }
+
+    for (const [key, value] of Object.entries(completePage(page))) {
+      table[`${definition.prefix}${key}`] = value;
+    }
+  }
+
+  return table;
+};
 
 export class AsciiTable {
   constructor(modelType, modelId) {
     this.modelType = modelType;
     this.modelId = modelId;
+    this.profile = getModelProfile(modelType, modelId);
   }
 
   /**
@@ -25,63 +65,10 @@ export class AsciiTable {
    * @param {'latex'|'unicode'} [type='latex']
    */
   get(type = 'latex') {
-    const asciiCopy = {};
-
-    const combine = (prefix, map, removeLatex = false) => {
-      for (const key in map) {
-        asciiCopy[`${prefix}${key}`] = removeLatex ?
-          map[key].replace(/\\circ/g, '·')
-            .replace(/\\ /g, ' ')
-            .replace(/\\cdot /g, '°')
-            .replace(/\\to /g, '→')
-            .replace(/\\mathrm/g, '')
-            .replace(/\{/g, '')
-            .replace(/}/g, '')
-          // .replace(/\\/g, '')
-          : map[key];
-      }
-    }
-
-    combine('', ascii00);
-    type === 'unicode' && combine('', ascii00_unicode);
-    if (DECIMAL_MARK_COMMA_MODEL[this.modelType]?.includes(this.modelId)) {
-      combine('', ascii00_DECIMAL_MARK_COMMA);
-    }
-    if (FR_MODEL[this.modelType]?.includes(this.modelId)) {
-      combine('', ascii00_FR);
-    }
-    if (MODEL_TYPE_EY_FY.includes(this.modelType)) {
-      combine('', ascii00_EY);
-      type === 'unicode' && combine('', ascii00_unicode_EY);
-      if (FR_MODEL[this.modelType]?.includes(this.modelId)) {
-        combine('', ascii00_FR_EY);
-      }
-    }
-
-    combine('FA', asciiFA, type === 'unicode');
-
-    combine('FB', asciiFB, type === 'unicode');
-    if (MODEL_TYPE_EY_FY.includes(this.modelType)) {
-      combine('FB', asciiFB_EY, type === 'unicode');
-    }
-
-    combine('FD', asciiFD);
-    type === 'unicode' && combine('FD', asciiFD_unicode);
-    if (FR_MODEL[this.modelType]?.includes(this.modelId)) {
-      combine('FD', asciiFD_FR, type === 'unicode');
-    }
-    if (MODEL_TYPE_EY_FY.includes(this.modelType)) {
-      combine('FD', asciiFD_EY);
-    }
-
-    combine('FE', asciiFE, type === 'unicode');
-    if (JP_MODEL[this.modelType]?.includes(this.modelId)) {
-      combine('FE', asciiFE_JP, type === 'unicode');
-    }
-    if (MODEL_TYPE_EY_FY.includes(this.modelType)) {
-      combine('FE', asciiFE_FY, type === 'unicode');
-    }
-
-    return asciiCopy;
+    return buildAsciiTable({
+      type,
+      modelType: this.modelType,
+      profile: this.profile,
+    });
   }
 }

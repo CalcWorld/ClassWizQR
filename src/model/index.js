@@ -45,6 +45,14 @@ const MODEL_FEATURES = [
   },
   {
     capabilities: {
+      locale: 'ce',
+    },
+    models: {
+      [MODEL_TYPE.CY]: ['291', '292', '293', '294'],
+    },
+  },
+  {
+    capabilities: {
       decimalMark: 'comma',
     },
     models: {

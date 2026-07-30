@@ -197,3 +197,10 @@ export const ascii00_SP = {
   "89": romanCall("MCM"),
   "AA": "∟",
 };
+
+export const ascii00_CE = {
+  "6E": romanCall("tgh"),
+  "71": ["\\mathrm{tgh}^{-1}(", "tgh⁻¹("],
+  "79": romanCall("tg"),
+  "7C": ["\\mathrm{tg}^{-1}(", "tg⁻¹("],
+};

@@ -1,4 +1,12 @@
-import { ascii00, ascii00_DECIMAL_MARK_COMMA, ascii00_EY, ascii00_FR, ascii00_FR_EY, ascii00_SP, } from './00.js';
+import {
+  ascii00,
+  ascii00_CE,
+  ascii00_DECIMAL_MARK_COMMA,
+  ascii00_EY,
+  ascii00_FR,
+  ascii00_FR_EY,
+  ascii00_SP,
+} from './00.js';
 import { asciiFA } from './FA.js';
 import { asciiFB, asciiFB_EY } from './FB.js';
 import { asciiFD, asciiFD_EY, asciiFD_FR } from './FD.js';
@@ -9,6 +17,7 @@ const isEYOrFY = ({ modelType }) => MODEL_TYPE_EY_FY.includes(modelType);
 const isJP = ({ profile }) => profile.locale === 'jp';
 const isFR = ({ profile }) => profile.locale === 'fr';
 const isSP = ({ profile }) => profile.locale === 'sp';
+const isCE = ({ profile }) => profile.locale === 'ce';
 const usesDecimalComma = ({ profile }) => profile.decimalMark === 'comma';
 
 export const ASCII_PAGE_DEFINITIONS = [
@@ -27,6 +36,10 @@ export const ASCII_PAGE_DEFINITIONS = [
       {
         when: isSP,
         map: ascii00_SP,
+      },
+      {
+        when: isCE,
+        map: ascii00_CE,
       },
       {
         when: isEYOrFY,

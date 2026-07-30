@@ -36,7 +36,6 @@ export const ASCII_PAGE_DEFINITIONS = [
   {
     prefix: 'FA',
     base: asciiFA,
-    convertUnicode: true,
   },
   {
     prefix: 'FB',

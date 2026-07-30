@@ -2,16 +2,16 @@ import Decimal from "decimal.js";
 import { tt } from "../utils.js";
 import {
   decimalToDmsLatex,
-  decimalToRecDecLatex,
+  decimalToFracLatex,
+  decimalToLatex,
+  decimalToPiFracLatex,
   decimalToPrimeFactor,
+  decimalToRecDecLatex,
   fracToRecDecLatex,
   getImpFrac,
   getMixedFrac,
   isMixedFrac,
-  lcm,
-  decimalToFracLatex,
-  decimalToLatex,
-  decimalToPiFracLatex
+  lcm
 } from './helper/index.js';
 
 export class ParseVariable {
@@ -133,18 +133,14 @@ export class ParseVariable {
     return [fracLatex, fracDec];
   }
 
-  #toDMS({ displayCode, fractionResult, modelType, modelId, }) {
+  #toDMS(option = {}) {
+    const { displayCode } = option;
     const [, decimal] = this.#toDecimal();
     if (displayCode === '1') {
       const dms = decimalToDmsLatex(decimal)
       return [dms, decimal];
     }
-    return this.#toStandardByDecimal({
-      displayCode,
-      fractionResult,
-      modelType,
-      modelId,
-    });
+    return this.#toStandardByDecimal(option);
   }
 
   #toSqrt({ displayCode }) {

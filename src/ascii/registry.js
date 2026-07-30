@@ -6,8 +6,8 @@ import { asciiFE, asciiFE_FY, asciiFE_JP } from './FE.js';
 import { MODEL_TYPE_EY_FY } from '../model/index.js';
 
 const isEYOrFY = ({ modelType }) => MODEL_TYPE_EY_FY.includes(modelType);
-const isFrench = ({ profile }) => profile.locale === 'fr';
-const isJapanese = ({ profile }) => profile.locale === 'jp';
+const isFR = ({ profile }) => profile.locale === 'fr';
+const isJP = ({ profile }) => profile.locale === 'jp';
 const usesDecimalComma = ({ profile }) => profile.decimalMark === 'comma';
 
 export const ASCII_PAGE_DEFINITIONS = [
@@ -15,12 +15,21 @@ export const ASCII_PAGE_DEFINITIONS = [
     prefix: '',
     base: ascii00,
     patches: [
-      { map: ascii00_DECIMAL_MARK_COMMA, when: usesDecimalComma },
-      { map: ascii00_FR, when: isFrench },
-      { map: ascii00_EY, when: isEYOrFY },
       {
+        when: usesDecimalComma,
+        map: ascii00_DECIMAL_MARK_COMMA,
+      },
+      {
+        when: isFR,
+        map: ascii00_FR,
+      },
+      {
+        when: isEYOrFY,
+        map: ascii00_EY,
+      },
+      {
+        when: context => isFR(context) && isEYOrFY(context),
         map: ascii00_FR_EY,
-        when: context => isFrench(context) && isEYOrFY(context),
       },
     ],
   },
@@ -34,15 +43,26 @@ export const ASCII_PAGE_DEFINITIONS = [
     base: asciiFB,
     convertUnicode: true,
     patches: [
-      { map: asciiFB_EY, when: isEYOrFY, convertUnicode: true },
+      {
+        when: isEYOrFY,
+        convertUnicode: true,
+        map: asciiFB_EY,
+      },
     ],
   },
   {
     prefix: 'FD',
     base: asciiFD,
     patches: [
-      { map: asciiFD_FR, when: isFrench, convertUnicode: true },
-      { map: asciiFD_EY, when: isEYOrFY },
+      {
+        when: isFR,
+        convertUnicode: true,
+        map: asciiFD_FR,
+      },
+      {
+        when: isEYOrFY,
+        map: asciiFD_EY,
+      },
     ],
   },
   {
@@ -50,8 +70,16 @@ export const ASCII_PAGE_DEFINITIONS = [
     base: asciiFE,
     convertUnicode: true,
     patches: [
-      { map: asciiFE_JP, when: isJapanese, convertUnicode: true },
-      { map: asciiFE_FY, when: isEYOrFY, convertUnicode: true },
+      {
+        when: isJP,
+        convertUnicode: true,
+        map: asciiFE_JP,
+      },
+      {
+        when: isEYOrFY,
+        convertUnicode: true,
+        map: asciiFE_FY,
+      },
     ],
   },
 ];

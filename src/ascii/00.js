@@ -111,7 +111,7 @@ export const ascii00 = {
   "B9": ["\\hat{y}", "ŷ"],
   "BA": ["\\hat{x}_1", "x̂₁"],
   "BB": ["\\hat{x}_2", "x̂₂"],
-  "C0": "-",
+  "C0": ["\\text{-}", "-"],
   "C1": roman("b"),
   "C2": roman("o"),
   "C3": roman("d"),
@@ -171,7 +171,7 @@ export const ascii00_DECIMAL_MARK_COMMA = {
 
 export const ascii00_FR = {
   "41": roman("Rép"),
-  "4A": roman("Pré−Rép"),
+  "4A": ["\\mathrm{Pré\\text{-}Rép}", "Pré-Rép"],
   "83": romanCall("Ent"),
   "84": romanCall("EntEx"),
   "88": romanCall("PGCD"),

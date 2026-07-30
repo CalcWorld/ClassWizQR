@@ -70,3 +70,53 @@ export function BackIcon() {
     </svg>
   );
 }
+
+export function HistoryIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M3 12a9 9 0 1 0 3-6.7"/>
+      <path d="M3 4v5h5M12 7v5l3 2"/>
+    </svg>
+  );
+}
+
+export function EditIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m4 20 4.2-1 10.6-10.6a2 2 0 0 0-2.8-2.8L5.4 16.2 4 20Z"/>
+      <path d="m14.5 7.1 2.8 2.8"/>
+    </svg>
+  );
+}
+
+export function DeleteIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/>
+    </svg>
+  );
+}
+
+export function ImportIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 3v12M7 10l5 5 5-5M5 20h14"/>
+    </svg>
+  );
+}
+
+export function ExportIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 16V4M7 9l5-5 5 5M5 20h14"/>
+    </svg>
+  );
+}
+
+export function CheckIcon() {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <path d="m5 12 4 4L19 6"/>
+    </svg>
+  );
+}

@@ -8,14 +8,25 @@ import CalculationView from './CalculationView.jsx';
 import ImageProcessingDialog from './ImageProcessingDialog.jsx';
 import ImageSequenceDialog from './ImageSequenceDialog.jsx';
 import JsonResult from './JsonResult.jsx';
+import HistoryDialog from './HistoryDialog.jsx';
 import MessageDialog from './MessageDialog.jsx';
 import ResultPanel from './ResultPanel.jsx';
-import { CameraIcon, ClearIcon, ClipboardIcon, CopyIcon, FileImageIcon, ParseIcon, ScreenIcon, } from './Icons.jsx';
+import {
+  CameraIcon,
+  ClearIcon,
+  ClipboardIcon,
+  CopyIcon,
+  FileImageIcon,
+  HistoryIcon,
+  ParseIcon,
+  ScreenIcon,
+} from './Icons.jsx';
 import SettingsView from './SettingsView.jsx';
 import { addQrImageResults, createEmptyImageSequenceSession, } from '../../scripts/qrImageSequence.js';
 import { filterValidQrResults, resolveInitialQrResults, } from '../../scripts/qrMultiResult.js';
 import { createQrPreviewUrl, prepareQrImage, } from '../../scripts/qrPreview.js';
 import { MULTI_QR_LIMIT, readQrCodes } from '../../scripts/qrReader.js';
+import { parseHistoryRepository } from '../../scripts/parseHistory.js';
 
 const EMPTY_RESULT = {};
 const LANGUAGE_OPTIONS = cwqr.availableLanguages.map(value => {
@@ -97,11 +108,15 @@ export default function ParserApp() {
   const [imageBusy, setImageBusy] = useState(false);
   const [imageProgress, setImageProgress] = useState(null);
   const [appMessage, setAppMessage] = useState(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [historyRecords, setHistoryRecords] = useState([]);
+  const [historyBusy, setHistoryBusy] = useState(false);
   const urlInputRef = useRef(null);
   const fileInputRef = useRef(null);
   const baseTitleRef = useRef('');
   const screenTitleStatusRef = useRef(null);
   const imageBusyRef = useRef(false);
+  const lastRecordedUrlRef = useRef('');
 
   const t = useCallback(
     (tag, params) => translate(tag, language, params),
@@ -134,6 +149,18 @@ export default function ParserApp() {
 
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    parseHistoryRepository.list()
+      .then(records => {
+        if (!cancelled) setHistoryRecords(records);
+      })
+      .catch(error => console.error(error));
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -200,18 +227,35 @@ export default function ParserApp() {
   useEffect(() => {
     if (!initialized || !languageReady) return;
 
+    const shouldRecord = Boolean(activeUrl)
+      && lastRecordedUrlRef.current !== activeUrl;
     let nextResult = EMPTY_RESULT;
+    let parsed = false;
     if (activeUrl) {
       try {
         nextResult = cwqr.parseUrl(activeUrl, language, resources);
+        parsed = Boolean(nextResult.mode || nextResult.model?.id);
       } catch (error) {
         console.error(error);
       }
+    } else {
+      lastRecordedUrlRef.current = '';
     }
 
     setResult(nextResult);
     setEditorValue(cloneResult(nextResult));
     setRenderVersion(version => version + 1);
+
+    if (shouldRecord) lastRecordedUrlRef.current = activeUrl;
+    if (parsed && shouldRecord) {
+      parseHistoryRepository.upsert(activeUrl, {
+        model: nextResult.model?.name || '',
+        mode: nextResult.mode?.mainName || '',
+        subMode: nextResult.mode?.subName || '',
+      }).then(() => parseHistoryRepository.list())
+        .then(setHistoryRecords)
+        .catch(error => console.error(error));
+    }
   }, [activeUrl, initialized, language, languageReady, resources]);
 
   const downloads = useMemo(() => {
@@ -551,6 +595,52 @@ export default function ParserApp() {
     download(`${payload.prefix}-${Date.now()}.csv`, content, 'text/csv;charset=utf-8');
   }
 
+  async function runHistoryTask(task) {
+    setHistoryBusy(true);
+    try {
+      await task();
+      setHistoryRecords(await parseHistoryRepository.list());
+      return true;
+    } catch (error) {
+      console.error(error);
+      setAppMessage({
+        title: t('history-error-title'),
+        body: t('history-error-body'),
+      });
+      return false;
+    } finally {
+      setHistoryBusy(false);
+    }
+  }
+
+  function selectHistoryUrl(url) {
+    setHistoryOpen(false);
+    commitUrl(url);
+  }
+
+  async function importHistory(text) {
+    await runHistoryTask(async () => {
+      const { skipped } = await parseHistoryRepository.importJson(text);
+      setAppMessage({
+        title: t('history-import-success-title'),
+        body: skipped
+          ? t('history-import-success-skipped', { count: skipped })
+          : t('history-import-success'),
+      });
+    });
+  }
+
+  async function exportHistory() {
+    await runHistoryTask(async () => {
+      const content = await parseHistoryRepository.exportJson();
+      download(
+        `classwiz-qr-history-${Date.now()}.json`,
+        content,
+        'application/json;charset=utf-8',
+      );
+    });
+  }
+
   return (
     <div
       id="app"
@@ -612,7 +702,17 @@ export default function ParserApp() {
         )}
         {!hideUrl && (
           <div class="form-field url-field">
-            <label for="qrUrl">{t('qr-url-label')}</label>
+            <div class="url-field-heading">
+              <label for="qrUrl">{t('qr-url-label')}</label>
+              <button
+                class="history-open-button"
+                type="button"
+                onClick={() => setHistoryOpen(true)}
+              >
+                <HistoryIcon/>
+                <span>{t('history-title')}</span>
+              </button>
+            </div>
             <div class="url-input-shell" onFocusOut={handleUrlControlFocusOut}>
               <textarea
                 ref={urlInputRef}
@@ -711,6 +811,22 @@ export default function ParserApp() {
         onContinue={imageSession?.source === 'clipboard' ? readClipboard : openFilePicker}
       />
       <ImageProcessingDialog progress={imageProgress} t={t}/>
+      <HistoryDialog
+        open={historyOpen}
+        records={historyRecords}
+        language={language}
+        busy={historyBusy}
+        t={t}
+        onClose={() => setHistoryOpen(false)}
+        onSelect={selectHistoryUrl}
+        onUpdateNote={(url, note) => runHistoryTask(
+          () => parseHistoryRepository.updateNote(url, note),
+        )}
+        onDelete={url => runHistoryTask(() => parseHistoryRepository.remove(url))}
+        onClear={() => runHistoryTask(() => parseHistoryRepository.clear())}
+        onImport={importHistory}
+        onExport={exportHistory}
+      />
       <MessageDialog
         open={Boolean(appMessage)}
         title={appMessage?.title || ''}

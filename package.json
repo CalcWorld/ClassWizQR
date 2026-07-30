@@ -77,6 +77,7 @@
     "csv-parse": "^6.1.0",
     "csv-stringify": "^6.6.0",
     "jsoneditor": "10.1.2",
+    "localforage": "^1.10.0",
     "mathjax": "2.7.9",
     "patch-package": "^8.0.1",
     "preact": "^10.29.7",

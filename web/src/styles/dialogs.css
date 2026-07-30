@@ -1,0 +1,165 @@
+html:has(.camera-scanner-dialog[open]),
+html:has(.message-dialog[open]),
+html:has(.history-dialog[open]) {
+    overflow: hidden;
+    overscroll-behavior: none;
+}
+
+html:has(.camera-scanner-dialog[open]) body,
+html:has(.message-dialog[open]) body,
+html:has(.history-dialog[open]) body {
+    overflow: hidden;
+}
+
+.camera-scanner-dialog,
+.message-dialog,
+.history-dialog {
+    margin: auto;
+    border: 0;
+    color: var(--text);
+    background: var(--surface);
+    box-shadow: 0 24px 80px rgba(0, 0, 0, .38);
+}
+
+.camera-scanner-dialog::backdrop,
+.message-dialog::backdrop,
+.history-dialog::backdrop {
+    background: rgba(20, 25, 30, .5);
+}
+
+.camera-scanner-dialog::backdrop,
+.history-dialog::backdrop {
+    backdrop-filter: blur(7px);
+}
+
+.camera-scanner-shell,
+.history-dialog-shell {
+    display: flex;
+    height: 100%;
+    min-height: 0;
+    flex-direction: column;
+}
+
+.camera-scanner-header,
+.history-dialog-header {
+    display: grid;
+    min-height: 58px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    gap: 12px;
+}
+
+.camera-scanner-header > strong,
+.history-dialog-header h2 {
+    overflow: hidden;
+    font-size: 1rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.camera-back-button,
+.history-icon-button {
+    display: inline-grid;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: var(--text);
+    background: transparent;
+    cursor: pointer;
+    place-items: center;
+}
+
+.camera-back-button:hover,
+.camera-back-button:focus-visible,
+.history-icon-button:hover,
+.history-icon-button:focus-visible {
+    background: var(--accent-soft);
+}
+
+.camera-back-button:focus-visible,
+.history-icon-button:focus-visible {
+    outline: 3px solid rgba(86, 122, 157, .24);
+}
+
+.camera-back-button svg,
+.history-icon-button svg {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+}
+
+.message-dialog {
+    width: min(430px, calc(100vw - 32px));
+    max-width: none;
+    padding: 0;
+    border-radius: 8px;
+}
+
+.message-dialog-content {
+    padding: 22px;
+}
+
+.message-dialog h2 {
+    margin: 0 0 10px;
+    font-size: 1.15rem;
+}
+
+.message-dialog-body {
+    color: var(--text-muted);
+    white-space: pre-wrap;
+}
+
+.message-dialog-actions {
+    display: flex;
+    margin-top: 22px;
+    justify-content: flex-end;
+}
+
+.message-dialog-confirm {
+    min-width: 88px;
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+    background: var(--accent);
+}
+
+.message-dialog-confirm:hover {
+    border-color: var(--accent-hover);
+    background: var(--accent-hover);
+}
+
+.image-processing-dialog {
+    width: min(360px, calc(100vw - 32px));
+}
+
+.image-processing-content {
+    display: flex;
+    padding: 24px;
+    align-items: center;
+    gap: 16px;
+}
+
+.image-processing-content h2 {
+    margin: 0 0 4px;
+}
+
+.image-processing-content [role="status"] {
+    color: var(--text-muted);
+}
+
+@media (max-width: 600px) {
+    .history-dialog {
+        width: 100vw;
+        height: 100dvh;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .history-dialog-header {
+        padding-top: max(8px, env(safe-area-inset-top));
+    }
+}

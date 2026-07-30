@@ -143,7 +143,7 @@ export const ascii00 = {
   "E5": ["\\textbf{n}", "𝐧"],
   "E6": ["\\textbf{p}", "𝐩"],
   "E7": ["\\textbf{f}", "𝐟"],
-  "E9": ["\\blacktriangleright \\mathrm{Simp}", "▶Simp"],
+  "E9": ["\\blacktriangleright \\mathrm{Simp} \\ ", "▶Simp "],
 };
 
 export const ascii00_EY = {

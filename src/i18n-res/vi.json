@@ -215,13 +215,6 @@
       "name": "Ngôn ngữ"
     }
   },
-  "graph": {
-    "RESERVED_VALUE": "Giá trị dự phòng",
-    "ENABLED": {
-      "0": "Tắt",
-      "1": "Bật"
-    }
-  },
   "input": {
     "DISTRIBUTION": {
       "0241": "Ldưới=${0}",
@@ -244,6 +237,13 @@
       "2": "Vô nghiệm",
       "4": "Vô nghiệm",
       "5": "Không có CĐ/CT"
+    }
+  },
+  "graph": {
+    "RESERVED_VALUE": "Giá trị dự phòng",
+    "ENABLED": {
+      "0": "Tắt",
+      "1": "Bật"
     }
   }
 }

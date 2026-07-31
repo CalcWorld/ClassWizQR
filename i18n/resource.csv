@@ -198,11 +198,6 @@ setup.ALGORITHM_UNIT_SETTING.0,pixels,像素,pixel,pixels
 setup.ALGORITHM_UNIT_SETTING.1,units,×10像素,đơn vị,unités
 setup.ALGORITHM_UNIT_SETTING.name,Algorithm: Unit Setting,算法：移动单位设置,Thuật toán: Cài đặt đơn vị,Algo : Réglage unité
 setup.LANGUAGE.name,Language,语言,Ngôn ngữ,Langue
-graph.FX_ENABLED.name,f(x),,,
-graph.GX_ENABLED.name,g(x),,,
-graph.RESERVED_VALUE,Reserved Value,保留值,Giá trị dự phòng,Valeur réservée
-graph.ENABLED.0,Disabled,禁用,Tắt,Désactivé
-graph.ENABLED.1,Enabled,启用,Bật,Activé
 input.DISTRIBUTION.0241,Lower=${0},下限=${0},Ldưới=${0},Limite inférieure=${0}
 input.DISTRIBUTION.0242,Upper=${1},上限=${1},Ltrên=${1},Limite supérieure=${1}
 input.DISTRIBUTION.0331,Area=${0},区域=${0},Vùng=${0},Aire=${0}
@@ -270,3 +265,8 @@ algo.scratch.F918,else,,,
 algo.scratch.F919,end,,,
 algo.scratch.value,value?,输入值?,,valeur?
 algo.scratch.any,any,任意,,n'importe laquelle
+graph.FX_ENABLED.name,f(x),,,
+graph.GX_ENABLED.name,g(x),,,
+graph.RESERVED_VALUE,Reserved Value,保留值,Giá trị dự phòng,Valeur réservée
+graph.ENABLED.0,Disabled,禁用,Tắt,Désactivé
+graph.ENABLED.1,Enabled,启用,Bật,Activé

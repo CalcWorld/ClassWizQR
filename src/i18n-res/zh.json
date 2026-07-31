@@ -215,13 +215,6 @@
       "name": "语言"
     }
   },
-  "graph": {
-    "RESERVED_VALUE": "保留值",
-    "ENABLED": {
-      "0": "禁用",
-      "1": "启用"
-    }
-  },
   "input": {
     "DISTRIBUTION": {
       "0241": "下限=${0}",
@@ -278,6 +271,13 @@
     "scratch": {
       "value": "输入值?",
       "any": "任意"
+    }
+  },
+  "graph": {
+    "RESERVED_VALUE": "保留值",
+    "ENABLED": {
+      "0": "禁用",
+      "1": "启用"
     }
   }
 }

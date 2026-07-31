@@ -215,13 +215,6 @@
       "name": "Langue"
     }
   },
-  "graph": {
-    "RESERVED_VALUE": "Valeur réservée",
-    "ENABLED": {
-      "0": "Désactivé",
-      "1": "Activé"
-    }
-  },
   "input": {
     "DISTRIBUTION": {
       "0241": "Limite inférieure=${0}",
@@ -278,6 +271,13 @@
     "scratch": {
       "value": "valeur?",
       "any": "n'importe laquelle"
+    }
+  },
+  "graph": {
+    "RESERVED_VALUE": "Valeur réservée",
+    "ENABLED": {
+      "0": "Désactivé",
+      "1": "Activé"
     }
   }
 }

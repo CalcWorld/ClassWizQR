@@ -24,7 +24,7 @@ export const ParseGraph = ({ W }) => {
 
     const reservedIndex = index - 1;
     return {
-      name: `${tt('graph.RESERVED_VALUE')}${reservedIndex}`,
+      name: `${tt('graph.RESERVED_VALUE')} ${reservedIndex}`,
       value: code,
       type: `RESERVED_VALUE_${reservedIndex}`,
       code,

@@ -144,13 +144,13 @@ const cases = [
           "code": "1"
         },
         {
-          "name": "Reserved Value1",
+          "name": "Reserved Value 1",
           "value": "0",
           "type": "RESERVED_VALUE_1",
           "code": "0"
         },
         {
-          "name": "Reserved Value2",
+          "name": "Reserved Value 2",
           "value": "0",
           "type": "RESERVED_VALUE_2",
           "code": "0"
@@ -338,13 +338,13 @@ const cases = [
           "code": "0"
         },
         {
-          "name": "Reserved Value1",
+          "name": "Reserved Value 1",
           "value": "0",
           "type": "RESERVED_VALUE_1",
           "code": "0"
         },
         {
-          "name": "Reserved Value2",
+          "name": "Reserved Value 2",
           "value": "0",
           "type": "RESERVED_VALUE_2",
           "code": "0"
@@ -490,13 +490,13 @@ const cases = [
           "code": "1"
         },
         {
-          "name": "Reserved Value1",
+          "name": "Reserved Value 1",
           "value": "0",
           "type": "RESERVED_VALUE_1",
           "code": "0"
         },
         {
-          "name": "Reserved Value2",
+          "name": "Reserved Value 2",
           "value": "0",
           "type": "RESERVED_VALUE_2",
           "code": "0"
@@ -518,8 +518,8 @@ test('Graph metadata is localized', () => {
     [
       { name: 'f(x)', value: '启用' },
       { name: 'g(x)', value: '启用' },
-      { name: '保留值1', value: '0' },
-      { name: '保留值2', value: '0' },
+      { name: '保留值 1', value: '0' },
+      { name: '保留值 2', value: '0' },
     ],
   );
 });
@@ -543,19 +543,19 @@ test('Graph metadata creates reserved values dynamically', () => {
   );
   assert.deepEqual(parse(url).graph.slice(2), [
     {
-      name: 'Reserved Value1',
+      name: 'Reserved Value 1',
       value: '2',
       type: 'RESERVED_VALUE_1',
       code: '2',
     },
     {
-      name: 'Reserved Value2',
+      name: 'Reserved Value 2',
       value: '3',
       type: 'RESERVED_VALUE_2',
       code: '3',
     },
     {
-      name: 'Reserved Value3',
+      name: 'Reserved Value 3',
       value: '1',
       type: 'RESERVED_VALUE_3',
       code: '1',

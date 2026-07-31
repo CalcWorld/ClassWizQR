@@ -26,7 +26,7 @@ export default function ImageSequenceDialog(
   return (
     <dialog
       ref={dialogRef}
-      class="camera-scanner-dialog image-sequence-dialog"
+      class="app-panel-dialog camera-scanner-dialog image-sequence-dialog"
       aria-label={title}
       onCancel={event => {
         event.preventDefault();

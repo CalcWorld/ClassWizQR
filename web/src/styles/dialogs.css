@@ -1,19 +1,16 @@
-html:has(.camera-scanner-dialog[open]),
-html:has(.message-dialog[open]),
-html:has(.history-dialog[open]) {
+html:has(.app-panel-dialog[open]),
+html:has(.message-dialog[open]) {
     overflow: hidden;
     overscroll-behavior: none;
 }
 
-html:has(.camera-scanner-dialog[open]) body,
-html:has(.message-dialog[open]) body,
-html:has(.history-dialog[open]) body {
+html:has(.app-panel-dialog[open]) body,
+html:has(.message-dialog[open]) body {
     overflow: hidden;
 }
 
-.camera-scanner-dialog,
-.message-dialog,
-.history-dialog {
+.app-panel-dialog,
+.message-dialog {
     margin: auto;
     border: 0;
     color: var(--text);
@@ -21,15 +18,23 @@ html:has(.history-dialog[open]) body {
     box-shadow: 0 24px 80px rgba(0, 0, 0, .38);
 }
 
-.camera-scanner-dialog::backdrop,
-.message-dialog::backdrop,
-.history-dialog::backdrop {
+.app-panel-dialog::backdrop,
+.message-dialog::backdrop {
     background: rgba(20, 25, 30, .5);
 }
 
-.camera-scanner-dialog::backdrop,
-.history-dialog::backdrop {
+.app-panel-dialog::backdrop {
     backdrop-filter: blur(7px);
+}
+
+.app-panel-dialog {
+    width: min(820px, calc(100vw - 32px));
+    height: min(860px, calc(100dvh - 32px));
+    max-width: none;
+    max-height: none;
+    padding: 0;
+    overflow: hidden;
+    border-radius: 8px;
 }
 
 .camera-scanner-shell,
@@ -149,4 +154,18 @@ html:has(.history-dialog[open]) body {
 
 .image-processing-content [role="status"] {
     color: var(--text-muted);
+}
+
+@media (max-width: 600px) {
+    .app-panel-dialog {
+        width: 100vw;
+        height: 100dvh;
+        margin: 0;
+        border-radius: 0;
+    }
+
+    .camera-scanner-header,
+    .history-dialog-header {
+        padding-top: max(8px, env(safe-area-inset-top));
+    }
 }

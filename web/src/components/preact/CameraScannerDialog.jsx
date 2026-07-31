@@ -458,7 +458,7 @@ export default function CameraScannerDialog(
     <>
       <dialog
         ref={dialogRef}
-        class="camera-scanner-dialog"
+        class="app-panel-dialog camera-scanner-dialog"
         aria-label={mode === 'screen' ? t('screen-scanner-title') : t('camera-title')}
         onCancel={event => {
           event.preventDefault();

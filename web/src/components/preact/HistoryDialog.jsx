@@ -90,7 +90,7 @@ export default function HistoryDialog({
   return (
     <dialog
       ref={dialogRef}
-      class="history-dialog"
+      class="app-panel-dialog history-dialog"
       aria-labelledby={titleId}
       onCancel={event => {
         event.preventDefault();

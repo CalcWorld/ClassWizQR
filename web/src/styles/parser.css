@@ -445,16 +445,6 @@ pre {
     font-size: .875rem;
 }
 
-.history-dialog {
-    width: min(820px, calc(100vw - 32px));
-    height: min(820px, calc(100dvh - 32px));
-    max-width: none;
-    max-height: none;
-    padding: 0;
-    overflow: hidden;
-    border-radius: 8px;
-}
-
 .history-dialog-header {
     flex: 0 0 auto;
     grid-template-columns: 40px minmax(0, 1fr) auto;
@@ -688,14 +678,4 @@ pre {
         grid-row: auto;
     }
 
-    .history-dialog {
-        width: 100vw;
-        height: 100dvh;
-        margin: 0;
-        border-radius: 0;
-    }
-
-    .history-dialog-header {
-        padding-top: max(8px, env(safe-area-inset-top));
-    }
 }

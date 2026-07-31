@@ -172,6 +172,9 @@ export const ascii00_DECIMAL_MARK_COMMA = {
 export const ascii00_FR = {
   "41": roman("Rép"),
   "4A": ["\\mathrm{Pré\\text{-}Rép}", "Pré-Rép"],
+  "7A": romanCall("Arcsin"),
+  "7B": romanCall("Arccos"),
+  "7C": romanCall("Arctan"),
   "83": romanCall("Ent"),
   "84": romanCall("EntEx"),
   "88": romanCall("PGCD"),
@@ -182,6 +185,10 @@ export const ascii00_FR = {
 
 export const ascii00_FR_EY = {
   "40": roman("Rép"),
+  "4A": ["\\mathrm{Pré\\text{-}Rép}", "Pré-Rép"],
+  "7A": ["\\sin^{-1}(", "sin⁻¹("],
+  "7B": ["\\cos^{-1}(", "cos⁻¹("],
+  "7C": ["\\tan^{-1}(", "tan⁻¹("],
 };
 
 export const ascii00_SP = {

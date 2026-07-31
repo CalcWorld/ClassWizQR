@@ -1234,7 +1234,7 @@ const asciiExpressionCases = [
   {
     name: 'Calculate French FY ASCII expression',
     url: 'http://wes.casio.com/ncal/index.php?q=I-506A+U-000000000000+M-C10000AD00+S-400410111000000E0010B0007135+Q-06700000000000000000000001010000000000000000000000000000+E-41A64AA68331D0A68432D0A688332C36D0A689352C3535D0A68A322E332C30D0A639AA32A642434445464740',
-    expression: '\\mathrm{A} + \\mathrm{PreAns} + \\mathrm{Ent}( 1 ) + \\mathrm{EntEx}( 2 ) + \\mathrm{PGCD}( 3 ; 6 ) + \\mathrm{PPCM}( 5 ; 5 5 ) + \\mathrm{Arond}( 2 , 3 ; 0 ) + 9 ├ 2 + \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x \\mathrm{Rép}',
+    expression: '\\mathrm{A} + \\mathrm{Pré\\text{-}Rép} + \\mathrm{Ent}( 1 ) + \\mathrm{EntEx}( 2 ) + \\mathrm{PGCD}( 3 ; 6 ) + \\mathrm{PPCM}( 5 ; 5 5 ) + \\mathrm{Arond}( 2 , 3 ; 0 ) + 9 ├ 2 + \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x \\mathrm{Rép}',
   },
   {
     name: 'Calculate Japanese EY ASCII expression',
@@ -1290,6 +1290,26 @@ const asciiExpressionCases = [
     name: 'Calculate RS hyperbolic ASCII expression',
     url: 'http://wes.casio.com/math/index.php?q=I-217A+U-000000000000+M-C10000A000+S-000400100000100E1010B0004E46+R-0999999999999981009900000000000000000000+E-6F70716E6D6C31',
     expression: '\\mathrm{Arcsinh}( \\mathrm{Arccosh}( \\mathrm{Arctgh}( \\mathrm{tgh}( \\cosh( \\sinh( 1',
+  },
+  {
+    name: 'Calculate French CY trigonometric ASCII expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-295A+U-000000000000+M-C10000AD00+S-000410110000100E0010B0006D13+R-0900000000733338010000000000000000000000+E-7A7B7C79787739',
+    expression: '\\mathrm{Arcsin}( \\mathrm{Arccos}( \\mathrm{Arctan}( \\tan( \\cos( \\sin( 9',
+  },
+  {
+    name: 'Calculate French CY variable ASCII expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-295A+U-000000000000+M-C10000AD00+S-000410110000100E0010B0006D13+R-0000000000000000000000000000000000000000+E-404142434445464748494A',
+    expression: '\\mathrm{M} \\mathrm{Rép} \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y \\mathrm{Pré\\text{-}Rép}',
+  },
+  {
+    name: 'Calculate French EY trigonometric ASCII expression',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-006A+U-000000000000+M-C10000AD00+S-000410110000000E0010B0002C6A+Q-09000000000000000007552801000000000000000000000000000000+E-7A7B7C79787739',
+    expression: '\\sin^{-1}( \\cos^{-1}( \\tan^{-1}( \\tan( \\cos( \\sin( 9',
+  },
+  {
+    name: 'Calculate French EY variable ASCII expression',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-006A+U-000000000000+M-C10000AD00+S-000410110000000E0010B0002C6A+Q-00000000000000000000000000000000000000000000000000000000+E-404142434445464748494A',
+    expression: '\\mathrm{Rép} \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\mathrm{Pré\\text{-}Rép}',
   },
 ];
 

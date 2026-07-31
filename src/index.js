@@ -194,7 +194,7 @@ export class ClassWizQR {
       setup = parseS.parseAll(modelType);
     }
 
-    let expression, expressionE, expressionG, _function, algorithm, graph;
+    let expression, expressionE, expressionG, _function, algorithm;
     let sequence, _sequenceDef;
     if (kv.E) {
       if (_mainMode === '0E') {
@@ -229,9 +229,6 @@ export class ClassWizQR {
       ];
     } else {
       expression = expressionE;
-    }
-    if (_mainMode === '09' && kv.W) {
-      graph = ParseGraph(kv);
     }
 
     let tableRange;
@@ -313,6 +310,12 @@ export class ClassWizQR {
       } else {
         statistic = ParseStatistic(kv);
       }
+    }
+
+    // Graph mode setting
+    let graph;
+    if (_mainMode === '09' && kv.W) {
+      graph = ParseGraph(kv);
     }
 
     return {

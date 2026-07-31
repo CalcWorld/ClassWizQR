@@ -216,12 +216,7 @@
     }
   },
   "graph": {
-    "FX_ENABLED": {
-      "name": "f(x)"
-    },
-    "GX_ENABLED": {
-      "name": "g(x)"
-    },
+    "RESERVED_VALUE": "Valeur réservée",
     "ENABLED": {
       "0": "Désactivé",
       "1": "Activé"

@@ -142,6 +142,18 @@ const cases = [
           "value": "Enabled",
           "type": "GX_ENABLED",
           "code": "1"
+        },
+        {
+          "name": "Reserved Value1",
+          "value": "0",
+          "type": "RESERVED_VALUE_1",
+          "code": "0"
+        },
+        {
+          "name": "Reserved Value2",
+          "value": "0",
+          "type": "RESERVED_VALUE_2",
+          "code": "0"
         }
       ],
       "variable": [
@@ -324,6 +336,18 @@ const cases = [
           "value": "Disabled",
           "type": "GX_ENABLED",
           "code": "0"
+        },
+        {
+          "name": "Reserved Value1",
+          "value": "0",
+          "type": "RESERVED_VALUE_1",
+          "code": "0"
+        },
+        {
+          "name": "Reserved Value2",
+          "value": "0",
+          "type": "RESERVED_VALUE_2",
+          "code": "0"
         }
       ]
     }
@@ -464,6 +488,18 @@ const cases = [
           "value": "Enabled",
           "type": "GX_ENABLED",
           "code": "1"
+        },
+        {
+          "name": "Reserved Value1",
+          "value": "0",
+          "type": "RESERVED_VALUE_1",
+          "code": "0"
+        },
+        {
+          "name": "Reserved Value2",
+          "value": "0",
+          "type": "RESERVED_VALUE_2",
+          "code": "0"
         }
       ]
     }
@@ -482,11 +518,47 @@ test('Graph metadata is localized', () => {
     [
       { name: 'f(x)', value: '启用' },
       { name: 'g(x)', value: '启用' },
+      { name: '保留值1', value: '0' },
+      { name: '保留值2', value: '0' },
     ],
   );
 });
 
-test('Graph metadata is omitted when W is not 36 characters', () => {
+test('Graph metadata parses every complete block available', () => {
   const url = cases[0].url.replace(/W-[^+]+/, 'W-100000100');
-  assert.equal(parse(url).graph, undefined);
+  assert.deepEqual(parse(url).graph, [
+    {
+      name: 'f(x)',
+      value: 'Enabled',
+      type: 'FX_ENABLED',
+      code: '1',
+    },
+  ]);
+});
+
+test('Graph metadata creates reserved values dynamically', () => {
+  const url = cases[0].url.replace(
+    /W-[^+]+/,
+    'W-100000100000000000200000100300000100100000100',
+  );
+  assert.deepEqual(parse(url).graph.slice(2), [
+    {
+      name: 'Reserved Value1',
+      value: '2',
+      type: 'RESERVED_VALUE_1',
+      code: '2',
+    },
+    {
+      name: 'Reserved Value2',
+      value: '3',
+      type: 'RESERVED_VALUE_2',
+      code: '3',
+    },
+    {
+      name: 'Reserved Value3',
+      value: '1',
+      type: 'RESERVED_VALUE_3',
+      code: '1',
+    },
+  ]);
 });

@@ -216,12 +216,7 @@
     }
   },
   "graph": {
-    "FX_ENABLED": {
-      "name": "f(x)"
-    },
-    "GX_ENABLED": {
-      "name": "g(x)"
-    },
+    "RESERVED_VALUE": "保留值",
     "ENABLED": {
       "0": "禁用",
       "1": "启用"

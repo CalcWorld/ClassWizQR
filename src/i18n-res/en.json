@@ -257,6 +257,7 @@
     "GX_ENABLED": {
       "name": "g(x)"
     },
+    "RESERVED_VALUE": "Reserved Value",
     "ENABLED": {
       "0": "Disabled",
       "1": "Enabled"

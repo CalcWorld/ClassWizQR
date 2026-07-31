@@ -216,12 +216,7 @@
     }
   },
   "graph": {
-    "FX_ENABLED": {
-      "name": "f(x)"
-    },
-    "GX_ENABLED": {
-      "name": "g(x)"
-    },
+    "RESERVED_VALUE": "Giá trị dự phòng",
     "ENABLED": {
       "0": "Tắt",
       "1": "Bật"

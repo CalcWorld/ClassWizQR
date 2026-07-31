@@ -32,6 +32,10 @@ class MemoryStorage {
     this.values.clear();
   }
 
+  async length() {
+    return this.values.size;
+  }
+
   async iterate(callback) {
     for (const [key, value] of this.values) callback(structuredClone(value), key);
   }
@@ -45,13 +49,11 @@ test('normalizes valid history records and rejects invalid URLs', () => {
   assert.deepEqual(
     normalizeHistoryRecord({
       url: ' https://example.com/qr ',
-      parsedAt: 100,
       note: ' note ',
     }, 200),
     {
       url: 'https://example.com/qr',
-      firstParsedAt: 100,
-      lastParsedAt: 100,
+      lastParsedAt: 200,
       note: 'note',
       summary: { model: '', mode: '', subMode: '' },
     },
@@ -77,7 +79,6 @@ test('upserts duplicate URLs without losing their note', async () => {
 
   assert.deepEqual(await repository.list(), [{
     url: 'https://example.com/one',
-    firstParsedAt: 100,
     lastParsedAt: 200,
     note: 'Practice',
     summary: { model: '', mode: 'Equation', subMode: '' },
@@ -151,7 +152,6 @@ test('rejects history files with an unsupported format', () => {
 test('exports data in a versioned format that can be imported again', () => {
   const text = serializeHistory([{
     url: 'https://example.com/exported',
-    firstParsedAt: 100,
     lastParsedAt: 200,
     note: 'Exported note',
     summary: { model: 'Model', mode: 'Mode', subMode: '' },

@@ -152,18 +152,6 @@ export default function ParserApp() {
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-    parseHistoryRepository.list()
-      .then(records => {
-        if (!cancelled) setHistoryRecords(records);
-      })
-      .catch(error => console.error(error));
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  useEffect(() => {
     baseTitleRef.current = document.title;
 
     function applyScreenTitle() {
@@ -252,9 +240,7 @@ export default function ParserApp() {
         model: nextResult.model?.name || '',
         mode: nextResult.mode?.mainName || '',
         subMode: nextResult.mode?.subName || '',
-      }).then(() => parseHistoryRepository.list())
-        .then(setHistoryRecords)
-        .catch(error => console.error(error));
+      }).catch(error => console.error(error));
     }
   }, [activeUrl, initialized, language, languageReady, resources]);
 
@@ -599,7 +585,6 @@ export default function ParserApp() {
     setHistoryBusy(true);
     try {
       await task();
-      setHistoryRecords(await parseHistoryRepository.list());
       return true;
     } catch (error) {
       console.error(error);
@@ -613,6 +598,20 @@ export default function ParserApp() {
     }
   }
 
+  function openHistory() {
+    setHistoryOpen(true);
+    runHistoryTask(async () => {
+      setHistoryRecords(await parseHistoryRepository.list());
+    });
+  }
+
+  function runHistoryMutation(task) {
+    return runHistoryTask(async () => {
+      await task();
+      setHistoryRecords(await parseHistoryRepository.list());
+    });
+  }
+
   function selectHistoryUrl(url) {
     setHistoryOpen(false);
     commitUrl(url);
@@ -620,7 +619,8 @@ export default function ParserApp() {
 
   async function importHistory(text) {
     await runHistoryTask(async () => {
-      const { skipped } = await parseHistoryRepository.importJson(text);
+      const { records, skipped } = await parseHistoryRepository.importJson(text);
+      setHistoryRecords(records);
       setAppMessage({
         title: t('history-import-success-title'),
         body: skipped
@@ -707,7 +707,7 @@ export default function ParserApp() {
               <button
                 class="history-open-button"
                 type="button"
-                onClick={() => setHistoryOpen(true)}
+                onClick={openHistory}
               >
                 <HistoryIcon/>
                 <span>{t('history-title')}</span>
@@ -819,11 +819,11 @@ export default function ParserApp() {
         t={t}
         onClose={() => setHistoryOpen(false)}
         onSelect={selectHistoryUrl}
-        onUpdateNote={(url, note) => runHistoryTask(
+        onUpdateNote={(url, note) => runHistoryMutation(
           () => parseHistoryRepository.updateNote(url, note),
         )}
-        onDelete={url => runHistoryTask(() => parseHistoryRepository.remove(url))}
-        onClear={() => runHistoryTask(() => parseHistoryRepository.clear())}
+        onDelete={url => runHistoryMutation(() => parseHistoryRepository.remove(url))}
+        onClear={() => runHistoryMutation(() => parseHistoryRepository.clear())}
         onImport={importHistory}
         onExport={exportHistory}
       />

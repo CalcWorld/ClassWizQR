@@ -3,8 +3,6 @@ import useModalDialog from '../../hooks/useModalDialog.js';
 import { MAX_HISTORY_ITEMS, MAX_HISTORY_NOTE_LENGTH, } from '../../scripts/parseHistory.js';
 import { BackIcon, CheckIcon, DeleteIcon, EditIcon, ExportIcon, ImportIcon, } from './Icons.jsx';
 
-const PAGE_SIZE = 50;
-
 function recordSearchText(record) {
   return [
     record.note,
@@ -43,7 +41,6 @@ export default function HistoryDialog({
   const noteInputRef = useRef(null);
   const titleId = useId();
   const [query, setQuery] = useState('');
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [editingUrl, setEditingUrl] = useState('');
   const [draftNote, setDraftNote] = useState('');
   const [confirmClear, setConfirmClear] = useState(false);
@@ -53,7 +50,6 @@ export default function HistoryDialog({
 
   useEffect(() => {
     if (!open) return;
-    setVisibleCount(PAGE_SIZE);
     setEditingUrl('');
     setConfirmClear(false);
     setConfirmDeleteUrl('');
@@ -126,10 +122,7 @@ export default function HistoryDialog({
             value={query}
             placeholder={t('history-search-placeholder')}
             aria-label={t('history-search-placeholder')}
-            onInput={event => {
-              setQuery(event.currentTarget.value);
-              setVisibleCount(PAGE_SIZE);
-            }}
+            onInput={event => setQuery(event.currentTarget.value)}
           />
           <input
             ref={importInputRef}
@@ -141,15 +134,7 @@ export default function HistoryDialog({
           />
         </div>
 
-        <div
-          class="history-list"
-          onScroll={event => {
-            const element = event.currentTarget;
-            if (element.scrollTop + element.clientHeight >= element.scrollHeight - 80) {
-              setVisibleCount(count => Math.min(count + PAGE_SIZE, filteredRecords.length));
-            }
-          }}
-        >
+        <div class="history-list">
           <div class="history-toolbar">
             <button
               class="form-button history-tool-button"
@@ -195,7 +180,7 @@ export default function HistoryDialog({
             </div>
           )}
 
-          {filteredRecords.slice(0, visibleCount).map(record => {
+          {filteredRecords.map(record => {
             const isEditing = editingUrl === record.url;
             const isConfirmingDelete = confirmDeleteUrl === record.url;
             const summary = recordSummaryText(record, t);

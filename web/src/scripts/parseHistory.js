@@ -52,19 +52,9 @@ export function normalizeHistoryRecord(value, now = Date.now()) {
   const url = normalizeUrl(value?.url);
   if (!url) return null;
 
-  const lastParsedAt = finiteTimestamp(
-    value.lastParsedAt ?? value.updatedAt ?? value.parsedAt,
-    now,
-  );
-  const firstParsedAt = Math.min(
-    finiteTimestamp(value.firstParsedAt ?? value.createdAt, lastParsedAt),
-    lastParsedAt,
-  );
-
   return {
     url,
-    firstParsedAt,
-    lastParsedAt,
+    lastParsedAt: finiteTimestamp(value.lastParsedAt, now),
     note: cleanText(value.note, MAX_HISTORY_NOTE_LENGTH),
     summary: normalizeSummary(value.summary),
   };
@@ -112,7 +102,7 @@ export function serializeHistory(records) {
     format: HISTORY_FORMAT,
     version: HISTORY_VERSION,
     exportedAt: new Date().toISOString(),
-    records: records.map(record => normalizeHistoryRecord(record)).filter(Boolean),
+    records,
   }, null, 2);
 }
 
@@ -123,7 +113,6 @@ function mergeRecords(current, incoming) {
 
   return {
     url: incoming.url,
-    firstParsedAt: Math.min(current.firstParsedAt, incoming.firstParsedAt),
     lastParsedAt: Math.max(current.lastParsedAt, incoming.lastParsedAt),
     note: newer.note || older.note,
     summary: {
@@ -158,7 +147,6 @@ export function createHistoryRepository(storage = historyStorage) {
     async upsert(url, summary, now = Date.now()) {
       const incoming = normalizeHistoryRecord({
         url,
-        firstParsedAt: now,
         lastParsedAt: now,
         summary,
       }, now);
@@ -168,7 +156,7 @@ export function createHistoryRepository(storage = historyStorage) {
       const current = normalizeHistoryRecord(await storage.getItem(key), now);
       const record = mergeRecords(current, incoming);
       await storage.setItem(key, record);
-      await trim();
+      if (await storage.length() > MAX_HISTORY_ITEMS) await trim();
       return record;
     },
 

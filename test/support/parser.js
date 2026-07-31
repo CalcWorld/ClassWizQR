@@ -9,6 +9,7 @@ const resources = { en, fr, vi, zh };
 export const semanticFields = [
   'expression',
   'function',
+  'graph',
   'equation',
   'tableRange',
   'result',

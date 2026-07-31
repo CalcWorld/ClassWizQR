@@ -215,6 +215,18 @@
       "name": "Ngôn ngữ"
     }
   },
+  "graph": {
+    "FX_ENABLED": {
+      "name": "f(x)"
+    },
+    "GX_ENABLED": {
+      "name": "g(x)"
+    },
+    "ENABLED": {
+      "0": "Tắt",
+      "1": "Bật"
+    }
+  },
   "input": {
     "DISTRIBUTION": {
       "0241": "Ldưới=${0}",

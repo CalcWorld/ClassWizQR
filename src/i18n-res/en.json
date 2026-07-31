@@ -250,6 +250,18 @@
       "name": "Language"
     }
   },
+  "graph": {
+    "FX_ENABLED": {
+      "name": "f(x)"
+    },
+    "GX_ENABLED": {
+      "name": "g(x)"
+    },
+    "ENABLED": {
+      "0": "Disabled",
+      "1": "Enabled"
+    }
+  },
   "input": {
     "DISTRIBUTION": {
       "0241": "Lower=${0}",

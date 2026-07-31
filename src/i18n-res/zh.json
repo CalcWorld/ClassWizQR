@@ -215,6 +215,18 @@
       "name": "语言"
     }
   },
+  "graph": {
+    "FX_ENABLED": {
+      "name": "f(x)"
+    },
+    "GX_ENABLED": {
+      "name": "g(x)"
+    },
+    "ENABLED": {
+      "0": "禁用",
+      "1": "启用"
+    }
+  },
   "input": {
     "DISTRIBUTION": {
       "0241": "下限=${0}",

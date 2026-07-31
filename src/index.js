@@ -12,6 +12,7 @@ import { ParseMathBox, ParseSequencesResult, ParseSpreadsheet, ParseStatistic } 
 import { ParseTableRange } from "./variable/P.js";
 import { ParseVariableList } from "./variable/V.js";
 import { ParseEquationResult, ParseInequalityResult, ParseNumberResult, ParseStatisticResult } from "./variable/R.js";
+import { ParseGraph } from "./variable/W.js";
 import { ParseSetup } from "./setup/index.js";
 import { availableLanguages, loadResource } from "./utils.js";
 import { ParseAlgorithm } from './algo/index.js';
@@ -76,6 +77,7 @@ export class ClassWizQR {
       P: void 0,
       V: void 0,
       Q: void 0,
+      W: void 0,
     };
     this.calcId = void 0;
     this.language = 'en';
@@ -192,7 +194,7 @@ export class ClassWizQR {
       setup = parseS.parseAll(modelType);
     }
 
-    let expression, expressionE, expressionG, _function, algorithm;
+    let expression, expressionE, expressionG, _function, algorithm, graph;
     let sequence, _sequenceDef;
     if (kv.E) {
       if (_mainMode === '0E') {
@@ -227,6 +229,9 @@ export class ClassWizQR {
       ];
     } else {
       expression = expressionE;
+    }
+    if (_mainMode === '09' && kv.W) {
+      graph = ParseGraph(kv);
     }
 
     let tableRange;
@@ -336,6 +341,7 @@ export class ClassWizQR {
       distribution,
       mathBox,
       algorithm,
+      graph,
       sequence,
       setup,
       kv,

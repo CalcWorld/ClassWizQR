@@ -47,6 +47,16 @@ function VariableList({ values, t }) {
   );
 }
 
+function GraphList({ values }) {
+  return (
+    <PreviewTable
+      rows={values.map(item => [item.name, item.value])}
+      className="preview-table"
+      transpose
+    />
+  );
+}
+
 function VectorMatrix({ id, title, values }) {
   return (
     <CalcSection id={id} title={title}>
@@ -81,6 +91,7 @@ export default function CalculationView({ result, language, renderVersion, t, on
     mathBox,
     algorithm,
     sequence,
+    graph,
   } = result;
   const hasContent = Boolean(
     expression || functions || equation || calculationResult || matrix || vector || spreadsheet
@@ -133,6 +144,12 @@ export default function CalculationView({ result, language, renderVersion, t, on
             {functions.map((item, index) => (
               <div class="content" key={index}><Latex display>{`${item.name}=${item.expression}`}</Latex></div>
             ))}
+            {graph && (
+              <>
+                <div class="title">{t('calc-graph')}</div>
+                <GraphList values={graph}/>
+              </>
+            )}
           </CalcSection>
         )}
 

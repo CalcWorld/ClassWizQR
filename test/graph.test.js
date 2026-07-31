@@ -117,6 +117,7 @@ const cases = [
       ],
       "semanticFields": [
         "function",
+        "graph",
         "variable"
       ],
       "function": [
@@ -127,6 +128,20 @@ const cases = [
         {
           "name": "g(x)",
           "expression": "\\mathrm{B} \\cos( x ) + \\mathrm{C}"
+        }
+      ],
+      "graph": [
+        {
+          "name": "f(x)",
+          "value": "Enabled",
+          "type": "FX_ENABLED",
+          "code": "1"
+        },
+        {
+          "name": "g(x)",
+          "value": "Enabled",
+          "type": "GX_ENABLED",
+          "code": "1"
         }
       ],
       "variable": [
@@ -284,7 +299,8 @@ const cases = [
         }
       ],
       "semanticFields": [
-        "function"
+        "function",
+        "graph"
       ],
       "function": [
         {
@@ -294,6 +310,20 @@ const cases = [
         {
           "name": "g(x)",
           "expression": ""
+        }
+      ],
+      "graph": [
+        {
+          "name": "f(x)",
+          "value": "Enabled",
+          "type": "FX_ENABLED",
+          "code": "1"
+        },
+        {
+          "name": "g(x)",
+          "value": "Disabled",
+          "type": "GX_ENABLED",
+          "code": "0"
         }
       ]
     }
@@ -409,7 +439,8 @@ const cases = [
         }
       ],
       "semanticFields": [
-        "function"
+        "function",
+        "graph"
       ],
       "function": [
         {
@@ -419,6 +450,20 @@ const cases = [
         {
           "name": "g(x)",
           "expression": "x ^{4}  + x ^{3}  + x ^{2}  + 2 x"
+        }
+      ],
+      "graph": [
+        {
+          "name": "f(x)",
+          "value": "Disabled",
+          "type": "FX_ENABLED",
+          "code": "0"
+        },
+        {
+          "name": "g(x)",
+          "value": "Enabled",
+          "type": "GX_ENABLED",
+          "code": "1"
         }
       ]
     }
@@ -430,3 +475,18 @@ for (const { name, url, expected } of cases) {
     assert.deepEqual(projectResult(parse(url)), expected);
   });
 }
+
+test('Graph metadata is localized', () => {
+  assert.deepEqual(
+    parse(cases[0].url, 'zh').graph.map(({ name, value }) => ({ name, value })),
+    [
+      { name: 'f(x)', value: '启用' },
+      { name: 'g(x)', value: '启用' },
+    ],
+  );
+});
+
+test('Graph metadata is omitted when W is not 36 characters', () => {
+  const url = cases[0].url.replace(/W-[^+]+/, 'W-100000100');
+  assert.equal(parse(url).graph, undefined);
+});

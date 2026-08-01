@@ -229,9 +229,10 @@ test('production service worker limits fetches and atomically reuses caches', as
   );
 });
 
-test('production service worker preserves clean HTML redirects', async () => {
+test('production service worker serves cached navigations and preserves clean HTML redirects', async () => {
   const caches = createCacheStorage();
   let online = true;
+  let navigationFetches = 0;
   const worker = loadWorker({
     caches,
     entries: [
@@ -241,9 +242,7 @@ test('production service worker preserves clean HTML redirects', async () => {
     fetch: async request => {
       if (!online) throw new TypeError('Network unavailable');
       const requestURL = new URL(request.url);
-      if (request.mode === 'navigate' && requestURL.pathname === '/api.html') {
-        return Response.redirect(`${origin}/source-rule`, 307);
-      }
+      if (request.mode === 'navigate') navigationFetches++;
       if (request.mode !== 'navigate' && requestURL.pathname.endsWith('.html')) {
         const finalPath = requestURL.pathname === '/index.html' ? '/' : '/api';
         const response = new Response(request.url);
@@ -268,12 +267,20 @@ test('production service worker preserves clean HTML redirects', async () => {
   assert.equal(cache.responses.has(`${origin}/api.html`), false);
   assert.equal(cache.responses.has(`${origin}/`), true);
 
-  const sourceRedirect = await worker.dispatchFetch(
+  const cachedRedirect = await worker.dispatchFetch(
     `${origin}/api.html?lang=zh`,
     'navigate',
   );
-  assert.equal(sourceRedirect.status, 307);
-  assert.equal(sourceRedirect.headers.get('Location'), `${origin}/source-rule`);
+  assert.equal(cachedRedirect.status, 308);
+  assert.equal(cachedRedirect.headers.get('Location'), `${origin}/api?lang=zh`);
+
+  const cachedPage = await worker.dispatchFetch(`${origin}/api`, 'navigate');
+  assert.equal(cachedPage.status, 200);
+  assert.equal(navigationFetches, 0, 'Cached navigations must not reach the network.');
+
+  const uncachedPage = await worker.dispatchFetch(`${origin}/uncached`, 'navigate');
+  assert.equal(uncachedPage.status, 200);
+  assert.equal(navigationFetches, 1, 'Uncached navigations must fall back to the network.');
 
   online = false;
   const updatedWorker = loadWorker({

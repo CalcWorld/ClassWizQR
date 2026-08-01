@@ -285,18 +285,13 @@ function recordedRedirect(requestURL, metadata) {
   return targetURL.href;
 }
 
-async function navigateNetworkFirst(request) {
-  try {
-    return await fetch(request);
-  } catch (error) {
-    const metadata = await precacheMetadata();
-    const redirectURL = recordedRedirect(request.url, metadata);
-    if (redirectURL) return Response.redirect(redirectURL, 308);
+async function navigateCacheFirst(request) {
+  const metadata = await precacheMetadata();
+  const redirectURL = recordedRedirect(request.url, metadata);
+  if (redirectURL) return Response.redirect(redirectURL, 308);
 
-    const cached = await matchPrecache(request.url, metadata);
-    if (cached) return cached;
-    throw error;
-  }
+  const cached = await matchPrecache(request.url, metadata);
+  return cached || fetch(request);
 }
 
 self.addEventListener('install', event => {
@@ -331,7 +326,7 @@ self.addEventListener('fetch', event => {
   if (requestURL.origin !== self.location.origin) return;
 
   if (event.request.mode === 'navigate') {
-    event.respondWith(navigateNetworkFirst(event.request));
+    event.respondWith(navigateCacheFirst(event.request));
     return;
   }
 

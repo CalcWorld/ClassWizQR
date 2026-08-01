@@ -11,16 +11,45 @@ html:has(.message-dialog[open]) body {
 
 .app-panel-dialog,
 .message-dialog {
+    --dialog-transition-duration: .18s;
+
     margin: auto;
     border: 0;
     color: var(--text);
     background: var(--surface);
     box-shadow: 0 24px 80px rgba(0, 0, 0, .38);
+    transition: opacity var(--dialog-transition-duration) ease,
+        scale var(--dialog-transition-duration) ease,
+        filter var(--dialog-transition-duration) ease,
+        display var(--dialog-transition-duration) ease allow-discrete,
+        overlay var(--dialog-transition-duration) ease allow-discrete;
+}
+
+.app-panel-dialog:not([open]),
+.message-dialog:not([open]) {
+    opacity: 0;
+    scale: 1.1;
+    filter: blur(6px);
+}
+
+.app-panel-dialog[open],
+.message-dialog[open] {
+    opacity: 1;
+    scale: 1;
+    filter: blur(0);
 }
 
 .app-panel-dialog::backdrop,
 .message-dialog::backdrop {
     background: rgba(20, 25, 30, .5);
+    opacity: 0;
+    transition: opacity var(--dialog-transition-duration) ease,
+        display var(--dialog-transition-duration) ease allow-discrete;
+}
+
+.app-panel-dialog[open]::backdrop,
+.message-dialog[open]::backdrop {
+    opacity: 1;
 }
 
 .app-panel-dialog::backdrop {
@@ -154,6 +183,20 @@ html:has(.message-dialog[open]) body {
 
 .image-processing-content [role="status"] {
     color: var(--text-muted);
+}
+
+@starting-style {
+    .app-panel-dialog[open],
+    .message-dialog[open] {
+        opacity: 0;
+        scale: 1.1;
+        filter: blur(6px);
+    }
+
+    .app-panel-dialog[open]::backdrop,
+    .message-dialog[open]::backdrop {
+        opacity: 0;
+    }
 }
 
 @media (max-width: 600px) {

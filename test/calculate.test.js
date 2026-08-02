@@ -1311,11 +1311,99 @@ const asciiExpressionCases = [
     url: 'http://wes.casio.com/ncal/index.php?q=I-006A+U-000000000000+M-C10000AD00+S-000410110000000E0010B0002C6A+Q-00000000000000000000000000000000000000000000000000000000+E-404142434445464748494A',
     expression: '\\mathrm{Rép} \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\mathrm{Pré\\text{-}Rép}',
   },
+  {
+    name: 'Calculate French EY-091 variable ASCII expression',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-C10000AD00+S-401410111000000E1010B0004753+Q-00000000000000000000000000000000000000000000000000000000+E-404142434445464748494A4B4C',
+    expression: '\\mathrm{Rép} \\mathrm{A} \\mathrm{B} \\mathrm{C} \\mathrm{D} \\mathrm{E} \\mathrm{F} x y z \\mathrm{Pré\\text{-}Rép} \\theta \\mathrm{S}',
+  },
 ];
 
 for (const { name, url, expression } of asciiExpressionCases) {
   test(name, () => {
     assert.equal(parse(url).expression, expression);
+  });
+}
+
+const numberResultCases = [
+  {
+    name: 'Calculate CY-295 quotient and remainder labels',
+    url: 'http://wes.casio.com/math/index.php?q=I-295A+U-000000000000+M-C10014AD00+S-000410110000100E0010B0003C86+R-0100000000000000010002000000000000000100+E-38AA36',
+    expression: '8 ├ 6',
+    latex: 'Q=1;R=2',
+  },
+  {
+    name: 'Calculate EY-006 quotient and remainder labels',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-006A+U-000000000000+M-C10014AD00+S-000410110000000E0010B0005250+Q-01000000000000000000000001000200000000000000000000000100+E-38AA36',
+    expression: '8 ├ 6',
+    latex: 'Q=1;R=2',
+  },
+  {
+    name: 'Calculate CY-247 quotient and remainder labels',
+    url: 'http://wes.casio.com/math/index.php?q=I-247A+U-000000000000+M-C10014AD00+S-000410110000100E0000B00071F7+R-0100000000000000010002000000000000000100+E-38AA36',
+    expression: '8 \\div \\mathrm{R} 6',
+    latex: 'Q=1;R=2',
+  },
+  {
+    name: 'Calculate EY-007 quotient and remainder labels',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-007A+U-000000000000+M-C10014AD00+S-000410110000000E0010B0005965+Q-01000000000000000000000001000200000000000000000000000100+E-38AA36',
+    expression: '8 \\div \\mathrm{R} 6',
+    latex: 'Q=1;R=2',
+  },
+  {
+    name: 'Calculate EY-091 quotient and remainder labels',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-C10014AD00+S-401410111000000E1010B000D202+Q-01000000000000000000000001000200000000000000000000000100+E-38AA36',
+    expression: '8 ├ 6',
+    latex: 'Q=1,R=2',
+  },
+  {
+    name: 'Calculate EY-090 quotient and remainder labels',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-090A+U-000000000000+M-C10014AD00+S-001410110000000E1010B000EECB+Q-01000000000000000000000001000200000000000000000000000100+E-38AA36',
+    expression: '8 ├ 6',
+    latex: 'Q=1,R=2',
+  },
+  {
+    name: 'Calculate FY-506 quotient and remainder labels',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-506A+U-000000000000+M-C10014AD00+S-400410111000000E0010B0009044+Q-01000000000000000000000001000200000000000000000000000100+E-38AA36',
+    expression: '8 ├ 6',
+    latex: 'Q=1;R=2',
+  },
+  {
+    name: 'Calculate CY-268 quotient and remainder labels',
+    url: 'http://wes.casio.com/math/index.php?q=I-268F+U-000000000000+M-C10014AD00+S-401410101000100E1010B000B181+R-0100000000000000010002000000000000000100+E-38AA36',
+    expression: '8 ∟ 6',
+    latex: 'C=1,R=2',
+  },
+  {
+    name: 'Calculate CY-254 quotient and remainder labels',
+    url: 'http://wes.casio.com/math/index.php?q=I-254A+U-000000000000+M-C10014AD00+S-401410101000100E1010B00057D8+R-0100000000000000010002000000000000000100+E-38AA36',
+    expression: '8 ∟ 6',
+    latex: 'C=1,R=2',
+  },
+  {
+    name: 'Calculate EY-011 quotient and remainder labels',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-011A+U-000000000000+M-C10014AD00+S-401410100000000E1010B000AC47+Q-01000000000000000000000001000200000000000000000000000100+E-38AA36',
+    expression: '8 ∟ 6',
+    latex: 'C=1,R=2',
+  },
+  {
+    name: 'Calculate EY-008 quotient and remainder labels',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-008A+U-000000000000+M-C10014AD00+S-401410100000000E0000B000184B+Q-01000000000000000000000001000200000000000000000000000100+E-38AA36',
+    expression: '8 ∟ 6',
+    latex: 'C=1,R=2',
+  },
+  {
+    name: 'Calculate EY-091 fraction simplification result',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-C10015BD00+S-401410111100000E1010B000A6AA+Q-24A30000000000000000000001030200000000000000000000000100+E-C81D1A381B1A361B1EE9',
+    expression: '\\dfrac{\\displaystyle 8} {\\displaystyle 6}  \\blacktriangleright \\mathrm{Simp} \\ ',
+    latex: 'F=2, \\dfrac {\\displaystyle 4} {\\displaystyle 3}',
+  },
+];
+
+for (const { name, url, expression, latex } of numberResultCases) {
+  test(name, () => {
+    const result = parse(url);
+    assert.equal(result.expression, expression);
+    assert.equal(result.result[0].latex, latex);
   });
 }
 

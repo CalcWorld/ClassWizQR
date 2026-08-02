@@ -22,10 +22,16 @@ test('model profiles contain only non-default capabilities', () => {
   assert.deepEqual(getModelProfile('EY', '006'), {
     locale: 'fr',
     decimalMark: 'comma',
+    quotient: 'Q=',
   });
   assert.deepEqual(getModelProfile('EY', '012'), {
     decimalMark: 'comma',
     recurringDecimal: 'overline',
+  });
+  assert.deepEqual(getModelProfile('FY', '091'), {
+    locale: 'fr',
+    decimalMark: 'comma',
+    quotient: 'Q=',
   });
   assert.deepEqual(getModelProfile('CY', '215'), {
     decimalMark: 'comma',

@@ -16,7 +16,7 @@ export const ParseNumberResult = ({ R, M, S = '' }, { modelType, modelId } = {})
   const [ans1Latex, ans1Decimal] = new ParseVariable(ans1).get(variableOptions);
   const [ans2Latex, ans2Decimal] = new ParseVariable(ans2).get(variableOptions);
 
-  let template = RESULT_INFO.NUMBER[parseM.getResultTemplate()]?.()?.join(separator);
+  let template = RESULT_INFO.NUMBER[parseM.getResultTemplate()]?.({ modelType, modelId })?.join(separator);
   let result = [];
   if (!template) {
     const ans2LatexBracket = !ans2Latex.includes('\\dfrac') && /^.+[+-]/.test(ans2Latex) ? `(${ans2Latex})` : ans2Latex;

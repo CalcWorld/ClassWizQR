@@ -30,8 +30,8 @@ const MODEL_FEATURES = [
     },
     models: {
       [MODEL_TYPE.CY]: ['246', '295'],
-      [MODEL_TYPE.EY]: ['006', '090', '091'],
-      [MODEL_TYPE.FY]: ['506'],
+      [MODEL_TYPE.EY]: ['006', '090'],
+      [MODEL_TYPE.FY]: ['091', '506'],
     },
   },
   {
@@ -65,8 +65,8 @@ const MODEL_FEATURES = [
     },
     models: {
       [MODEL_TYPE.CY]: ['215', '217', '246', '247', '250', '251', '270', '272', '291', '294', '295'],
-      [MODEL_TYPE.EY]: ['006', '007', '012', '014', '015', '016', '021', '036', '039', '047', '090', '091'],
-      [MODEL_TYPE.FY]: ['506', '521'],
+      [MODEL_TYPE.EY]: ['006', '007', '012', '014', '015', '016', '021', '036', '039', '047', '090'],
+      [MODEL_TYPE.FY]: ['091', '506', '521'],
     },
   },
   {
@@ -89,6 +89,25 @@ const MODEL_FEATURES = [
       [MODEL_TYPE.FY]: ['523'],
     },
   },
+  {
+    capabilities: {
+      quotient: 'Q=',
+    },
+    models: {
+      [MODEL_TYPE.CY]: ['246', '247', '295'],
+      [MODEL_TYPE.EY]: ['006', '007', '090'],
+      [MODEL_TYPE.FY]: ['091', '506'],
+    },
+  },
+  {
+    capabilities: {
+      quotient: 'C=',
+    },
+    models: {
+      [MODEL_TYPE.CY]: ['252', '253', '254', '255', '266', '267', '268', '269', '296'],
+      [MODEL_TYPE.EY]: ['008', '009', '010', '011'],
+    },
+  },
 ];
 
 /**
@@ -101,7 +120,7 @@ const MODEL_FEATURES = [
  *
  * @param {string} modelType
  * @param {string} modelId
- * @return {{locale?: 'fr'|'jp', decimalMark?: 'comma', recurringDecimal?: 'overline'|'bracket'}}
+ * @return {{locale?: 'jp'|'fr'|'sp'|'ce'|'rs', decimalMark?: 'comma', recurringDecimal?: 'overline'|'bracket', quotient?: 'Q='|'C='}}
  */
 export const getModelProfile = (modelType, modelId) => {
   const profile = {};

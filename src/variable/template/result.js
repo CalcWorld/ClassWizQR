@@ -1,4 +1,5 @@
 import { tt } from '../../utils.js';
+import { getModelProfile } from '../../model/index.js';
 
 const X_EQ_$0 = "x=${0}";
 
@@ -7,9 +8,11 @@ export const RESULT_INFO = {
     "11": () => ["x=${0}", "y=${1}"],
     "12": () => ["r=${0}", "θ=${1}"],
     "13": () => ["${2}=${0}", "L-R=${1}"],
-    // todo: different models format
-    "14": () => ["a=${0}", "R=${1}"],
-    "15": () => ["F=${1}", "a=${0}"],
+    "14": ({ modelType, modelId } = {}) => [
+      (getModelProfile(modelType, modelId).quotient ?? '') + "${0}",
+      "R=${1}",
+    ],
+    "15": () => ["F=${1}", "${0}"],
   },
   INEQUALITY: {
     "01": () => tt('result.INEQUALITY.01'),

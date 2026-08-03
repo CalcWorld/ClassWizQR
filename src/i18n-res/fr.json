@@ -235,6 +235,12 @@
       "vi": "vietnamien",
       "sr-Cyrl": "serbe/cyrillique",
       "sr-Latn": "serbe/latin"
+    },
+    "PRESERVE_SETTING": {
+      "name": "Conserver"
+    },
+    "URL_CHECKSUM": {
+      "name": "Somme de contrôle de l’URL"
     }
   },
   "input": {

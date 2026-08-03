@@ -1,9 +1,12 @@
 import { tt } from "../utils.js";
 import { getModelProfile } from '../model/index.js';
+import { calcChecksumFromKV } from './sum.js';
 
 export class ParseSetup {
-  constructor({ S }) {
+  constructor(kv) {
+    const { S } = kv;
     this.S = S;
+    this.kv = kv;
   }
 
   isFullSetup() {
@@ -109,13 +112,20 @@ export class ParseSetup {
     return this.S.slice(22, 23);
   }
 
+  getPreserveSetting() {
+    return this.S.slice(23, 24);
+  }
+
+  getUrlChecksum() {
+    return this.S.slice(-4);
+  }
+
   /**
    * @param {'CY'|'EY'|'FY'} modelType
    * @param {string} modelId
    */
   parseAll({ modelType, modelId }) {
-    const parseNumberFormat = () => {
-      const type = 'NUMBER_FORMAT';
+    const parseNumberFormat = (type) => {
       const main = this.getNumberFormatMain();
       const sub = this.getNumberFormatSub();
       const name = tt(`setup.${type}.name`);
@@ -126,8 +136,7 @@ export class ParseSetup {
       return { name, value, type, code: `${main}${sub}` };
     }
 
-    const parseInputOutput = () => {
-      const type = 'INPUT_OUTPUT';
+    const parseInputOutput = (type) => {
       const code = `${this.getInput()}${this.getOutput()}`;
       const name = tt(`setup.${type}.name`);
       const value = tt(`setup.${type}.${code}`);
@@ -153,6 +162,13 @@ export class ParseSetup {
       return { name, value, type, code };
     };
 
+    const parseUrlChecksum = (type, code) => {
+      const name = tt(`setup.${type}.name`);
+      const calcChecksum = calcChecksumFromKV(this.kv);
+      const value = `${calcChecksum} ${calcChecksum === code ? 'OK' : 'NG'}`;
+      return { name, value, type, code };
+    };
+
     const parseCommon = (type, code) => {
       const name = tt(`setup.${type}.name`);
       const value = tt(`setup.${type}.${code}`) || tt(`setup.${type}.${code}-${modelType}`) || code;
@@ -163,32 +179,35 @@ export class ParseSetup {
     result.push(parseLanguage('LANGUAGE', this.getLanguage()))
     if (this.isFullSetup()) {
       const setupMap = {
-        "DECIMAL_MARK": this.getDecimalMark(),
-        "ANGLE_UNIT": this.getAngleUnit(),
-        "FRACTION_RESULT": this.getFractionResult(),
-        "COMPLEX_RESULT": this.getComplexResult(),
-        "STATISTICS_FREQUENCY": this.getStatisticsFrequency(),
-        "RECURRING_DECIMAL": this.getRecurringDecimal(),
-        "SIMPLIFY": this.getSimplify(),
-        "AUTO_POWER_OFF": this.getAutoPowerOff(),
-        "TABLE_TYPE": this.getTableType(),
-        "ENGINEER_SYMBOL": this.getEngineerSymbol(),
-        "DIGIT_SEPARATOR": this.getDigitSeparator(),
-        "MULTI_LINE_FONT": this.getMultiLineFont(),
-        "EQUATION_COMPLEX_ROOT": this.getEquationComplexRoot(),
-        "SPREADSHEET_AUTO_CALC": this.getSpreadsheetAutoCalc(),
-        "SPREADSHEET_SHOW_CELL": this.getSpreadsheetShowCell(),
-        "QR_CODE_VERSION": this.getQRCodeVersion(),
-        "ALGORITHM_BACKGROUND": this.getAlgorithmBackground(),
-        "ALGORITHM_UNIT_SETTING": this.getAlgorithmUnitSetting(),
+        DECIMAL_MARK: this.getDecimalMark(),
+        ANGLE_UNIT: this.getAngleUnit(),
+        FRACTION_RESULT: this.getFractionResult(),
+        COMPLEX_RESULT: this.getComplexResult(),
+        STATISTICS_FREQUENCY: this.getStatisticsFrequency(),
+        RECURRING_DECIMAL: this.getRecurringDecimal(),
+        SIMPLIFY: this.getSimplify(),
+        AUTO_POWER_OFF: this.getAutoPowerOff(),
+        TABLE_TYPE: this.getTableType(),
+        ENGINEER_SYMBOL: this.getEngineerSymbol(),
+        DIGIT_SEPARATOR: this.getDigitSeparator(),
+        MULTI_LINE_FONT: this.getMultiLineFont(),
+        EQUATION_COMPLEX_ROOT: this.getEquationComplexRoot(),
+        SPREADSHEET_AUTO_CALC: this.getSpreadsheetAutoCalc(),
+        SPREADSHEET_SHOW_CELL: this.getSpreadsheetShowCell(),
+        QR_CODE_VERSION: this.getQRCodeVersion(),
+        ALGORITHM_BACKGROUND: this.getAlgorithmBackground(),
+        ALGORITHM_UNIT_SETTING: this.getAlgorithmUnitSetting(),
+        PRESERVE_SETTING: this.getPreserveSetting(),
       }
 
-      result.push(parseNumberFormat());
-      result.push(parseInputOutput());
+      result.push(parseNumberFormat('NUMBER_FORMAT'));
+      result.push(parseInputOutput('INPUT_OUTPUT'));
       for (const [type, code] of Object.entries(setupMap)) {
         result.push(parseCommon(type, code));
       }
     }
+    result.push(parseUrlChecksum('URL_CHECKSUM', this.getUrlChecksum()))
+
     return result;
   }
 }

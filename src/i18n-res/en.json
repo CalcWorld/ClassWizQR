@@ -359,6 +359,12 @@
       "vi": "Vietnamese",
       "sr-Cyrl": "Serbian/Cyrillic",
       "sr-Latn": "Serbian/Latin"
+    },
+    "PRESERVE_SETTING": {
+      "name": "Preserve"
+    },
+    "URL_CHECKSUM": {
+      "name": "URL Checksum"
     }
   },
   "input": {

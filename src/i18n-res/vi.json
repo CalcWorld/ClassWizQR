@@ -235,6 +235,12 @@
       "vi": "Tiếng Việt",
       "sr-Cyrl": "tiếng Serbia/chữ Kirin",
       "sr-Latn": "tiếng Serbia/chữ Latinh"
+    },
+    "PRESERVE_SETTING": {
+      "name": "Giữ nguyên"
+    },
+    "URL_CHECKSUM": {
+      "name": "Tổng kiểm tra URL"
     }
   },
   "input": {

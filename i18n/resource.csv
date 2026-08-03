@@ -275,6 +275,8 @@ setup.LANGUAGE_LOCAL.sr-Cyrl,Српски/Ћирилица,,,
 setup.LANGUAGE_TRANS.sr-Cyrl,Serbian/Cyrillic,塞尔维亚语/西里尔字母,tiếng Serbia/chữ Kirin,serbe/cyrillique
 setup.LANGUAGE_LOCAL.sr-Latn,Srpski/Latinica,,,
 setup.LANGUAGE_TRANS.sr-Latn,Serbian/Latin,塞尔维亚语/拉丁字母,tiếng Serbia/chữ Latinh,serbe/latin
+setup.PRESERVE_SETTING.name,Preserve,保留项,Giữ nguyên,Conserver
+setup.URL_CHECKSUM.name,URL Checksum,URL校验和,Tổng kiểm tra URL,Somme de contrôle de l’URL
 input.DISTRIBUTION.0241,Lower=${0},下限=${0},Ldưới=${0},Limite inférieure=${0}
 input.DISTRIBUTION.0242,Upper=${1},上限=${1},Ltrên=${1},Limite supérieure=${1}
 input.DISTRIBUTION.0331,Area=${0},区域=${0},Vùng=${0},Aire=${0}

@@ -235,6 +235,12 @@
       "vi": "越南语",
       "sr-Cyrl": "塞尔维亚语/西里尔字母",
       "sr-Latn": "塞尔维亚语/拉丁字母"
+    },
+    "PRESERVE_SETTING": {
+      "name": "保留项"
+    },
+    "URL_CHECKSUM": {
+      "name": "URL校验和"
     }
   },
   "input": {

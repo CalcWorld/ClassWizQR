@@ -58,6 +58,7 @@ const dutchUrls = [
   'http://wes.casio.com/ncal/index.php?q=I-521A+U-000000000000+M-Z000000000+S-08BBD',
   'http://wes.casio.com/ncal/index.php?q=I-521A+U-000000000000+M-Z000000000+S-10A9D',
 ];
+const fallbackEnglishUrl = 'http://wes.casio.com/ncal/index.php?q=I-546A+U-000000000000+M-Z000000000+S-018E9';
 
 const cases = [
   {
@@ -660,6 +661,21 @@ test('Dutch models expose their language table through the model profile', () =>
     });
   }
 });
+
+for (const [locale, expected] of Object.entries(localizedLanguages)) {
+  test(`models without a language profile fall back to English in ${locale}`, () => {
+    const { setup } = parse(fallbackEnglishUrl, locale);
+
+    assert.equal(getModelProfile('FY', '546').language, undefined);
+    assert.equal(setup.length, 1);
+    assert.deepEqual(setup.filter(({ type }) => type === 'LANGUAGE'), [{
+      name: expected.name,
+      value: expected.english,
+      type: 'LANGUAGE',
+      code: '0',
+    }]);
+  });
+}
 
 test('Japanese models expose their language table through the model profile', () => {
   assert.deepEqual(getModelProfile('CY', '243'), {

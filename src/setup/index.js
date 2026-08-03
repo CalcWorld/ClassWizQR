@@ -137,9 +137,9 @@ export class ParseSetup {
     const parseLanguage = (type, code) => {
       const name = tt(`setup.${type}.name`);
       let value = code;
-      const languageType = getModelProfile(modelType, modelId).language;
+      const languageType = getModelProfile(modelType, modelId).language ?? 'en';
       const langCode = tt(`setup.${type}.${languageType}.${code}`);
-      if (languageType && langCode) {
+      if (langCode) {
         const localLang = tt(`setup.${type}_LOCAL.${langCode}`);
         const transLang = tt(`setup.${type}_TRANS.${langCode}`);
         if (transLang && localLang) {

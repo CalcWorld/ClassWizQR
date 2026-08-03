@@ -115,7 +115,7 @@ const localizationCases = [
         "setup": [
           {
             "name": "Language",
-            "value": "0",
+            "value": "English",
             "type": "LANGUAGE",
             "code": "0"
           }
@@ -135,7 +135,7 @@ const localizationCases = [
         "setup": [
           {
             "name": "语言",
-            "value": "0",
+            "value": "English (英语)",
             "type": "LANGUAGE",
             "code": "0"
           }
@@ -155,7 +155,7 @@ const localizationCases = [
         "setup": [
           {
             "name": "Ngôn ngữ",
-            "value": "0",
+            "value": "English (Tiếng Anh)",
             "type": "LANGUAGE",
             "code": "0"
           }
@@ -175,7 +175,7 @@ const localizationCases = [
         "setup": [
           {
             "name": "Langue",
-            "value": "0",
+            "value": "English (Anglais)",
             "type": "LANGUAGE",
             "code": "0"
           }
@@ -202,7 +202,7 @@ const localizationCases = [
         "setup": [
           {
             "name": "Language",
-            "value": "0",
+            "value": "English",
             "type": "LANGUAGE",
             "code": "0"
           }
@@ -222,7 +222,7 @@ const localizationCases = [
         "setup": [
           {
             "name": "语言",
-            "value": "0",
+            "value": "English (英语)",
             "type": "LANGUAGE",
             "code": "0"
           }
@@ -242,7 +242,7 @@ const localizationCases = [
         "setup": [
           {
             "name": "Ngôn ngữ",
-            "value": "0",
+            "value": "English (Tiếng Anh)",
             "type": "LANGUAGE",
             "code": "0"
           }
@@ -262,7 +262,7 @@ const localizationCases = [
         "setup": [
           {
             "name": "Langue",
-            "value": "0",
+            "value": "English (Anglais)",
             "type": "LANGUAGE",
             "code": "0"
           }

@@ -198,6 +198,7 @@ setup.ALGORITHM_UNIT_SETTING.0,pixels,像素,pixel,pixels
 setup.ALGORITHM_UNIT_SETTING.1,units,×10像素,đơn vị,unités
 setup.ALGORITHM_UNIT_SETTING.name,Algorithm: Unit Setting,算法：移动单位设置,Thuật toán: Cài đặt đơn vị,Algo : Réglage unité
 setup.LANGUAGE.name,Language,语言,Ngôn ngữ,Langue
+setup.LANGUAGE.en.0,en,,,
 setup.LANGUAGE.cn.0,en,,,
 setup.LANGUAGE.cn.1,zh,,,
 setup.LANGUAGE.de.0,de,,,

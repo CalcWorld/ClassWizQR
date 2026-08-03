@@ -248,6 +248,9 @@
     },
     "LANGUAGE": {
       "name": "Language",
+      "en": {
+        "0": "en"
+      },
       "cn": {
         "0": "en",
         "1": "zh"

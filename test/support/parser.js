@@ -7,6 +7,15 @@ import zh from '../../src/i18n-res/zh.json' with { type: 'json' };
 
 const resources = { en, fr, vi, zh };
 
+const separatelyTestedSetupTypes = new Set([
+  'PRESERVE_SETTING',
+  'URL_CHECKSUM',
+]);
+
+const projectEstablishedSetup = setup => setup?.filter(
+  ({ type }) => !separatelyTestedSetupTypes.has(type)
+);
+
 export const semanticFields = [
   'expression',
   'function',
@@ -60,7 +69,8 @@ export function projectResult(result) {
     model: result.model,
     mode: result.mode,
     format: result.format,
-    setup: result.setup?.map(({ type, code }) => ({ type, code })),
+    setup: projectEstablishedSetup(result.setup)
+      ?.map(({ type, code }) => ({ type, code })),
     semanticFields: semanticFields.filter(field => result[field] !== undefined),
   };
 
@@ -75,7 +85,7 @@ export function projectLocalization(result, fields = []) {
   const projected = {
     mode: result.mode,
     format: result.format,
-    setup: result.setup,
+    setup: projectEstablishedSetup(result.setup),
   };
 
   for (const field of fields) {

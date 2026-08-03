@@ -65,43 +65,43 @@ const cases = [
     name: 'EX menu page in Japanese',
     url: japaneseUrl,
     code: '1',
-    setupCount: 1,
+    setupCount: 2,
   },
   {
     name: 'EX manual page in English',
     url: englishUrl,
     code: '0',
-    setupCount: 1,
+    setupCount: 2,
   },
   {
     name: 'CW full setup in Japanese',
     url: 'http://wes.casio.com/ncal/index.php?q=I-031A+U-000000000000+M-C10000AD00+S-001410100000000E1110B0007EB0+Q-00000000000000000000000000000000000000000000000000000000+E-4A',
     code: '1',
-    setupCount: 21,
+    setupCount: 23,
   },
   {
     name: 'CW menu page in English',
     url: 'http://wes.casio.com/ncal/index.php?q=I-031A+U-000000000000+M-Z000000000+S-04B42',
     code: '0',
-    setupCount: 1,
+    setupCount: 2,
   },
   {
     name: 'CW error page in English',
     url: 'http://wes.casio.com/ncal/index.php?q=I-031A+U-000000000000+M-Y200000000+S-0AD71',
     code: '0',
-    setupCount: 1,
+    setupCount: 2,
   },
   {
     name: 'CW error page in Japanese',
     url: 'http://wes.casio.com/ncal/index.php?q=I-031A+U-000000000000+M-Y200000000+S-12C91',
     code: '1',
-    setupCount: 1,
+    setupCount: 2,
   },
   {
     name: 'CW calculation with full setup in Japanese',
     url: 'http://wes.casio.com/ncal/index.php?q=I-031A+U-000000000000+M-C10000DD00+S-001410100000000E1110B000AA3A+Q-80000001000202010000000000010000000000000000000000000000+E-741A381B',
     code: '1',
-    setupCount: 21,
+    setupCount: 23,
   },
 ];
 
@@ -234,7 +234,7 @@ for (const [code, url] of belgianUrls.entries()) {
     const { setup } = parse(url);
     const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
 
-    assert.equal(setup.length, 1);
+    assert.equal(setup.length, 2);
     assert.deepEqual(languageEntries, [{
       name: 'Language',
       value: localizedBelgianLanguages.en[code],
@@ -283,7 +283,7 @@ for (const [code, url] of arabicUrls.entries()) {
     const { setup } = parse(url);
     const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
 
-    assert.equal(setup.length, 1);
+    assert.equal(setup.length, 2);
     assert.deepEqual(languageEntries, [{
       name: 'Language',
       value: localizedArabicLanguages.en[code],
@@ -325,7 +325,7 @@ for (const [code, url] of latinAmericanUrls.entries()) {
     const { setup } = parse(url);
     const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
 
-    assert.equal(setup.length, code === 2 ? 21 : 1);
+    assert.equal(setup.length, code === 2 ? 23 : 2);
     assert.deepEqual(languageEntries, [{
       name: 'Language',
       value: localizedLatinAmericanLanguages.en[code],
@@ -372,7 +372,7 @@ for (const [code, url] of spanishUrls.entries()) {
     const { setup } = parse(url);
     const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
 
-    assert.equal(setup.length, code === 1 ? 21 : 1);
+    assert.equal(setup.length, code === 1 ? 23 : 2);
     assert.deepEqual(languageEntries, [{
       name: 'Language',
       value: localizedSpanishLanguages.en[code],
@@ -414,7 +414,7 @@ for (const [code, url] of spanish2Urls.entries()) {
     const { setup } = parse(url);
     const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
 
-    assert.equal(setup.length, code === 1 ? 21 : 1);
+    assert.equal(setup.length, code === 1 ? 23 : 2);
     assert.deepEqual(languageEntries, [{
       name: 'Language',
       value: localizedSpanish2Languages.en[code],
@@ -456,7 +456,7 @@ for (const [code, url] of spanish3Urls.entries()) {
     const { setup } = parse(url);
     const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
 
-    assert.equal(setup.length, 1);
+    assert.equal(setup.length, 2);
     assert.deepEqual(languageEntries, [{
       name: 'Language',
       value: localizedSpanish3Languages.en[code],
@@ -498,7 +498,7 @@ for (const [code, url] of centralEuropeanUrls.entries()) {
     const { setup } = parse(url);
     const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
 
-    assert.equal(setup.length, code === 3 ? 21 : 1);
+    assert.equal(setup.length, code === 3 ? 23 : 2);
     assert.deepEqual(languageEntries, [{
       name: 'Language',
       value: localizedCentralEuropeanLanguages.en[code],
@@ -540,7 +540,7 @@ for (const [code, url] of vietnameseUrls.entries()) {
     const { setup } = parse(url);
     const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
 
-    assert.equal(setup.length, 1);
+    assert.equal(setup.length, 2);
     assert.deepEqual(languageEntries, [{
       name: 'Language',
       value: localizedVietnameseLanguages.en[code],
@@ -585,7 +585,7 @@ for (const [code, url] of serbianUrls.entries()) {
     const { setup } = parse(url);
     const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
 
-    assert.equal(setup.length, 1);
+    assert.equal(setup.length, 2);
     assert.deepEqual(languageEntries, [{
       name: 'Language',
       value: localizedSerbianLanguages.en[code],
@@ -629,7 +629,7 @@ for (const [code, url] of dutchUrls.entries()) {
     const { setup } = parse(url);
     const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
 
-    assert.equal(setup.length, 1);
+    assert.equal(setup.length, 2);
     assert.deepEqual(languageEntries, [{
       name: 'Language',
       value: localizedDutchLanguages.en[code],
@@ -667,7 +667,7 @@ for (const [locale, expected] of Object.entries(localizedLanguages)) {
     const { setup } = parse(fallbackEnglishUrl, locale);
 
     assert.equal(getModelProfile('FY', '546').language, undefined);
-    assert.equal(setup.length, 1);
+    assert.equal(setup.length, 2);
     assert.deepEqual(setup.filter(({ type }) => type === 'LANGUAGE'), [{
       name: expected.name,
       value: expected.english,

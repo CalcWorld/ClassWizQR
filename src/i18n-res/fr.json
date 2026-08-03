@@ -223,7 +223,11 @@
       "nl": "néerlandais",
       "ar": "arabe",
       "es": "espagnol",
-      "pt": "portugais"
+      "pt": "portugais",
+      "es-ES": "espagnol",
+      "ca": "catalan",
+      "eu": "basque",
+      "gl": "galicien"
     }
   },
   "input": {

@@ -275,6 +275,24 @@
         "0": "en",
         "1": "es",
         "2": "pt"
+      },
+      "sp": {
+        "0": "es-ES",
+        "1": "ca",
+        "2": "pt"
+      },
+      "sp2": {
+        "0": "es-ES",
+        "1": "ca",
+        "2": "eu",
+        "3": "pt"
+      },
+      "sp3": {
+        "0": "es-ES",
+        "1": "ca",
+        "2": "eu",
+        "3": "gl",
+        "4": "pt"
       }
     },
     "LANGUAGE_LOCAL": {
@@ -286,7 +304,11 @@
       "nl": "Nederlands",
       "ar": "عربي",
       "es": "Español",
-      "pt": "Português"
+      "pt": "Português",
+      "es-ES": "Castellano",
+      "ca": "Català",
+      "eu": "Euskara",
+      "gl": "Galego"
     },
     "LANGUAGE_TRANS": {
       "en": "English",
@@ -297,7 +319,11 @@
       "nl": "Dutch",
       "ar": "Arabic",
       "es": "Spanish",
-      "pt": "Portuguese"
+      "pt": "Portuguese",
+      "es-ES": "Spanish",
+      "ca": "Catalan",
+      "eu": "Basque",
+      "gl": "Galician"
     }
   },
   "input": {

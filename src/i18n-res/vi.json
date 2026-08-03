@@ -223,7 +223,11 @@
       "nl": "tiếng Hà Lan",
       "ar": "tiếng Ả Rập",
       "es": "tiếng Tây Ban Nha",
-      "pt": "tiếng Bồ Đào Nha"
+      "pt": "tiếng Bồ Đào Nha",
+      "es-ES": "tiếng Tây Ban Nha",
+      "ca": "tiếng Catalan",
+      "eu": "tiếng Basque",
+      "gl": "tiếng Galicia"
     }
   },
   "input": {

@@ -22,6 +22,24 @@ const latinAmericanUrls = [
   'http://wes.casio.com/math/index.php?q=I-272F+U-000000000000+M-X100000000+S-12AB1',
   'http://wes.casio.com/math/index.php?q=I-272F+U-000000000000+M-C10000DD00+S-000410100000100E1210B0006DCE+R-8000000100220201000100000000000000000000+E-741A38381B',
 ];
+const spanishUrls = [
+  'http://wes.casio.com/math/index.php?q=I-254A+U-000000000000+M-X100000000+S-084CA',
+  'http://wes.casio.com/math/index.php?q=I-254A+U-000000000000+M-C10000DD00+S-401410101000100E1110B00047A5+R-8000000100110301000100000000000000000000+E-741A39391B',
+  'http://wes.casio.com/math/index.php?q=I-254A+U-000000000000+M-X900000000+S-26A5D',
+];
+const spanish2Urls = [
+  'http://wes.casio.com/math/index.php?q=I-268F+U-000000000000+M-Z10F000000+S-0723D',
+  'http://wes.casio.com/math/index.php?q=I-268F+U-000000000000+M-C10000DD00+S-401410101000100E1110B0003A8A+R-8000000100110301000100000000000000000000+E-741A39391B',
+  'http://wes.casio.com/math/index.php?q=I-268F+U-000000000000+M-X100000000+S-290F5',
+  'http://wes.casio.com/math/index.php?q=I-268F+U-000000000000+M-Y200000000+S-35FBA',
+];
+const spanish3Urls = [
+  'http://wes.casio.com/ncal/index.php?q=I-011A+U-000000000000+M-Z000000000+S-0653F',
+  'http://wes.casio.com/ncal/index.php?q=I-011A+U-000000000000+M-Z000000000+S-1E41F',
+  'http://wes.casio.com/ncal/index.php?q=I-011A+U-000000000000+M-Z000000000+S-26780',
+  'http://wes.casio.com/ncal/index.php?q=I-011A+U-000000000000+M-Z000000000+S-3E660',
+  'http://wes.casio.com/ncal/index.php?q=I-011A+U-000000000000+M-Z000000000+S-460BD',
+];
 
 const cases = [
   {
@@ -320,6 +338,132 @@ test('Latin American models expose their language table through the model profil
     for (const modelId of modelIds) {
       assert.equal(getModelProfile(modelType, modelId).language, 'la');
     }
+  }
+});
+
+const localizedSpanishLanguages = {
+  en: ['Castellano (Spanish)', 'Català (Catalan)', 'Português (Portuguese)'],
+  zh: ['Castellano (西班牙语)', 'Català (加泰罗尼亚语)', 'Português (葡萄牙语)'],
+  vi: ['Castellano (tiếng Tây Ban Nha)', 'Català (tiếng Catalan)', 'Português (tiếng Bồ Đào Nha)'],
+  fr: ['Castellano (espagnol)', 'Català (catalan)', 'Português (portugais)'],
+};
+
+for (const [code, url] of spanishUrls.entries()) {
+  test(`Spanish sample uses language code ${code}`, () => {
+    const { setup } = parse(url);
+    const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
+
+    assert.equal(setup.length, code === 1 ? 21 : 1);
+    assert.deepEqual(languageEntries, [{
+      name: 'Language',
+      value: localizedSpanishLanguages.en[code],
+      type: 'LANGUAGE',
+      code: String(code),
+    }]);
+  });
+}
+
+for (const [locale, expectedValues] of Object.entries(localizedSpanishLanguages)) {
+  test(`Spanish calculator languages are localized in ${locale}`, () => {
+    const languages = expectedValues.map((value, code) => parse(spanishUrls[code], locale).setup
+      .find(({ type }) => type === 'LANGUAGE'));
+
+    assert.deepEqual(languages, expectedValues.map((value, code) => ({
+      name: localizedLanguages[locale].name,
+      value,
+      type: 'LANGUAGE',
+      code: String(code),
+    })));
+  });
+}
+
+test('Spanish models expose their language table through the model profile', () => {
+  for (const modelId of ['252', '253', '254', '255']) {
+    assert.equal(getModelProfile('CY', modelId).language, 'sp');
+  }
+});
+
+const localizedSpanish2Languages = {
+  en: ['Castellano (Spanish)', 'Català (Catalan)', 'Euskara (Basque)', 'Português (Portuguese)'],
+  zh: ['Castellano (西班牙语)', 'Català (加泰罗尼亚语)', 'Euskara (巴斯克语)', 'Português (葡萄牙语)'],
+  vi: ['Castellano (tiếng Tây Ban Nha)', 'Català (tiếng Catalan)', 'Euskara (tiếng Basque)', 'Português (tiếng Bồ Đào Nha)'],
+  fr: ['Castellano (espagnol)', 'Català (catalan)', 'Euskara (basque)', 'Português (portugais)'],
+};
+
+for (const [code, url] of spanish2Urls.entries()) {
+  test(`Spanish 2 sample uses language code ${code}`, () => {
+    const { setup } = parse(url);
+    const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
+
+    assert.equal(setup.length, code === 1 ? 21 : 1);
+    assert.deepEqual(languageEntries, [{
+      name: 'Language',
+      value: localizedSpanish2Languages.en[code],
+      type: 'LANGUAGE',
+      code: String(code),
+    }]);
+  });
+}
+
+for (const [locale, expectedValues] of Object.entries(localizedSpanish2Languages)) {
+  test(`Spanish 2 calculator languages are localized in ${locale}`, () => {
+    const languages = expectedValues.map((value, code) => parse(spanish2Urls[code], locale).setup
+      .find(({ type }) => type === 'LANGUAGE'));
+
+    assert.deepEqual(languages, expectedValues.map((value, code) => ({
+      name: localizedLanguages[locale].name,
+      value,
+      type: 'LANGUAGE',
+      code: String(code),
+    })));
+  });
+}
+
+test('Spanish 2 models expose their language table through the model profile', () => {
+  for (const modelId of ['266', '267', '268', '269', '296']) {
+    assert.equal(getModelProfile('CY', modelId).language, 'sp2');
+  }
+});
+
+const localizedSpanish3Languages = {
+  en: ['Castellano (Spanish)', 'Català (Catalan)', 'Euskara (Basque)', 'Galego (Galician)', 'Português (Portuguese)'],
+  zh: ['Castellano (西班牙语)', 'Català (加泰罗尼亚语)', 'Euskara (巴斯克语)', 'Galego (加利西亚语)', 'Português (葡萄牙语)'],
+  vi: ['Castellano (tiếng Tây Ban Nha)', 'Català (tiếng Catalan)', 'Euskara (tiếng Basque)', 'Galego (tiếng Galicia)', 'Português (tiếng Bồ Đào Nha)'],
+  fr: ['Castellano (espagnol)', 'Català (catalan)', 'Euskara (basque)', 'Galego (galicien)', 'Português (portugais)'],
+};
+
+for (const [code, url] of spanish3Urls.entries()) {
+  test(`Spanish 3 sample uses language code ${code}`, () => {
+    const { setup } = parse(url);
+    const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
+
+    assert.equal(setup.length, 1);
+    assert.deepEqual(languageEntries, [{
+      name: 'Language',
+      value: localizedSpanish3Languages.en[code],
+      type: 'LANGUAGE',
+      code: String(code),
+    }]);
+  });
+}
+
+for (const [locale, expectedValues] of Object.entries(localizedSpanish3Languages)) {
+  test(`Spanish 3 calculator languages are localized in ${locale}`, () => {
+    const languages = expectedValues.map((value, code) => parse(spanish3Urls[code], locale).setup
+      .find(({ type }) => type === 'LANGUAGE'));
+
+    assert.deepEqual(languages, expectedValues.map((value, code) => ({
+      name: localizedLanguages[locale].name,
+      value,
+      type: 'LANGUAGE',
+      code: String(code),
+    })));
+  });
+}
+
+test('Spanish 3 models expose their language table through the model profile', () => {
+  for (const modelId of ['008', '009', '010', '011']) {
+    assert.equal(getModelProfile('EY', modelId).language, 'sp3');
   }
 });
 

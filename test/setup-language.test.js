@@ -17,6 +17,11 @@ const arabicUrls = [
   'http://wes.casio.com/math/index.php?q=I-258A+U-000000000000+M-Z10D000000+S-0AC7B',
   'http://wes.casio.com/math/index.php?q=I-258A+U-000000000000+M-X100000000+S-137AC',
 ];
+const latinAmericanUrls = [
+  'http://wes.casio.com/math/index.php?q=I-272F+U-000000000000+M-Z10C000000+S-076EF',
+  'http://wes.casio.com/math/index.php?q=I-272F+U-000000000000+M-X100000000+S-12AB1',
+  'http://wes.casio.com/math/index.php?q=I-272F+U-000000000000+M-C10000DD00+S-000410100000100E1210B0006DCE+R-8000000100220201000100000000000000000000+E-741A38381B',
+];
 
 const cases = [
   {
@@ -268,6 +273,53 @@ for (const [locale, expectedValues] of Object.entries(localizedArabicLanguages))
 test('Arabic models expose their language table through the model profile', () => {
   for (const modelId of ['256', '257', '258', '259']) {
     assert.equal(getModelProfile('CY', modelId).language, 'ar');
+  }
+});
+
+const localizedLatinAmericanLanguages = {
+  en: ['English', 'Español (Spanish)', 'Português (Portuguese)'],
+  zh: ['English (英语)', 'Español (西班牙语)', 'Português (葡萄牙语)'],
+  vi: ['English (Tiếng Anh)', 'Español (tiếng Tây Ban Nha)', 'Português (tiếng Bồ Đào Nha)'],
+  fr: ['English (Anglais)', 'Español (espagnol)', 'Português (portugais)'],
+};
+
+for (const [code, url] of latinAmericanUrls.entries()) {
+  test(`Latin American sample uses language code ${code}`, () => {
+    const { setup } = parse(url);
+    const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
+
+    assert.equal(setup.length, code === 2 ? 21 : 1);
+    assert.deepEqual(languageEntries, [{
+      name: 'Language',
+      value: localizedLatinAmericanLanguages.en[code],
+      type: 'LANGUAGE',
+      code: String(code),
+    }]);
+  });
+}
+
+for (const [locale, expectedValues] of Object.entries(localizedLatinAmericanLanguages)) {
+  test(`Latin American calculator languages are localized in ${locale}`, () => {
+    const languages = expectedValues.map((value, code) => parse(latinAmericanUrls[code], locale).setup
+      .find(({ type }) => type === 'LANGUAGE'));
+
+    assert.deepEqual(languages, expectedValues.map((value, code) => ({
+      name: localizedLanguages[locale].name,
+      value,
+      type: 'LANGUAGE',
+      code: String(code),
+    })));
+  });
+}
+
+test('Latin American models expose their language table through the model profile', () => {
+  for (const [modelType, modelIds] of Object.entries({
+    CY: ['270', '271', '272', '273'],
+    EY: ['036', '038', '039'],
+  })) {
+    for (const modelId of modelIds) {
+      assert.equal(getModelProfile(modelType, modelId).language, 'la');
+    }
   }
 });
 

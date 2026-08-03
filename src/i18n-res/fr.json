@@ -221,7 +221,9 @@
       "jp": "japonais",
       "fr": "Français",
       "nl": "néerlandais",
-      "ar": "arabe"
+      "ar": "arabe",
+      "es": "espagnol",
+      "pt": "portugais"
     }
   },
   "input": {

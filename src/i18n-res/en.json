@@ -270,6 +270,11 @@
       "ar": {
         "0": "en",
         "1": "ar"
+      },
+      "la": {
+        "0": "en",
+        "1": "es",
+        "2": "pt"
       }
     },
     "LANGUAGE_LOCAL": {
@@ -279,7 +284,9 @@
       "jp": "日本語",
       "fr": "Français",
       "nl": "Nederlands",
-      "ar": "عربي"
+      "ar": "عربي",
+      "es": "Español",
+      "pt": "Português"
     },
     "LANGUAGE_TRANS": {
       "en": "English",
@@ -288,7 +295,9 @@
       "jp": "Japanese",
       "fr": "French",
       "nl": "Dutch",
-      "ar": "Arabic"
+      "ar": "Arabic",
+      "es": "Spanish",
+      "pt": "Portuguese"
     }
   },
   "input": {

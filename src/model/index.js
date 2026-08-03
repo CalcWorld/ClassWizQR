@@ -109,6 +109,17 @@ const MODEL_FEATURES = [
       [MODEL_TYPE.EY]: ['008', '009', '010', '011'],
     },
   },
+  {
+    capabilities: {
+      language: 'cn',
+    },
+    models: {
+      [MODEL_TYPE.CY]: ['236', '237', '238', '239'],
+      [MODEL_TYPE.EY]: ['024', '025', '026', '027', '028'],
+      [MODEL_TYPE.FY]: ['524', '525', '526', '527', '528'],
+    },
+  },
+
 ];
 
 /**

@@ -248,6 +248,10 @@
     },
     "LANGUAGE": {
       "name": "Language",
+      "cn": {
+        "0": "en",
+        "1": "zh"
+      },
       "jp": {
         "0": "en",
         "1": "jp"
@@ -255,10 +259,12 @@
     },
     "LANGUAGE_LOCAL": {
       "en": "English",
+      "zh": "中文",
       "jp": "日本語"
     },
     "LANGUAGE_TRANS": {
       "en": "English",
+      "zh": "Chinese",
       "jp": "Japanese"
     }
   },

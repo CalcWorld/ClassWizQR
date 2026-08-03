@@ -19,10 +19,10 @@ html:has(.message-dialog[open]) body {
     background: var(--surface);
     box-shadow: 0 24px 80px rgba(0, 0, 0, .38);
     transition: opacity var(--dialog-transition-duration) ease,
-        scale var(--dialog-transition-duration) ease,
-        filter var(--dialog-transition-duration) ease,
-        display var(--dialog-transition-duration) ease allow-discrete,
-        overlay var(--dialog-transition-duration) ease allow-discrete;
+    scale var(--dialog-transition-duration) ease,
+    filter var(--dialog-transition-duration) ease,
+    display var(--dialog-transition-duration) ease allow-discrete,
+    overlay var(--dialog-transition-duration) ease allow-discrete;
 }
 
 .app-panel-dialog:not([open]),
@@ -44,7 +44,7 @@ html:has(.message-dialog[open]) body {
     background: rgba(20, 25, 30, .5);
     opacity: 0;
     transition: opacity var(--dialog-transition-duration) ease,
-        display var(--dialog-transition-duration) ease allow-discrete;
+    display var(--dialog-transition-duration) ease allow-discrete;
 }
 
 .app-panel-dialog[open]::backdrop,

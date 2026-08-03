@@ -204,7 +204,7 @@ const MODEL_FEATURES = [
  *
  * @param {'CY'|'EY'|'FY'} modelType
  * @param {string} modelId
- * @return {{locale?: 'jp'|'fr'|'sp'|'ce'|'rs', decimalMark?: 'comma', recurringDecimal?: 'overline'|'bracket', quotient?: 'Q='|'C=', language?: 'jp'|'cn'|'de'|'be'|'fr'|'ar'|'la'|'sp'|'sp2'|'sp3'|'ce'|'vn'|'rs'|'nl'}}
+ * @return {{locale?: 'jp'|'fr'|'sp'|'ce'|'rs', decimalMark?: 'comma', recurringDecimal?: 'overline'|'bracket', quotient?: 'Q='|'C=', language?: 'cn'|'jp'|'de'|'be'|'fr'|'ar'|'la'|'sp'|'sp2'|'sp3'|'ce'|'vn'|'rs'|'nl'}}
  */
 export const getModelProfile = (modelType, modelId) => {
   const profile = {};

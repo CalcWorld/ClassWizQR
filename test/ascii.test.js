@@ -43,6 +43,7 @@ test('model profiles contain only non-default capabilities', () => {
   });
   assert.deepEqual(getModelProfile('FY', '523'), {
     recurringDecimal: 'bracket',
+    language: 'vn',
   });
 });
 

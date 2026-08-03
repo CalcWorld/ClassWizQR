@@ -299,6 +299,10 @@
         "1": "hu",
         "2": "pl",
         "3": "sk"
+      },
+      "vn": {
+        "0": "en",
+        "1": "vi"
       }
     },
     "LANGUAGE_LOCAL": {
@@ -318,7 +322,8 @@
       "cs": "Česky",
       "hu": "Magyar",
       "pl": "Polski",
-      "sk": "Slovensky"
+      "sk": "Slovensky",
+      "vi": "Tiếng Việt"
     },
     "LANGUAGE_TRANS": {
       "en": "English",
@@ -337,7 +342,8 @@
       "cs": "Czech",
       "hu": "Hungarian",
       "pl": "Polish",
-      "sk": "Slovak"
+      "sk": "Slovak",
+      "vi": "Vietnamese"
     }
   },
   "input": {

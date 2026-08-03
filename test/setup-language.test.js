@@ -46,6 +46,10 @@ const centralEuropeanUrls = [
   'http://wes.casio.com/math/index.php?q=I-294F+U-000000000000+M-Y200000000+S-2269B',
   'http://wes.casio.com/math/index.php?q=I-294F+U-000000000000+M-C10000AD00+S-000410100000100E1310B0000F86+R-0158384440324535009900000000000000000000+E-7939',
 ];
+const vietnameseUrls = [
+  'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-Z000000000+S-01BC4',
+  'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-Z000000000+S-19CA4',
+];
 
 const cases = [
   {
@@ -512,6 +516,51 @@ for (const [locale, expectedValues] of Object.entries(localizedCentralEuropeanLa
 test('Central European models expose their language table through the model profile', () => {
   for (const modelId of ['291', '292', '293', '294']) {
     assert.equal(getModelProfile('CY', modelId).language, 'ce');
+  }
+});
+
+const localizedVietnameseLanguages = {
+  en: ['English', 'Tiếng Việt (Vietnamese)'],
+  zh: ['English (英语)', 'Tiếng Việt (越南语)'],
+  vi: ['English (Tiếng Anh)', 'Tiếng Việt'],
+  fr: ['English (Anglais)', 'Tiếng Việt (vietnamien)'],
+};
+
+for (const [code, url] of vietnameseUrls.entries()) {
+  test(`Vietnamese sample uses language code ${code}`, () => {
+    const { setup } = parse(url);
+    const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
+
+    assert.equal(setup.length, 1);
+    assert.deepEqual(languageEntries, [{
+      name: 'Language',
+      value: localizedVietnameseLanguages.en[code],
+      type: 'LANGUAGE',
+      code: String(code),
+    }]);
+  });
+}
+
+for (const [locale, expectedValues] of Object.entries(localizedVietnameseLanguages)) {
+  test(`Vietnamese calculator languages are localized in ${locale}`, () => {
+    const languages = expectedValues.map((value, code) => parse(vietnameseUrls[code], locale).setup
+      .find(({ type }) => type === 'LANGUAGE'));
+
+    assert.deepEqual(languages, expectedValues.map((value, code) => ({
+      name: localizedLanguages[locale].name,
+      value,
+      type: 'LANGUAGE',
+      code: String(code),
+    })));
+  });
+}
+
+test('Vietnamese models expose their language table through the model profile', () => {
+  for (const [modelType, modelId] of [['CY', '298'], ['EY', '023'], ['FY', '523']]) {
+    assert.deepEqual(getModelProfile(modelType, modelId), {
+      recurringDecimal: 'bracket',
+      language: 'vn',
+    });
   }
 });
 

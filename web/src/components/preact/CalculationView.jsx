@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useLayoutEffect, useRef, useState } from 'preact/hooks';
 import PreviewTable from './PreviewTable.jsx';
 import ScratchBlocksView from './ScratchBlocksView.jsx';
 
@@ -98,35 +98,60 @@ export default function CalculationView({ result, language, renderVersion, t, on
     || statistic || distribution || variable || tableRange || mathBox || algorithm || sequence,
   );
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!hasContent || !containerRef.current) {
       setTypesetting(false);
       return undefined;
     }
 
     const queueVersion = ++queueVersionRef.current;
-    const mathJax = window.MathJax;
-    if (!mathJax?.Hub) {
-      setTypesetting(false);
-      return undefined;
-    }
-
     let cancelled = false;
+    const mathJaxScript = document.getElementById('mathjax-script');
     setTypesetting(true);
 
-    try {
-      mathJax.Hub.Queue(['Typeset', mathJax.Hub, containerRef.current]);
-      mathJax.Hub.Queue(() => {
-        if (!cancelled && queueVersionRef.current === queueVersion) setTypesetting(false);
-      });
-    } catch (error) {
-      console.error(error);
+    function typesetWhenReady() {
+      if (cancelled || queueVersionRef.current !== queueVersion) return true;
+
+      const mathJax = window.MathJax;
+      if (!mathJax?.Hub) return false;
+
+      try {
+        mathJax.Hub.Queue(['Typeset', mathJax.Hub, containerRef.current]);
+        mathJax.Hub.Queue(() => {
+          if (!cancelled && queueVersionRef.current === queueVersion) setTypesetting(false);
+        });
+      } catch (error) {
+        console.error(error);
+        setTypesetting(false);
+      }
+      return true;
+    }
+
+    function handleMathJaxError() {
+      if (cancelled || queueVersionRef.current !== queueVersion) return;
+      console.error('MathJax failed to load.');
       setTypesetting(false);
-      return undefined;
+    }
+
+    function handleMathJaxLoad() {
+      if (!typesetWhenReady()) handleMathJaxError();
+    }
+
+    if (!typesetWhenReady()) {
+      if (!mathJaxScript || mathJaxScript.dataset.loadFailed === 'true') {
+        handleMathJaxError();
+      } else if (mathJaxScript.dataset.loaded === 'true') {
+        handleMathJaxLoad();
+      } else {
+        mathJaxScript.addEventListener('load', handleMathJaxLoad, { once: true });
+        mathJaxScript.addEventListener('error', handleMathJaxError, { once: true });
+      }
     }
 
     return () => {
       cancelled = true;
+      mathJaxScript?.removeEventListener('load', handleMathJaxLoad);
+      mathJaxScript?.removeEventListener('error', handleMathJaxError);
     };
   }, [hasContent, language, renderVersion]);
 

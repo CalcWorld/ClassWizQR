@@ -13,7 +13,8 @@ import '../styles/jsoneditor-overrides.css';
 const mathJaxSrc = '/vendor/mathjax/MathJax.js?config=TeX-AMS_CHTML';
 ---
 <BaseLayout title="ClassWiz QR">
-    <script defer is:inline src={mathJaxSrc}></script>
+    <script id="mathjax-script" is:inline src={mathJaxSrc} onload="this.dataset.loaded = 'true'"
+            onerror="this.dataset.loadFailed = 'true'" defer></script>
     <ParserApp client:load/>
     <div id="app-footer">
         <SiteFooter/>

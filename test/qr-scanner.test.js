@@ -3,21 +3,11 @@ import { readFileSync } from 'node:fs';
 import { test } from 'vitest';
 import { prepareZXingModule, readBarcodes } from 'zxing-wasm/reader';
 import { parse } from './support/parser.js';
-import {
-  consumeQrResult,
-  createEmptySequence,
-  getPendingSequenceIndexes,
-} from '../web/src/scripts/qrSequence.js';
+import { consumeQrResult, createEmptySequence, getPendingSequenceIndexes, } from '../web/src/scripts/qrSequence.js';
 import { addQrImageResults, createEmptyImageSequenceSession, } from '../web/src/scripts/qrImageSequence.js';
-import {
-  filterValidQrResults,
-  resolveInitialQrResults,
-} from '../web/src/scripts/qrMultiResult.js';
+import { filterValidQrResults, resolveInitialQrResults, } from '../web/src/scripts/qrMultiResult.js';
 import { MULTI_QR_LIMIT } from '../web/src/scripts/qrReader.js';
-import {
-  calculatePreparedImageSize,
-  calculateQrSquareCrop,
-} from '../web/src/scripts/qrPreview.js';
+import { calculatePreparedImageSize, calculateQrSquareCrop, } from '../web/src/scripts/qrPreview.js';
 
 const wasmBinary = readFileSync(
   new URL('../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm', import.meta.url),

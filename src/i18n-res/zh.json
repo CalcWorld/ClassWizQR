@@ -213,6 +213,10 @@
     },
     "LANGUAGE": {
       "name": "语言"
+    },
+    "LANGUAGE_TRANS": {
+      "en": "英语",
+      "jp": "日语"
     }
   },
   "input": {

@@ -213,6 +213,10 @@
     },
     "LANGUAGE": {
       "name": "Ngôn ngữ"
+    },
+    "LANGUAGE_TRANS": {
+      "en": "Tiếng Anh",
+      "jp": "tiếng Nhật"
     }
   },
   "input": {

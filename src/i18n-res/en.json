@@ -247,7 +247,19 @@
       "name": "Algorithm: Unit Setting"
     },
     "LANGUAGE": {
-      "name": "Language"
+      "name": "Language",
+      "jp": {
+        "0": "en",
+        "1": "jp"
+      }
+    },
+    "LANGUAGE_LOCAL": {
+      "en": "English",
+      "jp": "日本語"
+    },
+    "LANGUAGE_TRANS": {
+      "en": "English",
+      "jp": "Japanese"
     }
   },
   "input": {

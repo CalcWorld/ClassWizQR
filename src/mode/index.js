@@ -88,7 +88,7 @@ export class ParseMode {
   }
 
   /**
-   * @param {CY|EY|FY} modelType
+   * @param {'CY'|'EY'|'FY'} modelType
    * @param {string} modelId
    */
   getModeInfo(modelType, modelId) {

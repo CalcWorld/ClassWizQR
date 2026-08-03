@@ -191,7 +191,7 @@ export class ClassWizQR {
     let setup;
     if (kv.S) {
       const parseS = new ParseSetup(kv);
-      setup = parseS.parseAll(modelType);
+      setup = parseS.parseAll({ modelType, modelId });
     }
 
     let expression, expressionE, expressionG, _function, algorithm;

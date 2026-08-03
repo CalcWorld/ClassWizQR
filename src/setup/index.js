@@ -1,4 +1,5 @@
 import { tt } from "../utils.js";
+import { getModelProfile } from '../model/index.js';
 
 export class ParseSetup {
   constructor({ S }) {
@@ -109,9 +110,10 @@ export class ParseSetup {
   }
 
   /**
-   * @param {CY|EY|FY} modelType
+   * @param {'CY'|'EY'|'FY'} modelType
+   * @param {string} modelId
    */
-  parseAll(modelType) {
+  parseAll({ modelType, modelId }) {
     const parseNumberFormat = () => {
       const type = 'NUMBER_FORMAT';
       const main = this.getNumberFormatMain();
@@ -132,6 +134,25 @@ export class ParseSetup {
       return { name, value, type, code };
     }
 
+    const parseLanguage = (type, code) => {
+      const name = tt(`setup.${type}.name`);
+      let value = code;
+      const languageType = getModelProfile(modelType, modelId).language;
+      const langCode = tt(`setup.${type}.${languageType}.${code}`);
+      if (languageType && langCode) {
+        const localLang = tt(`setup.${type}_LOCAL.${langCode}`);
+        const transLang = tt(`setup.${type}_TRANS.${langCode}`);
+        if (transLang && localLang) {
+          if (localLang === transLang) {
+            value = localLang;
+          } else {
+            value = `${localLang} (${transLang})`;
+          }
+        }
+      }
+      return { name, value, type, code };
+    };
+
     const parseCommon = (type, code) => {
       const name = tt(`setup.${type}.name`);
       const value = tt(`setup.${type}.${code}`) || tt(`setup.${type}.${code}-${modelType}`) || code;
@@ -139,6 +160,7 @@ export class ParseSetup {
     }
 
     const result = [];
+    result.push(parseLanguage('LANGUAGE', this.getLanguage()))
     if (this.isFullSetup()) {
       const setupMap = {
         "DECIMAL_MARK": this.getDecimalMark(),
@@ -154,7 +176,6 @@ export class ParseSetup {
         "DIGIT_SEPARATOR": this.getDigitSeparator(),
         "MULTI_LINE_FONT": this.getMultiLineFont(),
         "EQUATION_COMPLEX_ROOT": this.getEquationComplexRoot(),
-        "LANGUAGE": this.getLanguage(),
         "SPREADSHEET_AUTO_CALC": this.getSpreadsheetAutoCalc(),
         "SPREADSHEET_SHOW_CELL": this.getSpreadsheetShowCell(),
         "QR_CODE_VERSION": this.getQRCodeVersion(),
@@ -164,12 +185,9 @@ export class ParseSetup {
 
       result.push(parseNumberFormat());
       result.push(parseInputOutput());
-      for (const [code, setup] of Object.entries(setupMap)) {
-        result.push(parseCommon(code, setup));
+      for (const [type, code] of Object.entries(setupMap)) {
+        result.push(parseCommon(type, code));
       }
-    } else {
-      // in menu/error, only language is exported
-      result.push(parseCommon('LANGUAGE', this.getLanguage()));
     }
     return result;
   }

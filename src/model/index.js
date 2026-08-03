@@ -17,6 +17,7 @@ const MODEL_FEATURES = [
   {
     capabilities: {
       locale: 'jp',
+      language: 'jp',
     },
     models: {
       [MODEL_TYPE.CY]: ['240', '241', '242', '243'],
@@ -118,9 +119,9 @@ const MODEL_FEATURES = [
  * - decimalMark: dot
  * - recurringDecimal: dots above the first and last recurring digits
  *
- * @param {string} modelType
+ * @param {'CY'|'EY'|'FY'} modelType
  * @param {string} modelId
- * @return {{locale?: 'jp'|'fr'|'sp'|'ce'|'rs', decimalMark?: 'comma', recurringDecimal?: 'overline'|'bracket', quotient?: 'Q='|'C='}}
+ * @return {{locale?: 'jp'|'fr'|'sp'|'ce'|'rs', decimalMark?: 'comma', recurringDecimal?: 'overline'|'bracket', quotient?: 'Q='|'C=', language?: 'jp'}}
  */
 export const getModelProfile = (modelType, modelId) => {
   const profile = {};

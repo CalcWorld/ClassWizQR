@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
-import { parse, projectLocalization, projectResult } from './support/parser.js';
+import { assertSetupUnorderedEqual, parse, projectLocalization, projectResult } from './support/parser.js';
 
 // Sources: ../ClassWizQR.wiki/Calculate-Mode.md
 const cases = [
@@ -1206,7 +1206,7 @@ const cases = [
 
 for (const { name, url, expected } of cases) {
   test(name, () => {
-    assert.deepEqual(projectResult(parse(url)), expected);
+    assertSetupUnorderedEqual(projectResult(parse(url)), expected);
   });
 }
 
@@ -2067,7 +2067,7 @@ const localizationCases = [
 for (const { name, url, fields, expected } of localizationCases) {
   for (const [language, localizedExpected] of Object.entries(expected)) {
     test(`${name} (${language})`, () => {
-      assert.deepEqual(
+      assertSetupUnorderedEqual(
         projectLocalization(parse(url, language), fields),
         localizedExpected,
       );

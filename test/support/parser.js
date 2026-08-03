@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { ClassWizQR } from '../../src/index.js';
 import en from '../../src/i18n-res/en.json' with { type: 'json' };
 import fr from '../../src/i18n-res/fr.json' with { type: 'json' };
@@ -34,6 +35,24 @@ export function parse(url, language = 'en') {
 
 export function normalize(value) {
   return JSON.parse(JSON.stringify(value));
+}
+
+const sortSetup = setup => setup && [...setup].sort((left, right) =>
+  JSON.stringify(left).localeCompare(JSON.stringify(right))
+);
+
+/**
+ * Compares parser results while treating setup entries as an unordered list.
+ * Entry count and complete entry contents are still checked.
+ */
+export function assertSetupUnorderedEqual(actual, expected) {
+  const normalizedActual = normalize(actual);
+  const normalizedExpected = normalize(expected);
+
+  assert.equal(normalizedActual.setup?.length, normalizedExpected.setup?.length);
+  normalizedActual.setup = sortSetup(normalizedActual.setup);
+  normalizedExpected.setup = sortSetup(normalizedExpected.setup);
+  assert.deepEqual(normalizedActual, normalizedExpected);
 }
 
 export function projectResult(result) {

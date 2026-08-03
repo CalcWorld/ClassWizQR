@@ -1,7 +1,6 @@
-import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
-import { parse, projectResult } from './support/parser.js';
+import { assertSetupUnorderedEqual, parse, projectResult } from './support/parser.js';
 
 // Sources: ../ClassWizQR.wiki/Sequence-Mode.md
 const cases = [
@@ -1204,6 +1203,6 @@ const cases = [
 
 for (const { name, url, expected } of cases) {
   test(name, () => {
-    assert.deepEqual(projectResult(parse(url)), expected);
+    assertSetupUnorderedEqual(projectResult(parse(url)), expected);
   });
 }

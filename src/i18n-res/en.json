@@ -266,6 +266,10 @@
         "0": "en",
         "1": "fr",
         "2": "nl"
+      },
+      "ar": {
+        "0": "en",
+        "1": "ar"
       }
     },
     "LANGUAGE_LOCAL": {
@@ -274,7 +278,8 @@
       "de": "Deutsch",
       "jp": "日本語",
       "fr": "Français",
-      "nl": "Nederlands"
+      "nl": "Nederlands",
+      "ar": "عربي"
     },
     "LANGUAGE_TRANS": {
       "en": "English",
@@ -282,7 +287,8 @@
       "de": "German",
       "jp": "Japanese",
       "fr": "French",
-      "nl": "Dutch"
+      "nl": "Dutch",
+      "ar": "Arabic"
     }
   },
   "input": {

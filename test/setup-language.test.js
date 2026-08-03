@@ -13,6 +13,10 @@ const belgianUrls = [
   'http://wes.casio.com/math/index.php?q=I-247A+U-000000000000+M-X100000000+S-1F1A1',
   'http://wes.casio.com/math/index.php?q=I-247A+U-000000000000+M-Y200000000+S-27F02',
 ];
+const arabicUrls = [
+  'http://wes.casio.com/math/index.php?q=I-258A+U-000000000000+M-Z10D000000+S-0AC7B',
+  'http://wes.casio.com/math/index.php?q=I-258A+U-000000000000+M-X100000000+S-137AC',
+];
 
 const cases = [
   {
@@ -223,6 +227,48 @@ test('Belgian models expose their language table through the model profile', () 
     quotient: 'Q=',
     language: 'be',
   });
+});
+
+const localizedArabicLanguages = {
+  en: ['English', 'عربي (Arabic)'],
+  zh: ['English (英语)', 'عربي (阿拉伯语)'],
+  vi: ['English (Tiếng Anh)', 'عربي (tiếng Ả Rập)'],
+  fr: ['English (Anglais)', 'عربي (arabe)'],
+};
+
+for (const [code, url] of arabicUrls.entries()) {
+  test(`Arabic sample uses language code ${code}`, () => {
+    const { setup } = parse(url);
+    const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
+
+    assert.equal(setup.length, 1);
+    assert.deepEqual(languageEntries, [{
+      name: 'Language',
+      value: localizedArabicLanguages.en[code],
+      type: 'LANGUAGE',
+      code: String(code),
+    }]);
+  });
+}
+
+for (const [locale, expectedValues] of Object.entries(localizedArabicLanguages)) {
+  test(`Arabic calculator languages are localized in ${locale}`, () => {
+    const languages = expectedValues.map((value, code) => parse(arabicUrls[code], locale).setup
+      .find(({ type }) => type === 'LANGUAGE'));
+
+    assert.deepEqual(languages, expectedValues.map((value, code) => ({
+      name: localizedLanguages[locale].name,
+      value,
+      type: 'LANGUAGE',
+      code: String(code),
+    })));
+  });
+}
+
+test('Arabic models expose their language table through the model profile', () => {
+  for (const modelId of ['256', '257', '258', '259']) {
+    assert.equal(getModelProfile('CY', modelId).language, 'ar');
+  }
 });
 
 test('Japanese models expose their language table through the model profile', () => {

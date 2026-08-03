@@ -258,19 +258,28 @@
       "jp": {
         "0": "en",
         "1": "jp"
+      },
+      "be": {
+        "0": "en",
+        "1": "fr",
+        "2": "nl"
       }
     },
     "LANGUAGE_LOCAL": {
       "en": "English",
       "zh": "中文",
       "de": "Deutsch",
-      "jp": "日本語"
+      "jp": "日本語",
+      "fr": "Français",
+      "nl": "Nederlands"
     },
     "LANGUAGE_TRANS": {
       "en": "English",
       "zh": "Chinese",
       "de": "German",
-      "jp": "Japanese"
+      "jp": "Japanese",
+      "fr": "French",
+      "nl": "Dutch"
     }
   },
   "input": {

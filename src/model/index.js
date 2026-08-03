@@ -128,6 +128,15 @@ const MODEL_FEATURES = [
       [MODEL_TYPE.EY]: ['012', '013', '014', '015', '016', '047'],
     },
   },
+  {
+    capabilities: {
+      language: 'be',
+    },
+    models: {
+      [MODEL_TYPE.CY]: ['247'],
+      [MODEL_TYPE.EY]: ['007'],
+    },
+  },
 
 ];
 
@@ -141,7 +150,7 @@ const MODEL_FEATURES = [
  *
  * @param {'CY'|'EY'|'FY'} modelType
  * @param {string} modelId
- * @return {{locale?: 'jp'|'fr'|'sp'|'ce'|'rs', decimalMark?: 'comma', recurringDecimal?: 'overline'|'bracket', quotient?: 'Q='|'C=', language?: 'jp'|'cn'|'de'}}
+ * @return {{locale?: 'jp'|'fr'|'sp'|'ce'|'rs', decimalMark?: 'comma', recurringDecimal?: 'overline'|'bracket', quotient?: 'Q='|'C=', language?: 'jp'|'cn'|'de'|'be'}}
  */
 export const getModelProfile = (modelType, modelId) => {
   const profile = {};

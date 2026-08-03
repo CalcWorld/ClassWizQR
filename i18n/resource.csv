@@ -203,6 +203,9 @@ setup.LANGUAGE.cn.1,zh,,,
 setup.LANGUAGE.de.0,de,,,
 setup.LANGUAGE.jp.0,en,,,
 setup.LANGUAGE.jp.1,jp,,,
+setup.LANGUAGE.be.0,en,,,
+setup.LANGUAGE.be.1,fr,,,
+setup.LANGUAGE.be.2,nl,,,
 setup.LANGUAGE_LOCAL.en,English,,,
 setup.LANGUAGE_TRANS.en,English,英语,Tiếng Anh,Anglais
 setup.LANGUAGE_LOCAL.zh,中文,,,
@@ -211,6 +214,10 @@ setup.LANGUAGE_LOCAL.de,Deutsch,,,
 setup.LANGUAGE_TRANS.de,German,德语,tiếng Đức,allemand
 setup.LANGUAGE_LOCAL.jp,日本語,,,
 setup.LANGUAGE_TRANS.jp,Japanese,日语,tiếng Nhật,japonais
+setup.LANGUAGE_LOCAL.fr,Français,,,
+setup.LANGUAGE_TRANS.fr,French,法语,tiếng Pháp,Français
+setup.LANGUAGE_LOCAL.nl,Nederlands,,,
+setup.LANGUAGE_TRANS.nl,Dutch,荷兰语,tiếng Hà Lan,néerlandais
 input.DISTRIBUTION.0241,Lower=${0},下限=${0},Ldưới=${0},Limite inférieure=${0}
 input.DISTRIBUTION.0242,Upper=${1},上限=${1},Ltrên=${1},Limite supérieure=${1}
 input.DISTRIBUTION.0331,Area=${0},区域=${0},Vùng=${0},Aire=${0}

@@ -338,7 +338,7 @@ const localizationCases = [
           },
           {
             "name": "Language",
-            "value": "0",
+            "value": "English",
             "type": "LANGUAGE",
             "code": "0"
           },
@@ -577,7 +577,7 @@ const localizationCases = [
           },
           {
             "name": "语言",
-            "value": "0",
+            "value": "English (英语)",
             "type": "LANGUAGE",
             "code": "0"
           },
@@ -816,7 +816,7 @@ const localizationCases = [
           },
           {
             "name": "Ngôn ngữ",
-            "value": "0",
+            "value": "English (Tiếng Anh)",
             "type": "LANGUAGE",
             "code": "0"
           },
@@ -1055,7 +1055,7 @@ const localizationCases = [
           },
           {
             "name": "Langue",
-            "value": "0",
+            "value": "English (Anglais)",
             "type": "LANGUAGE",
             "code": "0"
           },

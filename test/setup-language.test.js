@@ -7,6 +7,11 @@ import { parse } from './support/parser.js';
 const japaneseUrl = 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-Z000000000+S-10061';
 const englishUrl = 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-X100000000+S-0C506';
 const germanUrl = 'http://wes.casio.com/math/index.php?q=I-250A+U-000000000000+M-Z000000000+S-00000';
+const belgianUrls = [
+  'http://wes.casio.com/math/index.php?q=I-247A+U-000000000000+M-Z109000000+S-06B7A',
+  'http://wes.casio.com/math/index.php?q=I-247A+U-000000000000+M-X100000000+S-1F1A1',
+  'http://wes.casio.com/math/index.php?q=I-247A+U-000000000000+M-Y200000000+S-27F02',
+];
 
 const cases = [
   {
@@ -136,6 +141,55 @@ test('German models expose their language table through the model profile', () =
   assert.equal(getModelProfile('CY', '216').language, 'de');
   assert.equal(getModelProfile('EY', '012').language, 'de');
   assert.equal(getModelProfile('EY', '047').language, 'de');
+});
+
+const localizedBelgianLanguages = {
+  en: ['English', 'Français (French)', 'Nederlands (Dutch)'],
+  zh: ['English (英语)', 'Français (法语)', 'Nederlands (荷兰语)'],
+  vi: ['English (Tiếng Anh)', 'Français (tiếng Pháp)', 'Nederlands (tiếng Hà Lan)'],
+  fr: ['English (Anglais)', 'Français', 'Nederlands (néerlandais)'],
+};
+
+for (const [code, url] of belgianUrls.entries()) {
+  test(`Belgian sample uses language code ${code}`, () => {
+    const { setup } = parse(url);
+    const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
+
+    assert.equal(setup.length, 1);
+    assert.deepEqual(languageEntries, [{
+      name: 'Language',
+      value: localizedBelgianLanguages.en[code],
+      type: 'LANGUAGE',
+      code: String(code),
+    }]);
+  });
+}
+
+for (const [locale, expectedValues] of Object.entries(localizedBelgianLanguages)) {
+  test(`Belgian calculator languages are localized in ${locale}`, () => {
+    const languages = expectedValues.map((value, code) => parse(belgianUrls[code], locale).setup
+      .find(({ type }) => type === 'LANGUAGE'));
+
+    assert.deepEqual(languages, expectedValues.map((value, code) => ({
+      name: localizedLanguages[locale].name,
+      value,
+      type: 'LANGUAGE',
+      code: String(code),
+    })));
+  });
+}
+
+test('Belgian models expose their language table through the model profile', () => {
+  assert.deepEqual(getModelProfile('CY', '247'), {
+    decimalMark: 'comma',
+    quotient: 'Q=',
+    language: 'be',
+  });
+  assert.deepEqual(getModelProfile('EY', '007'), {
+    decimalMark: 'comma',
+    quotient: 'Q=',
+    language: 'be',
+  });
 });
 
 test('Japanese models expose their language table through the model profile', () => {

@@ -307,6 +307,10 @@
       "rs": {
         "0": "sr-Cyrl",
         "1": "sr-Latn"
+      },
+      "nl": {
+        "0": "en",
+        "1": "nl"
       }
     },
     "LANGUAGE_LOCAL": {

@@ -54,6 +54,10 @@ const serbianUrls = [
   'http://wes.casio.com/math/index.php?q=I-217A+U-000000000000+M-Z10C000000+S-0393A',
   'http://wes.casio.com/math/index.php?q=I-217A+U-000000000000+M-X100000000+S-1C88E',
 ];
+const dutchUrls = [
+  'http://wes.casio.com/ncal/index.php?q=I-521A+U-000000000000+M-Z000000000+S-08BBD',
+  'http://wes.casio.com/ncal/index.php?q=I-521A+U-000000000000+M-Z000000000+S-10A9D',
+];
 
 const cases = [
   {
@@ -610,6 +614,51 @@ test('Serbian model exposes its language table through the model profile', () =>
     decimalMark: 'comma',
     language: 'rs',
   });
+});
+
+const localizedDutchLanguages = {
+  en: ['English', 'Nederlands (Dutch)'],
+  zh: ['English (英语)', 'Nederlands (荷兰语)'],
+  vi: ['English (Tiếng Anh)', 'Nederlands (tiếng Hà Lan)'],
+  fr: ['English (Anglais)', 'Nederlands (néerlandais)'],
+};
+
+for (const [code, url] of dutchUrls.entries()) {
+  test(`Dutch sample uses language code ${code}`, () => {
+    const { setup } = parse(url);
+    const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
+
+    assert.equal(setup.length, 1);
+    assert.deepEqual(languageEntries, [{
+      name: 'Language',
+      value: localizedDutchLanguages.en[code],
+      type: 'LANGUAGE',
+      code: String(code),
+    }]);
+  });
+}
+
+for (const [locale, expectedValues] of Object.entries(localizedDutchLanguages)) {
+  test(`Dutch calculator languages are localized in ${locale}`, () => {
+    const languages = expectedValues.map((value, code) => parse(dutchUrls[code], locale).setup
+      .find(({ type }) => type === 'LANGUAGE'));
+
+    assert.deepEqual(languages, expectedValues.map((value, code) => ({
+      name: localizedLanguages[locale].name,
+      value,
+      type: 'LANGUAGE',
+      code: String(code),
+    })));
+  });
+}
+
+test('Dutch models expose their language table through the model profile', () => {
+  for (const [modelType, modelId] of [['EY', '021'], ['FY', '521']]) {
+    assert.deepEqual(getModelProfile(modelType, modelId), {
+      decimalMark: 'comma',
+      language: 'nl',
+    });
+  }
 });
 
 test('Japanese models expose their language table through the model profile', () => {

@@ -232,6 +232,8 @@ setup.LANGUAGE.vn.0,en,,,
 setup.LANGUAGE.vn.1,vi,,,
 setup.LANGUAGE.rs.0,sr-Cyrl,,,
 setup.LANGUAGE.rs.1,sr-Latn,,,
+setup.LANGUAGE.nl.0,en,,,
+setup.LANGUAGE.nl.1,nl,,,
 setup.LANGUAGE_LOCAL.en,English,,,
 setup.LANGUAGE_TRANS.en,English,英语,Tiếng Anh,Anglais
 setup.LANGUAGE_LOCAL.zh,中文,,,

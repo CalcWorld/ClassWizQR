@@ -232,7 +232,9 @@
       "hu": "hongrois",
       "pl": "polonais",
       "sk": "slovaque",
-      "vi": "vietnamien"
+      "vi": "vietnamien",
+      "sr-Cyrl": "serbe/cyrillique",
+      "sr-Latn": "serbe/latin"
     }
   },
   "input": {

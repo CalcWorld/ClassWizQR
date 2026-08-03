@@ -230,6 +230,8 @@ setup.LANGUAGE.ce.2,pl,,,
 setup.LANGUAGE.ce.3,sk,,,
 setup.LANGUAGE.vn.0,en,,,
 setup.LANGUAGE.vn.1,vi,,,
+setup.LANGUAGE.rs.0,sr-Cyrl,,,
+setup.LANGUAGE.rs.1,sr-Latn,,,
 setup.LANGUAGE_LOCAL.en,English,,,
 setup.LANGUAGE_TRANS.en,English,英语,Tiếng Anh,Anglais
 setup.LANGUAGE_LOCAL.zh,中文,,,
@@ -266,6 +268,10 @@ setup.LANGUAGE_LOCAL.sk,Slovensky,,,
 setup.LANGUAGE_TRANS.sk,Slovak,斯洛伐克语,tiếng Slovakia,slovaque
 setup.LANGUAGE_LOCAL.vi,Tiếng Việt,,,
 setup.LANGUAGE_TRANS.vi,Vietnamese,越南语,Tiếng Việt,vietnamien
+setup.LANGUAGE_LOCAL.sr-Cyrl,Српски/Ћирилица,,,
+setup.LANGUAGE_TRANS.sr-Cyrl,Serbian/Cyrillic,塞尔维亚语/西里尔字母,tiếng Serbia/chữ Kirin,serbe/cyrillique
+setup.LANGUAGE_LOCAL.sr-Latn,Srpski/Latinica,,,
+setup.LANGUAGE_TRANS.sr-Latn,Serbian/Latin,塞尔维亚语/拉丁字母,tiếng Serbia/chữ Latinh,serbe/latin
 input.DISTRIBUTION.0241,Lower=${0},下限=${0},Ldưới=${0},Limite inférieure=${0}
 input.DISTRIBUTION.0242,Upper=${1},上限=${1},Ltrên=${1},Limite supérieure=${1}
 input.DISTRIBUTION.0331,Area=${0},区域=${0},Vùng=${0},Aire=${0}

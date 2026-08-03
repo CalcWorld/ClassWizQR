@@ -50,6 +50,10 @@ const vietnameseUrls = [
   'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-Z000000000+S-01BC4',
   'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-Z000000000+S-19CA4',
 ];
+const serbianUrls = [
+  'http://wes.casio.com/math/index.php?q=I-217A+U-000000000000+M-Z10C000000+S-0393A',
+  'http://wes.casio.com/math/index.php?q=I-217A+U-000000000000+M-X100000000+S-1C88E',
+];
 
 const cases = [
   {
@@ -562,6 +566,50 @@ test('Vietnamese models expose their language table through the model profile', 
       language: 'vn',
     });
   }
+});
+
+const localizedSerbianLanguages = {
+  en: ['Српски/Ћирилица (Serbian/Cyrillic)', 'Srpski/Latinica (Serbian/Latin)'],
+  zh: ['Српски/Ћирилица (塞尔维亚语/西里尔字母)', 'Srpski/Latinica (塞尔维亚语/拉丁字母)'],
+  vi: ['Српски/Ћирилица (tiếng Serbia/chữ Kirin)', 'Srpski/Latinica (tiếng Serbia/chữ Latinh)'],
+  fr: ['Српски/Ћирилица (serbe/cyrillique)', 'Srpski/Latinica (serbe/latin)'],
+};
+
+for (const [code, url] of serbianUrls.entries()) {
+  test(`Serbian sample uses language code ${code}`, () => {
+    const { setup } = parse(url);
+    const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
+
+    assert.equal(setup.length, 1);
+    assert.deepEqual(languageEntries, [{
+      name: 'Language',
+      value: localizedSerbianLanguages.en[code],
+      type: 'LANGUAGE',
+      code: String(code),
+    }]);
+  });
+}
+
+for (const [locale, expectedValues] of Object.entries(localizedSerbianLanguages)) {
+  test(`Serbian calculator languages are localized in ${locale}`, () => {
+    const languages = expectedValues.map((value, code) => parse(serbianUrls[code], locale).setup
+      .find(({ type }) => type === 'LANGUAGE'));
+
+    assert.deepEqual(languages, expectedValues.map((value, code) => ({
+      name: localizedLanguages[locale].name,
+      value,
+      type: 'LANGUAGE',
+      code: String(code),
+    })));
+  });
+}
+
+test('Serbian model exposes its language table through the model profile', () => {
+  assert.deepEqual(getModelProfile('CY', '217'), {
+    locale: 'rs',
+    decimalMark: 'comma',
+    language: 'rs',
+  });
 });
 
 test('Japanese models expose their language table through the model profile', () => {

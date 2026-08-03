@@ -303,6 +303,10 @@
       "vn": {
         "0": "en",
         "1": "vi"
+      },
+      "rs": {
+        "0": "sr-Cyrl",
+        "1": "sr-Latn"
       }
     },
     "LANGUAGE_LOCAL": {
@@ -323,7 +327,9 @@
       "hu": "Magyar",
       "pl": "Polski",
       "sk": "Slovensky",
-      "vi": "Tiếng Việt"
+      "vi": "Tiếng Việt",
+      "sr-Cyrl": "Српски/Ћирилица",
+      "sr-Latn": "Srpski/Latinica"
     },
     "LANGUAGE_TRANS": {
       "en": "English",
@@ -343,7 +349,9 @@
       "hu": "Hungarian",
       "pl": "Polish",
       "sk": "Slovak",
-      "vi": "Vietnamese"
+      "vi": "Vietnamese",
+      "sr-Cyrl": "Serbian/Cyrillic",
+      "sr-Latn": "Serbian/Latin"
     }
   },
   "input": {

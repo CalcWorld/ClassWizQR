@@ -232,7 +232,9 @@
       "hu": "tiếng Hungary",
       "pl": "tiếng Ba Lan",
       "sk": "tiếng Slovakia",
-      "vi": "Tiếng Việt"
+      "vi": "Tiếng Việt",
+      "sr-Cyrl": "tiếng Serbia/chữ Kirin",
+      "sr-Latn": "tiếng Serbia/chữ Latinh"
     }
   },
   "input": {

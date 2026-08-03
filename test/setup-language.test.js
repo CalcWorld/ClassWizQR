@@ -40,6 +40,12 @@ const spanish3Urls = [
   'http://wes.casio.com/ncal/index.php?q=I-011A+U-000000000000+M-Z000000000+S-3E660',
   'http://wes.casio.com/ncal/index.php?q=I-011A+U-000000000000+M-Z000000000+S-460BD',
 ];
+const centralEuropeanUrls = [
+  'http://wes.casio.com/math/index.php?q=I-294F+U-000000000000+M-Z10C000000+S-0F65F',
+  'http://wes.casio.com/math/index.php?q=I-294F+U-000000000000+M-X100000000+S-1959B',
+  'http://wes.casio.com/math/index.php?q=I-294F+U-000000000000+M-Y200000000+S-2269B',
+  'http://wes.casio.com/math/index.php?q=I-294F+U-000000000000+M-C10000AD00+S-000410100000100E1310B0000F86+R-0158384440324535009900000000000000000000+E-7939',
+];
 
 const cases = [
   {
@@ -464,6 +470,48 @@ for (const [locale, expectedValues] of Object.entries(localizedSpanish3Languages
 test('Spanish 3 models expose their language table through the model profile', () => {
   for (const modelId of ['008', '009', '010', '011']) {
     assert.equal(getModelProfile('EY', modelId).language, 'sp3');
+  }
+});
+
+const localizedCentralEuropeanLanguages = {
+  en: ['Česky (Czech)', 'Magyar (Hungarian)', 'Polski (Polish)', 'Slovensky (Slovak)'],
+  zh: ['Česky (捷克语)', 'Magyar (匈牙利语)', 'Polski (波兰语)', 'Slovensky (斯洛伐克语)'],
+  vi: ['Česky (tiếng Séc)', 'Magyar (tiếng Hungary)', 'Polski (tiếng Ba Lan)', 'Slovensky (tiếng Slovakia)'],
+  fr: ['Česky (tchèque)', 'Magyar (hongrois)', 'Polski (polonais)', 'Slovensky (slovaque)'],
+};
+
+for (const [code, url] of centralEuropeanUrls.entries()) {
+  test(`Central European sample uses language code ${code}`, () => {
+    const { setup } = parse(url);
+    const languageEntries = setup.filter(({ type }) => type === 'LANGUAGE');
+
+    assert.equal(setup.length, code === 3 ? 21 : 1);
+    assert.deepEqual(languageEntries, [{
+      name: 'Language',
+      value: localizedCentralEuropeanLanguages.en[code],
+      type: 'LANGUAGE',
+      code: String(code),
+    }]);
+  });
+}
+
+for (const [locale, expectedValues] of Object.entries(localizedCentralEuropeanLanguages)) {
+  test(`Central European calculator languages are localized in ${locale}`, () => {
+    const languages = expectedValues.map((value, code) => parse(centralEuropeanUrls[code], locale).setup
+      .find(({ type }) => type === 'LANGUAGE'));
+
+    assert.deepEqual(languages, expectedValues.map((value, code) => ({
+      name: localizedLanguages[locale].name,
+      value,
+      type: 'LANGUAGE',
+      code: String(code),
+    })));
+  });
+}
+
+test('Central European models expose their language table through the model profile', () => {
+  for (const modelId of ['291', '292', '293', '294']) {
+    assert.equal(getModelProfile('CY', modelId).language, 'ce');
   }
 });
 

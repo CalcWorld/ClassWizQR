@@ -227,7 +227,11 @@
       "es-ES": "tiếng Tây Ban Nha",
       "ca": "tiếng Catalan",
       "eu": "tiếng Basque",
-      "gl": "tiếng Galicia"
+      "gl": "tiếng Galicia",
+      "cs": "tiếng Séc",
+      "hu": "tiếng Hungary",
+      "pl": "tiếng Ba Lan",
+      "sk": "tiếng Slovakia"
     }
   },
   "input": {

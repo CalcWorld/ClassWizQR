@@ -224,6 +224,10 @@ setup.LANGUAGE.sp3.1,ca,,,
 setup.LANGUAGE.sp3.2,eu,,,
 setup.LANGUAGE.sp3.3,gl,,,
 setup.LANGUAGE.sp3.4,pt,,,
+setup.LANGUAGE.ce.0,cs,,,
+setup.LANGUAGE.ce.1,hu,,,
+setup.LANGUAGE.ce.2,pl,,,
+setup.LANGUAGE.ce.3,sk,,,
 setup.LANGUAGE_LOCAL.en,English,,,
 setup.LANGUAGE_TRANS.en,English,英语,Tiếng Anh,Anglais
 setup.LANGUAGE_LOCAL.zh,中文,,,
@@ -250,6 +254,14 @@ setup.LANGUAGE_LOCAL.eu,Euskara,,,
 setup.LANGUAGE_TRANS.eu,Basque,巴斯克语,tiếng Basque,basque
 setup.LANGUAGE_LOCAL.gl,Galego,,,
 setup.LANGUAGE_TRANS.gl,Galician,加利西亚语,tiếng Galicia,galicien
+setup.LANGUAGE_LOCAL.cs,Česky,,,
+setup.LANGUAGE_TRANS.cs,Czech,捷克语,tiếng Séc,tchèque
+setup.LANGUAGE_LOCAL.hu,Magyar,,,
+setup.LANGUAGE_TRANS.hu,Hungarian,匈牙利语,tiếng Hungary,hongrois
+setup.LANGUAGE_LOCAL.pl,Polski,,,
+setup.LANGUAGE_TRANS.pl,Polish,波兰语,tiếng Ba Lan,polonais
+setup.LANGUAGE_LOCAL.sk,Slovensky,,,
+setup.LANGUAGE_TRANS.sk,Slovak,斯洛伐克语,tiếng Slovakia,slovaque
 input.DISTRIBUTION.0241,Lower=${0},下限=${0},Ldưới=${0},Limite inférieure=${0}
 input.DISTRIBUTION.0242,Upper=${1},上限=${1},Ltrên=${1},Limite supérieure=${1}
 input.DISTRIBUTION.0331,Area=${0},区域=${0},Vùng=${0},Aire=${0}

@@ -227,7 +227,11 @@
       "es-ES": "espagnol",
       "ca": "catalan",
       "eu": "basque",
-      "gl": "galicien"
+      "gl": "galicien",
+      "cs": "tchèque",
+      "hu": "hongrois",
+      "pl": "polonais",
+      "sk": "slovaque"
     }
   },
   "input": {

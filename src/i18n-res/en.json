@@ -293,6 +293,12 @@
         "2": "eu",
         "3": "gl",
         "4": "pt"
+      },
+      "ce": {
+        "0": "cs",
+        "1": "hu",
+        "2": "pl",
+        "3": "sk"
       }
     },
     "LANGUAGE_LOCAL": {
@@ -308,7 +314,11 @@
       "es-ES": "Castellano",
       "ca": "Català",
       "eu": "Euskara",
-      "gl": "Galego"
+      "gl": "Galego",
+      "cs": "Česky",
+      "hu": "Magyar",
+      "pl": "Polski",
+      "sk": "Slovensky"
     },
     "LANGUAGE_TRANS": {
       "en": "English",
@@ -323,7 +333,11 @@
       "es-ES": "Spanish",
       "ca": "Catalan",
       "eu": "Basque",
-      "gl": "Galician"
+      "gl": "Galician",
+      "cs": "Czech",
+      "hu": "Hungarian",
+      "pl": "Polish",
+      "sk": "Slovak"
     }
   },
   "input": {

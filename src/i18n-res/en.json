@@ -252,6 +252,9 @@
         "0": "en",
         "1": "zh"
       },
+      "de": {
+        "0": "de"
+      },
       "jp": {
         "0": "en",
         "1": "jp"
@@ -260,11 +263,13 @@
     "LANGUAGE_LOCAL": {
       "en": "English",
       "zh": "中文",
+      "de": "Deutsch",
       "jp": "日本語"
     },
     "LANGUAGE_TRANS": {
       "en": "English",
       "zh": "Chinese",
+      "de": "German",
       "jp": "Japanese"
     }
   },

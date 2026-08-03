@@ -27,6 +27,7 @@ test('model profiles contain only non-default capabilities', () => {
   assert.deepEqual(getModelProfile('EY', '012'), {
     decimalMark: 'comma',
     recurringDecimal: 'overline',
+    language: 'de',
   });
   assert.deepEqual(getModelProfile('FY', '091'), {
     locale: 'fr',
@@ -36,6 +37,7 @@ test('model profiles contain only non-default capabilities', () => {
   assert.deepEqual(getModelProfile('CY', '215'), {
     decimalMark: 'comma',
     recurringDecimal: 'overline',
+    language: 'de',
   });
   assert.deepEqual(getModelProfile('FY', '523'), {
     recurringDecimal: 'bracket',

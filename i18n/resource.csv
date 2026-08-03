@@ -200,12 +200,15 @@ setup.ALGORITHM_UNIT_SETTING.name,Algorithm: Unit Setting,算法：移动单位�
 setup.LANGUAGE.name,Language,语言,Ngôn ngữ,Langue
 setup.LANGUAGE.cn.0,en,,,
 setup.LANGUAGE.cn.1,zh,,,
+setup.LANGUAGE.de.0,de,,,
 setup.LANGUAGE.jp.0,en,,,
 setup.LANGUAGE.jp.1,jp,,,
 setup.LANGUAGE_LOCAL.en,English,,,
 setup.LANGUAGE_TRANS.en,English,英语,Tiếng Anh,Anglais
 setup.LANGUAGE_LOCAL.zh,中文,,,
 setup.LANGUAGE_TRANS.zh,Chinese,中文,Trung Quốc,Chinois
+setup.LANGUAGE_LOCAL.de,Deutsch,,,
+setup.LANGUAGE_TRANS.de,German,德语,tiếng Đức,allemand
 setup.LANGUAGE_LOCAL.jp,日本語,,,
 setup.LANGUAGE_TRANS.jp,Japanese,日语,tiếng Nhật,japonais
 input.DISTRIBUTION.0241,Lower=${0},下限=${0},Ldưới=${0},Limite inférieure=${0}

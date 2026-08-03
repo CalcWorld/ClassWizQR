@@ -6,6 +6,7 @@ import { parse } from './support/parser.js';
 
 const japaneseUrl = 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-Z000000000+S-10061';
 const englishUrl = 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-X100000000+S-0C506';
+const germanUrl = 'http://wes.casio.com/math/index.php?q=I-250A+U-000000000000+M-Z000000000+S-00000';
 
 const cases = [
   {
@@ -109,6 +110,33 @@ for (const [locale, expected] of Object.entries(localizedLanguages)) {
     });
   });
 }
+
+const localizedGerman = {
+  en: { name: 'Language', value: 'Deutsch (German)' },
+  zh: { name: '语言', value: 'Deutsch (德语)' },
+  vi: { name: 'Ngôn ngữ', value: 'Deutsch (tiếng Đức)' },
+  fr: { name: 'Langue', value: 'Deutsch (allemand)' },
+};
+
+for (const [locale, expected] of Object.entries(localizedGerman)) {
+  test(`German-only calculator language is localized in ${locale}`, () => {
+    const language = parse(germanUrl, locale).setup
+      .find(({ type }) => type === 'LANGUAGE');
+
+    assert.deepEqual(language, {
+      ...expected,
+      type: 'LANGUAGE',
+      code: '0',
+    });
+  });
+}
+
+test('German models expose their language table through the model profile', () => {
+  assert.equal(getModelProfile('CY', '250').language, 'de');
+  assert.equal(getModelProfile('CY', '216').language, 'de');
+  assert.equal(getModelProfile('EY', '012').language, 'de');
+  assert.equal(getModelProfile('EY', '047').language, 'de');
+});
 
 test('Japanese models expose their language table through the model profile', () => {
   assert.deepEqual(getModelProfile('CY', '243'), {

@@ -7,6 +7,7 @@ import { parse } from './support/parser.js';
 const japaneseUrl = 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-Z000000000+S-10061';
 const englishUrl = 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-X100000000+S-0C506';
 const germanUrl = 'http://wes.casio.com/math/index.php?q=I-250A+U-000000000000+M-Z000000000+S-00000';
+const frenchUrl = 'http://wes.casio.com/ncal/index.php?q=I-006A+U-000000000000+M-C10000AD00+S-000410110000000E0010B0002C6A+Q-09000000000000000007552801000000000000000000000000000000+E-7A7B7C79787739';
 const belgianUrls = [
   'http://wes.casio.com/math/index.php?q=I-247A+U-000000000000+M-Z109000000+S-06B7A',
   'http://wes.casio.com/math/index.php?q=I-247A+U-000000000000+M-X100000000+S-1F1A1',
@@ -141,6 +142,38 @@ test('German models expose their language table through the model profile', () =
   assert.equal(getModelProfile('CY', '216').language, 'de');
   assert.equal(getModelProfile('EY', '012').language, 'de');
   assert.equal(getModelProfile('EY', '047').language, 'de');
+});
+
+const localizedFrench = {
+  en: { name: 'Language', value: 'Français (French)' },
+  zh: { name: '语言', value: 'Français (法语)' },
+  vi: { name: 'Ngôn ngữ', value: 'Français (tiếng Pháp)' },
+  fr: { name: 'Langue', value: 'Français' },
+};
+
+for (const [locale, expected] of Object.entries(localizedFrench)) {
+  test(`French-only calculator language is localized in ${locale}`, () => {
+    const language = parse(frenchUrl, locale).setup
+      .find(({ type }) => type === 'LANGUAGE');
+
+    assert.deepEqual(language, {
+      ...expected,
+      type: 'LANGUAGE',
+      code: '0',
+    });
+  });
+}
+
+test('French models expose their language table through the model profile', () => {
+  for (const [modelType, modelIds] of Object.entries({
+    CY: ['246', '295'],
+    EY: ['006', '090'],
+    FY: ['091', '506'],
+  })) {
+    for (const modelId of modelIds) {
+      assert.equal(getModelProfile(modelType, modelId).language, 'fr');
+    }
+  }
 });
 
 const localizedBelgianLanguages = {

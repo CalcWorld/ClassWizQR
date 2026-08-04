@@ -1407,6 +1407,23 @@ for (const { name, url, expression, latex } of numberResultCases) {
   });
 }
 
+const nonSimplifiedFractionCases = [
+  {
+    name: 'Calculate CY-247 non-simplified fraction indicator',
+    url: 'http://wes.casio.com/math/index.php?q=I-247A+U-000000000000+M-C10000BD00+S-000410110100100E0000B000E4D0+R-28A6000000000001010300000000000000000000+E-C81D1A381B1A361B1E',
+  },
+  {
+    name: 'Calculate EY-007 non-simplified fraction indicator',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-007A+U-000000000000+M-C10000BD00+S-000410110100000E0010B0001667+Q-29A60000000000010000000001030000000000000000000000000000+E-C81D1A391B1A361B1E',
+  },
+];
+
+for (const { name, url } of nonSimplifiedFractionCases) {
+  test(name, () => {
+    assert.ok(parse(url).result[0].latex.includes('\\Downarrow'));
+  });
+}
+
 const recurringDecimalCases = [
   {
     name: 'Recurring decimal result with brackets',

@@ -130,6 +130,12 @@ export class ParseVariable {
         modelId,
       }) || fracLatex;
     }
+    if (this.valNum[14] === '1') {
+      // \Downarrow indicates that the fraction is not in its simplest form
+      // It is shown only when ParseSetup({S}).getSimplify() === '1' and the code === '1';
+      // for convenience, we check only the code here
+      fracLatex += ' \\Downarrow';
+    }
     return [fracLatex, fracDec];
   }
 

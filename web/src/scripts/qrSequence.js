@@ -79,7 +79,19 @@ export function consumeQrResult(current, result) {
       ...current,
       parts: [...current.parts],
     };
-  const isDuplicate = next.parts[sequenceIndex] !== null;
+  const existingPart = next.parts[sequenceIndex];
+  const isDuplicate = existingPart !== null;
+  const conflict = isDuplicate && existingPart !== result.text;
+
+  if (conflict) {
+    return {
+      sequence: current,
+      completedText: null,
+      acceptedIndex: null,
+      sequenceStarted: false,
+      conflict: true,
+    };
+  }
 
   if (!isDuplicate) next.parts[sequenceIndex] = result.text;
 

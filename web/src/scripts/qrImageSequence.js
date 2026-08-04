@@ -55,6 +55,14 @@ export function addQrImageResults(current, items) {
 
   for (const item of items) {
     const consumed = consumeQrResult(sequence, item.result);
+    if (consumed.conflict) {
+      return {
+        status: 'mixed',
+        session: current,
+        completedText: null,
+        rejectedPreviews: items.map(({ preview }) => preview),
+      };
+    }
     if (consumed.acceptedIndex === null) {
       rejectedPreviews.push(item.preview);
       continue;

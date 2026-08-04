@@ -27,6 +27,7 @@ import { filterValidQrResults, resolveInitialQrResults, } from '../../scripts/qr
 import { createQrPreviewUrl, prepareQrImage, } from '../../scripts/qrPreview.js';
 import { MULTI_QR_LIMIT, readQrCodes } from '../../scripts/qrReader.js';
 import { parseHistoryRepository } from '../../scripts/parseHistory.js';
+import { readClipboardContent } from '../../scripts/clipboardContent.js';
 
 const EMPTY_RESULT = {};
 const LANGUAGE_OPTIONS = cwqr.availableLanguages.map(value => {
@@ -418,6 +419,7 @@ export default function ParserApp() {
     {
       initialMulti = false,
       showProcessingDialog = false,
+      showReadError = true,
     } = {},
   ) {
     const items = await decodeImageBlobs(
@@ -426,27 +428,39 @@ export default function ParserApp() {
       showProcessingDialog,
     );
     if (!items.length) {
-      setAppMessage({
-        title: t('image-read-error-title'),
-        body: t('image-read-error-body'),
-      });
-      return;
-    }
-
-    if (initialMulti) {
-      const resolution = resolveInitialQrResults(items.map(item => item.result));
-      if (resolution.status === 'empty') {
-        revokePreviews(items.map(item => item.preview));
+      if (showReadError) {
         setAppMessage({
           title: t('image-read-error-title'),
           body: t('image-read-error-body'),
         });
-        return;
+      }
+      return false;
+    }
+
+    if (initialMulti) {
+      const resolution = resolveInitialQrResults(items.map(item => item.result));
+      if (resolution.status === 'conflict') {
+        revokePreviews(items.map(item => item.preview));
+        setAppMessage({
+          title: t('image-sequence-mixed-title'),
+          body: t('image-sequence-mixed-body'),
+        });
+        return true;
+      }
+      if (resolution.status === 'empty') {
+        revokePreviews(items.map(item => item.preview));
+        if (showReadError) {
+          setAppMessage({
+            title: t('image-read-error-title'),
+            body: t('image-read-error-body'),
+          });
+        }
+        return false;
       }
       if (resolution.status === 'complete') {
         revokePreviews(items.map(item => item.preview));
         acceptScannedUrl(resolution.text);
-        return;
+        return true;
       }
 
       const selectedResults = new Set(resolution.results);
@@ -464,10 +478,10 @@ export default function ParserApp() {
       if (consumed.status === 'complete') {
         revokePreviews(selectedItems.map(item => item.preview));
         acceptScannedUrl(consumed.completedText);
-        return;
+        return true;
       }
       setImageSession(consumed.session);
-      return;
+      return true;
     }
 
     const current = imageSession?.source === source
@@ -481,16 +495,17 @@ export default function ParserApp() {
         title: t('image-sequence-mixed-title'),
         body: t('image-sequence-mixed-body'),
       });
-      return;
+      return true;
     }
 
     if (consumed.status === 'complete') {
       revokePreviews(items.map(item => item.preview));
       acceptScannedUrl(consumed.completedText);
-      return;
+      return true;
     }
 
     setImageSession(consumed.session);
+    return true;
   }
 
   function openFilePicker() {
@@ -539,31 +554,27 @@ export default function ParserApp() {
     await runImageTask(async () => {
       try {
         const clipboardItems = await navigator.clipboard.read();
-        for (const item of clipboardItems) {
-          if (!item.types.includes('text/plain')) continue;
-          const value = (await (await item.getType('text/plain')).text()).trim();
-          if (value) {
-            acceptScannedUrl(value);
-            return;
-          }
+        const clipboard = await readClipboardContent(clipboardItems);
+        if (clipboard.text) {
+          acceptScannedUrl(clipboard.text);
+          return;
         }
 
-        const images = [];
-        for (const item of clipboardItems) {
-          const imageType = item.types.find(type => type.startsWith('image/'));
-          if (imageType) images.push(await item.getType(imageType));
-        }
-        if (!images.length) {
+        if (!clipboard.images.length) {
           setAppMessage({
             title: t('clipboard-error-title'),
             body: t('clipboard-error-body'),
           });
           return;
         }
-        await processImageBlobs(images, 'clipboard', {
+        const processed = await processImageBlobs(clipboard.images, 'clipboard', {
           initialMulti: imageSession?.source !== 'clipboard',
           showProcessingDialog: imageSession?.source !== 'clipboard',
+          showReadError: !clipboard.fallbackText,
         });
+        if (!processed && clipboard.fallbackText) {
+          acceptScannedUrl(clipboard.fallbackText);
+        }
       } catch (error) {
         console.error(error);
         setAppMessage({

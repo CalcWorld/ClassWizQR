@@ -79,8 +79,15 @@ export function resolveInitialQrResults(results) {
 
   const partial = orderedGroups[0];
   if (!partial) return { status: 'empty', results: [] };
+  if (partial.conflicted) {
+    return {
+      status: 'conflict',
+      results: partial.results,
+    };
+  }
+
   return {
     status: 'partial',
-    results: partial.conflicted ? [partial.results[0]] : partial.results,
+    results: partial.results,
   };
 }

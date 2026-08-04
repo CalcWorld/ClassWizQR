@@ -167,6 +167,7 @@ export default function CameraScannerDialog(
         // The autoplay attribute can still start playback once metadata is ready.
       }
     }
+    if (generation !== generationRef.current || streamRef.current !== stream) return;
     setDevices([]);
     setStatus('scanning');
   }
@@ -212,11 +213,11 @@ export default function CameraScannerDialog(
     onClose();
   }
 
-  async function listCameras() {
+  async function listCameras(generation) {
     const mediaDevices = await navigator.mediaDevices.enumerateDevices();
     const cameras = mediaDevices.filter(device => device.kind === 'videoinput');
+    if (generation !== generationRef.current) return;
     setDevices(cameras);
-    return cameras;
   }
 
   async function requestCamera(deviceId, allowFallback) {
@@ -277,16 +278,23 @@ export default function CameraScannerDialog(
       }
     }
 
+    if (generation !== generationRef.current || streamRef.current !== stream || !open) {
+      stream.getTracks().forEach(track => track.stop());
+      return;
+    }
+
     const actualDeviceId = stream.getVideoTracks()[0]?.getSettings().deviceId || deviceId;
     if (actualDeviceId) {
       setSelectedDeviceId(actualDeviceId);
       rememberCamera(actualDeviceId);
     }
     try {
-      await listCameras();
+      await listCameras(generation);
     } catch {
+      if (generation !== generationRef.current) return;
       setDevices([]);
     }
+    if (generation !== generationRef.current || streamRef.current !== stream || !open) return;
     setStatus('scanning');
   }
 
@@ -350,18 +358,28 @@ export default function CameraScannerDialog(
       const context = canvas.getContext('2d', { willReadFrequently: true });
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
+      const generation = generationRef.current;
+      const stream = streamRef.current;
       decodingRef.current = true;
       try {
         const results = await readQrCodes(
           context.getImageData(0, 0, canvas.width, canvas.height),
           mode === 'screen' && multiScanPendingRef.current ? MULTI_QR_LIMIT : 1,
         );
+        if (
+          generation !== generationRef.current
+          || streamRef.current !== stream
+          || pausedRef.current
+        ) return;
+
         const validResults = filterValidQrResults(results);
-        if (!validResults.length || pausedRef.current) return;
+        if (!validResults.length) return;
 
         if (mode === 'screen' && multiScanPendingRef.current) {
-          multiScanPendingRef.current = false;
           const resolution = resolveInitialQrResults(validResults);
+
+          if (resolution.status === 'conflict') return;
+          multiScanPendingRef.current = false;
 
           if (resolution.status === 'complete') {
             const total = resolution.kind === 'sequence'
@@ -389,7 +407,10 @@ export default function CameraScannerDialog(
         }
 
         const [result] = validResults;
-        const consumed = consumeQrResult(sequenceRef.current, result);
+        let consumed = consumeQrResult(sequenceRef.current, result);
+        if (consumed.conflict) {
+          consumed = consumeQrResult(createEmptySequence(), result);
+        }
         sequenceRef.current = consumed.sequence;
         setSequence(consumed.sequence);
 
@@ -429,6 +450,10 @@ export default function CameraScannerDialog(
           });
         }
       } catch (error) {
+        if (
+          generation !== generationRef.current
+          || streamRef.current !== stream
+        ) return;
         console.error(error);
         pausedRef.current = true;
         setMessage({

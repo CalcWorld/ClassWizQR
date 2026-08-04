@@ -8,6 +8,7 @@ import { addQrImageResults, createEmptyImageSequenceSession, } from '../web/src/
 import { filterValidQrResults, resolveInitialQrResults, } from '../web/src/scripts/qrMultiResult.js';
 import { MULTI_QR_LIMIT } from '../web/src/scripts/qrReader.js';
 import { calculatePreparedImageSize, calculateQrSquareCrop, } from '../web/src/scripts/qrPreview.js';
+import { readClipboardContent } from '../web/src/scripts/clipboardContent.js';
 
 const wasmBinary = readFileSync(
   new URL('../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm', import.meta.url),
@@ -92,7 +93,7 @@ test('structured append parts are deduplicated and joined by zero-based index', 
   const duplicate = consumeQrResult(
     first.sequence,
     qrResult({
-      text: 'ignored',
+      text: 'left-',
       sequenceId: '90',
       sequenceIndex: 0,
       sequenceSize: 2,
@@ -112,6 +113,27 @@ test('structured append parts are deduplicated and joined by zero-based index', 
   );
   assert.equal(completed.completedText, 'left-right');
   assert.deepEqual(completed.sequence, createEmptySequence());
+});
+
+test('structured append parts distinguish exact duplicates from conflicts', () => {
+  const firstResult = qrResult({
+    text: 'left-',
+    sequenceId: '90',
+    sequenceIndex: 0,
+    sequenceSize: 2,
+  });
+  const first = consumeQrResult(createEmptySequence(), firstResult);
+  const duplicate = consumeQrResult(first.sequence, firstResult);
+  const conflict = consumeQrResult(first.sequence, {
+    ...firstResult,
+    text: 'different',
+  });
+
+  assert.equal(Boolean(duplicate.conflict), false);
+  assert.equal(duplicate.acceptedIndex, null);
+  assert.equal(conflict.conflict, true);
+  assert.strictEqual(conflict.sequence, first.sequence);
+  assert.equal(conflict.completedText, null);
 });
 
 test('a changed sequence identity starts fresh from the current QR', () => {
@@ -364,8 +386,98 @@ test('conflicting duplicate sequence indexes cannot produce a complete result', 
     second,
   ]);
 
+  assert.equal(resolved.status, 'conflict');
+  assert.deepEqual(resolved.results, [first, second]);
+});
+
+test('a later conflicting group does not displace the earliest clean partial sequence', () => {
+  const partial = qrResult({
+    text: 'partial',
+    sequenceId: '10',
+    sequenceIndex: 0,
+    sequenceSize: 2,
+  });
+  const conflict = qrResult({
+    text: 'conflict-a',
+    sequenceId: '20',
+    sequenceIndex: 0,
+    sequenceSize: 2,
+  });
+  const conflictingDuplicate = { ...conflict, text: 'conflict-b' };
+  const resolved = resolveInitialQrResults([
+    partial,
+    conflict,
+    conflictingDuplicate,
+  ]);
+
   assert.equal(resolved.status, 'partial');
-  assert.deepEqual(resolved.results, [first]);
+  assert.deepEqual(resolved.results, [partial]);
+});
+
+test('image sequence sessions reject conflicting continuation parts', () => {
+  const first = addQrImageResults(
+    createEmptyImageSequenceSession('file'),
+    [{
+      result: qrResult({
+        text: 'left-',
+        sequenceId: '90',
+        sequenceIndex: 0,
+        sequenceSize: 2,
+      }),
+      preview: 'first.png',
+    }],
+  );
+  const conflict = addQrImageResults(first.session, [{
+    result: qrResult({
+      text: 'different',
+      sequenceId: '90',
+      sequenceIndex: 0,
+      sequenceSize: 2,
+    }),
+    preview: 'different.png',
+  }]);
+
+  assert.equal(conflict.status, 'mixed');
+  assert.strictEqual(conflict.session, first.session);
+  assert.deepEqual(conflict.rejectedPreviews, ['different.png']);
+});
+
+test('clipboard content preserves explicit text priority and uses rich text as image fallback', async () => {
+  const textItem = text => ({
+    types: ['text/plain'],
+    async getType() {
+      return { text: async () => text };
+    },
+  });
+  const image = { type: 'image/png' };
+  const richImageItem = {
+    types: ['image/png', 'text/plain'],
+    async getType(type) {
+      return type === 'image/png'
+        ? image
+        : { text: async () => 'image source' };
+    },
+  };
+
+  assert.deepEqual(
+    await readClipboardContent([richImageItem, textItem('ClassWiz URL')]),
+    { text: 'ClassWiz URL', images: [], fallbackText: '' },
+  );
+  assert.deepEqual(
+    await readClipboardContent([richImageItem]),
+    { text: '', images: [image], fallbackText: 'image source' },
+  );
+
+  assert.deepEqual(
+    await readClipboardContent([{
+      types: ['image/png', 'text/plain'],
+      async getType(type) {
+        if (type === 'text/plain') throw new Error('Text flavor unavailable');
+        return image;
+      },
+    }]),
+    { text: '', images: [image], fallbackText: '' },
+  );
 });
 
 test('QR preview crop is square, padded, and clamped to the image', () => {

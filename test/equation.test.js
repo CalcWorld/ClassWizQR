@@ -511,6 +511,343 @@ for (const { name, url, latex } of linearEquationCases) {
   });
 }
 
+const generatedEquationCases = [
+  {
+    name: 'two-variable simultaneous equation',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4501AD0000+S-401410111000000E1010B0001012+R-EQ00100000000000000060001000000000000000600+C-010000000000000001000100000000000000060000000000000000000000000000000000000000000200000000000000010002000000000000000600',
+    latex: '\\left\\{\\begin{array}{l} x -y = 0 \\\\ 2y = -2 \\end{array}\\right.',
+    decimal: ['1', '-1', '0', '0', '2', '-2'],
+  },
+  {
+    name: 'three-variable simultaneous equation',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4502BD0000+S-401410111000000E1010B0009634+R-EQ021A2A70000000000060522A1A70000000000060522A4A700000000000605+C-000000000000000000000100000000000000010002000000000000000600030000000000000001000100000000000000060002000000000000000100000000000000000000000300000000000000060002000000000000000100000000000000000000000100000000000000060000000000000000000000',
+    latex: '\\left\\{\\begin{array}{l} y -2z = 3 \\\\ -x +2y = -3 \\\\ 2x -z = 0 \\end{array}\\right.',
+    decimal: ['0', '1', '-2', '3', '-1', '2', '0', '-3', '2', '0', '-1', '0'],
+  },
+  {
+    name: 'four-variable simultaneous equation with an all-zero row',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4503DD0000+S-401410111000000E1010B000F4C7+R-EQ1+C-0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000001000100000000000000060002000000000000000100020000000000000006000300000000000000010001000000000000000600010000000000000001000000000000000000000002000000000000000100030000000000000006000200000000000000010000000000000000000000010000000000000006000100000000000000010000000000000000000000',
+    latex: '\\left\\{\\begin{array}{l} 0 = 0 \\\\ x -y +2z -2t = 3 \\\\ -x +y +2t = -3 \\\\ 2x -z +t = 0 \\end{array}\\right.',
+    decimal: ['0', '0', '0', '0', '0', '1', '-1', '2', '-2', '3', '-1', '1', '0', '2', '-3', '2', '0', '-1', '1', '0'],
+  },
+  {
+    name: 'one-sided linear equation with unit coefficient',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4511AD0000+S-401410111000000E1010B0005FAA+R-EQ001000000000000000100+C-0100000000000000010001000000000000000600',
+    latex: 'x -1 = 0',
+    decimal: ['1', '-1'],
+  },
+  {
+    name: 'one-sided linear equation with negative unit coefficient',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4511AD0000+S-401410111000000E1010B0005FAA+R-EQ002000000000000000100+C-0100000000000000060002000000000000000100',
+    latex: '-x +2 = 0',
+    decimal: ['-1', '2'],
+  },
+  {
+    name: 'one-sided linear equation with zero constant',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4511AD0000+S-401410111000000E1010B0005FAA+R-EQ000000000000000000000+C-0200000000000000010000000000000000000000',
+    latex: '2x = 0',
+    decimal: ['2', '0'],
+  },
+  {
+    name: 'two-sided linear equation with unit signs',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4512AD0000+S-401410111000000E1010B000627A+R-EQ001000000000000000100+C-01000000000000000100010000000000000006000100000000000000060001000000000000000100',
+    latex: 'x -1 = -x +1',
+    decimal: ['1', '-1', '-1', '1'],
+  },
+  {
+    name: 'two-sided linear equation with leading negative unit',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4512AD0000+S-401410111000000E1010B000627A+R-EQ002000000000000000100+C-01000000000000000600020000000000000001000100000000000000010002000000000000000600',
+    latex: '-x +2 = x -2',
+    decimal: ['-1', '2', '1', '-2'],
+  },
+  {
+    name: 'two-sided linear equation omitting the right variable',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4512BD0000+S-401410111000000E1010B000906C+R-EQ021A1A200000000000105+C-02000000000000000100000000000000000000000000000000000000000003000000000000000100',
+    latex: '2x = 3',
+    decimal: ['2', '0', '0', '3'],
+  },
+  {
+    name: 'two-sided linear equation omitting the left variable',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4512AD0000+S-401410111000000E1010B000627A+R-EQ001000000000000000600+C-00000000000000000000020000000000000006000200000000000000010000000000000000000000',
+    latex: '-2 = 2x',
+    decimal: ['0', '-2', '2', '0'],
+  },
+  {
+    name: 'two-sided linear equation with decimal and fractional coefficients',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4512AD0000+S-401410111000000E1010B000627A+R-EQ003000000000000000100+C-05000000000000000099012500000000000006000333333333333333009907500000000000000599',
+    latex: ' \\dfrac {\\displaystyle 1} {\\displaystyle 2}x - \\dfrac {\\displaystyle 5} {\\displaystyle 4} =  \\dfrac {\\displaystyle 1} {\\displaystyle 3}x - \\dfrac {\\displaystyle 3} {\\displaystyle 4}',
+    decimal: ['0.5', '-1.25', '0.333333333333333', '-0.75'],
+  },
+  {
+    name: 'quadratic equation covering unit, zero and negative coefficients',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4504DD0000+S-401410111000000E1010B0008D54+R-EQ08000000100020101000100000000000000000000800000010002010100060000000000000000000000000000000000000000000000000000000000000200000000000000060000000000000000000000+C-010000000000000001000000000000000000000002000000000000000600',
+    latex: 'x^2 -2 = 0',
+    decimal: ['1', '0', '-2'],
+  },
+  {
+    name: 'quadratic equation covering negative unit, positive and zero coefficients',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4504AD0000+S-401410111000000E1010B0008B61+R-EQ00200000000000000010000000000000000000000000000000000000000000000000000000000000001000000000000000100000000000000000000000100000000000000010000000000000000000000+C-010000000000000006000200000000000000010000000000000000000000',
+    latex: '-x^2 +2x = 0',
+    decimal: ['-1', '2', '0'],
+  },
+  {
+    name: 'quadratic equation with internal negative unit coefficient',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4504DD0000+S-401410111000000E1010B0008D54+R-EQ021A400000000000001038000000100230104000121A400000000000001038000000100230104000602500000000000000099000000000000000000000287500000000000010000000000000000000000+C-020000000000000001000100000000000000060003000000000000000100',
+    latex: '2x^2 -x +3 = 0',
+    decimal: ['2', '-1', '3'],
+  },
+  {
+    name: 'quadratic equation with fractional coefficients',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4504DD0000+S-401410111000000E1010B0008D54+R-EQ023A400000000000001038000000100310104000123A400000000000001038000000100310104000607500000000000000099000000000000000000000968750000000000009900000000000000000000+C-050000000000000000990750000000000000059901250000000000000100',
+    latex: ' \\dfrac {\\displaystyle 1} {\\displaystyle 2}x^2 - \\dfrac {\\displaystyle 3} {\\displaystyle 4}x + \\dfrac {\\displaystyle 5} {\\displaystyle 4} = 0',
+    decimal: ['0.5', '-0.75', '1.25'],
+  },
+  {
+    name: 'cubic equation covering unit, zero and negative coefficients',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4505AD0000+S-401410111000000E1010B0000830+R-EQ001521379706804560600000000000000000000000760689853402283009908578736265951780099076068985340228300990857873626595178059980000001000301030006800102010003020901018000000100030103000180010201000302090106+C-01000000000000000100000000000000000000000100000000000000060002000000000000000100',
+    latex: 'x^3 -x +2 = 0',
+    decimal: ['1', '0', '-1', '2'],
+  },
+  {
+    name: 'cubic equation covering leading negative unit and zero constant',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4505AD0000+S-401410111000000E1010B0000830+R-EQ5010000000000000001000100000000000000010001000000000000000100010000000000000006000000000000000000000000000000000000000000+C-01000000000000000600020000000000000001000200000000000000060000000000000000000000',
+    latex: '-x^3 +2x^2 -2x = 0',
+    decimal: ['-1', '2', '-2', '0'],
+  },
+  {
+    name: 'cubic equation with fractional coefficients',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4505AD0000+S-401410111000000E1010B0000830+R-EQ003047089459348390100000000000000000000000235447296741976059801215016367899960100023544729674197605980121501636789996060080010101000501030106800131120005052706018001010100050103010180013112000505270606+C-05000000000000000099015000000000000006000666666666666666009902250000000000000600',
+    latex: ' \\dfrac {\\displaystyle 1} {\\displaystyle 2}x^3 - \\dfrac {\\displaystyle 3} {\\displaystyle 2}x^2 + \\dfrac {\\displaystyle 2} {\\displaystyle 3}x - \\dfrac {\\displaystyle 9} {\\displaystyle 4} = 0',
+    decimal: ['0.5', '-1.5', '0.666666666666666', '-2.25'],
+  },
+  {
+    name: 'quartic equation covering all coefficient sign states',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4506AD0000+S-401410111000000E1010B0007DB6+R-EQ00999999999999999009900000000000000000000080376088336891105990000000000000000000001518804416844550099011050264464632701000151880441684455009901105026446463270600+C-0200000000000000010001000000000000000600010000000000000001000000000000000000000002000000000000000600',
+    latex: '2x^4 -x^3 +x^2 -2 = 0',
+    decimal: ['2', '-1', '1', '0', '-2'],
+  },
+  {
+    name: 'quartic equation with fractional coefficients',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4506AD0000+S-401410111000000E1010B0007DB6+R-EQ00195057874886085010007069837789718050099019505787488608501000706983778971805059907005787488608540599081898838522518900990700578748860854059908189883852251890599+C-0500000000000000009901250000000000000600000000000000000000000750000000000000009902500000000000000100',
+    latex: ' \\dfrac {\\displaystyle 1} {\\displaystyle 2}x^4 - \\dfrac {\\displaystyle 5} {\\displaystyle 4}x^3 + \\dfrac {\\displaystyle 3} {\\displaystyle 4}x + \\dfrac {\\displaystyle 5} {\\displaystyle 2} = 0',
+    decimal: ['0.5', '-1.25', '0', '0.75', '2.5'],
+  },
+];
+
+for (const { name, url, latex, decimal } of generatedEquationCases) {
+  test(`Generated equation QR: ${name}`, () => {
+    const equation = parse(url).equation;
+    assert.equal(equation.latex, latex);
+    assert.deepEqual(equation.decimal.map(String), decimal);
+  });
+}
+
+const complexRootCases = [
+  {
+    name: 'quadratic roots enabled',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4504AD0000+S-401410111000000E1010B0008B61+R-EQ00000000000000000000001000000000000000100000000000000000000000100000000000000060000000000000000000000000000000000000000000100000000000000010000000000000000000000+C-010000000000000001000000000000000000000001000000000000000100',
+    latex: 'x^2 +1 = 0',
+    settingCode: '1',
+    resultLength: 9,
+    resultLatex: 'x_1=i \\\\ x_2=- i \\\\ x_{min}=0 \\\\ y_{min}=1',
+  },
+  {
+    name: 'cubic roots enabled',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4505AD0000+S-401410111000000E1010B0000830+R-EQ5010000000000000006000000000000000000000021A200000000000001038000000100030102000121A2000000000000010380000001000301020006+C-01000000000000000100000000000000000000000000000000000000000001000000000000000100',
+    latex: 'x^3 +1 = 0',
+    settingCode: '1',
+    resultLength: 7,
+    resultLatex: 'x_1=-1 \\\\ x_2= \\dfrac {\\displaystyle 1} {\\displaystyle 2}  + \\dfrac {\\displaystyle  \\sqrt{3} } {\\displaystyle 2}i \\\\ x_3= \\dfrac {\\displaystyle 1} {\\displaystyle 2} -\\dfrac {\\displaystyle  \\sqrt{3} } {\\displaystyle 2}i \\\\ No Local Max/Min',
+  },
+  {
+    name: 'cubic roots disabled',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4505AD0000+S-401410111000000E0010B000CE37+R-EQ50100000000000000060000000000000000000000+C-01000000000000000100000000000000000000000000000000000000000001000000000000000100',
+    latex: 'x^3 +1 = 0',
+    settingCode: '0',
+    resultLength: 3,
+    resultLatex: 'x=-1 \\\\ No Local Max/Min',
+  },
+  {
+    name: 'quartic roots enabled',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4506AD0000+S-401410111000000E1010B0007DB6+R-EQ00100000000000000010000000000000000000000010000000000000006000000000000000000000000000000000000000000010000000000000001000000000000000000000001000000000000000600+C-0100000000000000010000000000000000000000000000000000000000000000000000000000000001000000000000000600',
+    latex: 'x^4 -1 = 0',
+    settingCode: '1',
+    resultLength: 9,
+    resultLatex: 'x_1=1 \\\\ x_2=-1 \\\\ x_3=i \\\\ x_4=- i',
+  },
+  {
+    name: 'quartic roots disabled',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4506AD0000+S-401410111000000E0010B000F66B+R-EQ001000000000000000100000000000000000000000100000000000000060000000000000000000000+C-0100000000000000010000000000000000000000000000000000000000000000000000000000000001000000000000000600',
+    latex: 'x^4 -1 = 0',
+    settingCode: '0',
+    resultLength: 5,
+    resultLatex: 'x_1=1 \\\\ x_2=-1',
+  },
+];
+
+for (const { name, url, latex, settingCode, resultLength, resultLatex } of complexRootCases) {
+  test(`Complex-root result count: ${name}`, () => {
+    const parsed = parse(url);
+    const setting = parsed.setup.find(({ type }) => type === 'EQUATION_COMPLEX_ROOT');
+
+    assert.equal(parsed.equation.latex, latex);
+    assert.equal(setting.code, settingCode);
+    assert.equal(parsed.result.length, resultLength);
+    assert.equal(parsed.result[0].latex, resultLatex);
+  });
+}
+
+const equationResultTemplateCases = [
+  {
+    name: 'quadratic single root without extrema',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-535A+U-000000000000+M-4504AD0000+S-401410101000000E1010B000EC5A+R-EQ00100000000000000010000000000000000000000+C-010000000000000001000200000000000000060001000000000000000100',
+    equationLatex: 'x^2 -2x +1 = 0',
+    resultLength: 3,
+    resultLatex: 'x=1',
+  },
+  {
+    name: 'quadratic two roots without extrema',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-535A+U-000000000000+M-4504AD0000+S-401410101000000E1010B000EC5A+R-EQ001000000000000000100000000000000000000000100000000000000060000000000000000000000+C-010000000000000001000000000000000000000001000000000000000600',
+    equationLatex: 'x^2 -1 = 0',
+    resultLength: 5,
+    resultLatex: 'x_1=1 \\\\ x_2=-1',
+  },
+  {
+    name: 'quadratic no real roots without extrema',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-535A+U-000000000000+M-4504DD0000+S-401410101000000E0010B0000362+R-EQ4+C-010000000000000001000000000000000000000001000000000000000100',
+    equationLatex: 'x^2 +1 = 0',
+    resultLength: 1,
+    resultLatex: 'No Real Roots',
+    settingCode: '0',
+  },
+  {
+    name: 'quadratic single root with extrema',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4504AD0000+S-401410111000000E1010B0008B61+R-EQ0010000000000000001000000000000000000000001000000000000000100000000000000000000000000000000000000000000000000000000000000+C-010000000000000001000200000000000000060001000000000000000100',
+    equationLatex: 'x^2 -2x +1 = 0',
+    resultLength: 7,
+    resultLatex: 'x=1 \\\\ x_{min}=1 \\\\ y_{min}=0',
+    settingCode: '1',
+  },
+  {
+    name: 'quadratic no real roots with extrema',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4504DD0000+S-401410111000000E0010B000CAF3+R-EQ400000000000000000000000000000000000000000100000000000000010000000000000000000000+C-010000000000000001000000000000000000000001000000000000000100',
+    equationLatex: 'x^2 +1 = 0',
+    resultLength: 5,
+    resultLatex: 'No Real Roots \\\\ x_{min}=0 \\\\ y_{min}=1',
+    settingCode: '0',
+  },
+  {
+    name: 'cubic two roots without extrema',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-535A+U-000000000000+M-4505AD0000+S-401410101000000E1010B0003403+R-EQ002000000000000000600000000000000000000000100000000000000010000000000000000000000+C-01000000000000000100000000000000000000000300000000000000060002000000000000000100',
+    equationLatex: 'x^3 -3x +2 = 0',
+    resultLength: 5,
+    resultLatex: 'x_1=-2 \\\\ x_2=1',
+  },
+  {
+    name: 'cubic three roots without extrema',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-535A+U-000000000000+M-4505AD0000+S-401410101000000E1010B0003403+R-EQ0010000000000000001000000000000000000000021A200000000000006030866025403784438009921A2000000000000060308660254037844380599+C-01000000000000000100000000000000000000000000000000000000000001000000000000000600',
+    equationLatex: 'x^3 -1 = 0',
+    resultLength: 7,
+    resultIncludes: ['x_1=1', 'x_2=', 'x_3=', 'i'],
+    resultDecimals: [1, 0, -0.5, Math.sqrt(3) / 2, -0.5, -Math.sqrt(3) / 2],
+  },
+  {
+    name: 'cubic two roots with extrema',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4505AD0000+S-401410111000000E1010B0000830+R-EQ00200000000000000060000000000000000000000010000000000000001000000000000000000000001000000000000000600040000000000000001000100000000000000010000000000000000000000+C-01000000000000000100000000000000000000000300000000000000060002000000000000000100',
+    equationLatex: 'x^3 -3x +2 = 0',
+    resultLength: 9,
+    resultLatex: 'x_1=-2 \\\\ x_2=1 \\\\ x_{max}=-1 \\\\ y_{max}=4 \\\\ x_{min}=1 \\\\ y_{min}=0',
+    settingCode: '1',
+  },
+  {
+    name: 'cubic one real root with complex roots disabled',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-535A+U-000000000000+M-4505AD0000+S-401410101000000E0010B0006D7F+R-EQ00100000000000000060000000000000000000000+C-01000000000000000100000000000000000000000000000000000000000001000000000000000100',
+    equationLatex: 'x^3 +1 = 0',
+    resultLength: 3,
+    resultLatex: 'x=-1',
+    settingCode: '0',
+  },
+  {
+    name: 'quartic single root',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-535A+U-000000000000+M-4506AD0000+S-401410101000000E1010B0008A0F+R-EQ00000000000000000000000000000000000000000+C-0100000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+    equationLatex: 'x^4 = 0',
+    resultLength: 3,
+    resultLatex: 'x=0',
+  },
+  {
+    name: 'cubic one real root with extrema',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-4505AD0000+S-401410111000000E0010B000CE37+R-EQ0015213797068045606000000000000000000000080000001000301030006800102010003020901018000000100030103000180010201000302090106+C-01000000000000000100000000000000000000000100000000000000060002000000000000000100',
+    equationLatex: 'x^3 -x +2 = 0',
+    resultLength: 7,
+    resultIncludes: ['x=-1.52137970680456', 'x_{max}=', 'y_{max}=', 'x_{min}=', 'y_{min}='],
+    resultDecimals: [
+      -1.5213797068045676,
+      0,
+      -Math.sqrt(3) / 3,
+      (18 + 2 * Math.sqrt(3)) / 9,
+      Math.sqrt(3) / 3,
+      (18 - 2 * Math.sqrt(3)) / 9,
+    ],
+    settingCode: '0',
+  },
+  {
+    name: 'quartic three roots',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-535A+U-000000000000+M-4506AD0000+S-401410101000000E1010B0008A0F+R-EQ0010000000000000001000000000000000000000000000000000000000000000000000000000000000100000000000000060000000000000000000000+C-0100000000000000010000000000000000000000010000000000000006000000000000000000000000000000000000000000',
+    equationLatex: 'x^4 -x^2 = 0',
+    resultLength: 7,
+    resultLatex: 'x_1=1 \\\\ x_2=0 \\\\ x_3=-1',
+  },
+  {
+    name: 'four-variable simultaneous equation unique solution',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-535A+U-000000000000+M-4503AD0000+S-401410101000000E0010B000F44D+R-EQ001000000000000000100020000000000000001000300000000000000010004000000000000000100+C-0100000000000000010000000000000000000000000000000000000000000000000000000000000001000000000000000100000000000000000000000100000000000000010000000000000000000000000000000000000000000200000000000000010000000000000000000000000000000000000000000100000000000000010000000000000000000000030000000000000001000000000000000000000000000000000000000000000000000000000000000100000000000000010004000000000000000100',
+    equationLatex: '\\left\\{\\begin{array}{l} x = 1 \\\\ y = 2 \\\\ z = 3 \\\\ t = 4 \\end{array}\\right.',
+    resultLength: 5,
+    resultLatex: 'x=1 \\\\ y=2 \\\\ z=3 \\\\ t=4',
+  },
+  {
+    name: 'simultaneous equation no solution',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-535A+U-000000000000+M-4501DD0000+S-401410101000000E0010B000D984+R-EQ2+C-010000000000000001000100000000000000010001000000000000000100010000000000000001000100000000000000010002000000000000000100',
+    equationLatex: '\\left\\{\\begin{array}{l} x +y = 1 \\\\ x +y = 2 \\end{array}\\right.',
+    resultLength: 1,
+    resultLatex: 'No Solution',
+  },
+];
+
+for (const {
+  name,
+  url,
+  equationLatex,
+  resultLength,
+  resultLatex,
+  resultIncludes = [],
+  resultDecimals,
+  settingCode,
+} of equationResultTemplateCases) {
+  test(`Equation result template: ${name}`, () => {
+    const parsed = parse(url);
+
+    assert.equal(parsed.equation.latex, equationLatex);
+    assert.equal(parsed.result.length, resultLength);
+    if (resultLatex) assert.equal(parsed.result[0].latex, resultLatex);
+    for (const fragment of resultIncludes) {
+      assert.ok(parsed.result[0].latex.includes(fragment));
+    }
+    if (resultDecimals) {
+      assert.equal(parsed.result.length - 1, resultDecimals.length);
+      parsed.result.slice(1).forEach(({ decimal }, index) => {
+        assert.ok(
+          Math.abs(Number(decimal) - resultDecimals[index]) < 1e-10,
+          'Part' + (index + 1) + ' differs from the independently calculated value',
+        );
+      });
+    }
+    if (settingCode) {
+      const setting = parsed.setup.find(({ type }) => type === 'EQUATION_COMPLEX_ROOT');
+      assert.equal(setting.code, settingCode);
+    }
+  });
+}
+
 const ZERO_COEFFICIENT = '00000000000000000000';
 const ONE_COEFFICIENT = '01000000000000000100';
 const TWO_COEFFICIENT = '02000000000000000100';

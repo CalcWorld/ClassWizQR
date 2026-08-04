@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
 import { assertSetupUnorderedEqual, parse, projectLocalization, projectResult } from './support/parser.js';
@@ -443,6 +444,146 @@ const cases = [
 for (const { name, url, expected } of cases) {
   test(name, () => {
     assertSetupUnorderedEqual(projectResult(parse(url)), expected);
+  });
+}
+
+const inequalityPolynomials = {
+  positiveQuadratic: { coefficients: [1, 0, 1], roots: [], positiveDefinite: true },
+  square: { coefficients: [1, 0, 0], roots: [0, 0] },
+  cubicTriple: { coefficients: [1, 0, 0, 0], roots: [0, 0, 0] },
+  quadraticTwo: { coefficients: [1, 0, -1], roots: [-1, 1] },
+  cubicLeftDouble: { coefficients: [1, 1, -1, -1], roots: [-1, -1, 1] },
+  cubicRightDouble: { coefficients: [1, -1, -1, 1], roots: [-1, 1, 1] },
+  cubicThree: { coefficients: [1, 0, -1, 0], roots: [-1, 0, 1] },
+  quarticDoublePair: { coefficients: [1, 0, -2, 0, 1], roots: [-1, -1, 1, 1] },
+  quarticLeftDouble: { coefficients: [1, 4, 3, -4, -4], roots: [-2, -2, -1, 1] },
+  quarticMiddleDouble: { coefficients: [1, 0, -1, 0, 0], roots: [-1, 0, 0, 1] },
+  quarticRightDouble: { coefficients: [1, -4, 3, 4, -4], roots: [-1, 1, 2, 2] },
+  quarticFour: { coefficients: [1, 0, -5, 0, 4], roots: [-2, -1, 1, 2] },
+};
+
+const generatedInequalityCases = [
+  { code: '01', name: 'quadratic always positive', polynomial: 'positiveQuadratic', relation: '>', result: 'All Real Numbers', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B04DD0000+S-001410100000000E1010B0007EFC+R-IN01+C-010000000000000001000000000000000000000001000000000000000100' },
+  { code: '02', name: 'quadratic impossible negative', polynomial: 'positiveQuadratic', relation: '<', result: 'No Solution', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B04DD0100+S-001410100000000E1010B000F063+R-IN02+C-010000000000000001000000000000000000000001000000000000000100' },
+  { code: '03', name: 'quadratic zero only', polynomial: 'square', relation: '≤', result: 'x=0', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B04AD0300+S-001410100000000E1010B0009F17+R-IN0300000000000000000000+C-010000000000000001000000000000000000000000000000000000000000' },
+  { code: '04', name: 'quadratic nonzero', polynomial: 'square', relation: '>', result: 'x≠0', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B04AD0000+S-001410100000000E1010B00095F8+R-IN0400000000000000000000+C-010000000000000001000000000000000000000000000000000000000000' },
+  { code: '05', name: 'cubic negative half-line', polynomial: 'cubicTriple', relation: '<', result: 'x<0', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0100+S-001410100000000E1010B000C731+R-IN0500000000000000000000+C-01000000000000000100000000000000000000000000000000000000000000000000000000000000' },
+  { code: '06', name: 'cubic nonpositive half-line', polynomial: 'cubicTriple', relation: '≤', result: 'x≤0', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0300+S-001410100000000E1010B000DD50+R-IN0600000000000000000000+C-01000000000000000100000000000000000000000000000000000000000000000000000000000000' },
+  { code: '07', name: 'cubic positive half-line', polynomial: 'cubicTriple', relation: '>', result: '0<x', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0000+S-001410100000000E1010B00000D6+R-IN0700000000000000000000+C-01000000000000000100000000000000000000000000000000000000000000000000000000000000' },
+  { code: '08', name: 'cubic nonnegative half-line', polynomial: 'cubicTriple', relation: '≥', result: '0≤x', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0200+S-001410100000000E1010B0008676+R-IN0800000000000000000000+C-01000000000000000100000000000000000000000000000000000000000000000000000000000000' },
+  { code: '09', name: 'quadratic between roots strict', polynomial: 'quadraticTwo', relation: '<', result: '-1<x<1', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B04AD0100+S-001410100000000E1010B00062DA+R-IN090100000000000000060001000000000000000100+C-010000000000000001000000000000000000000001000000000000000600' },
+  { code: '0A', name: 'quadratic between roots closed', polynomial: 'quadraticTwo', relation: '≤', result: '-1≤x≤1', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B04AD0300+S-001410100000000E1010B0009F17+R-IN0A0100000000000000060001000000000000000100+C-010000000000000001000000000000000000000001000000000000000600' },
+  { code: '0B', name: 'quadratic outside roots strict', polynomial: 'quadraticTwo', relation: '>', result: 'x<-1, 1<x', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B04AD0000+S-001410100000000E1010B00095F8+R-IN0B0100000000000000060001000000000000000100+C-010000000000000001000000000000000000000001000000000000000600' },
+  { code: '0C', name: 'quadratic outside roots closed', polynomial: 'quadraticTwo', relation: '≥', result: 'x≤-1, 1≤x', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B04AD0200+S-001410100000000E1010B000BEEC+R-IN0C0100000000000000060001000000000000000100+C-010000000000000001000000000000000000000001000000000000000600' },
+  { code: '0D', name: 'cubic isolated root plus right ray', polynomial: 'cubicLeftDouble', relation: '≥', result: 'x=-1, 1≤x', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0200+S-001410100000000E1010B0008676+R-IN0D0100000000000000060001000000000000000100+C-01000000000000000100010000000000000001000100000000000000060001000000000000000600' },
+  { code: '0E', name: 'cubic punctured left ray', polynomial: 'cubicLeftDouble', relation: '<', result: 'x≠-1 \\mathrm{and} x<1', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0100+S-001410100000000E1010B000C731+R-IN0E0100000000000000060001000000000000000100+C-01000000000000000100010000000000000001000100000000000000060001000000000000000600' },
+  { code: '0F', name: 'cubic left ray plus isolated root', polynomial: 'cubicRightDouble', relation: '≤', result: 'x≤-1, x=1', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0300+S-001410100000000E1010B000DD50+R-IN0F0100000000000000060001000000000000000100+C-01000000000000000100010000000000000006000100000000000000060001000000000000000100' },
+  { code: '10', name: 'cubic punctured right ray', polynomial: 'cubicRightDouble', relation: '>', result: '-1<x \\mathrm{and} x ≠1', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0000+S-001410100000000E1010B00000D6+R-IN100100000000000000060001000000000000000100+C-01000000000000000100010000000000000006000100000000000000060001000000000000000100' },
+  { code: '11', name: 'cubic positive alternating intervals', polynomial: 'cubicThree', relation: '>', result: '-1<x<0, 1<x', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0000+S-001410100000000E1010B00000D6+R-IN11010000000000000006000000000000000000000001000000000000000100+C-01000000000000000100000000000000000000000100000000000000060000000000000000000000' },
+  { code: '12', name: 'cubic nonnegative alternating intervals', polynomial: 'cubicThree', relation: '≥', result: '-1≤x≤0, 1≤x', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0200+S-001410100000000E1010B0008676+R-IN12010000000000000006000000000000000000000001000000000000000100+C-01000000000000000100000000000000000000000100000000000000060000000000000000000000' },
+  { code: '13', name: 'cubic negative alternating intervals', polynomial: 'cubicThree', relation: '<', result: 'x<-1, 0<x<1', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0100+S-001410100000000E1010B000C731+R-IN13010000000000000006000000000000000000000001000000000000000100+C-01000000000000000100000000000000000000000100000000000000060000000000000000000000' },
+  { code: '14', name: 'cubic nonpositive alternating intervals', polynomial: 'cubicThree', relation: '≤', result: 'x≤-1, 0≤x≤1', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B05AD0300+S-001410100000000E1010B000DD50+R-IN14010000000000000006000000000000000000000001000000000000000100+C-01000000000000000100000000000000000000000100000000000000060000000000000000000000' },
+  { code: '15', name: 'quartic excludes two double roots', polynomial: 'quarticDoublePair', relation: '>', result: 'x≠-1 \\mathrm{and} x≠1', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0000+S-001410100000000E1010B000DEA8+R-IN150100000000000000060001000000000000000100+C-0100000000000000010000000000000000000000020000000000000006000000000000000000000001000000000000000100' },
+  { code: '16', name: 'quartic only two double roots', polynomial: 'quarticDoublePair', relation: '≤', result: 'x=-1, x=1', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0300+S-001410100000000E1010B000B81B+R-IN160100000000000000060001000000000000000100+C-0100000000000000010000000000000000000000020000000000000006000000000000000000000001000000000000000100' },
+  { code: '17', name: 'quartic left double root outside solution', polynomial: 'quarticLeftDouble', relation: '>', result: 'x≠-2 \\mathrm{and} x<-1, 1<x', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0000+S-001410100000000E1010B000DEA8+R-IN17020000000000000006000100000000000000060001000000000000000100+C-0100000000000000010004000000000000000100030000000000000001000400000000000000060004000000000000000600' },
+  { code: '18', name: 'quartic left isolated root plus closed interval', polynomial: 'quarticLeftDouble', relation: '≤', result: 'x=-2, -1≤x≤1', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0300+S-001410100000000E1010B000B81B+R-IN18020000000000000006000100000000000000060001000000000000000100+C-0100000000000000010004000000000000000100030000000000000001000400000000000000060004000000000000000600' },
+  { code: '19', name: 'quartic middle double root punctured interval', polynomial: 'quarticMiddleDouble', relation: '<', result: '-1<x<1 \\mathrm{and} x≠0', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0100+S-001410100000000E1010B000BB55+R-IN19010000000000000006000000000000000000000001000000000000000100+C-0100000000000000010000000000000000000000010000000000000006000000000000000000000000000000000000000000' },
+  { code: '1A', name: 'quartic middle isolated root plus outer rays', polynomial: 'quarticMiddleDouble', relation: '≥', result: 'x≤-1, x=0, 1≤x', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0200+S-001410100000000E1010B00048B5+R-IN1A010000000000000006000000000000000000000001000000000000000100+C-0100000000000000010000000000000000000000010000000000000006000000000000000000000000000000000000000000' },
+  { code: '1B', name: 'quartic right double root outside solution', polynomial: 'quarticRightDouble', relation: '>', result: 'x<-1, 1<x, \\mathrm{and} x≠2', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0000+S-001410100000000E1010B000DEA8+R-IN1B010000000000000006000100000000000000010002000000000000000100+C-0100000000000000010004000000000000000600030000000000000001000400000000000000010004000000000000000600' },
+  { code: '1C', name: 'quartic closed interval plus right isolated root', polynomial: 'quarticRightDouble', relation: '≤', result: '-1≤x≤1, x=2', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0300+S-001410100000000E1010B000B81B+R-IN1C010000000000000006000100000000000000010002000000000000000100+C-0100000000000000010004000000000000000600030000000000000001000400000000000000010004000000000000000600' },
+  { code: '1D', name: 'quartic two strict inner intervals', polynomial: 'quarticFour', relation: '<', result: '-2<x<-1, 1<x<2', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0100+S-001410100000000E1010B000BB55+R-IN1D02000000000000000600010000000000000006000100000000000000010002000000000000000100+C-0100000000000000010000000000000000000000050000000000000006000000000000000000000004000000000000000100' },
+  { code: '1E', name: 'quartic three strict positive intervals', polynomial: 'quarticFour', relation: '>', result: 'x<-2, -1<x<1, 2<x', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0000+S-001410100000000E1010B000DEA8+R-IN1E02000000000000000600010000000000000006000100000000000000010002000000000000000100+C-0100000000000000010000000000000000000000050000000000000006000000000000000000000004000000000000000100' },
+  { code: '1F', name: 'quartic two closed inner intervals', polynomial: 'quarticFour', relation: '≤', result: '-2≤x≤-1, 1≤x≤2', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0300+S-001410100000000E1010B000B81B+R-IN1F02000000000000000600010000000000000006000100000000000000010002000000000000000100+C-0100000000000000010000000000000000000000050000000000000006000000000000000000000004000000000000000100' },
+  { code: '20', name: 'quartic three closed positive intervals', polynomial: 'quarticFour', relation: '≥', result: 'x≤-2, -1≤x≤1, 2≤x', url: 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-4B06AD0200+S-001410100000000E1010B00048B5+R-IN2002000000000000000600010000000000000006000100000000000000010002000000000000000100+C-0100000000000000010000000000000000000000050000000000000006000000000000000000000004000000000000000100' },
+];
+
+const solutionContains = {
+  '01': () => true, '02': () => false, '03': x => x === 0, '04': x => x !== 0,
+  '05': x => x < 0, '06': x => x <= 0, '07': x => 0 < x, '08': x => 0 <= x,
+  '09': x => -1 < x && x < 1, '0A': x => -1 <= x && x <= 1,
+  '0B': x => x < -1 || 1 < x, '0C': x => x <= -1 || 1 <= x,
+  '0D': x => x === -1 || 1 <= x, '0E': x => x !== -1 && x < 1,
+  '0F': x => x <= -1 || x === 1, '10': x => -1 < x && x !== 1,
+  '11': x => (-1 < x && x < 0) || 1 < x, '12': x => (-1 <= x && x <= 0) || 1 <= x,
+  '13': x => x < -1 || (0 < x && x < 1), '14': x => x <= -1 || (0 <= x && x <= 1),
+  '15': x => x !== -1 && x !== 1, '16': x => x === -1 || x === 1,
+  '17': x => (x !== -2 && x < -1) || 1 < x, '18': x => x === -2 || (-1 <= x && x <= 1),
+  '19': x => -1 < x && x < 1 && x !== 0, '1A': x => x <= -1 || x === 0 || 1 <= x,
+  '1B': x => x < -1 || (1 < x && x !== 2), '1C': x => (-1 <= x && x <= 1) || x === 2,
+  '1D': x => (-2 < x && x < -1) || (1 < x && x < 2),
+  '1E': x => x < -2 || (-1 < x && x < 1) || 2 < x,
+  '1F': x => (-2 <= x && x <= -1) || (1 <= x && x <= 2),
+  '20': x => x <= -2 || (-1 <= x && x <= 1) || 2 <= x,
+};
+
+const relationHolds = {
+  '>': value => value > 0, '<': value => value < 0,
+  '≥': value => value >= 0, '≤': value => value <= 0,
+};
+
+const expandMonicRoots = roots => roots.reduce((coefficients, root) => {
+  const expanded = Array(coefficients.length + 1).fill(0);
+  coefficients.forEach((coefficient, index) => {
+    expanded[index] += coefficient;
+    expanded[index + 1] -= coefficient * root;
+  });
+  return expanded;
+}, [1]);
+
+const evaluatePolynomial = (coefficients, x) =>
+  coefficients.reduce((value, coefficient) => value * x + coefficient, 0);
+
+const formatPolynomial = coefficients => {
+  const degree = coefficients.length - 1;
+  const terms = [];
+  coefficients.forEach((coefficient, index) => {
+    if (coefficient === 0) return;
+    const exponent = degree - index;
+    const variable = exponent === 0 ? '' : exponent === 1 ? 'x' : 'x^' + exponent;
+    const magnitude = Math.abs(coefficient) === 1 && exponent > 0 ? '' : Math.abs(coefficient);
+    const sign = terms.length === 0 ? (coefficient < 0 ? '-' : '') : coefficient < 0 ? '-' : '+';
+    terms.push(sign + magnitude + variable);
+  });
+  return terms.join(' ');
+};
+
+for (const { code, name, polynomial, relation, result, url } of generatedInequalityCases) {
+  test('Generated inequality QR IN' + code + ': ' + name, () => {
+    const definition = inequalityPolynomials[polynomial];
+    const parsed = parse(url);
+    const degree = definition.coefficients.length - 1;
+    const relationCode = { '>': '00', '<': '01', '≥': '02', '≤': '03' }[relation];
+
+    assert.equal(parsed.mode.subMode, String(degree + 2).padStart(2, '0') + relationCode);
+    assert.equal(parsed.equation.latex, formatPolynomial(definition.coefficients) + ' ' + relation + '0');
+    assert.deepEqual(parsed.equation.decimal.map(String), definition.coefficients.map(String));
+    assert.equal(parsed.result[0].latex, result);
+
+    if (definition.positiveDefinite) {
+      const [a, b, c] = definition.coefficients;
+      assert.ok(a > 0 && b * b - 4 * a * c < 0);
+    } else {
+      assert.deepEqual(expandMonicRoots(definition.roots), definition.coefficients);
+    }
+
+    const distinctRoots = [...new Set(definition.roots)].sort((a, b) => a - b);
+    const probes = distinctRoots.length === 0 ? [-10, -1, 0, 1, 10] : [
+      distinctRoots[0] - 1,
+      ...distinctRoots.flatMap((root, index) => [
+        root,
+        ...(index + 1 < distinctRoots.length ? [(root + distinctRoots[index + 1]) / 2] : []),
+      ]),
+      distinctRoots.at(-1) + 1,
+    ];
+
+    // The sign is constant between adjacent real roots; these probes form the complete sign chart.
+    for (const x of probes) {
+      assert.equal(
+        relationHolds[relation](evaluatePolynomial(definition.coefficients, x)),
+        solutionContains[code](x),
+        'sign chart mismatch for IN' + code + ' at x=' + x,
+      );
+    }
   });
 }
 

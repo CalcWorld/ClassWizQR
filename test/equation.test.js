@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
 import { assertSetupUnorderedEqual, parse, projectLocalization, projectResult } from './support/parser.js';
@@ -477,6 +478,35 @@ const cases = [
 for (const { name, url, expected } of cases) {
   test(name, () => {
     assertSetupUnorderedEqual(projectResult(parse(url)), expected);
+  });
+}
+
+const linearEquationCases = [
+  {
+    name: 'omits a zero right-hand variable term and renders a zero right-hand side',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-506A+U-000000000000+M-4512BD0000+S-400410111000000E0010B000D1B7+R-EQ021A2A300000000000605+C-03000000000000000100050000000000000001000000000000000000000000000000000000000000',
+    latex: '3x +5 = 0',
+  },
+  {
+    name: 'renders non-zero terms on both sides',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-506A+U-000000000000+M-4512BD0000+S-400410111000000E0010B000D1B7+R-EQ022A30000000000000103+C-03000000000000000100050000000000000001000600000000000000010003000000000000000100',
+    latex: '3x +5 = 6x +3',
+  },
+  {
+    name: 'omits a zero right-hand variable term without dropping the relation',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-506A+U-000000000000+M-4512BD0000+S-400410111000000E0010B000D1B7+R-EQ022A30000000000000603+C-03000000000000000100050000000000000001000000000000000000000003000000000000000100',
+    latex: '3x +5 = 3',
+  },
+  {
+    name: 'omits a zero left-hand variable term',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-506A+U-000000000000+M-4512BD0000+S-400410111000000E0010B000D1B7+R-EQ021A30000000000000103+C-00000000000000000000050000000000000001000600000000000000010003000000000000000100',
+    latex: '5 = 6x +3',
+  },
+];
+
+for (const { name, url, latex } of linearEquationCases) {
+  test(`Linear equation: ${name}`, () => {
+    assert.equal(parse(url).equation.latex, latex);
   });
 }
 

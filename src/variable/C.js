@@ -151,10 +151,20 @@ export const ParseEquation = ({ C, M, S }) => {
     let needPlus = false;
     let elementRow = [];
     let c = 0;
+    let hasRelation = false;
     const newRow = row.map(cell => {
       let temp = cell;
       const placeholder = '${' + k + '}';
-      if (!temp.includes(placeholder)) return temp;
+      if (!temp.includes(placeholder)) {
+        if (temp === '=') {
+          const relation = c === 0 ? '0 =' : '=';
+          hasRelation = true;
+          c = 0;
+          needPlus = false;
+          return relation;
+        }
+        return temp;
+      }
 
       let [latex, decimal] = new ParseVariable(split[k]).get({ fractionResult });
       k++;
@@ -192,8 +202,11 @@ export const ParseEquation = ({ C, M, S }) => {
       }
       return replaced;
     });
+    if (hasRelation && c === 0) {
+      newRow.push('0');
+    }
     element.push(elementRow);
-    return newRow;
+    return hasRelation ? newRow.filter(Boolean) : newRow;
   });
 
   switch (mainMode) {

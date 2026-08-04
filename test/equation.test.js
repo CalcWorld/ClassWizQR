@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
 import { assertSetupUnorderedEqual, parse, projectLocalization, projectResult } from './support/parser.js';
+import { ParseEquation } from '../src/variable/C.js';
 
 // Sources: ../ClassWizQR.wiki/Equation-Mode.md
 const cases = [
@@ -121,7 +122,7 @@ const cases = [
         "result"
       ],
       "equation": {
-        "latex": "\\left\\{\\begin{array}{l} x +2y =3 \\\\ 6x +7y =9 \\end{array}\\right.",
+        "latex": "\\left\\{\\begin{array}{l} x +2y = 3 \\\\ 6x +7y = 9 \\end{array}\\right.",
         "decimal": [
           "1",
           "2",
@@ -277,7 +278,7 @@ const cases = [
         "result"
       ],
       "equation": {
-        "latex": "x^2 +2x +3 =0",
+        "latex": "x^2 +2x +3 = 0",
         "decimal": [
           "1",
           "2",
@@ -510,6 +511,54 @@ for (const { name, url, latex } of linearEquationCases) {
   });
 }
 
+const ZERO_COEFFICIENT = '00000000000000000000';
+const ONE_COEFFICIENT = '01000000000000000100';
+const TWO_COEFFICIENT = '02000000000000000100';
+const THREE_COEFFICIENT = '03000000000000000100';
+const EQUATION_SETUP = '001410101000000E1010B000CCE2';
+
+test('Equation rows render zero when every term on either side is omitted', () => {
+  const simultaneous = ParseEquation({
+    C: ZERO_COEFFICIENT.repeat(6),
+    M: '4501BD0000',
+    S: EQUATION_SETUP,
+  });
+  const linear = ParseEquation({
+    C: ZERO_COEFFICIENT.repeat(4),
+    M: '4512BD0000',
+    S: EQUATION_SETUP,
+  });
+
+  assert.equal(
+    simultaneous.latex,
+    '\\left\\{\\begin{array}{l} 0 = 0 \\\\ 0 = 0 \\end{array}\\right.',
+  );
+  assert.equal(linear.latex, '0 = 0');
+});
+
+test('Ratio templates retain their colon and equality delimiters', () => {
+  const ratio = ParseEquation({
+    C: ONE_COEFFICIENT + TWO_COEFFICIENT + THREE_COEFFICIENT,
+    M: '4A01BD0000',
+    S: EQUATION_SETUP,
+  });
+
+  assert.equal(ratio.latex, '1 :2 = X:3');
+});
+
+test('Equation coefficients must contain complete 20-character chunks', () => {
+  const payload = { M: '4504BD0000', S: EQUATION_SETUP };
+
+  assert.throws(
+    () => ParseEquation({ ...payload, C: '' }),
+    /Equation template not match/,
+  );
+  assert.throws(
+    () => ParseEquation({ ...payload, C: ZERO_COEFFICIENT.repeat(3) + '0' }),
+    /Equation template not match/,
+  );
+});
+
 const localizationCases = [
   {
     "name": "Equation localization",
@@ -661,7 +710,7 @@ const localizationCases = [
           }
         ],
         "equation": {
-          "latex": "\\left\\{\\begin{array}{l} x +2y =3 \\\\ 6x +7y =9 \\end{array}\\right.",
+          "latex": "\\left\\{\\begin{array}{l} x +2y = 3 \\\\ 6x +7y = 9 \\end{array}\\right.",
           "decimal": [
             "1",
             "2",
@@ -842,7 +891,7 @@ const localizationCases = [
           }
         ],
         "equation": {
-          "latex": "\\left\\{\\begin{array}{l} x +2y =3 \\\\ 6x +7y =9 \\end{array}\\right.",
+          "latex": "\\left\\{\\begin{array}{l} x +2y = 3 \\\\ 6x +7y = 9 \\end{array}\\right.",
           "decimal": [
             "1",
             "2",
@@ -1023,7 +1072,7 @@ const localizationCases = [
           }
         ],
         "equation": {
-          "latex": "\\left\\{\\begin{array}{l} x +2y =3 \\\\ 6x +7y =9 \\end{array}\\right.",
+          "latex": "\\left\\{\\begin{array}{l} x +2y = 3 \\\\ 6x +7y = 9 \\end{array}\\right.",
           "decimal": [
             "1",
             "2",
@@ -1204,7 +1253,7 @@ const localizationCases = [
           }
         ],
         "equation": {
-          "latex": "\\left\\{\\begin{array}{l} x +2y =3 \\\\ 6x +7y =9 \\end{array}\\right.",
+          "latex": "\\left\\{\\begin{array}{l} x +2y = 3 \\\\ 6x +7y = 9 \\end{array}\\right.",
           "decimal": [
             "1",
             "2",

@@ -103,6 +103,69 @@ export const ParseVectorList = ({ C, S }) => {
 }
 
 /**
+ * Render one row while tracking signs independently on each side of `=`.
+ * Equation coefficient terms only use x, y, z, and t in the fixed templates.
+ */
+const renderEquationRow = (row, coefficientChunks, fractionResult) => {
+  const cells = [];
+  const decimal = [];
+  const element = [];
+  let termCount = 0;
+  let hasRelation = false;
+
+  for (const cell of row) {
+    if (cell === '=') {
+      if (termCount === 0) cells.push('0');
+      cells.push(cell);
+      hasRelation = true;
+      termCount = 0;
+      continue;
+    }
+
+    const placeholderMatch = cell.match(/\$\{(\d+)}/);
+    if (!placeholderMatch) {
+      cells.push(cell);
+      continue;
+    }
+
+    const placeholder = placeholderMatch[0];
+    const coefficientIndex = Number(placeholderMatch[1]);
+    let [latex, value] = new ParseVariable(
+      coefficientChunks[coefficientIndex]
+    ).get({ fractionResult });
+    element.push(latex);
+    decimal.push(value);
+
+    let cellTemplate = cell;
+    if (/[xyzt]/.test(cellTemplate)) {
+      if (value.eq(1)) {
+        latex = '';
+      } else if (value.eq(-1)) {
+        latex = '-';
+      } else if (value.eq(0)) {
+        cellTemplate = '';
+      }
+    } else if (cellTemplate === placeholder && value.eq(0)) {
+      cellTemplate = '';
+    }
+
+    const placeholderStartsCell = cellTemplate.indexOf(placeholder) === 0;
+    if (termCount > 0 && placeholderStartsCell && value.gte(0)) {
+      latex = '+' + latex;
+    }
+
+    const rendered = cellTemplate.replace(placeholder, latex);
+    if (!rendered) continue;
+
+    cells.push(rendered);
+    termCount++;
+  }
+
+  if (hasRelation && termCount === 0) cells.push('0');
+  return { cells, decimal, element };
+};
+
+/**
  *
  * @param {{C: string, M: string, S: string}} payload
  * @return {{latex: *, decimal: *[], element: *[]}}
@@ -110,112 +173,46 @@ export const ParseVectorList = ({ C, S }) => {
 export const ParseEquation = ({ C, M, S }) => {
   const parseS = new ParseSetup({ S });
   const fractionResult = parseS.getFractionResult();
+  if (typeof C !== 'string' || C.length === 0 || C.length % 20 !== 0) {
+    throw new Error('Equation template not match');
+  }
   const split = C.match(/.{20}/g);
   const parseM = new ParseMode({ M });
   const mainMode = parseM.getMainMode();
   const subMode = parseM.getSubMode();
   const sb = +subMode;
-  let equType, m, n;
-  switch (mainMode) {
-    case '45':
-      equType = 'EQUATION';
-      if (sb <= 3) {
-        [m, n] = [sb + 1, sb + 2];
-      } else if (sb > 10) {
-        [m, n] = [1, (sb - 10) * 2];
-      } else {
-        [m, n] = [1, sb - 1];
-      }
-      break;
-    case '4A':
-      equType = 'RATIO';
-      m = 1;
-      n = 3;
-      break;
-    case '4B':
-      equType = 'INEQUALITY';
-      m = 1;
-      n = sb - 1;
-      break;
-  }
-
-  if (split.length !== m * n) {
+  const equType = {
+    '45': 'EQUATION',
+    '4A': 'RATIO',
+    '4B': 'INEQUALITY',
+  }[mainMode];
+  const inputTemplate = INPUT_INFO[equType]?.[subMode];
+  const placeholderCount = inputTemplate?.flat().reduce(
+    (count, cell) => count + (cell.match(/\$\{\d+}/g)?.length ?? 0),
+    0
+  );
+  if (!inputTemplate || split.length !== placeholderCount) {
     throw new Error('Equation template not match');
   }
 
-  let k = 0;
   const decimalResult = [];
   const element = [];
-  let template;
-  template = INPUT_INFO[equType][subMode].map(row => {
-    let needPlus = false;
-    let elementRow = [];
-    let c = 0;
-    let hasRelation = false;
-    const newRow = row.map(cell => {
-      let temp = cell;
-      const placeholder = '${' + k + '}';
-      if (!temp.includes(placeholder)) {
-        if (temp === '=') {
-          const relation = c === 0 ? '0 =' : '=';
-          hasRelation = true;
-          c = 0;
-          needPlus = false;
-          return relation;
-        }
-        return temp;
-      }
-
-      let [latex, decimal] = new ParseVariable(split[k]).get({ fractionResult });
-      k++;
-      elementRow.push(latex);
-      decimalResult.push(decimal);
-
-      if (/[xyzt]/.test(temp)) {
-        if (decimal.eq(1)) {
-          latex = '';
-        } else if (decimal.eq(-1)) {
-          latex = '-';
-        } else if (decimal.eq(0)) {
-          temp = '';
-        }
-      }
-      if (temp === placeholder && decimal.eq(0)) {
-        temp = '';
-      }
-      if (temp.indexOf(placeholder) !== 0) {
-        needPlus = false;
-      }
-      if (needPlus && decimal.gte(0)) {
-        latex = '+' + latex;
-      }
-
-      const replaced = temp.replace(placeholder, latex)
-
-      if (temp) {
-        c++;
-        needPlus = true;
-      } else if (c === 0) {
-        needPlus = false;
-      } else {
-        needPlus = true;
-      }
-      return replaced;
-    });
-    if (hasRelation && c === 0) {
-      newRow.push('0');
-    }
-    element.push(elementRow);
-    return hasRelation ? newRow.filter(Boolean) : newRow;
+  let template = inputTemplate.map(row => {
+    const rendered = renderEquationRow(row, split, fractionResult);
+    decimalResult.push(...rendered.decimal);
+    element.push(rendered.element);
+    return rendered.cells;
   });
+
+  const hasRelation = inputTemplate.some(row => row.some(cell => cell.includes('=')));
 
   switch (mainMode) {
     case '45':
       if (sb <= 3) {
         template[0].unshift("\\left\\{\\begin{array}{l}");
         template[sb].push("\\end{array}\\right.");
-      } else if (sb !== 12) {
-        template[0].push("=0");
+      } else if (!hasRelation) {
+        template[0].push("=", "0");
       }
       break;
     case '4B':

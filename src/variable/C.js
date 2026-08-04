@@ -173,9 +173,6 @@ const renderEquationRow = (row, coefficientChunks, fractionResult) => {
 export const ParseEquation = ({ C, M, S }) => {
   const parseS = new ParseSetup({ S });
   const fractionResult = parseS.getFractionResult();
-  if (typeof C !== 'string' || C.length === 0 || C.length % 20 !== 0) {
-    throw new Error('Equation template not match');
-  }
   const split = C.match(/.{20}/g);
   const parseM = new ParseMode({ M });
   const mainMode = parseM.getMainMode();

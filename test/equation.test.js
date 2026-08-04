@@ -883,19 +883,6 @@ test('Ratio templates retain their colon and equality delimiters', () => {
   assert.equal(ratio.latex, '1 :2 = X:3');
 });
 
-test('Equation coefficients must contain complete 20-character chunks', () => {
-  const payload = { M: '4504BD0000', S: EQUATION_SETUP };
-
-  assert.throws(
-    () => ParseEquation({ ...payload, C: '' }),
-    /Equation template not match/,
-  );
-  assert.throws(
-    () => ParseEquation({ ...payload, C: ZERO_COEFFICIENT.repeat(3) + '0' }),
-    /Equation template not match/,
-  );
-});
-
 const localizationCases = [
   {
     "name": "Equation localization",

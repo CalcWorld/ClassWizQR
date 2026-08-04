@@ -886,7 +886,7 @@ const cases = [
           },
           "seq2": {
             "type": "vₙ₊₁",
-            "firstTerm": "u₁"
+            "firstTerm": "v₁"
           },
           "displaySum": true,
           "resultHeader": [
@@ -907,7 +907,7 @@ const cases = [
             "expression": "vₙ + n"
           },
           {
-            "name": "u₁",
+            "name": "v₁",
             "expression": "0"
           }
         ],

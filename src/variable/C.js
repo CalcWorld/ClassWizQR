@@ -272,7 +272,7 @@ export const ParseSequenceSetting = ({ C, E, G }) => {
   }
 
   if (parameter[1].decimal.eq(4)) {
-    setting.seq2 = { type: 'vₙ₊₁', firstTerm: setting.firstTermIsA0 ? 'v₀' : 'u₁' };
+    setting.seq2 = { type: 'vₙ₊₁', firstTerm: setting.firstTermIsA0 ? 'v₀' : 'v₁' };
   } else {
     setting.seq2 = { type: 'vₙ', firstTerm: null };
   }

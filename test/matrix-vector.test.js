@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
 import { assertSetupUnorderedEqual, parse, projectResult } from './support/parser.js';
@@ -357,3 +358,18 @@ for (const { name, url, expected } of cases) {
     assertSetupUnorderedEqual(projectResult(parse(url)), expected);
   });
 }
+
+test('Vector FY-523 cross product is routed to VctAns', () => {
+  const url = 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-070400A000+S-001410100000000E1010B000CEE6+R-VT03000000000000000000000000000000000000000004849639220191740599+E-FB25A8FB26+C-VA020200000000000000010002828427124746190100VB020800000000000000009928A90000000000000103';
+  const parsed = parse(url);
+  const [a1, a2] = parsed.vector[0].decimal.map(Number);
+  const [b1, b2] = parsed.vector[1].decimal.map(Number);
+  const result = parsed.result[0];
+
+  assert.equal(parsed.model.prefix, 'FY');
+  assert.equal(parsed.model.id, '523');
+  assert.equal(result.name, 'VctAns');
+  assert.equal(result.decimal.length, 3);
+  assert.deepEqual(result.decimal.slice(0, 2).map(Number), [0, 0]);
+  assert.ok(Math.abs(Number(result.decimal[2]) - (a1 * b2 - a2 * b1)) < 1e-14);
+});

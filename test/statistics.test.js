@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
 import { assertSetupUnorderedEqual, parse, projectLocalization, projectResult } from './support/parser.js';
@@ -1780,3 +1781,20 @@ for (const { name, url, fields, expected } of localizationCases) {
     });
   }
 }
+
+test('Statistics FY-523 quadratic regression result includes c', () => {
+  const url = 'http://wes.casio.com/ncal/index.php?q=I-523A+U-000000000000+M-0303F30000+S-001410100000000E1010B0001157+R-030000000000000001000350000000000000010005000000000000000599';
+  const result = parse(url);
+
+  assert.equal(result.model.prefix, 'FY');
+  assert.equal(result.model.id, '523');
+  assert.equal(result.mode.subMode, '03');
+  assert.equal(
+    result.result[0].latex,
+    'y=a+bx+cx² \\\\ a=3 \\\\ b= \\dfrac {\\displaystyle 7} {\\displaystyle 2} \\\\ c=- \\dfrac {\\displaystyle 1} {\\displaystyle 2}',
+  );
+  assert.deepEqual(
+    result.result.slice(1).map(({ decimal }) => Number(decimal)),
+    [3, 3.5, -0.5],
+  );
+});

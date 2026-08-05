@@ -1324,6 +1324,46 @@ for (const { name, url, expression } of asciiExpressionCases) {
   });
 }
 
+const mathTemplateCases = [
+  {
+    name: 'Calculate CY-243 product expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000AD00+S-001410100000100E1110B0005EC6+R-0339986800285814014200000000000000000000+E-531AC81D1A481B1A321B1E1C311C34351B',
+    expression: '\\prod\\limits_{x=1}^{4 5}{\\left(\\dfrac{\\displaystyle x} {\\displaystyle 2} \\right)} ',
+    expectedValue: Array.from({ length: 45 }, (_, index) => (index + 1) / 2)
+      .reduce((product, value) => product * value, 1),
+  },
+  {
+    name: 'Calculate CY-243 absolute-value and exponential expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000AD00+S-001410100000100E1110B0005EC6+R-0419328284878138009500000000000000000000+E-681AC81D1A721AC0381B1B1A381B1E1B',
+    expression: '\\left | \\dfrac{\\displaystyle e^{\\text{-} 8} } {\\displaystyle 8}  \\right | ',
+    expectedValue: Math.abs(Math.exp(-8) / 8),
+  },
+  {
+    name: 'Calculate CY-243 nth-root expression',
+    url: 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000AD00+S-001410100000100E1110B0005EC6+R-0200000000000000010000000000000000000000+E-CA1D1A351B1A33321B1E',
+    expression: '\\sqrt[5]{3 2} ',
+    expectedValue: 32 ** (1 / 5),
+  },
+  {
+    name: 'Calculate EY-091 FY-family scientific-notation expression',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-091A+U-000000000000+M-C10000AD00+S-401410111000000E1010B0004753+Q-05000000000000000000000001000000000000000000000000000000+E-6032731A331BD0A96034731A321BD0',
+    expression: '( 2 \\times 10^{3}  ) \\div ( 4 \\times 10^{2}  )',
+    expectedValue: (2 * 10 ** 3) / (4 * 10 ** 2),
+  },
+];
+
+for (const { name, url, expression, expectedValue } of mathTemplateCases) {
+  test(name, () => {
+    const result = parse(url);
+    const actualValue = Number(result.result[1].decimal);
+
+    assert.equal(result.expression, expression);
+    assert.ok(
+      Math.abs(actualValue - expectedValue) <= Math.abs(expectedValue) * 1e-13,
+    );
+  });
+}
+
 const numberResultCases = [
   {
     name: 'Calculate CY-295 quotient and remainder labels',
@@ -1406,6 +1446,30 @@ for (const { name, url, expression, latex } of numberResultCases) {
     assert.equal(result.result[0].latex, latex);
   });
 }
+
+test('Calculate CY-243 DMS result', () => {
+  const url = 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C100001D00+S-001410100000100E1110B00058B3+R-4715305555555555010000000000000000000000+E-32DC33DC34DCA635DC36DC37DC';
+  const result = parse(url);
+
+  assert.equal(result.model.prefix, 'CY');
+  assert.equal(result.model.id, '243');
+  assert.equal(result.format.displayCode, '1');
+  assert.equal(result.result[0].latex, "7^\\circ 9' 11'' ");
+  assert.ok(
+    Math.abs(Number(result.result[1].decimal) - (7 + 9 / 60 + 11 / 3600)) < 1e-12,
+  );
+});
+
+test('Calculate CY-243 rectangular-coordinate result template 11', () => {
+  const url = 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10011AD00+S-001410100000100E1110B000CAB0+R-8000000100060102000180000001000201020001+E-7F741A321B2C3330';
+  const result = parse(url);
+
+  assert.equal(result.model.prefix, 'CY');
+  assert.equal(result.model.id, '243');
+  assert.equal(result.result[0].latex, 'x=\\dfrac {\\displaystyle  \\sqrt{6} } {\\displaystyle 2},y=\\dfrac {\\displaystyle  \\sqrt{2} } {\\displaystyle 2}');
+  assert.ok(Math.abs(Number(result.result[1].decimal) - Math.sqrt(6) / 2) < 1e-14);
+  assert.ok(Math.abs(Number(result.result[2].decimal) - Math.sqrt(2) / 2) < 1e-14);
+});
 
 const nonSimplifiedFractionCases = [
   {

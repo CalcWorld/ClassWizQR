@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
 import { assertSetupUnorderedEqual, parse, projectResult } from './support/parser.js';
@@ -217,5 +218,76 @@ const cases = [
 for (const { name, url, expected } of cases) {
   test(name, () => {
     assertSetupUnorderedEqual(projectResult(parse(url)), expected);
+  });
+}
+
+// Source: https://support.casio.com/global/en/calc/manual/fx-9910CW_en/using_calculator_apps/using_math_box.html
+const mathBoxCases = [
+  {
+    name: 'MathBox FY-505 one die',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-4F00S10000+S-001410101000000E1010B0000455+C-010000000000000001000500000000000000010000000000000000000000+T-000000340034340034340034340034340034',
+    quantity: 1,
+    header: 'Sum',
+    outcomes: [1, 2, 3, 4, 5, 6],
+    frequencies: [0, 1, 1, 1, 1, 1],
+  },
+  {
+    name: 'MathBox FY-505 two dice sum',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-4F00S10000+S-001410101000000E1010B0000455+C-020000000000000001000500000000000000010000000000000000000000+T-000000000000680034000000680034000000000000340034000000000000000000',
+    quantity: 2,
+    header: 'Sum',
+    outcomes: Array.from({ length: 11 }, (_, index) => index + 2),
+    frequencies: [0, 0, 2, 0, 2, 0, 0, 1, 0, 0, 0],
+  },
+  {
+    name: 'MathBox FY-505 two dice difference',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-4F00S10000+S-001410101000000E1010B0000455+C-020000000000000001000500000000000000010001000000000000000100+T-340034340034340034000000680034000000',
+    quantity: 2,
+    header: 'Diff',
+    outcomes: [0, 1, 2, 3, 4, 5],
+    frequencies: [1, 1, 1, 0, 2, 0],
+  },
+  {
+    name: 'MathBox FY-505 one coin preserves head-tail ordering',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-4F00S20000+S-001410101000000E1010B0001911+C-0100000000000000010005000000000000000100+T-CG0034340034',
+    quantity: 1,
+    header: 'Side',
+    outcomes: [0, 1],
+    frequencies: [1, 4],
+  },
+  {
+    name: 'MathBox FY-505 two coins',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-4F00S20000+S-001410101000000E1010B0001911+C-0200000000000000010005000000000000000100+T-9C0034680034000000',
+    quantity: 2,
+    header: 'Side',
+    outcomes: [0, 1, 2],
+    frequencies: [3, 2, 0],
+  },
+  {
+    name: 'MathBox FY-505 three coins',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-4F00S20000+S-001410101000000E1010B0001911+C-0300000000000000010005000000000000000100+T-680034000000680034340034',
+    quantity: 3,
+    header: 'Side',
+    outcomes: [0, 1, 2, 3],
+    frequencies: [2, 0, 2, 1],
+  },
+];
+
+for (const { name, url, quantity, header, outcomes, frequencies } of mathBoxCases) {
+  test(name, () => {
+    const result = parse(url);
+    const { attempts, array } = result.mathBox;
+    const rows = array.slice(1);
+
+    assert.equal(result.model.id, '505');
+    assert.equal(Number(result.mathBox.quantity), quantity);
+    assert.equal(Number(attempts), 5);
+    assert.deepEqual(array[0], [header, 'Freq', 'Rel Fr']);
+    assert.deepEqual(rows.map(row => Number(row[0])), outcomes);
+    assert.deepEqual(rows.map(row => Number(row[1])), frequencies);
+    assert.equal(frequencies.reduce((sum, value) => sum + value, 0), Number(attempts));
+    for (const [, frequency, relativeFrequency] of rows) {
+      assert.equal(Number(relativeFrequency), Number(frequency) / Number(attempts));
+    }
   });
 }

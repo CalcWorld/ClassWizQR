@@ -1,3 +1,4 @@
+import assert from 'node:assert/strict';
 import { test } from 'vitest';
 
 import { assertSetupUnorderedEqual, parse, projectLocalization, projectResult } from './support/parser.js';
@@ -919,4 +920,119 @@ for (const { name, url, fields, expected } of localizationCases) {
       );
     });
   }
+}
+
+// Source: https://support.casio.com/global/en/calc/manual/fx-9910CW_en/using_calculator_apps/distribution_calculations.html
+const combination = (n, k) => {
+  let result = 1;
+  for (let i = 1; i <= k; i++) result = result * (n - i + 1) / i;
+  return result;
+};
+
+const binomialPd = (x, n, p) => combination(n, x) * p ** x * (1 - p) ** (n - x);
+const binomialCd = (x, n, p) => Array.from(
+  { length: x + 1 },
+  (_, value) => binomialPd(value, n, p),
+).reduce((sum, value) => sum + value, 0);
+const poissonPd = (x, lambda) => Math.exp(-lambda) * lambda ** x
+  / Array.from({ length: x }, (_, index) => index + 1).reduce((product, value) => product * value, 1);
+const poissonCd = (x, lambda) => Array.from(
+  { length: x + 1 },
+  (_, value) => poissonPd(value, lambda),
+).reduce((sum, value) => sum + value, 0);
+
+const distributionVariableCases = [
+  {
+    name: 'Distribution FY-505 Normal PD Variable',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-0C0100A000+S-001410101000000E1010B0008276+R-0176032663382149009900000000000000000000+C-036000000000000001010350000000000000010102000000000000000100',
+    subMode: '01',
+    parameters: [36, 35, 2],
+    expected: Math.exp(-0.5 * ((36 - 35) / 2) ** 2) / (2 * Math.sqrt(2 * Math.PI)),
+  },
+  {
+    name: 'Distribution FY-505 Normal CD Variable',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-0C0200A000+S-001410101000000E1010B000B8C7+R-0341344746068229009900000000000000000000+C-00000000000000000000010000000000000001000000000000000000000001000000000000000100',
+    subMode: '02',
+    parameters: [0, 1, 0, 1],
+    expected: 0.3413447460685429,
+  },
+  {
+    name: 'Distribution FY-505 Binomial PD Variable',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-0C0400A000+S-001410101000000E1010B0008E4C+R-0312500000000000009900000000000000000000+C-020000000000000001000500000000000000010005000000000000000099',
+    subMode: '04',
+    parameters: [2, 5, 0.5],
+    expected: binomialPd(2, 5, 0.5),
+  },
+  {
+    name: 'Distribution FY-505 Binomial CD Variable',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-0C0500A000+S-001410101000000E1010B000D401+R-0499999999999999009900000000000000000000+C-020000000000000001000500000000000000010005000000000000000099',
+    subMode: '05',
+    parameters: [2, 5, 0.5],
+    expected: binomialCd(2, 5, 0.5),
+  },
+  {
+    name: 'Distribution FY-505 Poisson PD Variable',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-0C0600A000+S-001410101000000E1010B0000385+R-0224041807655387009900000000000000000000+C-0200000000000000010003000000000000000100',
+    subMode: '06',
+    parameters: [2, 3],
+    expected: poissonPd(2, 3),
+  },
+  {
+    name: 'Distribution FY-505 Poisson CD Variable',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-0C0700A000+S-001410101000000E1010B000A20D+R-0423190102774688009900000000000000000000+C-0200000000000000010003000000000000000100',
+    subMode: '07',
+    parameters: [2, 3],
+    expected: poissonCd(2, 3),
+  },
+];
+
+for (const { name, url, subMode, parameters, expected } of distributionVariableCases) {
+  test(name, () => {
+    const result = parse(url);
+
+    assert.equal(result.model.id, '505');
+    assert.equal(result.mode.subMode, subMode);
+    assert.deepEqual(result.distribution.decimal.map(Number), parameters);
+    // The calculator manual specifies distribution accuracy of up to six
+    // significant digits, even when the encoded result contains more digits.
+    assert.ok(Math.abs(Number(result.result[1].decimal) - expected) < 5e-7);
+  });
+}
+
+const distributionListCases = [
+  {
+    name: 'Distribution FY-505 Binomial CD List',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-0C05A00000+S-001410101000000E1010B0003FE7+C-0500000000000000010005000000000000000099+T-200000100499999099300000100812500099',
+    subMode: '05',
+    parameters: [5, 0.5],
+    probability: x => binomialCd(x, 5, 0.5),
+  },
+  {
+    name: 'Distribution FY-505 Poisson PD List',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-0C06A00000+S-001410101000000E1010B0003962+C-03000000000000000100+T-200000100224041099300000100224041099',
+    subMode: '06',
+    parameters: [3],
+    probability: x => poissonPd(x, 3),
+  },
+  {
+    name: 'Distribution FY-505 Poisson CD List',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-0C07A00000+S-001410101000000E1010B0004932+C-03000000000000000100+T-200000100423190099300000100647231099',
+    subMode: '07',
+    parameters: [3],
+    probability: x => poissonCd(x, 3),
+  },
+];
+
+for (const { name, url, subMode, parameters, probability } of distributionListCases) {
+  test(name, () => {
+    const result = parse(url);
+
+    assert.equal(result.model.id, '505');
+    assert.equal(result.mode.subMode, subMode);
+    assert.deepEqual(result.distribution.decimal.map(Number), parameters);
+    assert.deepEqual(result.statistic.array[0], ['x', 'P']);
+    for (const [x, actual] of result.statistic.array.slice(1)) {
+      assert.ok(Math.abs(Number(actual) - probability(Number(x))) < 1.1e-6);
+    }
+  });
 }

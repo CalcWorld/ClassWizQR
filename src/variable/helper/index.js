@@ -131,18 +131,29 @@ export const decimalToFracLatex = ({ displayCode, fractionResult, numSign, valNu
 }
 /**
  * @param {string|Decimal|number} num
- * @param {string|Decimal|number} pi_25200
- * @param {string|Decimal|number} digits
+ * @param {string|Decimal|number} pi
+ * @param {number} arithmeticDigits
+ * @param {number} digits
  */
-export const numberToPiFrac = (num, pi_25200, digits) => {
-  const r = new Decimal(num);
-  const p = new Decimal(pi_25200);
-  let d = r.div(p).toSignificantDigits(digits);
+export const numberToPiFrac = (num, pi, arithmeticDigits, digits) => {
+  const ModelDecimal = Decimal.clone({
+    precision: 80,
+    rounding: Decimal.ROUND_DOWN,
+  });
+  const r = new ModelDecimal(num).toSignificantDigits(arithmeticDigits);
+  if (!r.isFinite() || r.isZero() || r.abs().gte('1e6')) return;
+
+  let d = r
+    .div(new ModelDecimal(pi))
+    .toSignificantDigits(arithmeticDigits)
+    .times(25200)
+    .toSignificantDigits(arithmeticDigits)
+    .toSignificantDigits(digits, Decimal.ROUND_HALF_UP);
   if (!d.isInt()) {
     return;
   }
   let c;
-  [d, c] = simpFrac(d, new Decimal(25200));
+  [d, c] = simpFrac(d, new ModelDecimal(25200));
   return [d, c];
 }
 /**
@@ -155,13 +166,13 @@ export const numberToPiFrac = (num, pi_25200, digits) => {
  * @return {*}
  */
 export const decimalToPiFracLatex = ({ displayCode, fractionResult, numSign, valNum, num }) => {
-  const [pi_25200, digits] = {
-    '16': ['0.000124666375142452', 13], // EX
-    '24': ['0.0001246663751424521126374', 19], // CW
+  const [pi, arithmeticDigits, digits] = {
+    '16': ['3.1415926535898', 15, 13], // EX
+    '24': ['3.1415926535897932384626', 23, 19], // CW
   }[`${valNum.length}`] || [];
-  if (!pi_25200) return;
+  if (!pi) return;
 
-  const frac = numberToPiFrac(num, pi_25200, digits);
+  const frac = numberToPiFrac(num, pi, arithmeticDigits, digits);
   if (!frac) return;
 
   const [d, c] = frac;

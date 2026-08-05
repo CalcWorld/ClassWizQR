@@ -1572,13 +1572,20 @@ const piResultCases = [
     latex: ' \\dfrac {\\displaystyle 156158413} {\\displaystyle 3600} \\pi ',
     expectedValue: 11 ** 6 / 13,
   },
+  {
+    name: 'Calculate FY-505 large rational pi result',
+    url: 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-C10000DD00+S-001410101000000E1010B0001742+Q-08397949535160905840286001050000000000000000000000000000+E-3239C91A321BA63933C91A331BA6313836C91A321BA6C81D1A3230C91A331B1B1A383339301B1E',
+    modelId: '505',
+    latex: ' \\dfrac {\\displaystyle 748482101} {\\displaystyle 2800} \\pi ',
+    expectedValue: 29 ** 2 + 93 ** 3 + 186 ** 2 + 20 ** 3 / 8390,
+  },
 ];
 
-for (const { name, url, latex, expectedValue } of piResultCases) {
+for (const { name, url, modelId = '243', latex, expectedValue } of piResultCases) {
   test(name, () => {
     const result = parse(url);
 
-    assert.equal(result.model.id, '243');
+    assert.equal(result.model.id, modelId);
     assert.equal(result.result[0].latex, latex);
     assert.ok(Math.abs(Number(result.result[1].decimal) - expectedValue) < 1e-9);
   });

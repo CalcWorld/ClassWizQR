@@ -1798,3 +1798,21 @@ test('Statistics FY-523 quadratic regression result includes c', () => {
     [3, 3.5, -0.5],
   );
 });
+
+test('Statistics CY-243 logarithmic regression result', () => {
+  const url = 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-0304F30000+S-001410100000100E1110B000A862+R-075990576184412400990285790021093024010007815927060212940099';
+  const result = parse(url);
+
+  assert.equal(result.model.prefix, 'CY');
+  assert.equal(result.model.id, '243');
+  assert.equal(result.mode.subMode, '04');
+  assert.equal(result.mode.subName, 'Logarithmic Regression [y=a+b･ln(x)]');
+  assert.equal(
+    result.result[0].latex,
+    'y=a+b･ln(x) \\\\ a=0.759905761844124 \\\\ b=2.85790021093024 \\\\ r=0.781592706021294',
+  );
+  assert.deepEqual(
+    result.result.slice(1).map(({ decimal }) => Number(decimal)),
+    [0.759905761844124, 2.85790021093024, 0.781592706021294],
+  );
+});

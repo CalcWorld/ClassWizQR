@@ -1471,6 +1471,119 @@ test('Calculate CY-243 rectangular-coordinate result template 11', () => {
   assert.ok(Math.abs(Number(result.result[2].decimal) - Math.sqrt(2) / 2) < 1e-14);
 });
 
+test('Calculate FY-505 square-root result displayed as DMS', () => {
+  const url = 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-C100001100+S-001410101000000E1010B0001D5D+Q-80000001000202010000000000010000000000000000000000000000+E-741A381B';
+  const result = parse(url);
+
+  assert.equal(result.model.prefix, 'FY');
+  assert.equal(result.model.id, '505');
+  assert.equal(result.format.displayCode, '1');
+  assert.equal(result.expression, '\\sqrt{8} ');
+  assert.equal(result.result[0].latex, "2^\\circ 49' 42.34'' ");
+  assert.ok(Math.abs(Number(result.result[1].decimal) - Math.sqrt(8)) < 1e-14);
+});
+
+test('Calculate FY-505 DMS-encoded result displayed as a fraction', () => {
+  const url = 'http://wes.casio.com/ncal/index.php?q=I-505A+U-000000000000+M-C10000BD00+S-001410101000000E1010B000594F+Q-48333333333333333333333300990000000000000000000000000000+E-30DC3530DC30DC';
+  const result = parse(url);
+
+  assert.equal(result.model.prefix, 'FY');
+  assert.equal(result.model.id, '505');
+  assert.equal(result.format.displayCode, 'B');
+  assert.equal(result.result[0].latex, ' \\dfrac {\\displaystyle 5} {\\displaystyle 6}');
+  assert.ok(Math.abs(Number(result.result[1].decimal) - 5 / 6) < 1e-14);
+});
+
+test('Calculate CY-243 recurring-decimal input displayed as a fraction', () => {
+  const url = 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000BD00+S-001410100000100E1110B000CADD+R-28A9000000000000010300000000000000000000+E-302E2F1A381B';
+  const result = parse(url);
+
+  assert.equal(result.model.id, '243');
+  assert.equal(result.expression, '0 . \\dot{8} ');
+  assert.equal(result.result[0].latex, ' \\dfrac {\\displaystyle 8} {\\displaystyle 9}');
+  assert.ok(Math.abs(Number(result.result[1].decimal) - 8 / 9) < 1e-14);
+});
+
+const numberFormatCases = [
+  {
+    name: 'Calculate CY-243 Sci5 setup',
+    url: 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000AA00+S-951410100010100E1110B00049A5+R-0714285714285714009900000000000000000000+E-35A937',
+    code: '95',
+    value: 'Sci5',
+  },
+  {
+    name: 'Calculate CY-243 Fix1 setup',
+    url: 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000AA00+S-811410100010100E1110B000490F+R-0714285714285714009900000000000000000000+E-35A937',
+    code: '81',
+    value: 'Fix1',
+  },
+];
+
+for (const { name, url, code, value } of numberFormatCases) {
+  test(name, () => {
+    const result = parse(url);
+    const numberFormat = result.setup.find(item => item.type === 'NUMBER_FORMAT');
+
+    assert.equal(result.model.id, '243');
+    assert.deepEqual(
+      { code: numberFormat.code, value: numberFormat.value },
+      { code, value },
+    );
+    assert.equal(result.expression, '5 \\div 7');
+    assert.ok(Math.abs(Number(result.result[1].decimal) - 5 / 7) < 1e-14);
+  });
+}
+
+test('Calculate CY-243 mixed-number result', () => {
+  const url = 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000CD00+S-411411100010100E1110B000DED1+R-25A1A30000000000010500000000000000000000+E-181F1D1A341B1A381B1A361B1E';
+  const result = parse(url);
+
+  assert.equal(result.model.id, '243');
+  assert.equal(result.format.displayCode, 'C');
+  assert.equal(
+    result.result[0].latex,
+    ' {\\displaystyle 5} \\dfrac {\\displaystyle 1} {\\displaystyle 3}',
+  );
+  assert.ok(Math.abs(Number(result.result[1].decimal) - 16 / 3) < 1e-14);
+});
+
+const piResultCases = [
+  {
+    name: 'Calculate CY-243 pi result',
+    url: 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000DD00+S-001410100000100E1110B00005B8+R-0314159265358980010000000000000000000000+E-22',
+    latex: ' \\pi ',
+    expectedValue: Math.PI,
+  },
+  {
+    name: 'Calculate CY-243 fractional pi result',
+    url: 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000DD00+S-001410100000100E1110B00005B8+R-0392699081698725009900000000000000000000+E-C81D1A221B1A381B1E',
+    latex: ' \\dfrac {\\displaystyle 1} {\\displaystyle 8} \\pi ',
+    expectedValue: Math.PI / 8,
+  },
+  {
+    name: 'Calculate CY-243 negative pi result',
+    url: 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000DD00+S-001410100000100E1110B00005B8+R-0314159265358980060000000000000000000000+E-22A9A731',
+    latex: '- \\pi ',
+    expectedValue: -Math.PI,
+  },
+  {
+    name: 'Calculate CY-243 large rational pi result',
+    url: 'http://wes.casio.com/math/index.php?q=I-243F+U-000000000000+M-C10000DD00+S-001410100000100E1110B00005B8+R-0136273923076923010500000000000000000000+E-C81D1A3131C91A361B1B1A31331B1E',
+    latex: ' \\dfrac {\\displaystyle 156158413} {\\displaystyle 3600} \\pi ',
+    expectedValue: 11 ** 6 / 13,
+  },
+];
+
+for (const { name, url, latex, expectedValue } of piResultCases) {
+  test(name, () => {
+    const result = parse(url);
+
+    assert.equal(result.model.id, '243');
+    assert.equal(result.result[0].latex, latex);
+    assert.ok(Math.abs(Number(result.result[1].decimal) - expectedValue) < 1e-9);
+  });
+}
+
 const nonSimplifiedFractionCases = [
   {
     name: 'Calculate CY-247 non-simplified fraction indicator',

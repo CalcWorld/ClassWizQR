@@ -88,7 +88,7 @@
     "webpack": "^5.105.0",
     "webpack-cli": "^5.1.4",
     "workbox-build": "^7.4.1",
-    "wrangler": "4.115.0",
+    "wrangler": "4.128.0",
     "zxing-wasm": "^3.1.2"
   }
 }
